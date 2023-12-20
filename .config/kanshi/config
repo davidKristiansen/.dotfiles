@@ -1,0 +1,21 @@
+
+# include /etc/kanshi/config.d/*
+
+profile {
+    output eDP-1 enable
+}
+
+profile office {
+    output eDP-1  position 0,360 mode 1920x1080
+    output "Acer Technologies ED347CKR 0x00003617" position 1920,0 mode 3440x1440 scale 1
+}
+
+profile odin {
+    output eDP-1  position 0,360 mode 1920x1080
+    output "Sony SONY TV  *30 0x00000101" position 1920,0 mode 3840x2160 scale 2
+}
+
+profile thor {
+    output eDP-1  position 0,360 mode 1920x1080
+    output "Sony SONY TV  *00 0x00000101" position 1920,0 mode 3840x2160 scale 2
+}

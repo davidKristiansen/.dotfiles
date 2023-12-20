@@ -1,0 +1,6 @@
+
+# output * bg ~/Pictures/Wallpapers/Sway_Wallpaper_Blue_2048x1536_Portrait.png fill
+output * bg ~/Pictures/Wallpapers/wp4067047.jpg fill
+
+# output 'Sharp Corporation 0x14D0 0x00000000' pos 0 0 res 3840x2400
+#  output 'Unknown ASUS MB16AP JBLMTF129716' pos 1920 0 res 1920x1080 transform 270

@@ -1,0 +1,55 @@
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+set $term kitty
+# set $term footclient
+#set $menu exec kitty --class=launcher -e sway-launcher-desktop
+# set $menu j4-dmenu-desktop --dmenu="bemenu -i \
+#         --tb '#1D2021' \
+#         --tf '#EBDBB2' \
+#         --hb '#1D2021' \
+#         --hf '#FE8019' \
+#         --fb '#1D2021' \
+#         --nb '#1D2021'" \
+#         --term='kitty'
+# set $menu j4-dmenu-desktop
+set $menu rofi -modi drun -show-icons -show drun
+# set $menu j4-dmenu-desktop --dmenu="wofi -dmenu -i"
+set $lock swaylock \
+        --screenshots \
+        --clock \
+        --indicator \
+        --indicator-radius 100 \
+        --indicator-thickness 7 \
+        --effect-blur 7x5 \
+        --effect-pixelate 10 \
+        --effect-vignette 0.5:0.5 \
+        --ring-color b8bb26 \
+        --key-hl-color 458588 \
+        --line-color 00000000 \
+        --inside-color 1d2021ef \
+        --separator-color 00000000 \
+        --grace 15 \
+        --fade-in 10
+
+set $screengrab slurp \
+        | grim -g - - \
+        | wl-copy
+
+include colorscheme
+include window_rules
+include startup_applications
+include input
+include output
+include functions
+include keybindings
+include bar
+include ux
+include scratchpad
+
+
+include /etc/sway/config.d/*
+
+# vim: filetype=i3config

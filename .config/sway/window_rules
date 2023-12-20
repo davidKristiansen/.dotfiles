@@ -1,0 +1,17 @@
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10, opacity 0.9
+
+for_window [app_id="termfloat"] floating enable, sticky enable, resize set 58 ppt 46 ppt, opacity 0.9
+
+for_window [app_id="gnome-calculator"] floating enable
+
+for_window [app_id="^scratchpad$"] move scratchpad
+
+for_window [class="^ffplay$"] floating enable
+
+for_window [class="SpeedCrunch" window_type="normal"] move scratchpad
+
+for_window [class="^Skype$" floating] floating enable
+
+for_window [title="Arm Development Studio IDE" floating] floating enable
+
+for_window [title="Picture-in-Picture"] floating enable, sticky enable

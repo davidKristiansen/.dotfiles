@@ -1,0 +1,26 @@
+add_newline = true
+[line_break]
+disabled = false
+
+command_timeout = 1000
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[✗](bold red) "
+
+[directory]
+truncation_length = 8
+truncation_symbol = "…/"
+truncate_to_repo = false
+
+[cmd_duration]
+min_time = 0
+format = "took [$duration](bold yellow)"
+
+[status]
+# style = "bg:blue"
+# symbol = "🔴 "
+# success_symbol = "🟢 SUCCESS"
+format = '[$status]($style) '
+map_symbol = true
+disabled = false

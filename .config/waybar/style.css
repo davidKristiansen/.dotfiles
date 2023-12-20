@@ -1,0 +1,223 @@
+
+/*
+*
+* Base16 oomox-gruvbox-dark-hard
+* Author: oomox-gruvbox-dark-hard
+*
+*/
+
+
+@define-color dark0_hard #1d2021;
+@define-color dark0 #282828;
+@define-color dark0_soft #32302f;
+@define-color dark1 #3c3836;
+@define-color dark2 #504945;
+@define-color dark3 #665c54;
+@define-color dark4 #7c6f64;
+@define-color dark4_256 #7c6f64;
+
+@define-color gray_245 #928374;
+@define-color gray_244 #928374;
+
+@define-color light0_hard #f9f5d7;
+@define-color light0 #fbf1c7;
+@define-color light0_soft #f2e5bc;
+@define-color light1 #ebdbb2;
+@define-color light2 #d5c4a1;
+@define-color light3 #bdae93;
+@define-color light4 #a89984;
+@define-color light4_256 #a89984;
+
+@define-color bright_red #fb4934;
+@define-color bright_green #b8bb26;
+@define-color bright_yellow #fabd2f;
+@define-color bright_blue #83a598;
+@define-color bright_purple #d3869b;
+@define-color bright_aqua #8ec07c;
+@define-color bright_orange #fe8019;
+
+@define-color neutral_red #cc241d;
+@define-color neutral_green #98971a;
+@define-color neutral_yellow #d79921;
+@define-color neutral_blue #458588;
+@define-color neutral_purple #b16286;
+@define-color neutral_aqua #689d6a;
+@define-color neutral_orange #d65d0e;
+
+@define-color faded_red #9d0006;
+@define-color faded_green #79740e;
+@define-color faded_yellow #b57614;
+@define-color faded_blue #076678;
+@define-color faded_purple #8f3f71;
+@define-color faded_aqua #427b58;
+@define-color faded_orange #af3a03;
+
+
+@define-color base00 #1d2021;
+@define-color base01 #cc241d;
+@define-color base02 #98971a;
+@define-color base03 #d79921;
+@define-color base04 #458588;
+@define-color base05 #b16286;
+@define-color base06 #689d6a;
+@define-color base07 #a89984;
+@define-color base08 #928374;
+@define-color base09 #fb4934;
+@define-color base0A #b8bb26;
+@define-color base0B #fabd2f;
+@define-color base0C #83a598;
+@define-color base0D #d3869b;
+@define-color base0E #8ec07c;
+@define-color base0F #ebdbb2;
+
+* {
+    border: none;
+    border-radius: 0;
+    font-size: 13px;
+}
+
+window#waybar {
+    /* font-family: "CaskaydiaCove Nerd Font", "Font Awesome 5 Free"; */
+    font-family: "0xProto Nerd Font Propo";
+    font-size: 12px;
+    color: @base0F;
+    background:  @dark0_hard;
+}
+
+#workspaces button {
+    color: @base0F;
+    padding: 0 3px;
+    min-width: 0;
+    background: @dark0_hard;
+    /* border-bottom: 3px solid transparent; */
+}
+
+#workspaces button.visible {
+    color: @neutral_orange;
+    background: @dark0_hard;
+    /* border-bottom: 3px solid transparent; */
+}
+
+#workspaces button.focused {
+    color: @bright_orange;
+    background: @dark0_hard;
+    /* border-bottom: 3px solid @base02; */
+}
+
+#clock {
+    font-family: "0xProto Nerd Font";
+    padding-right: 5px;
+    font-size: 13px;
+}
+
+#custom-spotify {
+    padding-left: 10px;
+    padding-right: 10px;
+    color: @light0_hard;
+    background: @dark4;
+}
+
+
+#pulseaudio, #backlight, #battery, #cpu {
+    padding-right: 5px;
+    padding-left: 5px;
+    margin: 0;
+}
+
+#clock {
+    border-right: none;
+}
+
+#tray {
+    background: @dark0_hard;
+}
+
+#cpu {
+    background: @dark0_hard;
+}
+
+#memory {
+    background: @dark0_hard;
+    padding-right: 5px;
+}
+
+#idle_inhibitor {
+    padding-right: 5px;
+}
+
+#mode {
+    padding: 0 10px 0 10px;
+    background: @transparent;
+}
+
+#backlight {
+    background: @dark0_hard;
+}
+
+#battery {
+    background: @dark0_hard;
+    padding-right: 8px;
+    padding-left: 0px;
+}
+/* @keyframes blink { */
+/*     to { */
+/*         background-color: $base01; */
+/*         color: $base00; */
+/*     } */
+/* } */
+
+/* #battery.warning:not(.charging) { */
+/*     background: $base01; */
+/*     color: $base0F; */
+/*     animation-name: blink; */
+/*     animation-duration: 0.5s; */
+/*     animation-timing-function: linear; */
+/*     animation-iteration-count: infinite; */
+/*     animation-direction: alternate; */
+/* } */
+
+#custom-arrow1 {
+	font-size: 18px;
+	color: @dark1;
+	background: @dark2;
+}
+#custom-arrow2 {
+	font-size: 18px;
+	color: @dark2;
+	background: @dark3;
+}
+#custom-arrow3 {
+	font-size: 18px;
+	background: #4e4e4e;
+	color: #949494
+}
+#custom-arrow4 {
+	font-size: 18px;
+	color: #4e4e4e;
+	background: #3a3a3a
+}
+#custom-arrow5 {
+	font-size: 18px;
+	color: #3a3a3a;
+	background: transparent;
+}
+#custom-arrow6 {
+	font-size: 18px;
+	color: @dark1;
+	background: @dark4;
+}
+#custom-arrow7 {
+	font-size: 18px;
+	color: @dark4;
+	background: transparent;
+}
+#custom-arrow8 {
+	font-size: 18px;
+	color: @bright_orange;
+	background: transparent;
+}
+
+#custom-separator {
+  color: @light0;
+  margin: 0 5px;
+}

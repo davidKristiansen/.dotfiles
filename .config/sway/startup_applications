@@ -1,0 +1,45 @@
+# exec mako
+exec dunst
+
+# exec gammastep-indicator
+
+exec libinput-gestures-setup start
+
+exec pulseaudio --start
+
+# exec ydotoold
+
+# exec kdeconnect-indicator
+
+# exec $term --class=scratchpad -e tmux new -s scratchpad
+
+exec_always pkill kanshi && kanshi
+
+exec --no-startup-id speedcrunch
+
+# exec foot --server
+
+exec caffein-indicator
+
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
+
+# exec swayidle -w \
+#     timeout 120 '$lock' \
+#     timeout 240 'systemctl suspend' \
+#     resume 'swaymsg "output * dpms on"' \
+#     before-sleep '$lock'
+
+exec swayidle -w \
+    timeout 120 '$lock' \
+    timeout 240 'swaymsg "output * dpms off"' \
+       resume 'swaymsg "output * dpms on"' \
+    before-sleep '$lock'
+
+exec sworkstyle &> /tmp/sworkstyle.log
+
+exec_always 'systemctl --user restart wireplumber.service'
+
+
+# vim: filetype=i3config

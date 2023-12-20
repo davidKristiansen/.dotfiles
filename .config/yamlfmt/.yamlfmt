@@ -1,0 +1,9 @@
+formatter:
+    type: basic
+    include_document_start: true
+    include_document_end: true
+    retain_line_breaks: true
+    indent: 2
+    indentless_arrays: false
+
+# vim: syntax=yaml
