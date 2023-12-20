@@ -5,6 +5,7 @@
 #   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 # fi
 
+
 # First prompt line
 if type neofetch >/dev/null; then
     neofetch --off --disable packages --color_blocks off
@@ -241,3 +242,5 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+dotfiles pull | grep -v "Already up to date." || true
