@@ -119,6 +119,7 @@ export MANWIDTH=9999
 export VISUAL=$EDITOR
 export PAGER='less'
 export BAT_THEME="gruvbox-dark"
+export GCM_CREDENTIAL_STORE=secretservice
 
 # alias tmux="TERM=tmux-256color tmux"
 
@@ -163,10 +164,12 @@ fi
 # fi
 if type exa >/dev/null; then
     alias ls='exa --color=auto'
-    alias la='exa -a'
-    alias ll='exa -lahb'
-    alias l=ls
+else
+    alias ls='ls --color=auto'
 fi
+alias la='ls -a'
+alias ll='ls -lahb'
+alias l=ls
 if type clip.exe >/dev/null; then
     alias clip='clip.exe'
 fi
@@ -205,10 +208,11 @@ fi
 if [ -d /opt/arm/armcc/bin ]; then
 	export PATH=$PATH:/opt/arm/armcc/bin
 fi
+if [ -d /opt/arm/armds/bin ]; then
+	export PATH=$PATH:/opt/arm/armds/bin
+fi
 
 fpath+=(~/.zsh_completions.d)
-
-export PYTHONPATH=/home/SONY/s7000026748/Work/Aurora/Devcontainer/70.Toolchain/10.Internal/10.Libraries/Python:$PYTHONPATH
 
 ###############################################################################
 # WSL VPN Fix (using sakai135/wsl-vpnkit)
