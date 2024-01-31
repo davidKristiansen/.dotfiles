@@ -2,12 +2,33 @@ local M = {}
 
 
 function M.on_attach(client, buffer)
+  local wik = require("which-key")
   local keys = {
     { "<leader>cd", vim.diagnostic.open_float, desc = "Line Diagnostics" },
     { "<leader>cl", "<cmd>LspInfo<cr>",        desc = "Lsp Info" },
     { "gD",         vim.lsp.buf.declaration,   desc = "Goto Declaration" },
     { "gd",         vim.lsp.buf.definition,    desc = "Goto Definition" },
-    { "<leader>ca", vim.lsp.buf.code_action,   desc = "Code Action" },
+    {
+      "gvD",
+      function()
+      vim.cmd([[
+        vsplit
+      ]])
+         vim.lsp.buf.declaration()
+      end,
+      desc = "Goto Declaration (split)"
+    },
+    {
+      "gvd",
+      function()
+         vim.cmd([[
+          vsplit
+        ]])
+        vim.lsp.buf.definition()
+      end,
+      desc = "Goto Definition (split)"
+    },
+    { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
     {
       "<leader>cf",
       function()
@@ -28,3 +49,6 @@ function M.on_attach(client, buffer)
 end
 
 return M
+-- vim.keymap.set('n', 'gv', function()
+--     vsplit vim.lsp.buf.definition
+--   end , bufopts)
