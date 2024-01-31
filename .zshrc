@@ -213,6 +213,8 @@ if [ -d /opt/arm/armds/bin ]; then
 fi
 
 fpath+=(~/.zsh_completions.d)
+autoload -Uz compinit
+compinit
 
 ###############################################################################
 # WSL VPN Fix (using sakai135/wsl-vpnkit)
@@ -238,8 +240,6 @@ export PATH=$PATH:/ROOTDIR/TOOL/DS-5_Linux/bin:/opt/kanshi
 # bindkey -r '^F'
 bindkey -s "^F" ':e "+Telescope find_files"^M'
 
-# autoload -Uz compinit
-# compinit
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
