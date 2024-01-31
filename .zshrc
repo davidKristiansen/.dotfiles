@@ -162,8 +162,8 @@ fi
 # if type nala >/dev/null; then
 #     alias apt=nala
 # fi
-if type exa >/dev/null; then
-    alias ls='exa --color=auto'
+if type eza >/dev/null; then
+    alias ls='eza --color=auto'
 else
     alias ls='ls --color=auto'
 fi
@@ -238,8 +238,8 @@ export PATH=$PATH:/ROOTDIR/TOOL/DS-5_Linux/bin:/opt/kanshi
 # bindkey -r '^F'
 bindkey -s "^F" ':e "+Telescope find_files"^M'
 
-autoload -Uz compinit
-compinit
+# autoload -Uz compinit
+# compinit
 
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
