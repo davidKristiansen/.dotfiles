@@ -6,22 +6,24 @@ function M.on_attach(client, buffer)
   local keys = {
     { "<leader>cd", vim.diagnostic.open_float, desc = "Line Diagnostics" },
     { "<leader>cl", "<cmd>LspInfo<cr>",        desc = "Lsp Info" },
+    { "K",          vim.lsp.buf.hover,         desc = "Peek" },
+    { "<c-k>",      vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
     { "gD",         vim.lsp.buf.declaration,   desc = "Goto Declaration" },
     { "gd",         vim.lsp.buf.definition,    desc = "Goto Definition" },
     {
       "gvD",
       function()
-      vim.cmd([[
+        vim.cmd([[
         vsplit
       ]])
-         vim.lsp.buf.declaration()
+        vim.lsp.buf.declaration()
       end,
       desc = "Goto Declaration (split)"
     },
     {
       "gvd",
       function()
-         vim.cmd([[
+        vim.cmd([[
           vsplit
         ]])
         vim.lsp.buf.definition()

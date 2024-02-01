@@ -14,16 +14,16 @@ return {
     },
     keys = {
       -- stylua: ignore
-      {
-        "<leader>cdu",
-        ":DevcontainerUp<cr>",
-        desc = "Up the DevContainer",
-      },
-      {
-        "<leader>cdc",
-        ":DevcontainerConnect<cr>",
-        desc = "Connect to DevContainer",
-      },
+      -- {
+      --   "<leader>cdu",
+      --   ":DevcontainerUp<cr>",
+      --   desc = "Up the DevContainer",
+      -- },
+      -- {
+      --   "<leader>cdc",
+      --   ":DevcontainerConnect<cr>",
+      --   desc = "Connect to DevContainer",
+      -- },
     }
   },
 }
