@@ -9,7 +9,9 @@ return {
       'nvim-lua/plenary.nvim',
       {
         'nvim-telescope/telescope-fzf-native.nvim',
-        lazy = false,
+        config = function(_, opts)
+          require('telescope').load_extension('fzf')
+        end,
         build =
         'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
       },
@@ -130,9 +132,6 @@ return {
         desc = "Goto Symbol (Workspace)",
       },
     },
-    config = function(_, opts)
-      require('telescope').load_extension('fzf')
-    end
   },
   {
     "nvim-telescope/telescope-media-files.nvim",
