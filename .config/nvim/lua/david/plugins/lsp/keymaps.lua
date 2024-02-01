@@ -4,12 +4,14 @@ local M = {}
 function M.on_attach(client, buffer)
   local wik = require("which-key")
   local keys = {
-    { "<leader>cd", vim.diagnostic.open_float, desc = "Line Diagnostics" },
-    { "<leader>cl", "<cmd>LspInfo<cr>",        desc = "Lsp Info" },
-    { "K",          vim.lsp.buf.hover,         desc = "Peek" },
-    { "<c-k>",      vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
-    { "gD",         vim.lsp.buf.declaration,   desc = "Goto Declaration" },
-    { "gd",         vim.lsp.buf.definition,    desc = "Goto Definition" },
+    { "<leader>cd",    vim.diagnostic.open_float, desc = "Line Diagnostics" },
+    { "<leader>cl",    "<cmd>LspInfo<cr>",        desc = "Lsp Info" },
+    { "K",             vim.lsp.buf.hover,         desc = "Peek" },
+    { "<c-k>",         vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
+    { "<LeftMouse>",   vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
+    { "<c-LeftMouse>", vim.lsp.buf.declaration,   mode = { "n", "i" },      desc = "Goto Declaration" },
+    { "gD",            vim.lsp.buf.declaration,   desc = "Goto Declaration" },
+    { "gd",            vim.lsp.buf.definition,    desc = "Goto Definition" },
     {
       "gvD",
       function()
