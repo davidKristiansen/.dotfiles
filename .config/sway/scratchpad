@@ -14,6 +14,6 @@ for_window [class="1Password"] move scratchpad
 bindsym $mod+o [class="1Password"] scratchpad show, move position center
 #
 # ## Scratchpad // Show kitty (quake mode) //  <> [ ##
-exec --no-startup-id kitty --class Kitty
-for_window [app_id="Kitty"] move scratchpad
-bindsym $mod+q [app_id="Kitty"] scratchpad show, move position top
+exec --no-startup-id $term --class __scratchpad
+for_window [app_id="__scratchpad"] move scratchpad
+bindsym $mod+q [app_id="__scratchpad"] scratchpad show, move position top

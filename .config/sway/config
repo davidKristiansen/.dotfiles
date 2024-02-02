@@ -3,7 +3,7 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term kitty
+set $term $HOME/.local/bin/kitty
 # set $term footclient
 #set $menu exec kitty --class=launcher -e sway-launcher-desktop
 # set $menu j4-dmenu-desktop --dmenu="bemenu -i \
@@ -38,7 +38,7 @@ set $screengrab slurp \
         | grim -g - - \
         | wl-copy
 
-include colorscheme
+include colorscheme/kanagawa_dragon
 include window_rules
 include startup_applications
 include input

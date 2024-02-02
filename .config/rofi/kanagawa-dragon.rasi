@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Rofi color theme
+
+   Based on the Gruvbox color scheme for Vim by morhetz
+   https://github.com/morhetz/gruvbox
+
+   File: gruvbox-dark-hard.rasi
+   Desc: Gruvbox dark (hard contrast) color theme for Rofi
+   Author: bardisty <b@bah.im>
+   Source: https://github.com/bardisty/gruvbox-rofi
+   Modified: Mon Feb 12 2018 06:04:26 PST -0800
+   ========================================================================== */
+
+* {
+    /* Theme settings */
+    highlight: bold italic;
+    scrollbar: true;
+
+    /* Kanagawa Dragon colors */
+    kanagawa-dragonBlack1: #12120f;
+    kanagawa-dragonBlack2: #1D1C19;
+    kanagawa-dragonBlack3: #181616;
+    kanagawa-dragonBlack4: #282727;
+    kanagawa-dragonBlack5: #393836;
+    kanagawa-dragonBlack6: #625e5a;
+
+    kanagawa-dragonWhite: #c5c9c5;
+    kanagawa-dragonGreen: #87a987;
+    kanagawa-dragonGreen2: #8a9a7b;
+    kanagawa-dragonPink: #a292a3;
+    kanagawa-dragonOrange: #b6927b;
+    kanagawa-dragonOrange2: #b98d7b;
+    kanagawa-dragonGray: #a6a69c;
+    kanagawa-dragonGray2: #9e9b93;
+    kanagawa-dragonGray3: #7a8382;
+    kanagawa-dragonBlue2: #8ba4b0;
+    kanagawa-dragonViolet: #8992a7;
+    kanagawa-dragonRed: #c4746e;
+    kanagawa-dragonAqua: #8ea4a2;
+    kanagawa-dragonAsh: #737c73;
+    kanagawa-dragonTeal: #949fb5;
+    kanagawa-dragonYellow: #c4b28a;
+
+    /* Theme colors */
+    background:                  @kanagawa-dragonBlack3;
+    background-color:            @background;
+    foreground:                  @kanagawa-dragonWhite;
+    border-color:                @kanagawa-dragonBlue2;
+    separatorcolor:              @border-color;
+    scrollbar-handle:            @border-color;
+
+    normal-background:           @background;
+    normal-foreground:           @foreground;
+    alternate-normal-background: @kanagawa-dragonBlack3;
+    alternate-normal-foreground: @foreground;
+    selected-normal-background:  @kanagawa-dragonBlack5;
+    selected-normal-foreground:  @kanagawa-dragonWhite;
+
+    active-background:           @kanagawa-dragonYellow;
+    active-foreground:           @background;
+    alternate-active-background: @active-background;
+    alternate-active-foreground: @active-foreground;
+    selected-active-background:  @kanagawa-dragonYellow;
+    selected-active-foreground:  @active-foreground;
+
+    urgent-background:           @kanagawa-dragonRed;
+    urgent-foreground:           @background;
+    alternate-urgent-background: @urgent-background;
+    alternate-urgent-foreground: @urgent-foreground;
+    selected-urgent-background:  @kanagawa-dragonRed;
+    selected-urgent-foreground:  @urgent-foreground;
+}
+
+window {
+    background-color: @background;
+    border:           1;
+    padding:          5;
+}
+mainbox {
+    border:  0;
+    padding: 0;
+}
+message {
+    border:       2px 0px 0px ;
+    border-color: @separatorcolor;
+    padding:      1px ;
+}
+textbox {
+    text-color: @foreground;
+}
+listview {
+    fixed-height: 0;
+    border:       2px 0px 0px ;
+    border-color: @separatorcolor;
+    spacing:      2px ;
+    scrollbar:    true;
+    padding:      2px 0px 0px ;
+}
+element {
+    border:  0;
+    padding: 1px ;
+}
+element-text {
+    background-color: inherit;
+    text-color:       inherit;
+}
+element.normal.normal {
+    background-color: @normal-background;
+    text-color:       @normal-foreground;
+}
+element.normal.urgent {
+    background-color: @urgent-background;
+    text-color:       @urgent-foreground;
+}
+element.normal.active {
+    background-color: @active-background;
+    text-color:       @active-foreground;
+}
+element.selected.normal {
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+}
+element.selected.urgent {
+    background-color: @selected-urgent-background;
+    text-color:       @selected-urgent-foreground;
+}
+element.selected.active {
+    background-color: @selected-active-background;
+    text-color:       @selected-active-foreground;
+}
+element.alternate.normal {
+    background-color: @alternate-normal-background;
+    text-color:       @alternate-normal-foreground;
+}
+element.alternate.urgent {
+    background-color: @alternate-urgent-background;
+    text-color:       @alternate-urgent-foreground;
+}
+element.alternate.active {
+    background-color: @alternate-active-background;
+    text-color:       @alternate-active-foreground;
+}
+scrollbar {
+    width:        4px ;
+    border:       0;
+    handle-width: 8px ;
+    padding:      0;
+}
+mode-switcher {
+    border:       2px 0px 0px ;
+    border-color: @separatorcolor;
+}
+button.selected {
+    background-color: @selected-normal-background;
+    text-color:       @selected-normal-foreground;
+}
+inputbar {
+    spacing:    0;
+    text-color: @normal-foreground;
+    padding:    1px ;
+}
+case-indicator {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+entry {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+prompt {
+    spacing:    0;
+    text-color: @normal-foreground;
+}
+inputbar {
+    children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
+}
+textbox-prompt-colon {
+    expand:     false;
+    str:        ":";
+    margin:     0px 0.3em 0em 0em ;
+    text-color: @normal-foreground;
+}

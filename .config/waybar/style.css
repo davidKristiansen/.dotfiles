@@ -53,7 +53,37 @@
 @define-color faded_orange #af3a03;
 
 
-@define-color base00 #1d2021;
+/*
+ * Kanagawa
+ */
+
+@define-color dragonBlack0 #0d0c0c;
+@define-color dragonBlack1 #12120f;
+@define-color dragonBlack2 #1D1C19;
+@define-color dragonBlack3 #181616;
+@define-color dragonBlack4 #282727;
+@define-color dragonBlack5 #393836;
+@define-color dragonBlack6 #625e5a;
+
+@define-color dragonWhite #c5c9c5;
+@define-color dragonGreen #87a987;
+@define-color dragonGreen2 #8a9a7b;
+@define-color dragonPink #a292a3;
+@define-color dragonOrange #b6927b;
+@define-color dragonOrange2 #b98d7b;
+@define-color dragonGray #a6a69c;
+@define-color dragonGray2 #9e9b93;
+@define-color dragonGray3 #7a8382;
+@define-color dragonBlue2 #8ba4b0;
+@define-color dragonViolet #8992a7;
+@define-color dragonRed #c4746e;
+@define-color dragonAqua #8ea4a2;
+@define-color dragonAsh #737c73;
+@define-color dragonTeal #949fb5;
+@define-color dragonYellow #c4b28a;
+
+
+@define-color base00 @dragonBlack3;
 @define-color base01 #cc241d;
 @define-color base02 #98971a;
 @define-color base03 #d79921;
@@ -68,7 +98,7 @@
 @define-color base0C #83a598;
 @define-color base0D #d3869b;
 @define-color base0E #8ec07c;
-@define-color base0F #ebdbb2;
+@define-color base0F @dragonWhite;
 
 * {
     border: none;
@@ -77,30 +107,29 @@
 }
 
 window#waybar {
-    /* font-family: "CaskaydiaCove Nerd Font", "Font Awesome 5 Free"; */
-    font-family: "0xProto Nerd Font Propo";
+    font-family: "Hack Nerd Font Propo";
     font-size: 12px;
     color: @base0F;
-    background:  @dark0_hard;
+    background:  @base00;
 }
 
 #workspaces button {
     color: @base0F;
     padding: 0 3px;
     min-width: 0;
-    background: @dark0_hard;
+    background: @base00;
     /* border-bottom: 3px solid transparent; */
 }
 
 #workspaces button.visible {
     color: @neutral_orange;
-    background: @dark0_hard;
+    background: @base00;
     /* border-bottom: 3px solid transparent; */
 }
 
 #workspaces button.focused {
     color: @bright_orange;
-    background: @dark0_hard;
+    background: @base00;
     /* border-bottom: 3px solid @base02; */
 }
 
@@ -113,8 +142,8 @@ window#waybar {
 #custom-spotify {
     padding-left: 10px;
     padding-right: 10px;
-    color: @light0_hard;
-    background: @dark4;
+    color: @base0F;
+    background: @base00;
 }
 
 
@@ -129,15 +158,15 @@ window#waybar {
 }
 
 #tray {
-    background: @dark0_hard;
+    background: @base00;
 }
 
 #cpu {
-    background: @dark0_hard;
+    background: @base00;
 }
 
 #memory {
-    background: @dark0_hard;
+    background: @base00;
     padding-right: 5px;
 }
 
@@ -151,11 +180,11 @@ window#waybar {
 }
 
 #backlight {
-    background: @dark0_hard;
+    background: @base00;
 }
 
 #battery {
-    background: @dark0_hard;
+    background: @base00;
     padding-right: 8px;
     padding-left: 0px;
 }

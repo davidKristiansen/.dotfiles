@@ -144,4 +144,5 @@ terminal: "rofi-sensible-terminal";
       sorting-method:    "name";
   }
 }
-@theme "gruvbox-dark-hard"
+// @theme "gruvbox-dark-hard"
+@theme "kanagawa-dragon"

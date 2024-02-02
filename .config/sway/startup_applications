@@ -17,6 +17,8 @@ exec_always pkill kanshi && kanshi
 
 exec --no-startup-id speedcrunch
 
+exec_always fcitx5 -d --replace
+
 # exec foot --server
 
 exec caffein-indicator
