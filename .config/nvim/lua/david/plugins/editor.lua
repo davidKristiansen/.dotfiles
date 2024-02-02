@@ -43,5 +43,12 @@ return {
       wk.setup(opts)
       wk.register(opts.defaults)
     end
+  },
+  {
+    -- amongst your other plugins
+    'akinsho/toggleterm.nvim',
+    lazy = false,
+    version = "*",
+    config = true
   }
 }
