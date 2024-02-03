@@ -202,15 +202,19 @@ fi
 bindkey -s '^T' 'uptime'
 
 if [ -d /opt/python/bin ]; then
-	export PATH=$PATH:/opt/python/bin
+	export PATH=/opt/python/bin:$PATH
 fi
 
 if [ -d /opt/arm/armcc/bin ]; then
-	export PATH=$PATH:/opt/arm/armcc/bin
+	export PATH=/opt/arm/armcc/bin:$PATH
 fi
 if [ -d /opt/arm/armds/bin ]; then
-	export PATH=$PATH:/opt/arm/armds/bin
+	export PATH=/opt/arm/armds/bin:$PATH
 fi
+if [ -d $HOME/neovim/bin ]; then
+	export PATH=$HOME/neovim/bin:$PATH
+fi
+
 
 fpath+=(~/.zsh_completions.d)
 autoload -Uz compinit
@@ -223,8 +227,6 @@ compinit
 if [[ -n "$IS_WSL" || -n "$WSL_DISTRO_NAME" ]]; then
     {wsl.exe -d wsl-vpnkit service wsl-vpnkit start &> /dev/null} &!
 fi
-
-export PATH=$PATH:/ROOTDIR/TOOL/DS-5_Linux/bin:/opt/kanshi
 
 # ## Podman
 # if [[ -z "$XDG_RUNTIME_DIR" ]]; then
