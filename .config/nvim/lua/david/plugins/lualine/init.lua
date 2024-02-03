@@ -1,5 +1,8 @@
+local f = require("david.plugins.lualine.functions")
+
+local colors = require("kanagawa.colors").setup({ theme = 'dragon' })
 return {
-{
+  {
     'nvim-lualine/lualine.nvim',
     event = "VeryLazy",
     dependencies = {
@@ -8,7 +11,8 @@ return {
     },
     opts = {
       options = {
-        theme = require("david.plugins.lualine.theme"),
+        -- theme = require("david.plugins.lualine.theme"),
+        theme = "auto",
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
         disabled_filetypes = {
@@ -21,8 +25,29 @@ return {
         'neo-tree',
         'lazy'
       },
+      sections = {
+        lualine_a = {
+          {
+            "macro-recording",
+            fmt = f.show_macro_recording,
+          },
+          'mode',
+        },
+        lualine_z = {
+          'location',
+          {
+            require("lazy.status").updates,
+            cond = require("lazy.status").has_updates,
+            -- color = { fg = colors.dragonBlack0 },
+          }
+        }
+      },
       winbar = {
-        lualine_a = { { 'filename', path = 1 } },
+        lualine_a = {
+          {
+            'filename', path = 1
+          },
+        },
         lualine_b = {
           {
             "navic",

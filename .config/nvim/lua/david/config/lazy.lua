@@ -19,8 +19,11 @@ require("lazy").setup({
     lazy = true,
     version = false
   },
-  install = {colorscheme = {"gruvbox"}},
-  checker = {enabled = true},
+  install = {colorscheme = {"kanagawa"}},
+  checker = {
+    enabled = true,
+    notify = false,
+  },
   performance = {
     rtp = {
       disabled_plugins = {
