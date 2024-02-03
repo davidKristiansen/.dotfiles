@@ -91,7 +91,12 @@ return {
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
-          { name = 'path' },
+          {
+            name = 'path',
+            option = {
+              trailing_slash = true
+            }
+          },
           { name = 'buffer' },
           { name = 'bazel' },
         }, {
@@ -118,7 +123,12 @@ return {
       cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
-          { name = 'path' }
+          {
+            name = 'path',
+            option = {
+              trailing_slash = true
+            }
+          }
         }, {
           { name = 'cmdline' }
         })

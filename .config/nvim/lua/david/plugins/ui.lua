@@ -1,3 +1,5 @@
+local dragon_colors = require("kanagawa.colors").setup({ theme = 'dragon' })
+
 return {
 
 
@@ -14,9 +16,19 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    version = "v2.20.8",
     event = { "BufReadPre", "BufNewFile" },
-    opts = {}
+    main = "ibl",
+    opts = {
+      indent = {
+        highlight = dragon_colors.dragonBlack3 ,
+        -- char = '┊',
+      },
+      whitespace = {
+        highlight = dragon_colors.dragonWhite,
+        remove_blankline_trail = false,
+    },
+    -- scope = { enabled = true, highlight = dragon_colors.dragonRed },
+    }
   },
 
   {
