@@ -1,6 +1,6 @@
 local f = require("david.plugins.lualine.functions")
 
-local colors = require("kanagawa.colors").setup({ theme = 'dragon' })
+-- local colors = require("kanagawa.colors").setup({ theme = 'dragon' })
 return {
   {
     'nvim-lualine/lualine.nvim',
@@ -11,8 +11,8 @@ return {
     },
     opts = {
       options = {
-        -- theme = require("david.plugins.lualine.theme"),
-        theme = "auto",
+        theme = require("david.plugins.lualine.theme"),
+        -- theme = "auto",
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
         disabled_filetypes = {

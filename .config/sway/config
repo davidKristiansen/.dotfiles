@@ -38,7 +38,7 @@ set $screengrab slurp \
         | grim -g - - \
         | wl-copy
 
-include colorscheme/kanagawa_dragon
+include colorscheme/gruvbox_dark_hard
 include window_rules
 include startup_applications
 include input
