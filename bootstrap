@@ -4,6 +4,8 @@ stow \
   --target=$HOME \
   --no-folding \
   --ignore=bootstrap \
-  --override="."
+  --adopt \
   .
+
+git restore .
 
