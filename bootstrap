@@ -1,4 +1,9 @@
 #!/bin/bash
 
-stow --target=$HOME --no-folding --adopt .
+stow \
+  --target=$HOME \
+  --no-folding \
+  --ignore=bootstrap \
+  --override="."
+  .
 
