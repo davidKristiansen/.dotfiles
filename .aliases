@@ -3,6 +3,6 @@ alias :e=$EDITOR
 alias :q=exit
 alias :Q=:q
 
-ssh="kitty +kitten ssh"
-ls="ls --color=auto"
-tmux="tmux -u"
+alias ssh="kitty +kitten ssh"
+alias ls="ls --color=auto"
+alias tmux="tmux -u"

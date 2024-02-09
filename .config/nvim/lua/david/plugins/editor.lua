@@ -106,5 +106,8 @@ return {
     lazy = false,
     version = "*",
     config = true
-  }
+  },
+  -- {
+  --   'vimpostor/vim-tpipeline'
+  -- }
 }
