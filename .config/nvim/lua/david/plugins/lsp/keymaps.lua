@@ -36,8 +36,9 @@ function M.on_attach(client, buffer)
     {
       "<leader>cf",
       function()
-        vim.lsp.buf.format { async = true }
+        vim.lsp.buf.format { async = false }
       end,
+      mode = { "n", "v" },
       desc = "Format"
     },
   }
