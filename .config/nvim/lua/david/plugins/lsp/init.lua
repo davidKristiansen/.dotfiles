@@ -13,7 +13,8 @@ return {
       {
         "folke/neodev.nvim",
         opts = {}
-      }
+      },
+      "folke/trouble.nvim",
     },
     opts = {
       inlay_hints = {
@@ -25,6 +26,7 @@ return {
       local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
       local servers = require("david.plugins.lsp.servers")
       local mason_lspconfig = require("mason-lspconfig")
+      local trouble = require("trouble")
 
       require("david.plugins.lsp.util").on_attach(function(client, buffer)
         require("david.plugins.lsp.keymaps").on_attach(client, buffer)
@@ -79,6 +81,31 @@ return {
   {
     'Fymyte/rasi.vim',
     ft = 'rasi',
-  }
+  },
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    keys = {
+      {
+        "]t",
+        function ()
+          require("trouble").next({skip_groups = true, jump = true});
+        end,
+        desc = "Next Trouble"
+      },
+      {
+        "[t",
+        function ()
+          require("trouble").previous({skip_groups = true, jump = true});
+        end,
+        desc = "Previous Trouble"
+      },
 
+    }
+  }
 }

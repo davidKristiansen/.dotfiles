@@ -7,6 +7,7 @@ return {
     version = false,
     dependencies = {
       'nvim-lua/plenary.nvim',
+      "folke/trouble.nvim",
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         config = function(_, opts)
