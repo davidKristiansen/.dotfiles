@@ -142,11 +142,6 @@ fi
 
 autoload colors && colors
 
-alias vim=$EDITOR
-alias :e=$EDITOR
-alias :q=exit
-alias :Q=:q
-
 if [ -f $HOME/.aliases ]; then
     source $HOME/.aliases
 fi
@@ -217,8 +212,11 @@ fi
 if [ -d /opt/arm/armds/bin ]; then
 	export PATH=/opt/arm/armds/bin:$PATH
 fi
-if [ -d $HOME/neovim/bin ]; then
-	export PATH=$HOME/neovim/bin:$PATH
+if [ -d $HOME/.local/neovim/bin ]; then
+	export PATH=$HOME/.local/neovim/bin:$PATH
+fi
+if [ -d $HOME/.local/tmux/bin ]; then
+	export PATH=$HOME/.local/tmux/bin:$PATH
 fi
 
 

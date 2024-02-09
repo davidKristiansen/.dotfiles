@@ -1,2 +1,8 @@
+alias vim=$EDITOR
+alias :e=$EDITOR
+alias :q=exit
+alias :Q=:q
+
 ssh="kitty +kitten ssh"
 ls="ls --color=auto"
+tmux="tmux -u"
