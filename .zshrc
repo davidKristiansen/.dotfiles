@@ -248,5 +248,5 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/.dotfiles'
+alias dotfiles='/usr/bin/git -C $HOME/.dotfiles'
 dotfiles pull | grep -v "Already up to date." || true
