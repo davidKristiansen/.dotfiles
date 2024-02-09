@@ -8,11 +8,12 @@ return {
     dependencies = {
       'nvim-tree/nvim-web-devicons',
       "SmiteshP/nvim-navic",
+      "tpope/vim-tpipeline"
     },
     opts = {
       options = {
-        theme = require("david.plugins.lualine.theme"),
-        -- theme = "auto",
+        -- theme = require("david.plugins.lualine.theme"),
+        theme = "auto",
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
         disabled_filetypes = {

@@ -107,7 +107,4 @@ return {
     version = "*",
     config = true
   },
-  -- {
-  --   'vimpostor/vim-tpipeline'
-  -- }
 }
