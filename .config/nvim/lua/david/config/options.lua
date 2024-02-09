@@ -59,3 +59,10 @@ opt.laststatus = 3
 opt.swapfile = false
 
 opt.fileencodings = "ucs-bom,utf-8,sjis,default"
+
+
+-- vim.cmd([[
+-- let &t_fe = "\<Esc>[?1004h"
+-- let &t_fd = "\<Esc>[?1004l"
+-- ]])
+
