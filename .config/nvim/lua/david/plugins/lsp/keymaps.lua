@@ -41,6 +41,20 @@ function M.on_attach(client, buffer)
       mode = { "n", "v" },
       desc = "Format"
     },
+    {
+      "[d",
+      function ()
+        vim.diagnostic.goto_prev()
+      end,
+      desc = "Previous Diagnostic"
+    },
+    {
+      "]d",
+      function ()
+        vim.diagnostic.goto_next()
+      end,
+      desc = "Next Diagnostic"
+    }
   }
 
   local opts = {
