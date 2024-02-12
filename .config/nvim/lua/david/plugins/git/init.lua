@@ -18,13 +18,13 @@ return {
       on_attach = function(bufnr)
         require("david.plugins.git.keymaps").on_attach(bufnr)
       end,
-        current_line_blame = true,
+      current_line_blame = true,
       current_line_blame_opts = {
         virt_text = true,
-        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-        delay = 1000,
+        virt_text_pos = 'right_align', -- 'eol' | 'overlay' | 'right_align'
+        delay = 100,
         ignore_whitespace = false,
-        virt_text_priority = 100,
+        virt_text_priority = 1000,
       },
     }
   },
