@@ -33,6 +33,7 @@ return {
           TabLineSel = { bg = "none" },
           StatusLine = { bg = "none" },
           StatusLineNC = { bg = "none" },
+           CursorLine = { bg = "none" },
         },
         dim_inactive = false,
         transparent_mode = false,
