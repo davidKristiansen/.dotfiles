@@ -1,4 +1,8 @@
 local f = require("david.plugins.lualine.functions")
+local telescope = require("telescope")
+
+local debug = require("david.debug")
+
 
 -- local colors = require("kanagawa.colors").setup({ theme = 'dragon' })
 return {
@@ -11,7 +15,9 @@ return {
     --   vim.cmd("highlight lualine_c_normal guibg=NONE")
     -- end,
     dependencies = {
+      'kazhala/close-buffers.nvim',
       'nvim-tree/nvim-web-devicons',
+      'WhoIsSethDaniel/lualine-lsp-progress.nvim',
       "SmiteshP/nvim-navic",
       {
         "tpope/vim-tpipeline",
@@ -28,6 +34,7 @@ return {
         -- theme = "gruvbox_dark",
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
+        globalstatus = true,
         disabled_filetypes = {
           statusline = { "neo-tree" },
           winbar = { "neo-tree" },
@@ -36,7 +43,11 @@ return {
       extensions = {
         'quickfix',
         'neo-tree',
-        'lazy'
+        'lazy',
+        'fugitive',
+        'mason',
+        'fzf',
+        'toggleterm'
       },
       sections = {
         lualine_a = {
@@ -44,13 +55,37 @@ return {
             "macro-recording",
             fmt = f.show_macro_recording,
           },
-          'mode',
+          {
+            'mode',
+            icons_enabled = true
+          },
+        },
+        lualine_b = {
+          {
+            'branch',
+            on_click = function(num, but, mod)
+              -- for x, v in pairs(debug.locals()) do print(x, v) end
+              print("HELLO")
+              telescope.builtin.git_branches()
+            end
+          },
+          'diff',
+          {
+            'diagnostics',
+            on_click = function()
+              require("telescope.builtin").diagnostics()
+            end
+          }
         },
         lualine_c = {
           {
             'filename', path = 1
           },
         },
+        lualine_x = {
+          'lsp_progress'
+        },
+        lualine_y = {'encoding', 'fileformat', 'filetype', 'progress'},
         lualine_z = {
           'location',
           {
@@ -63,7 +98,12 @@ return {
       winbar = {
         lualine_a = {
           {
-            'filename'
+            'filename',
+            on_click = function(num, but, mod)
+              if but == 'm' then
+                require("close_buffers").delete({ type = 'this' })
+              end
+            end
           },
         },
         lualine_c = {
@@ -75,7 +115,16 @@ return {
         }
       },
       inactive_winbar = {
-        lualine_a = { 'filename' }
+        lualine_a = {
+          {
+            'filename',
+            on_click = function(num, but, mod)
+              if but == 'm' then
+                require("close_buffers").delete({ type = 'this' })
+              end
+            end
+          }
+        }
       }
     }
   },
