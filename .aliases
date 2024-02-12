@@ -7,7 +7,7 @@ if type trash >/dev/null; then
     alias rm=trash
 fi
 if type bat >/dev/null; then
-    alias cat=bat
+    alias cat=bat --theme gruvbox-dark --color auto --decoration auto
 fi
 
 if command -v eza &>/dev/null; then
