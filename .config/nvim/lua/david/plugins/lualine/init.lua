@@ -46,6 +46,11 @@ return {
           },
           'mode',
         },
+        lualine_c = {
+          {
+            'filename', path = 1
+          },
+        },
         lualine_z = {
           'location',
           {
@@ -58,7 +63,7 @@ return {
       winbar = {
         lualine_a = {
           {
-            'filename', path = 1
+            'filename'
           },
         },
         lualine_c = {
@@ -70,8 +75,7 @@ return {
         }
       },
       inactive_winbar = {
-        lualine_a = { { 'filename', path = 1 },
-        }
+        lualine_a = { 'filename' }
       }
     }
   },
