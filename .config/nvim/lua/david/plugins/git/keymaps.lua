@@ -8,6 +8,7 @@ function M.on_attach(buffer)
   local keys = {
     { '<leader>ga', gs.stage_hunk,                                                       desc = "Stage hunk" },
     { '<leader>gr', gs.reset_hunk,                                                       desc = "Reset hunk" },
+    { '<leader>gR', gs.reset_buffer,                                                     desc = "Reset buffer" },
     { '<leader>ga', function() gs.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end, desc = "Stage hunk",       mode = 'v' },
     { '<leader>gr', function() gs.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end, desc = "Reset hunk",       mode = 'v' },
     { '<leader>gA', gs.stage_buffer,                                                     desc = "Stage buffer" },
