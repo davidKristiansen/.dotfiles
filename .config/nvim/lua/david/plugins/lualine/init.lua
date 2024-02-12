@@ -6,6 +6,10 @@ return {
     'nvim-lualine/lualine.nvim',
     lazy = false,
     event = "VeryLazy",
+    -- init = function()
+    --   vim.cmd("highlight lualine_c_inactive guibg=NONE")
+    --   vim.cmd("highlight lualine_c_normal guibg=NONE")
+    -- end,
     dependencies = {
       'nvim-tree/nvim-web-devicons',
       "SmiteshP/nvim-navic",
@@ -13,15 +17,15 @@ return {
         "tpope/vim-tpipeline",
         config = function()
           vim.g.tpipeline_clearstl = 1
-          vim.o.fcs = "stlnc:─,stl:─,vert:│"
+          -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
           vim.opt.fillchars:append({ eob = " " })
         end
       }
     },
     opts = {
       options = {
-        --       -- theme = require("david.plugins.lualine.theme"),
-        theme = "auto",
+        theme = require("david.plugins.lualine.theme"),
+        -- theme = "gruvbox_dark",
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
         disabled_filetypes = {
@@ -42,14 +46,6 @@ return {
           },
           'mode',
         },
-        lualine_c = {
-          'filename',
-          {
-            "navic",
-            color_correction = nil,
-            navic_opts = nil
-          },
-        },
         lualine_z = {
           'location',
           {
@@ -59,18 +55,24 @@ return {
           }
         }
       },
-      -- winbar = {
-      --   lualine_a = {
-      --     {
-      --       'filename', path = 1
-      --     },
-      --   },
-      --   lualine_b = {
-      --   }
-      -- },
-      -- inactive_winbar = {
-      --   lualine_a = { { 'filename', path = 1 } }
-      -- }
+      winbar = {
+        lualine_a = {
+          {
+            'filename', path = 1
+          },
+        },
+        lualine_c = {
+          {
+            "navic",
+            color_correction = nil,
+            navic_opts = nil
+          },
+        }
+      },
+      inactive_winbar = {
+        lualine_a = { { 'filename', path = 1 },
+        }
+      }
     }
   },
   {

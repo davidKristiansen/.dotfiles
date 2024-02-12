@@ -5,6 +5,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      local palette = require("gruvbox").palette
       require("gruvbox").setup({
         undercurl = true,
         underline = true,
@@ -20,11 +21,18 @@ return {
         invert_signs = false,
         invert_tabline = false,
         invert_intend_guides = false,
-        inverse = true, -- invert background for search, diffs, statuslines and errors
+        inverse = true,    -- invert background for search, diffs, statuslines and errors
         contrast = "hard", -- can be "hard", "soft" or empty string
         palette_overrides = {},
         overrides = {
-          SignColumn = {bg = "#1d2021"}
+          SignColumn = { bg = "none" },
+          WinBar = { bg = "none" },
+          WinBarNC = { bg = "none" },
+          TabLineFill = { bg = "none" },
+          TabLine = { bg = "none" },
+          TabLineSel = { bg = "none" },
+          StatusLine = { bg = "none" },
+          StatusLineNC = { bg = "none" },
         },
         dim_inactive = false,
         transparent_mode = false,
