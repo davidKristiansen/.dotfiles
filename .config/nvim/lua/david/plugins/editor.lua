@@ -7,19 +7,36 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
+      {
+        's1n7ax/nvim-window-picker',
+        opts = {
+          filter_rules = {
+            include_current_win = false,
+            autoselect_one = true,
+            -- filter using buffer options
+            bo = {
+              -- if the file type is one of following, the window will be ignored
+              filetype = { 'neo-tree', "neo-tree-popup", "notify" },
+              -- if the buffer type is one of following, the window will be ignored
+              buftype = { 'terminal', "quickfix" },
+            },
+          },
+        },
+      },
     },
     opts = {
       close_if_last_window = true,
       enable_git_status = true,
+      reveal = true,
       -- enable_diagnostic = true
-      default_component_configs = {
+      window = {
         mappings = {
           ["<space>"] = {
             "toggle_node",
             nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
           },
-          ["<2-LeftMouse>"] = "open",
-          ["<cr>"] = "open",
+          ["<2-LeftMouse>"] = "open_with_window_picker",
+          ["<cr>"] = "open_with_window_picker",
           ["<esc>"] = "cancel", -- close preview or floating neo-tree window
           ["P"] = { "toggle_preview", config = { use_float = true, use_image_nvim = true } },
           -- Read `# Preview Mode` for more information
@@ -71,7 +88,7 @@ return {
       }
     },
     keys = {
-      { "<leader>fe", "<cmd>Neotree toggle dir=./<cr>", desc = "Explorer" }
+      { "<leader>fe", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" }
     }
   },
 
