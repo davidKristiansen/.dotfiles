@@ -28,7 +28,22 @@ return {
       close_if_last_window = true,
       enable_git_status = true,
       reveal = true,
-      -- enable_diagnostic = true
+      enable_diagnostic = true,
+      filesystem = {
+        use_libuv_file_watcher = false,
+        hide_dotfiles = false,
+        hide_gitignore = true,
+        follow_current_file = {
+          enabled = true,
+          leave_dirs_open = false,
+        },
+      },
+      buffers = {
+        follow_current_file = {
+            enabled = true,
+            leave_dirs_open = false,
+          },
+      },
       window = {
         mappings = {
           ["<space>"] = {
@@ -88,7 +103,8 @@ return {
       }
     },
     keys = {
-      { "<leader>fe", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" }
+      { "<leader>fe", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" },
+      { "\\", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" }
     }
   },
 
@@ -108,6 +124,7 @@ return {
         ["]"] = { name = "+next" },
         ["["] = { name = "+prev" },
         ["<leader>f"] = { name = "+file/find" },
+        ["<leader>t"] = { name = "+tasks" },
         ["<leader>s"] = { name = "+search" },
       }
     },
