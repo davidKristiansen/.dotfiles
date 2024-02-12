@@ -7,6 +7,9 @@ M.opts = {
       if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
         client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
           Lua = {
+            diagnostics = {
+              globals = { 'vim' }
+            },
             runtime = {
               version = 'LuaJIT'
             },
@@ -64,6 +67,14 @@ M.opts = {
 
 M.setup = {
   clangd = function(_, opts)
+    local wk = require("which-key")
+
+    wk.register({
+      g = {
+        h = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch source header" }
+      }
+    })
+
     require("clangd_extensions").setup({
       server = opts,
       extensions = {

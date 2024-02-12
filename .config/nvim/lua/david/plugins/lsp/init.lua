@@ -15,6 +15,7 @@ return {
         opts = {}
       },
       "folke/trouble.nvim",
+       "folke/which-key.nvim",
     },
     opts = {
       inlay_hints = {
