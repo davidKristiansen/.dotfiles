@@ -142,9 +142,6 @@ fi
 
 autoload colors && colors
 
-if [ -f $HOME/.aliases ]; then
-    . $HOME/.aliases
-fi
 
 export PATH=$PATH:$HOME/.local/bin
 
@@ -202,6 +199,9 @@ if [ -d $HOME/.local/tmux/bin ]; then
 	export PATH=$HOME/.local/tmux/bin:$PATH
 fi
 
+if [ -f $HOME/.aliases ]; then
+    . $HOME/.aliases
+fi
 
 fpath+=(~/.zsh_completions.d)
 autoload -Uz compinit
