@@ -62,7 +62,6 @@ M.opts = {
       "--background-index",
       "-j=16",
       "--clang-tidy",
-      "--clang-tidy-checks=*",
       "--completion-style=detailed",
       "--header-insertion=never",
       "--offset-encoding=utf-16", --temporary fix for null-ls
