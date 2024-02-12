@@ -3,6 +3,38 @@ alias :e=$EDITOR
 alias :q=exit
 alias :Q=:q
 
+if type trash >/dev/null; then
+    alias rm=trash
+fi
+if type bat >/dev/null; then
+    alias cat=bat
+fi
+
+if command -v eza &>/dev/null; then
+    alias ls='eza --color=auto'
+    alias ll='ls \
+      --total-size \
+      --long \
+      --changed \
+      --sort modified \
+      --reverse \
+      --all \
+      --header \
+      --group-directories-first \
+    '
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -lahb'
+fi
+alias la='ls -a'
+alias l=ls
+if type clip.exe >/dev/null; then
+    alias clip='clip.exe'
+fi
+
+
 alias ssh="kitty +kitten ssh"
-alias ls="ls --color=auto"
 alias tmux="tmux -u"
+
+
+# vim: set filetype=bash:

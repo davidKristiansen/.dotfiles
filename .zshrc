@@ -143,7 +143,7 @@ fi
 autoload colors && colors
 
 if [ -f $HOME/.aliases ]; then
-    source $HOME/.aliases
+    . $HOME/.aliases
 fi
 
 export PATH=$PATH:$HOME/.local/bin
@@ -154,26 +154,9 @@ elif [ -d $HOME/.cargo/bin ]; then
 	export PATH=$PATH:$HOME/.cargo/bin
 fi
 
-if type trash >/dev/null; then
-    alias rm=trash
-fi
-if type bat >/dev/null; then
-    alias cat=bat
-fi
 # if type nala >/dev/null; then
 #     alias apt=nala
 # fi
-if type eza >/dev/null; then
-    alias ls='eza --color=auto'
-else
-    alias ls='ls --color=auto'
-fi
-alias la='ls -a'
-alias ll='ls -lahb'
-alias l=ls
-if type clip.exe >/dev/null; then
-    alias clip='clip.exe'
-fi
 
 dotenv () {
     set -a
