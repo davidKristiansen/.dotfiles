@@ -22,7 +22,7 @@ return {
       current_line_blame_opts = {
         virt_text = true,
         virt_text_pos = 'right_align', -- 'eol' | 'overlay' | 'right_align'
-        delay = 100,
+        delay = 0,
         ignore_whitespace = false,
         virt_text_priority = 1000,
       },
@@ -76,7 +76,9 @@ return {
         fzf_lua = true,
       },
     }
+  },
+  {
+    "tpope/vim-fugitive",
+    event = { "BufReadPost", "BufNewFile" },
   }
-
-
 }
