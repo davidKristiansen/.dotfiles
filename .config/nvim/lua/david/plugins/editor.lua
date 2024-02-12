@@ -101,6 +101,11 @@ return {
     end
   },
   {
+    "luukvbaal/statuscol.nvim",
+    event = { "BufEnter", "WinEnter", "FocusGained" },
+    config = true
+  },
+  {
     -- amongst your other plugins
     'akinsho/toggleterm.nvim',
     lazy = false,
