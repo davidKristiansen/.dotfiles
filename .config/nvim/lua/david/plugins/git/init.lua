@@ -17,7 +17,15 @@ return {
     opts = {
       on_attach = function(bufnr)
         require("david.plugins.git.keymaps").on_attach(bufnr)
-      end
+      end,
+        current_line_blame = true,
+      current_line_blame_opts = {
+        virt_text = true,
+        virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+        delay = 1000,
+        ignore_whitespace = false,
+        virt_text_priority = 100,
+      },
     }
   },
   {
@@ -38,14 +46,27 @@ return {
     "NeogitOrg/neogit",
     lazy = false,
     dependencies = {
-      "nvim-lua/plenary.nvim", -- required
+      "nvim-lua/plenary.nvim",  -- required
       "sindrets/diffview.nvim", -- optional - Diff integration
 
       -- Only one of these is needed, not both.
       "nvim-telescope/telescope.nvim", -- optional
-      "ibhagwan/fzf-lua",            -- optional
+      "ibhagwan/fzf-lua",              -- optional
     },
-    config = true
+    opts = {
+      kind = "split",
+      signs = {
+        -- { CLOSED, OPENED }
+        section = { "", "" },
+        item = { "", "" },
+        hunk = { "", "" },
+      },
+      integrations = {
+        diffview = true,
+        telescope = true,
+        fzf_lua = true,
+      },
+    }
   }
 
 
