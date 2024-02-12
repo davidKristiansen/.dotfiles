@@ -80,5 +80,8 @@ return {
   {
     "tpope/vim-fugitive",
     event = { "BufReadPost", "BufNewFile" },
+    keys = {
+      { '<leader>gD', ':Gvdiffsplit ', "Diff (vsplit)"}
+    }
   }
 }

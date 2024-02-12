@@ -18,7 +18,7 @@ function M.on_attach(buffer)
     -- { '<leader>gb', function() gs.blame_line { full = true } end, desc = "Blame line"},
     { '<leader>gb', gs.toggle_current_line_blame,                                        desc = "Blame line toggle" },
     { '<leader>gd', gs.diffthis,                                                         desc = "Diff this" },
-    { '<leader>gD', function() gs.diffthis('~') end,                                     desc = "Diff this (~)" },
+    -- { '<leader>gD', function() gs.diffthis('~') end,                                     desc = "Diff this (~)" },
     -- { '<leader>gd', gs.toggle_deleted, desc = "Toggle deleted"},
     { 'ih',         ':<C-U>Gitsigns select_hunk<CR>',                                    desc = "Select hunk",      mode = { 'o', 'x' }, }
   }
