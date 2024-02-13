@@ -54,6 +54,7 @@ zinit wait lucid for \
   OMZP::tmux \
 	b4b4r07/enhancd \
 	Aloxaf/fzf-tab \
+  soimort/translate-shell \
     # OMZ::plugins/docker/_docker \
 
 zinit ice depth=1
