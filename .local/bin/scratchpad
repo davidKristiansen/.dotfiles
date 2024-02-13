@@ -1,7 +1,9 @@
 #!/bin/bash
 
 if [[ ! $(ps aux | grep "[_]_scratchpad") ]]; then
-  bash -e kitty --class __scratchpad
+  kitty --class __scratchpad; swaymsg '[app_id="__scratchpad"] scratchpad show'
 fi
+
+swaymsg '[app_id="__scratchpad"] scratchpad show'
 
 # vim.filetype=bash:
