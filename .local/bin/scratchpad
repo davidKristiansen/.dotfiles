@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ ! $(ps aux | grep "[_]_scratchpad") ]]; then
+  bash -e kitty --class __scratchpad
+fi
+
+# vim.filetype=bash:
