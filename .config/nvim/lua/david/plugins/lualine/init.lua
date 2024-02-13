@@ -20,7 +20,7 @@ return {
       'WhoIsSethDaniel/lualine-lsp-progress.nvim',
       "SmiteshP/nvim-navic",
       {
-        "tpope/vim-tpipeline",
+        "vimpostor/vim-tpipeline",
         config = function()
           vim.g.tpipeline_clearstl = 1
           -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
