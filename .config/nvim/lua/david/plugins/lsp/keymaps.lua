@@ -36,21 +36,25 @@ function M.on_attach(client, buffer)
     {
       "<leader>cf",
       function()
-        vim.lsp.buf.format { async = false }
+        if client.supports_method("textDocument/formatting") then
+          vim.lsp.buf.format { async = false }
+        else
+          require('conform').format()
+        end
       end,
       mode = { "n", "v" },
       desc = "Format"
     },
     {
       "[d",
-      function ()
+      function()
         vim.diagnostic.goto_prev()
       end,
       desc = "Previous Diagnostic"
     },
     {
       "]d",
-      function ()
+      function()
         vim.diagnostic.goto_next()
       end,
       desc = "Next Diagnostic"
