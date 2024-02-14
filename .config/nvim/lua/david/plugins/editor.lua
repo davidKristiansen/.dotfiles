@@ -1,3 +1,4 @@
+local palette = require('gruvbox').palette
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -29,10 +30,12 @@ return {
       enable_git_status = true,
       reveal = true,
       enable_diagnostic = true,
+      use_libuv_file_watcher = false,
       filesystem = {
-        use_libuv_file_watcher = false,
-        hide_dotfiles = false,
-        hide_gitignore = true,
+        filtered_items = {
+          hide_dotfiles = false,
+          hide_gitignore = true,
+        },
         follow_current_file = {
           enabled = true,
           leave_dirs_open = false,
@@ -40,9 +43,14 @@ return {
       },
       buffers = {
         follow_current_file = {
-            enabled = true,
-            leave_dirs_open = false,
-          },
+          enabled = true,
+          leave_dirs_open = false,
+        },
+      },
+      default_component_configs = {
+        name = {
+          -- highlight = { palette.neutral_yellow }
+        },
       },
       window = {
         mappings = {
@@ -104,7 +112,7 @@ return {
     },
     keys = {
       { "<leader>fe", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" },
-      { "\\", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" }
+      { "\\",         "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" }
     }
   },
 
