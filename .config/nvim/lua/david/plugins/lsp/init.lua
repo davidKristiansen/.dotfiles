@@ -15,7 +15,7 @@ return {
         opts = {}
       },
       "folke/trouble.nvim",
-       "folke/which-key.nvim",
+      "folke/which-key.nvim",
     },
     opts = {
       inlay_hints = {
@@ -74,7 +74,8 @@ return {
     opts = {
       ensure_installed = {
         "lua_ls",
-        "clangd"
+        "clangd",
+        "jsonls"
       },
       automatic_installation = true
     }
@@ -94,19 +95,19 @@ return {
     keys = {
       {
         "]t",
-        function ()
-          require("trouble").next({skip_groups = true, jump = true});
+        function()
+          require("trouble").next({ skip_groups = true, jump = true });
         end,
         desc = "Next Trouble"
       },
       {
         "[t",
-        function ()
-          require("trouble").previous({skip_groups = true, jump = true});
+        function()
+          require("trouble").previous({ skip_groups = true, jump = true });
         end,
         desc = "Previous Trouble"
       },
 
     }
-  }
+  },
 }
