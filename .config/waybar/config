@@ -35,28 +35,15 @@
             "9": ["DP-5"]
         }
     },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
-    "wireplumber": {
-        "format": "{volume}% {icon}",
-        "format-muted": "",
-        "on-click": "helvum",
-        "format-icons": ["", "", ""]
-    },
     "cpu": {
         "interval": 10,
         "format": "{load:3.1f}% ",
         "max-length": 10,
-	    "on-click": "kitty -e htop"
+	    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
     },
     "memory": {
         "format": "{}% ",
-	    "on-click": "kitty -e htop"
+	    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
     },
 
     "sway/window": {
@@ -102,11 +89,11 @@
         "format-alt": "{:%a, %d. %b  %H:%M}"
     },
     "wireplumber": {
-    "format": "{volume}% {icon}",
-    "format-muted": "",
-    "on-click": "pavucontrol",
-    "format-icons": ["", "", ""]
-},
+      "format": "{volume}% {icon}",
+      "format-muted": "",
+      "on-click": "pavucontrol",
+      "format-icons": ["", "", ""]
+    },
     "pulseaudio": {
         "format": "{volume}% {icon}",
         "format-bluetooth": "{volume}% {icon}",
@@ -143,7 +130,7 @@
         "format": "{ifname}",
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ifname} ",
-        "format-disconnected": "", //An empty format will hide the module.
+        "format-disconnected": "",
         "tooltip-format": "{ifname}",
         "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
         "tooltip-format-ethernet": "{ifname} ",
@@ -183,5 +170,5 @@
 
 }
 
-# vim: set syntax=json:
-# vim: filetype=json
+// vim: set syntax=json:
+// vim: filetype=json
