@@ -210,6 +210,9 @@ fi
 if [ -f $HOME/.aliases ]; then
     . $HOME/.aliases
 fi
+if [ -f ~/.fzf.zsh ]; then
+  . ~/.fzf.zsh
+fi
 
 fpath+=(~/.zsh_completions.d)
 autoload -Uz compinit
