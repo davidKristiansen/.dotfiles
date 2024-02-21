@@ -4,19 +4,11 @@ set $down j
 set $up k
 set $right l
 set $term $HOME/.local/bin/kitty
-# set $term footclient
-#set $menu exec kitty --class=launcher -e sway-launcher-desktop
-# set $menu j4-dmenu-desktop --dmenu="bemenu -i \
-#         --tb '#1D2021' \
-#         --tf '#EBDBB2' \
-#         --hb '#1D2021' \
-#         --hf '#FE8019' \
-#         --fb '#1D2021' \
-#         --nb '#1D2021'" \
-#         --term='kitty'
-# set $menu j4-dmenu-desktop
-set $menu rofi -modi drun -show-icons -show drun
-# set $menu j4-dmenu-desktop --dmenu="wofi -dmenu -i"
+# set $menu rofi -modi drun -show-icons -show drun
+
+set $menu swaymsg 'exec $term --class __launcher -e fzf-launcher'
+
+
 set $lock swaylock \
         --screenshots \
         --clock \

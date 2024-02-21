@@ -18,4 +18,6 @@ for_window [title="Picture-in-Picture"] floating enable, sticky enable
 
 for_window [app_id="__btop"] floating enable, sticky enable, resize set 650 400, opacity 0.9
 
+for_window [app_id="__launcher"] floating enable, sticky enable, resize set 1200 800, opacity 0.9
+
 # vim: filetype=i3config
