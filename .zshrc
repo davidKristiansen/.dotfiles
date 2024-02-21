@@ -52,10 +52,17 @@ zinit wait lucid for \
 	OMZP::extract \
 	OMZP::thefuck \
   OMZP::tmux \
-	b4b4r07/enhancd \
 	Aloxaf/fzf-tab \
   soimort/translate-shell \
     # OMZ::plugins/docker/_docker \
+
+
+zinit ice wait"2" as"command" from"gh-r" lucid \
+  mv"zoxide*/zoxide -> zoxide" \
+  atclone"./zoxide init zsh > init.zsh" \
+  atpull"%atclone" src"init.zsh" nocompile'!'
+zinit light ajeetdsouza/zoxide
+
 
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
@@ -236,6 +243,8 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+eval "$($HOME/.zinit/plugins/ajeetdsouza---zoxide/zoxide init zsh --cmd cd)"
 
 alias dotfiles='/usr/bin/git -C $HOME/.dotfiles'
 dotfiles pull | grep -v "Already up to date." || true
