@@ -154,4 +154,15 @@ return {
     version = "*",
     config = true
   },
+  {
+    "lewis6991/satellite.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      current_only = true,
+      excluded_filetypes = { 'neo-tree' },
+      width = 1,
+      windblend = 70,
+      zindex = 100
+    }
+  }
 }
