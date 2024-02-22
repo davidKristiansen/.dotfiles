@@ -68,7 +68,7 @@ if [[ "$verbose" ]]; then
     set -x
 fi
 
-locations=( "$HOME/.local/share/applications" "/usr/share/applications" )
+locations=( "$HOME/.local/share/applications" "/usr/share/applications" "/var/lib/snapd/desktop/applications")
 
 #print out the available categories:
 grep -r '^Categories' "${locations[@]}" |
