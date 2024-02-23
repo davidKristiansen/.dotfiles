@@ -17,9 +17,9 @@ return {
             -- filter using buffer options
             bo = {
               -- if the file type is one of following, the window will be ignored
-              filetype = { 'neo-tree', "neo-tree-popup", "notify" },
+              filetype = { 'neo-tree', "neo-tree-popup", "notify" , "alpha" },
               -- if the buffer type is one of following, the window will be ignored
-              buftype = { 'terminal', "quickfix" },
+              buftype = { 'terminal', "quickfix", "alpha" },
             },
           },
         },
@@ -143,30 +143,10 @@ return {
     end
   },
   {
-    "luukvbaal/statuscol.nvim",
-    branch = "0.10",
-    event = { "BufEnter", "WinEnter", "FocusGained" },
-    opts = {
-      ft_ignore = { "neo-tree" },
-      relculright = true,
-    }
-  },
-  {
     -- amongst your other plugins
     'akinsho/toggleterm.nvim',
     lazy = false,
     version = "*",
     config = true
   },
-  {
-    "lewis6991/satellite.nvim",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      current_only = true,
-      excluded_filetypes = { 'neo-tree' },
-      width = 1,
-      windblend = 70,
-      zindex = 100
-    }
-  }
 }

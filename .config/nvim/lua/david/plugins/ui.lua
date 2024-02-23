@@ -4,9 +4,24 @@
 
 return {
   {
+    "lewis6991/satellite.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      current_only = true,
+      excluded_filetypes = { 'neo-tree', 'alpha' },
+      width = 1,
+      windblend = 70,
+      zindex = 100
+    }
+  },
+  {
     "luukvbaal/statuscol.nvim",
-    event = "VeryLazy",
-    opts = {}
+    branch = "0.10",
+    event = { "BufEnter", "WinEnter", "FocusGained" },
+    opts = {
+      ft_ignore = { "neo-tree" },
+      relculright = true,
+    }
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -60,7 +75,8 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     opts = {
       filetypes_denylist = {
-        'neo-tree'
+        'neo-tree',
+        'alpha'
       },
       delay = 500
     },
@@ -68,4 +84,33 @@ return {
       require('illuminate').configure(opts)
     end
   },
+  {
+    'goolord/alpha-nvim',
+    lazy = false,
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    init = function()
+      vim.cmd([[
+        autocmd User AlphaReady set showtabline=0 | autocmd BufUnload <buffer> set showtabline=2
+      ]])
+    end,
+    config = function()
+      local alpha = require("alpha")
+      local dashboard = require"alpha.themes.dashboard"
+
+      dashboard.section.buttons.val = {
+             dashboard.button( "e", "  New file" , ":ene <BAR> startinsert <CR>"),
+             dashboard.button( "q", "󰅚  Quit NVIM" , ":qa<CR>"),
+      }
+         local handle = io.popen('fortune')
+         local fortune = handle:read("*a")
+         handle:close()
+         dashboard.section.footer.val = fortune
+
+         dashboard.config.opts.noautocmd = true
+
+         vim.cmd[[autocmd User AlphaReady echo 'ready']]
+
+         alpha.setup(dashboard.config)
+     end
+  }
 }
