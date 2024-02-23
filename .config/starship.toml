@@ -4,9 +4,12 @@ disabled = false
 
 command_timeout = 1000
 
-[character]
-success_symbol = "[➜](bold green) "
-error_symbol = "[✗](bold red) "
+# [character]
+# success_symbol = "[➜](bold green) "
+# error_symbol = "[✗](bold red) "
+
+[docker_context]
+format = 'via [🐋 $context](blue bold)'
 
 [directory]
 truncation_length = 8
