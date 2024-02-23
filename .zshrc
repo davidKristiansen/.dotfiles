@@ -243,4 +243,4 @@ zstyle ':completion:*' cache-path ~/.zsh/cache
 eval "$($HOME/.zinit/plugins/ajeetdsouza---zoxide/zoxide init zsh --cmd cd)"
 
 alias dotfiles='/usr/bin/git -C $HOME/.dotfiles'
-dotfiles pull | grep -v "Already up to date." || true
+# dotfiles pull | grep -v "Already up to date." || true
