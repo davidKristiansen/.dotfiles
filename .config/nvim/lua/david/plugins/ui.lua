@@ -101,7 +101,7 @@ return {
              dashboard.button( "e", "  New file" , ":ene <BAR> startinsert <CR>"),
              dashboard.button( "q", "󰅚  Quit NVIM" , ":qa<CR>"),
       }
-         local handle = io.popen('fortune')
+         local handle = io.popen('fortune $HOME/.local/share/fortune/fortunes')
          local fortune = handle:read("*a")
          handle:close()
          dashboard.section.footer.val = fortune
