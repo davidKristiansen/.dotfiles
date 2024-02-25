@@ -1,5 +1,6 @@
 alias vim=$EDITOR
 alias :e=$EDITOR
+alias e=$EDITOR
 alias :q=exit
 alias :Q=:q
 

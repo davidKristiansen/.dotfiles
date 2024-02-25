@@ -1,11 +1,20 @@
 # First prompt line
-if type neofetch >/dev/null; then
-    neofetch --off --disable packages --color_blocks off
-    # printf "---\n"
-fi
-# if type fortune >/dev/null; then
-#     fortune
+# if type neofetch >/dev/null; then
+#     neofetch --off --disable packages --color_blocks off
 # fi
+if [ -f $HOME/.cargo/env ]; then
+	source $HOME/.cargo/env
+elif [ -d $HOME/.cargo/bin ]; then
+	export PATH=$HOME/.cargo/bin:$PATH
+fi
+
+# if type zeitfetch >/dev/null; then
+#   zeitfetch --no-logo
+# fi
+if type fortune >/dev/null; then
+    printf "---\n"
+    fortune
+fi
 
 # ZINIT
 ## Added by Zinit's installer
@@ -137,12 +146,6 @@ autoload colors && colors
 
 
 export PATH=$PATH:$HOME/.local/bin
-
-if [ -f $HOME/.cargo/env ]; then
-	source $HOME/.cargo/env
-elif [ -d $HOME/.cargo/bin ]; then
-	export PATH=$PATH:$HOME/.cargo/bin
-fi
 
 # if type nala >/dev/null; then
 #     alias apt=nala
