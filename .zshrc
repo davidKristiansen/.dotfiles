@@ -194,6 +194,9 @@ fi
 if [ -d $HOME/.local/tmux/bin ]; then
 	export PATH=$HOME/.local/tmux/bin:$PATH
 fi
+if [ -d $HOME/go/bin ]; then
+	export PATH=$HOME/go/bin:$PATH
+fi
 
 if [ -f $HOME/.aliases ]; then
     . $HOME/.aliases
