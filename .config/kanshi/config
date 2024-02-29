@@ -6,8 +6,9 @@ profile {
 }
 
 profile office {
-    output eDP-1  position 0,360 mode 1920x1080
-    output "Acer Technologies ED347CKR 0x00003617" position 1920,0 mode 3440x1440 scale 1
+    output eDP-1                           position 0,920    mode 1920x1080
+    output "Unknown HP Z38c 6CM0141HKL"    position 1920,400 mode 3840x1600@29.998Hz
+    output "Unknown HP Z27k G3 CN41363981" position 5760,0   mode 3840x2160@30Hz transform 90 scale 1.5
 }
 
 profile odin {
