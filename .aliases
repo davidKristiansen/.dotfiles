@@ -23,6 +23,7 @@ if command -v eza &>/dev/null; then
       --header \
       --group-directories-first \
     '
+    alias tree='ls --tree'
 else
     alias ls='ls --color=auto'
     alias ll='ls -lahb'
