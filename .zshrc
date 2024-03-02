@@ -7,6 +7,7 @@
 # Zsh configuration
 # -----------------
 
+fpath+=(~/.zsh_completions.d)
 #
 # History
 #
@@ -120,6 +121,46 @@ fi
 # ------------------------------
 # Post-init module configuration
 # ------------------------------
+
+[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zhistory"
+HISTSIZE=290000
+SAVEHIST=$HISTSIZE
+
+export BROWSER='firefox'
+export EDITOR='nvim'
+export MANPAGER='nvim +Man!'
+export MANWIDTH=9999
+export VISUAL=$EDITOR
+export PAGER='less'
+export BAT_THEME="gruvbox-dark"
+export GCM_CREDENTIAL_STORE=secretservice
+
+export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.asdf/shims:$PATH
+
+if [ -d /opt/python/bin ]; then
+	export PATH=/opt/python/bin:$PATH
+fi
+
+if [ -d /opt/arm/armcc/bin ]; then
+	export PATH=/opt/arm/armcc/bin:$PATH
+fi
+if [ -d /opt/arm/armds/bin ]; then
+	export PATH=/opt/arm/armds/bin:$PATH
+fi
+if [ -d $HOME/go/bin ]; then
+	export PATH=$HOME/go/bin:$PATH
+fi
+
+if [ -f $HOME/.aliases ]; then
+    . $HOME/.aliases
+fi
+if [ -f ~/.fzf.zsh ]; then
+  . ~/.fzf.zsh
+fi
+
+
+eval "$($HOME/.asdf/shims/zoxide init zsh --cmd cd)"
 
 #
 # zsh-history-substring-search

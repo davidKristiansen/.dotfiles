@@ -39,4 +39,6 @@ alias ssh="kitty +kitten ssh"
 alias tmux="tmux -u"
 
 
+alias dotfiles='/usr/bin/git -C $HOME/.dotfiles'
+
 # vim: set filetype=bash:
