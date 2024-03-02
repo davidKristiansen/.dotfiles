@@ -113,7 +113,7 @@ source ${ZIM_HOME}/init.zsh
 
 # Install asdf plugins
 if [[ ! -d "$HOME/.asdf/shims" ]]; then
-  cut -d' ' -f1 .tool-versions|xargs -i asdf plugin add  {}
+  cut -d' ' -f1 $HOME/.tool-versions|xargs -i asdf plugin add  {}
   asdf install
 fi
 
