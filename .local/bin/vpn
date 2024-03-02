@@ -2,8 +2,8 @@
 
 anyconnect=/opt/cisco/anyconnect/bin/vpn
 anyconnect_ui=/opt/cisco/anyconnect/bin/vpnui
-user=$($HOME/.asdf -u)
-passcode=$(stoken tokencode --pin $($HOME/.asdf -p))
+user=$($HOME/.hjkl -u)
+passcode=$(stoken tokencode --pin $($HOME/.hjkl -p))
 LABEL_ICON=
 
 
@@ -26,7 +26,7 @@ print_state () {
 }
 
 connect () {
-    printf "$user\n$passcode" | $anyconnect -s connect $($HOME/.asdf -h) |& :
+    printf "$user\n$passcode" | $anyconnect -s connect $($HOME/.hjkl -h) |& :
 }
 
 disconnect () {
