@@ -111,6 +111,12 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+# Install asdf plugins
+if [[ ! -d "$HOME/.asdf/shims" ]]; then
+  cut -d' ' -f1 .tool-versions|xargs -i asdf plugin add  {}
+  asdf install
+fi
+
 # ------------------------------
 # Post-init module configuration
 # ------------------------------
