@@ -3,3 +3,4 @@ tmux 3.4
 zoxide 0.9.4
 bat 0.24.0
 eza 0.18.5
+direnv 2.34.0
