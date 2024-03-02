@@ -4,3 +4,5 @@ zoxide 0.9.4
 bat 0.24.0
 eza 0.18.5
 direnv 2.34.0
+fzf 0.46.1
+starship 1.17.1
