@@ -9,7 +9,7 @@
 
 zmodule environment
 zmodule git
-zmodule input
+# zmodule input
 zmodule termtitle
 zmodule utility
 zmodule asdf
