@@ -26,8 +26,8 @@ zmodule jeffreytse/zsh-vi-mode
 zmodule duration-info
 zmodule git-info
 zmodule prompt-pwd
-# zmodule sorin
-zmodule joke/zim-starship
+zmodule sorin
+# zmodule joke/zim-starship
 
 #
 # Completion
