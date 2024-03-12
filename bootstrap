@@ -37,3 +37,5 @@ walk_dir () {
 }
 
 walk_dir .
+
+exec /bin/zsh
