@@ -4,7 +4,7 @@ return {
     keys = {
       {
         "gtr",
-        "<cmd>Translate EN -source=JA -command=translate_shell -output=replace -comment<cr>",
+        "<cmd>Translate EN -source=JA -command=translate_shell -output=replace<cr>",
         desc = "Replace",
         mode = { "n", "v" },
       },
