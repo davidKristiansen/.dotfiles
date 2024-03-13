@@ -18,6 +18,7 @@ zmodule magic-enter
 zmodule pvenv
 zmodule archive
 zmodule jeffreytse/zsh-vi-mode
+zmodule soimort/translate-shell
 
 #
 # Prompt
