@@ -55,4 +55,6 @@ function rm mv () {
   fi
 }
 
+alias macpyver='$HOME/Work/ISX038/es2_eval/MacPyver_SilEval/macpyver/macpyver.py'
+
 # vim: set filetype=bash:
