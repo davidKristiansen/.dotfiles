@@ -4,45 +4,46 @@
 # zimfw plugin manager.
 #
 
-#
-# Modules
+### Modules
+# https://zimfw.sh/docs/modules/
 
-zmodule environment
-zmodule git
+## Behaviour
+zmodule environment             # Sets generic Zsh built-in environment options.
+zmodule run-help                # Figures out where to get the best help, and gets it.
 # zmodule input
-zmodule termtitle
-zmodule utility
-zmodule asdf
-zmodule fzf
-zmodule magic-enter
-zmodule pvenv
-zmodule archive
+
+zmodule git                     # Provides nice git aliases and functions.
+zmodule termtitle               # Sets a custom terminal title.
+zmodule utility                 # Adds utility aliases and functions. Adds colour to ls, grep and less.
+zmodule asdf                    # Sets up asdf, with auto install and optimized usage of the direnv plugin.
+zmodule fzf                     # Configures fzf for faster fetching of files and directories names.
+zmodule magic-enter             # Shown when there is no command and user presses ENTER.
+zmodule pvenv                   # Manages all python venvs in one place.
+zmodule archive                 # Provides archive and unarchive functions for easy archive manipulation.
 zmodule jeffreytse/zsh-vi-mode
 zmodule soimort/translate-shell
 
-#
-# Prompt
-#
 
-zmodule duration-info
-zmodule git-info
-zmodule prompt-pwd
-zmodule sorin
+## Prompt
+
+zmodule duration-info           # Exposes to prompts how long the last command took to execute.
+zmodule git-info                # Exposes git repository status information to prompts.
+zmodule prompt-pwd              # Formats the current working directory to be used by prompts.
+zmodule sorin                   # Sorin theme
 # zmodule joke/zim-starship
 
-#
-# Completion
-#
+
+## Completion
 
 # Additional completion definitions for Zsh.
 zmodule zsh-users/zsh-completions --fpath src
 # Enables and configures smart and extensive tab completion.
 # completion must be sourced after all modules that add completion definitions.
-zmodule completion
+zmodule Aloxaf/fzf-tab
+# zmodule completion
 
-#
-# Modules that must be initialized last
-#
+
+## Modules that must be initialized last
 
 # Fish-like syntax highlighting for Zsh.
 # zsh-users/zsh-syntax-highlighting must be sourced after completion
