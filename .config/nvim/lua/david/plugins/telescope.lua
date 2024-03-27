@@ -7,6 +7,12 @@ return {
     version = false,
     dependencies = {
       'nvim-lua/plenary.nvim',
+      {
+        'nvim-telescope/telescope-ui-select.nvim',
+        config = function ()
+          require("telescope").load_extension("ui-select")
+        end
+      },
       "folke/trouble.nvim",
       {
         'nvim-telescope/telescope-fzf-native.nvim',
@@ -18,6 +24,20 @@ return {
       },
     },
     cmd = "Telescope",
+    opts = {
+      pickers = {
+        find_files = {
+          follow = true
+        }
+      },
+      extensions = {
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown {
+            -- even more opts
+          }
+        }
+      }
+    },
     keys = {
       { "<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer" },
       { "<leader>/", Util.telescope("live_grep"),                        desc = "Grep (root dir)" },
