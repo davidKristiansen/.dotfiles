@@ -1,10 +1,10 @@
 
 default_border pixel 1
 default_floating_border normal
-hide_edge_borders smart
+# hide_edge_borders smart
 
 smart_gaps on
-gaps inner 10
+gaps inner 0
 
 mouse_warping output
 
