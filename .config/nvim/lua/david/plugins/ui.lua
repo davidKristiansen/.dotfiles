@@ -112,5 +112,10 @@ return {
 
          alpha.setup(dashboard.config)
      end
+  },
+  {
+    'NvChad/nvim-colorizer.lua',
+    event = { "BufReadPre", "BufNewFile" },
+    config = true
   }
 }
