@@ -173,7 +173,11 @@ if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
 
-
 eval "$($HOME/.asdf/shims/zoxide init zsh --cmd cd)"
 
 export LC_ALL="en_US.UTF-8"
+
+
+if [[ ! $(tmux ls) ]] 2> /dev/null; then
+  tmux new -s λ
+fi
