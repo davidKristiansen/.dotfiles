@@ -1,45 +1,52 @@
 return {
   {
+    "vhyrro/luarocks.nvim",
+    priority = 1000,
+    config = true,
+  },
+  {
     "nvim-neorg/neorg",
-    version = nil,
+    lazy = false,
+    version = "*",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "folke/which-key.nvim",
+      "luarocks.nvim"
     },
-    ft = "norg",
-    cmd = "Neorg",
-    build = ":Neorg sync-parsers", -- This is the important bit!
-    config = function()
-      require("neorg").setup({
-        load = {
-          ["core.defaults"] = {},
-          ["core.esupports.metagen"] = {
-            config = {
-              type = "auto"
-            }
-          },
-          ["core.summary"] = {},
-          ["core.export"] = {},
-          ["core.ui.calendar"] = {},
-          ["core.dirman"] = {
-            config = {
-              workspaces = {
-                work = "~/.notes",
-              },
-              index = "index.norg",
-              default_workspace = "work",
-              open_last_workspace = true,
-            },
-          },
-          ["core.completion"] = {
-            config = {
-              engine = "nvim-cmp",
-            },
-          },
-          ["core.concealer"] = {},
-        },
-      })
-    end,
+    opts = true,
+    -- ft = "norg",
+    -- cmd = "Neorg",
+    -- config = function()
+    --   require("neorg").setup({
+    --     load = {
+    --       ["core.defaults"] = {},
+    --       ["core.esupports.metagen"] = {
+    --         config = {
+    --           type = "auto"
+    --         }
+    --       },
+    --       ["core.summary"] = {},
+    --       ["core.export"] = {},
+    --       ["core.ui.calendar"] = {},
+    --       ["core.dirman"] = {
+    --         config = {
+    --           workspaces = {
+    --             work = "~/.notes",
+    --           },
+    --           index = "index.norg",
+    --           default_workspace = "work",
+    --           open_last_workspace = true,
+    --         },
+    --       },
+    --       ["core.completion"] = {
+    --         config = {
+    --           engine = "nvim-cmp",
+    --         },
+    --       },
+    --       ["core.concealer"] = {},
+    --     },
+    --   })
+    -- end,
     init = function()
       local wk = require("which-key")
       wk.register({
@@ -54,10 +61,10 @@ return {
     'renerocksai/telekasten.nvim',
     dependencies = {
       'nvim-telescope/telescope.nvim',
-        "nvim-telescope/telescope-media-files.nvim",
-        {
-          "renerocksai/calendar-vim"
-        }
+      "nvim-telescope/telescope-media-files.nvim",
+      {
+        "renerocksai/calendar-vim"
+      }
     },
     cmd = "Telekasten",
     keys = {
