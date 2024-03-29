@@ -1,7 +1,7 @@
 ## Scratchpad // Show SpeedCrunch //  <> s ##
 exec --no-startup-id speedcrunch
-for_window [class="SpeedCrunch" window_type="normal"] move scratchpad
-bindsym $mod+s [class="SpeedCrunch"] scratchpad show
+for_window [app_id="org.speedcrunch.speedcrunch"] move scratchpad
+bindsym $mod+s [app_id="org.speedcrunch.speedcrunch"] scratchpad show
 
 ## Scratchpad // Show Kuro Todo //  <> o ##
 exec --no-startup-id kuro

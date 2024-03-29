@@ -15,7 +15,7 @@ exec pulseaudio --start
 
 exec_always pkill kanshi && kanshi
 
-exec --no-startup-id speedcrunch
+# exec --no-startup-id speedcrunch
 
 exec_always fcitx5 -d --replace
 
