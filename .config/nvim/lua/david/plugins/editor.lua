@@ -131,6 +131,7 @@ return {
         ["z"] = { name = "+folds" },
         ["]"] = { name = "+next" },
         ["["] = { name = "+prev" },
+        ["<leader>r"] = { name = "+rename" },
         ["<leader>f"] = { name = "+file/find" },
         ["<leader>t"] = { name = "+tasks" },
         ["<leader>s"] = { name = "+search" },

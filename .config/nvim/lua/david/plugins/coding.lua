@@ -33,6 +33,21 @@ return {
     version = false,
     opts = {}
   },
+  {
+    "smjonas/inc-rename.nvim",
+    opts = {},
+    keys = {
+      { "<leader>rn", "<leader>rn", ":IncRename ", desc = "Rename" },
+      {
+        "<leader>rN",
+        function()
+          return ":IncRename " .. vim.fn.expand("<cword>")
+        end,
+        desc = "Rename (copy word)",
+        expr = true
+      }
+    },
+  },
 
   --   {
   --   "echasnovski/mini.surround",
