@@ -79,6 +79,11 @@ return {
             word = false,
             cyclic = true,
           },
+          augend.constant.new {
+            elements = { "on", "off" },
+            word = false,
+            cyclic = true,
+          },
         },
 
         -- augends used when group with name `mygroup` is specified
