@@ -29,8 +29,9 @@ zmodule soimort/translate-shell
 zmodule duration-info           # Exposes to prompts how long the last command took to execute.
 zmodule git-info                # Exposes git repository status information to prompts.
 zmodule prompt-pwd              # Formats the current working directory to be used by prompts.
-zmodule sorin                   # Sorin theme
+# zmodule sorin                   # Sorin theme
 # zmodule joke/zim-starship
+zmodule romkatv/powerlevel10k --use degit
 
 
 ## Completion
