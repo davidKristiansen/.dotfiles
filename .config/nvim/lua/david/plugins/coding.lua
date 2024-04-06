@@ -1,7 +1,14 @@
 return {
   {
+    'echasnovski/mini.align',
+    version = '*',
+    event = { "BufReadPost", "BufNewFile" },
+    config = true
+  },
+
+  {
     'echasnovski/mini.comment',
-    event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     version = false,
     config = true
   },
