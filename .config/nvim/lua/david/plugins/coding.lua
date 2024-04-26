@@ -63,7 +63,7 @@ return {
       require("dial.config").augends:register_group {
         -- default augends used when no group name is specified
         default = {
-          augend.hexcolor.new ({
+          augend.hexcolor.new({
             case = "lower"
           }),
           augend.integer.alias.decimal_int,
@@ -168,7 +168,7 @@ return {
       },
     }
 
-  }
+  },
 
   --   {
   --   "echasnovski/mini.surround",
@@ -202,4 +202,16 @@ return {
   --     },
   --   },
   -- }
+  {
+    "theKnightsOfRohan/csvlens.nvim",
+    lazy = false,
+    dependencies = {
+      "akinsho/toggleterm.nvim"
+    },
+    ft = { "csv" },
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      direction = "vertical"
+    }
+  }
 }
