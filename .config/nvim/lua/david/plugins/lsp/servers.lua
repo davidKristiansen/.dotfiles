@@ -58,13 +58,13 @@ M.opts = {
   },
   clangd = {
     cmd = {
-      "clangd",
+      "/usr/bin/clangd",
       "--background-index",
       "-j=16",
       "--clang-tidy",
       "--completion-style=detailed",
       "--header-insertion=never",
-      "--offset-encoding=utf-16", --temporary fix for null-ls
+      -- "--offset-encoding=utf-16", --temporary fix for null-ls
       "--pch-storage=memory"
     }
   }
