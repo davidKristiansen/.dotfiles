@@ -1,14 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-anyconnect=/opt/cisco/anyconnect/bin/vpn
-anyconnect_ui=/opt/cisco/anyconnect/bin/vpnui
-user=$($HOME/.hjkl -u)
-passcode=$(stoken tokencode --pin $($HOME/.hjkl -p))
+source ~/.secrets
+anyconnect=/opt/cisco/secureclient/bin/vpn
+anyconnect_ui=/opt/cisco/secureclient/bin/vpnui
 LABEL_ICON=
 
 
 get_state () {
-    $anyconnect state | grep state | head -1 | cut -d' ' -f 5
+  $anyconnect state | grep state | head -2 | tail -1 | cut -d' ' -f 5
 }
 
 print_state () {
@@ -25,47 +24,63 @@ print_state () {
   echo $ret
 }
 
-connect () {
-    printf "$user\n$passcode" | $anyconnect -s connect $($HOME/.hjkl -h) |& :
+connect_sweden () {
+  $anyconnect -s connect $SE_VPN < <(echo -e "$sGID\n$(stoken)\nexit\n")
+}
+
+connect_uk () {
+  $anyconnect -s connect $SE_VPN < <(echo -e "$sGID\n$(stoken)\nexit\n")
 }
 
 disconnect () {
-    $anyconnect disconnect > /dev/null 2>&1
+  $anyconnect disconnect > /dev/null 2>&1
 }
 
 case $1 in
-    "toggle")
-        state=$( get_state )
-        if [[ $state == "Connected" ]]; then
-            disconnect
-        else
-            connect
-        fi
-    ;;
-    "connect")
-        state=$( get_state )
-        if [[ $state != "Connected" ]]; then
-            connect
-        fi
-    ;;
-    "disconnect")
-        state=$( get_state )
-        if [[ $state == "Connected" ]]; then
-            disconnect
-        fi
-    ;;
-    "reconnect")
-        state=$( get_state )
-        if [[ $state == "Connected" ]]; then
-            disconnect
-        fi
-          connect
-    ;;
-    "ui")
-        $anyconnect_ui
-    ;;
-    *)
-    ;;
+  "toggle")
+    state=$( get_state )
+    if [[ $state == "Connected" ]]; then
+      disconnect
+    else
+      connect
+    fi
+  ;;
+  "sweden")
+    state=$( get_state )
+    if [[ $state != "Connected" ]]; then
+      connect_sweden
+    fi
+  ;;
+  "uk")
+    state=$( get_state )
+    if [[ $state != "Connected" ]]; then
+      connect_uk
+    fi
+  ;;
+  "connect")
+    state=$( get_state )
+    if [[ $state != "Connected" ]]; then
+      connect_sweden
+    fi
+  ;;
+  "disconnect")
+    state=$( get_state )
+    if [[ $state == "Connected" ]]; then
+      disconnect
+    fi
+  ;;
+  "reconnect")
+    state=$( get_state )
+    if [[ $state == "Connected" ]]; then
+      disconnect
+    fi
+  connect
+  ;;
+  "ui")
+    $anyconnect_ui
+  ;;
+  *)
+  ;;
 esac
 
 if [ -t 0 ]
@@ -76,5 +91,4 @@ else
 fi
 
 exit 0
-
 
