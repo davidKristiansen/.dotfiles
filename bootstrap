@@ -1,41 +1,10 @@
 #!/bin/bash
 
-pushd () {
-    command pushd "$@" > /dev/null
-}
+mkdir -p $HOME/.config
+mkdir -p $HOME/.local/bin
+mkdir -p $HOME/.local/share
 
-popd () {
-    command popd > /dev/null
-}
-
-symlink () {
-  directory=$(dirname ${1:2})
-  filename=$(basename ${1:2})
-
-  mkdir -p $HOME/$directory
-  rel_path=$(realpath -s --relative-to=$HOME/$directory $directory)
-  pushd $HOME/$directory
-  ln -sf $rel_path/$filename .
-  popd
-}
-
-walk_dir () {
-    shopt -s nullglob dotglob
-
-    for pathname in "$1"/*; do
-        if [ "$pathname" == "$1/.git" ] || [ "$pathname" == "$0" ]
-        then
-          continue
-        fi
-
-        if [ -d "$pathname" ]; then
-            walk_dir "$pathname"
-        else
-            symlink "$pathname"
-        fi
-    done
-}
-
-walk_dir .
-
-exec /bin/zsh
+./.local/bin/stow.sh \
+  -i $(basename $0) \
+  -i .git \
+  -f

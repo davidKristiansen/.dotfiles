@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-# set -euo pipefail
+pushd () {
+  command pushd "$@" > /dev/null
+}
+popd () {
+  command popd > /dev/null
+}
 
-dir="."
-target=".."
 force=false
-ignore=".git,bootstrap"
-stow=unset
-delete=unset
 
 usage () {
   echo $(basename $0) [dtfiSDh] DIR
@@ -18,14 +18,14 @@ OPTSTRING="hd:t:fi:S:D:"
 
 while getopts ${OPTSTRING} opt; do
   case $opt in
-    d) dir=$OPTARG    ;;
-    t) target=$OPTARG ;;
-    f) force=true     ;;
-    i) ignore=$OPTARG ;;
-    S) stow=$OPTARG   ;;
-    D) delete=$OPTARG ;;
-    h) usage          ;;
-    ?) usage 1        ;;
+    d) dir=$OPTARG                 ;;
+    t) target=$OPTARG              ;;
+    f) force=true                  ;;
+    i) ignore+=("$OPTARG")         ;;
+    S) stow_targets+=("$OPTARG")   ;;
+    D) unstow_targets+=("$OPTARG") ;;
+    h) usage                       ;;
+    ?) usage 1                     ;;
   esac
 done
 shift $(expr $OPTIND - 1 )
@@ -36,66 +36,129 @@ elif [ $# -eq 1 ]; then
   dir=$1
 fi
 
-IFS=', ' read -r -a ignore <<< "$ignore"
-IFS=', ' read -r -a stow <<< "$stow"
-IFS=', ' read -r -a delete <<< "$delete"
-dir=$(realpath $dir)
-target=$(realpath $target)
-# relative_path=$(realpath -s --relative-to=$HOME/$directory $directory)
+if [[ -z $ignore ]]; then
+  ignore=(".git" "bootstrap")
+fi
+if [[ -z $dir ]]; then
+  dir=$(pwd)
+else
+  dir="$(realpath "$dir")"
+fi
+if [[ -z $target ]]; then
+  target="$(dirname "$dir")"
+else
+  target="$(realpath "$target")"
+fi
 
-
-
-pushd () {
-  command pushd "$@" > /dev/null
-}
-popd () {
-  command popd > /dev/null
-}
-is_ignore () {
-  if [[ " ${ignore[*]} " =~ [[:space:]]"$1"[[:space:]] ]];then
+contains () {
+  val=$1
+  shift
+  arr=("$@")
+  if [[ " ${arr[*]} " =~ [[:space:]]"$val"[[:space:]] ]]; then
     true
   else
     false
   fi
 }
 
-stow_targets=()
-
 walk_dir () {
   shopt -s nullglob dotglob
 
-  for pathname in "$1"/*; do
+  for stow_candidate in "$1"/*; do
+    base="${stow_candidate#"$dir"/}"
+    target_path="$target/$base"
+    stow_candidate="$stow_candidate"
 
-    if is_ignore ${pathname#"$dir"/} ;then
+    if contains $base "${ignore[@]}"; then
       continue
     fi
 
-    if [ -d "$pathname" ]; then
-      walk_dir "$pathname"
-    else
-      stow_targets+=("${pathname#"$dir"/}")
+    if [ -f "$stow_candidate" ]; then
+      stow_targets+=("$base")
+      continue
+    fi
+    if [ -L "$target_path" ]; then
+      stow_targets+=("$base")
+      continue
     fi
 
-  done
+    if [ ! -d "$target_path" ]; then
+      stow_targets+=("$base")
+      continue
+    fi
 
+    walk_dir $stow_candidate
+  done
 }
 
-delete () {
-  echo delete
+remove_symlink() {
+    if [[ ! -L "$1" ]]; then
+      echo \"$1\" does not exist or is not a symlink
+      return 1
+    fi
+    rm "$1"
+    echo \"$1\" removed
+    return 0
+}
+
+unstow () {
+  for candidate in $@; do
+    target_path="$target/$candidate"
+    remove_symlink "$target_path"
+  done
 }
 
 stow () {
-  echo stow
+  for candidate in $@; do
+
+    target_path="$target/$candidate"
+    stow_path="$dir/$candidate"
+
+    if [[ ! -e "$stow_path" ]]; then
+      echo \"$stow_path\" not a stowable object!
+      continue
+    fi
+
+    if [[ -e "$target_path" ]]; then
+      if [[ $force == false ]]; then
+        echo "$target_path" already exist. Use the \"\(-f\)orce\"
+        continue
+      fi
+      unstow $candidate
+      if [[ $? != 0 ]]; then
+        continue
+      fi
+    fi
+
+    target_dir="$(dirname $target_path)"
+    stow_dir="$(dirname $stow_path)"
+    relative_path=$(realpath -s --relative-to="$target_dir" "$stow_path")
+
+    mkdir -p $target_dir
+    pushd $target_dir
+      ln -s "$relative_path" .
+    popd
+    echo "$target_path -> $relative_path"
+
+  done
 }
 
-walk_dir $dir
+if [[ -z $stow_targets ]]; then
+  walk_dir $dir
+fi
+stow "${stow_targets[@]}"
 
-echo ${stow_targets[*]}
->&2 cat << EOF
-dir=$dir
-target=$target
-force=$force
-ignore=${ignore[*]}
-stow=${stow[*]}
-delete=${delete[*]}
-EOF
+
+if [[ ! -z $unstow_targets ]]; then
+  unstow "${unstow_targets[@]}"
+fi
+
+# >&2 cat << EOF
+# stow_targets=${stow_targets[*]}
+# dir=$dir
+# target=$target
+# force=$force
+# ignore=${ignore[*]}
+# stow=${stow[*]}
+# delete=${delete[*]}
+# EOF
