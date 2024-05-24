@@ -10,7 +10,7 @@ popd () {
 force=false
 
 usage () {
-  echo $(basename $0) [dtfiSDh] DIR
+  echo $(basename $0) [dtfiSDh]
   exit $1
 }
 
