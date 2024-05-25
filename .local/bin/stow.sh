@@ -143,15 +143,17 @@ stow () {
   done
 }
 
+if [[ ! -z $unstow_targets ]]; then
+  unstow "${unstow_targets[@]}"
+  exit 0
+fi
 if [[ -z $stow_targets ]]; then
+
   walk_dir $dir
 fi
 stow "${stow_targets[@]}"
 
 
-if [[ ! -z $unstow_targets ]]; then
-  unstow "${unstow_targets[@]}"
-fi
 
 # >&2 cat << EOF
 # stow_targets=${stow_targets[*]}

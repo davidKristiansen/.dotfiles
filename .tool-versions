@@ -1,4 +1,4 @@
-neovim nightly
+neovim 0.10.0
 tmux 3.4
 zoxide 0.9.4
 bat 0.24.0
