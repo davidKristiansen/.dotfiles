@@ -66,11 +66,16 @@ walk_dir () {
   shopt -s nullglob dotglob
 
   for stow_candidate in "$1"/*; do
-    base="${stow_candidate#"$dir"/}"
+    base="${stow_candidate#"$dir"}"
     target_path="$target/$base"
     stow_candidate="$stow_candidate"
 
-    if contains $(sanitize_path $base) "${ignore[@]}"; then
+    sanitized_base=$(sanitize_path $base)
+    if [[ "$sanitized_base" == /* ]]; then
+      sanitized_base="${sanitized_base:1}"
+    fi
+    echo $sanitized_base
+    if contains $sanitized_base "${ignore[@]}"; then
       continue
     fi
 

@@ -29,6 +29,8 @@ git submodule update --init
 ./.local/bin/stow.sh \
   -i $(basename $0) \
   -i .git \
+  -i .gitmodules \
+  -i .gitignore \
   -f
 
 cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i asdf plugin add  {}
