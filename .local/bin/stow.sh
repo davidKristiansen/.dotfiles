@@ -79,7 +79,7 @@ walk_dir () {
       condition_string=${stow_candidate##*##}
       IFS=',' read -r -a conditions <<< "$condition_string"
       for condition in "${conditions[@]}"; do
-        if [[ "$condition" == "!*" ]]; then
+        if [[ "$condition" == \!* ]]; then
           condition="${condition:1}"
           expected=1
         else
@@ -215,16 +215,14 @@ if [[ -z $stow_targets ]]; then
 
   walk_dir $dir
 fi
-# stow "${stow_targets[@]}"
+stow "${stow_targets[@]}"
 
-
-
->&2 cat << EOF
-stow_targets=${stow_targets[*]}
-dir=$dir
-target=$target
-force=$force
-ignore=${ignore[*]}
-stow=${stow[*]}
-delete=${delete[*]}
-EOF
+# >&2 cat << EOF
+# stow_targets=${stow_targets[*]}
+# dir=$dir
+# target=$target
+# force=$force
+# ignore=${ignore[*]}
+# stow=${stow[*]}
+# delete=${delete[*]}
+# EOF
