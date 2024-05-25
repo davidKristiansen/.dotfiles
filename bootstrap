@@ -35,3 +35,5 @@ git submodule update --init
 
 cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i .asdf/bin/asdf plugin add  {}
 cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i .asdf/bin/asdf install {}
+
+exec /bin/zsh
