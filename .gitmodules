@@ -1,7 +1,7 @@
-# [submodule ".config/zsh##shell.zsh/antidote"]
-# 	path = .config/zsh/antidote
-# 	url = https://github.com/mattmc3/antidote.git
-# 	shallow = true
+[submodule ".config/zsh/antidote"]
+	path = .config/zsh/antidote
+	url = https://github.com/mattmc3/antidote.git
+	shallow = true
 [submodule ".asdf"]
 	path = .asdf
 	url = https://github.com/asdf-vm/asdf.git
