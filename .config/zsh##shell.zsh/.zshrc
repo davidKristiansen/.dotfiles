@@ -79,9 +79,9 @@ eval "$($HOME/.asdf/shims/zoxide init zsh --cmd cd)"
 export LC_ALL="en_US.UTF-8"
 
 
-if [[ ! $(tmux ls) ]] 2> /dev/null; then
-  tmux new -s λ
-fi
+# if [[ ! $(tmux ls) ]] 2> /dev/null; then
+#   tmux new -s λ
+# fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
