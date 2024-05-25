@@ -74,7 +74,6 @@ walk_dir () {
     if [[ "$sanitized_base" == /* ]]; then
       sanitized_base="${sanitized_base:1}"
     fi
-    echo $sanitized_base
     if contains $sanitized_base "${ignore[@]}"; then
       continue
     fi
