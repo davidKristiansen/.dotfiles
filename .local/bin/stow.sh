@@ -80,6 +80,7 @@ walk_dir () {
       IFS=',' read -r -a conditions <<< "$condition_string"
       for condition in "${conditions[@]}"; do
         if [[ "$condition" == "!*" ]]; then
+          condition="{condition:1}"
           expected=1
         else
           expected=0
