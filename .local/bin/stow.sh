@@ -8,6 +8,7 @@ popd () {
 }
 
 force=false
+declare -A stows
 
 usage () {
   echo $(basename $0) [dtfiSDh]
@@ -69,8 +70,30 @@ walk_dir () {
     target_path="$target/$base"
     stow_candidate="$stow_candidate"
 
-    if contains $base "${ignore[@]}"; then
+    if contains $(sanitize_path $base) "${ignore[@]}"; then
       continue
+    fi
+
+    if [[ "$stow_candidate" == *"##"* ]]; then
+      pass=true
+      condition_string=${stow_candidate##*##}
+      IFS=',' read -r -a conditions <<< "$condition_string"
+      for condition in "${conditions[@]}"; do
+        if [[ "$condition" == "!*" ]]; then
+          expected=1
+        else
+          expected=0
+        fi
+        IFS='.' read -r -a cond <<< "$condition"
+        "${cond[@]}" "${cond[@]:1}"
+        if [[ $? != $expected ]]; then
+          pass=false
+          break
+        fi
+      done
+      if [[ $pass == false ]]; then
+        continue
+      fi
     fi
 
     if [ -f "$stow_candidate" ]; then
@@ -101,9 +124,19 @@ remove_symlink() {
     return 0
 }
 
+sanitize_path() {
+  a=($(echo "$1" | tr '/' '\n'))
+  sanitized=""
+  for token in ${a[@]}; do
+    sanitized+="/${token%##*}"
+  done
+  echo $sanitized
+}
+
 unstow () {
   for candidate in $@; do
     target_path="$target/$candidate"
+    target_path=$(sanitize_path $target_path)
     remove_symlink "$target_path"
   done
 }
@@ -113,6 +146,8 @@ stow () {
 
     target_path="$target/$candidate"
     stow_path="$dir/$candidate"
+
+    target_path=$(sanitize_path $target_path)
 
     if [[ ! -e "$stow_path" ]]; then
       echo \"$stow_path\" not a stowable object!
@@ -136,11 +171,39 @@ stow () {
 
     mkdir -p $target_dir
     pushd $target_dir
-      ln -s "$relative_path" .
+      ln -s "$relative_path" "$(basename $target_path)"
     popd
     echo "$target_path -> $relative_path"
 
   done
+}
+
+os () {
+  os=$(grep -E "^NAME=" /etc/os-release)
+  os="${os#*=}"
+  os="${os//\"/}"
+  os="${os,,}"
+  if [[ $os == "$1" ]];  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+shell () {
+  if [ $(basename $SHELL) == $1 ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+docker () {
+  if [ -f /.dockerenv ]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 if [[ ! -z $unstow_targets ]]; then
@@ -151,16 +214,16 @@ if [[ -z $stow_targets ]]; then
 
   walk_dir $dir
 fi
-stow "${stow_targets[@]}"
+# stow "${stow_targets[@]}"
 
 
 
-# >&2 cat << EOF
-# stow_targets=${stow_targets[*]}
-# dir=$dir
-# target=$target
-# force=$force
-# ignore=${ignore[*]}
-# stow=${stow[*]}
-# delete=${delete[*]}
-# EOF
+>&2 cat << EOF
+stow_targets=${stow_targets[*]}
+dir=$dir
+target=$target
+force=$force
+ignore=${ignore[*]}
+stow=${stow[*]}
+delete=${delete[*]}
+EOF
