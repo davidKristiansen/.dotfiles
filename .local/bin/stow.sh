@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source __stow_conditions.sh
+
 pushd () {
   command pushd "$@" > /dev/null
 }
@@ -38,7 +40,11 @@ elif [ $# -eq 1 ]; then
 fi
 
 if [[ -z $ignore ]]; then
-  ignore=(".git" "bootstrap")
+  ignore=(".git"
+          "bootstrap"
+          ".gitmodules"
+          ".gitignore"
+)
 fi
 if [[ -z $dir ]]; then
   dir=$(pwd)
@@ -181,34 +187,6 @@ stow () {
     echo "$target_path -> $relative_path"
 
   done
-}
-
-os () {
-  os=$(grep -E "^NAME=" /etc/os-release)
-  os="${os#*=}"
-  os="${os//\"/}"
-  os="${os,,}"
-  if [[ $os == "$1" ]];  then
-    return 0
-  else
-    return 1
-  fi
-}
-
-shell () {
-  if [ $(basename $SHELL) == $1 ]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-docker () {
-  if [ -f /.dockerenv ]; then
-    return 0
-  else
-    return 1
-  fi
 }
 
 if [[ ! -z $unstow_targets ]]; then
