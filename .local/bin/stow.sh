@@ -96,7 +96,7 @@ walk_dir () {
           expected=0
         fi
         IFS='.' read -r -a cond <<< "$condition"
-        "${cond[@]}" "${cond[@]:1}"
+        "__stow_""${cond[@]}" "${cond[@]:1}"
         if [[ $? != $expected ]]; then
           pass=false
           break

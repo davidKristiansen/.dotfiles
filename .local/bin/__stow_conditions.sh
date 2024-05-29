@@ -1,8 +1,8 @@
-extension() {
+__stow_extension() {
   return 0
 }
 
-os () {
+__stow_os () {
   os=$(grep -E "^NAME=" /etc/os-release)
   os="${os#*=}"
   os="${os//\"/}"
@@ -14,7 +14,7 @@ os () {
   fi
 }
 
-shell () {
+__stow_shell () {
   if [ $(basename $SHELL) == $1 ]; then
     return 0
   else
@@ -22,7 +22,7 @@ shell () {
   fi
 }
 
-docker () {
+__stow_docker () {
   if [ -f /.dockerenv ]; then
     return 0
   else
@@ -30,7 +30,7 @@ docker () {
   fi
 }
 
-wsl () {
+__stow_wsl () {
   if $(lscpu | grep '^\(Hypervisor vendor\).*\([mM]icrosoft\|[wW]indows\)'); then
     return 0
   else
@@ -38,7 +38,7 @@ wsl () {
   fi
 }
 
-exe () {
+__stow_exe () {
   if type $1 &>/dev/null; then
     return 0
   else
@@ -46,6 +46,6 @@ exe () {
   fi
 }
 
-wm () {
-  return $(executable $1)
+__stow_wm () {
+  return $(__stow_exe $1)
 }
