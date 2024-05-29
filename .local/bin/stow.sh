@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e -u -o pipefail
+
 source __stow_conditions.sh
 
 pushd () {
@@ -39,6 +41,7 @@ elif [ $# -eq 1 ]; then
   dir=$1
 fi
 
+set +u
 if [[ -z $ignore ]]; then
   ignore=(".git"
           "bootstrap"
@@ -56,6 +59,7 @@ if [[ -z $target ]]; then
 else
   target="$(realpath "$target")"
 fi
+set -u
 
 contains () {
   val=$1
@@ -189,15 +193,16 @@ stow () {
   done
 }
 
+set +u
 if [[ ! -z $unstow_targets ]]; then
   unstow "${unstow_targets[@]}"
   exit 0
 fi
 if [[ -z $stow_targets ]]; then
-
   walk_dir $dir
 fi
 stow "${stow_targets[@]}"
+set -u
 
 # >&2 cat << EOF
 # stow_targets=${stow_targets[*]}
