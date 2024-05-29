@@ -3,5 +3,5 @@
 	url = https://github.com/mattmc3/antidote.git
 	shallow = true
 [submodule ".asdf"]
-	path = .asdf
+	path = .local/share/asdf
 	url = https://github.com/asdf-vm/asdf.git

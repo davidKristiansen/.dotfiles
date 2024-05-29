@@ -33,7 +33,23 @@ git submodule update --init
   -i .gitignore \
   -f
 
-cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i .asdf/bin/asdf plugin add  {}
-cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i .asdf/bin/asdf install {}
+export ASDF_DIR="${HOME}"/.local/share/asdf
+export ASDF_DATA_DIR="${HOME}"/.local/share/asdf_data
+export ASDF_CONFIG_FILE="${HOME}"/.config/asdf/config
+
+if type zsh >/dev/null; then
+  direnv_shell="zsh"
+else
+  direnv_shell="bash"
+fi
+
+
+(
+ cd $HOME
+  # asdf plugin-add direnv
+  # asdf direnv setup --shell $direnv_shell --version latest
+  cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i "${ASDF_DIR}"/bin/asdf plugin add  {}
+  cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i "${ASDF_DIR}"/bin/asdf install {}
+)
 
 exec /bin/zsh

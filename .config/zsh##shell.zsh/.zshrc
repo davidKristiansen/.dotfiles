@@ -1,15 +1,7 @@
-if [[ -z "${XDG_CONFIG_HOME}" ]]; then
-  export XDG_CONFIG_HOME="$HOME/.config"
-fi
-if [[ -z "${XDG_CACHE_HOME}" ]]; then
-  export XDG_CACHE_HOME="$HOME/.cache"
-fi
-if [[ -z "${XDG_DATA_HOME}" ]]; then
-  export XDG_DATA_HOME="$HOME/.local/share"
-fi
-if [[ -z "${XDG_STATE_HOME}" ]]; then
-  export XDG_STATE_HOME="$HOME/.local/state/"
-fi
+
+set -a
+. "${ZDOTDIR}"/.zshenv
+set +a
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -19,9 +11,13 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
-. "$XDG_DATA_HOME/asdf/asdf.sh"
 
-fpath+=($ZDOTDIR/zsh_completions.d)
+. "${ASDF_DIR}"/asdf.sh
+
+fpath+=("${ZDOTDIR}"/zsh_completions.d)
+fpath+=("${ASDF_DIR}"/completions)
+autoload -Uz compinit
+compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 
 # Remove older command from the history if a duplicate is to be added.
 setopt HIST_IGNORE_ALL_DUPS
@@ -37,6 +33,9 @@ WORDCHARS=${WORDCHARS//[\/]}
 
 # Append `../` to your input for each `.` you type after an initial `..`
 zstyle ':zim:input' double-dot-expand yes
+
+\mkdir -p "${XDG_CACHE_HOME}"/zsh
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
 
 
 [ -z "$HISTFILE" ] && HISTFILE="$HOME/.zhistory"
@@ -63,8 +62,6 @@ export PAGER='less'
 export BAT_THEME="gruvbox-dark"
 export GCM_CREDENTIAL_STORE=secretservice
 
-export PATH=$HOME/.local/bin:$PATH
-export PATH=$HOME/.asdf/shims:$PATH
 
 if [ -d /opt/python/bin ]; then
 	export PATH=/opt/python/bin:$PATH
@@ -76,8 +73,8 @@ fi
 if [ -d /opt/arm/armds/bin ]; then
 	export PATH=/opt/arm/armds/bin:$PATH
 fi
-if [ -d $HOME/go/bin ]; then
-	export PATH=$HOME/go/bin:$PATH
+if [ -d "${GOPATH}"/bin ]; then
+	export PATH="${GOPATH}"/bin:$PATH
 fi
 
 if [ -f $ZDOTDIR/aliases ]; then
@@ -87,7 +84,7 @@ if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
 
-eval "$($XDG_DATA_HOME/asdf/shims/zoxide init zsh --cmd cd)"
+eval "$("${ASDF_DATA_DIR}"/shims/zoxide init zsh --cmd cd)"
 
 export LC_ALL="en_US.UTF-8"
 
@@ -97,4 +94,4 @@ export LC_ALL="en_US.UTF-8"
 # fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+[[ ! -f "${ZDOTDIR}"/.p10k.zsh ]] || source "${ZDOTDIR}"/.p10k.zsh

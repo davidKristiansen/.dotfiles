@@ -1,5 +1,5 @@
 ZDOTDIR=$HOME/.config/zsh
 
-if [ -f $ZDOTDIR ]; then
-  . $ZDOTDIR/.zshenv
+if [[ -f "${ZDOTDIR}/.zshenv" ]]; then
+  . "${ZDOTDIR}/.zshenv"
 fi

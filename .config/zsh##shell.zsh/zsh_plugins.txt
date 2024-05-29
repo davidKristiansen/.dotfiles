@@ -3,9 +3,9 @@ romkatv/powerlevel10k
 
 ohmyzsh/ohmyzsh path:lib
 ohmyzsh/ohmyzsh path:plugins/magic-enter
-ohmyzsh/ohmyzsh path:plugins/asdf
+# ohmyzsh/ohmyzsh path:plugins/asdf
 ohmyzsh/ohmyzsh path:plugins/command-not-found
-ohmyzsh/ohmyzsh path:plugins/direnv
+# ohmyzsh/ohmyzsh path:plugins/direnv
 
 jeffreytse/zsh-vi-mode
 soimort/translate-shell
