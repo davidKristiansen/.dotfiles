@@ -49,6 +49,8 @@ function ssh_alias() {
 
 alias ssh=ssh_alias
 alias ssh="kitty +kitten ssh"
+
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tmux="tmux -u"
 
 alias dotfiles='/usr/bin/git -C $HOME/.dotfiles'
