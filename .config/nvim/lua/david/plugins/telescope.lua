@@ -9,7 +9,7 @@ return {
       'nvim-lua/plenary.nvim',
       {
         'nvim-telescope/telescope-ui-select.nvim',
-        config = function ()
+        config = function()
           require("telescope").load_extension("ui-select")
         end
       },
@@ -22,6 +22,13 @@ return {
         build =
         'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
       },
+      {
+        "danielfalk/smart-open.nvim",
+        dependencies = {
+          "kkharji/sqlite.lua",
+        },
+      },
+      "danielfalk/smart-open.nvim"
     },
     cmd = "Telescope",
     opts = {
@@ -31,6 +38,10 @@ return {
         }
       },
       extensions = {
+        smart_open = {
+          match_algorithm = "fzf",
+          show_scores = true,
+        },
         ["ui-select"] = {
           require("telescope.themes").get_dropdown {
             -- even more opts
@@ -44,9 +55,9 @@ return {
       { "<leader>:", "<cmd>Telescope command_history<cr>",               desc = "Command History" },
       {
         "<leader><space>",
-        Util.telescope("files"),
+        "<cmd>Telescope smart_open<cr>",
         desc =
-        "Find Files (root dir)"
+        "Smart Open"
       },
       -- find
       { "<leader>fb", "<cmd>Telescope buffers<cr>",                         desc = "Buffers" },
@@ -160,6 +171,15 @@ return {
     "nvim-telescope/telescope-media-files.nvim",
     opts = {}
 
+  },
+  {
+    "danielfalk/smart-open.nvim",
+    dependencies = {
+      "kkharji/sqlite.lua",
+    },
+    config = function()
+      require("telescope").load_extension("smart_open")
+    end,
   },
   {
     "EthanJWright/vs-tasks.nvim",
