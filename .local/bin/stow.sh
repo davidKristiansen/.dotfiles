@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e -o pipefail
+set -o pipefail
 
 source $(dirname $0)/__stow_conditions.sh
 
