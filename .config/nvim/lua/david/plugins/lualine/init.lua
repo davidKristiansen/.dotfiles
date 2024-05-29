@@ -17,7 +17,7 @@ return {
     dependencies = {
       'kazhala/close-buffers.nvim',
       'nvim-tree/nvim-web-devicons',
-      'WhoIsSethDaniel/lualine-lsp-progress.nvim',
+      'linrongbin16/lsp-progress.nvim',
       "SmiteshP/nvim-navic",
       {
         "vimpostor/vim-tpipeline",
@@ -86,9 +86,12 @@ return {
           },
         },
         lualine_x = {
-          'lsp_progress'
+          function()
+            -- invoke `progress` here.
+            return require('lsp-progress').progress()
+          end,
         },
-        lualine_y = {'encoding', 'fileformat', 'filetype', 'progress'},
+        lualine_y = { 'encoding', 'fileformat', 'filetype', 'progress' },
         lualine_z = {
           'location',
           {
@@ -140,5 +143,11 @@ return {
       click = true,
       -- highlight = true,
     }
+  },
+  {
+    'linrongbin16/lsp-progress.nvim',
+    config = function()
+      require('lsp-progress').setup()
+    end
   }
 }
