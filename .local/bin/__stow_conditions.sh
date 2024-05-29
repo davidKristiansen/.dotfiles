@@ -1,3 +1,6 @@
+extension() {
+  return 0
+}
 
 os () {
   os=$(grep -E "^NAME=" /etc/os-release)
@@ -35,7 +38,7 @@ wsl () {
   fi
 }
 
-executable () {
+exe () {
   if type $1 &>/dev/null; then
     return 0
   else
