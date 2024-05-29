@@ -2,7 +2,7 @@
 
 set -e -o pipefail
 
-source __stow_conditions.sh
+source $(dirname $0)/__stow_conditions.sh
 
 pushd () {
   command pushd "$@" > /dev/null
