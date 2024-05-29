@@ -1,3 +1,16 @@
+if [[ -z "${XDG_CONFIG_HOME}" ]]; then
+  export XDG_CONFIG_HOME="$HOME/.config"
+fi
+if [[ -z "${XDG_CACHE_HOME}" ]]; then
+  export XDG_CACHE_HOME="$HOME/.cache"
+fi
+if [[ -z "${XDG_DATA_HOME}" ]]; then
+  export XDG_DATA_HOME="$HOME/.local/share"
+fi
+if [[ -z "${XDG_STATE_HOME}" ]]; then
+  export XDG_STATE_HOME="$HOME/.local/state/"
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -6,7 +19,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
-. "$HOME/.asdf/asdf.sh"
+. "$XDG_DATA_HOME/asdf/asdf.sh"
 
 fpath+=($ZDOTDIR/zsh_completions.d)
 
@@ -74,7 +87,7 @@ if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
 
-eval "$($HOME/.asdf/shims/zoxide init zsh --cmd cd)"
+eval "$($XDG_DATA_HOME/asdf/shims/zoxide init zsh --cmd cd)"
 
 export LC_ALL="en_US.UTF-8"
 
