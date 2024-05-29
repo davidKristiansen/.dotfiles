@@ -23,5 +23,5 @@ WORKON_HOME="${XDG_DATA_HOME}"/virtualenvs
 HISTFILE="${XDG_STATE_HOME}"/zsh/history
 
 PATH="${HOME}"/.local/bin:$PATH
-PATH="${ASDF_DATA_DIR}"/shims:$PATH
+# PATH="${ASDF_DATA_DIR}"/shims:$PATH
 
