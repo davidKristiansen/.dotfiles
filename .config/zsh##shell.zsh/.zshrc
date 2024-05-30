@@ -52,6 +52,8 @@ if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
 fi
 source ${zsh_plugins}.zsh
 
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+bindkey '^r' fzf-history-widget
 
 export BROWSER='firefox'
 export EDITOR='nvim'
