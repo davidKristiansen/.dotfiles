@@ -6,6 +6,7 @@ return {
     dependencies = {
       "folke/which-key.nvim"
     },
+    cmd = { "Gitsigns" },
     init = function()
       local wk = require('which-key')
       wk.register({
