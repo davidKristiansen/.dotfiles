@@ -15,6 +15,10 @@ __stow_os () {
 }
 
 __stow_shell () {
+  if [[ ! -z  $SHELL ]]; then
+    return $(__stow_exe $1)
+  fi
+
   if [ $(basename $SHELL) == $1 ]; then
     return 0
   else
