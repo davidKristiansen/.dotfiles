@@ -25,3 +25,5 @@ HISTFILE="${XDG_STATE_HOME}"/zsh/history
 PATH="${HOME}"/.local/bin:$PATH
 # PATH="${ASDF_DATA_DIR}"/shims:$PATH
 
+TERM='xterm-256color'
+
