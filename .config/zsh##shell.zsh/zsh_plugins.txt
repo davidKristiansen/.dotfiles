@@ -7,9 +7,18 @@ ohmyzsh/ohmyzsh path:plugins/magic-enter
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 # ohmyzsh/ohmyzsh path:plugins/direnv
 
+zdharma-continuum/fast-syntax-highlighting
+
 jeffreytse/zsh-vi-mode
 soimort/translate-shell
+
+# add even more completions
+zsh-users/zsh-completions
+# now, configure and run compinit to initialize completions
+belak/zsh-utils path:completion
+
 Aloxaf/fzf-tab
+
 
 # add fish-like features
 zdharma-continuum/fast-syntax-highlighting kind:defer
