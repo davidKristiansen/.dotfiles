@@ -65,6 +65,26 @@ alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion"
 #   fi
 # }
 
+alias dc="devcontainer"
+alias dcu="devcontainer up"
+alias dce="devcontainer exec"
+
+function git () {
+  if [[ -z "${1}" ]]; then
+    command lazygit
+  else
+    command \git "${@}"
+  fi
+}
+
+function docker () {
+  if [[ -z "${1}" ]]; then
+    command lazydocker
+  else
+    command \docker "${@}"
+  fi
+}
+
 alias macpyver='$HOME/Work/ISX038/es2_eval/MacPyver_SilEval/macpyver/macpyver.py'
 alias ollama='docker exec -ti ollama ollama'
 
