@@ -4,22 +4,42 @@ set -o pipefail
 
 source $(dirname $0)/__stow_conditions.sh
 
-pushd () {
-  command pushd "$@" > /dev/null
-}
-popd () {
-  command popd > /dev/null
-}
-
 force=false
-declare -A stows
+debug=0
+dry_run=false
+# declare -A stow_targets=()
 
-usage () {
+__usage () {
   echo $(basename $0) [dtfiSDh]
   exit $1
 }
 
-OPTSTRING="hd:t:fi:S:D:"
+_log() {
+  local level="${1}"
+  shift 1
+  if [[ $level == "debug" ]]; then
+    debug_level="${1}"
+    shift 1
+  fi
+  local message="${@}"
+
+  case $level in
+    debug)
+      if [[ "$debug" -ge "$debug_level" ]]; then
+        printf "${message}""\n"
+      fi
+      ;;
+    info)
+        printf "${message}""\n"
+      ;;
+    error)
+        printf "${message}""\n" 1>&2
+      ;;
+  esac
+}
+
+
+OPTSTRING="hd:t:fi:S:D:vn"
 
 while getopts ${OPTSTRING} opt; do
   case $opt in
@@ -29,183 +49,218 @@ while getopts ${OPTSTRING} opt; do
     i) ignore+=("$OPTARG")         ;;
     S) stow_targets+=("$OPTARG")   ;;
     D) unstow_targets+=("$OPTARG") ;;
-    h) usage                       ;;
-    ?) usage 1                     ;;
+    v) debug=$((debug+=1))         ;;
+    n) dry_run=true                ;;
+    h) __usage                     ;;
+    ?) __usage 1                   ;;
   esac
 done
 shift $(expr $OPTIND - 1 )
 
 if [ $# -gt 1 ]; then
-  usage 1
+  __usage 1
 elif [ $# -eq 1 ]; then
-  dir=$1
+  stows=("${1}")
 fi
 
-if [[ -z $ignore ]]; then
-  ignore=(".git"
-          "bootstrap"
-          ".gitmodules"
-          ".gitignore"
-)
-fi
 if [[ -z $dir ]]; then
-  dir=$(pwd)
+  readonly _SOURCE=$(pwd)
 else
-  dir="$(realpath "$dir")"
+  readonly _SOURCE="$(realpath "$dir")"
 fi
+
 if [[ -z $target ]]; then
-  target="$(dirname "$dir")"
+  readonly _TARGET="$(dirname "$_SOURCE")"
 else
-  target="$(realpath "$target")"
+  readonly _TARGET="$(realpath "$target")"
 fi
 
-contains () {
-  val=$1
+# printf "Running "${0}" with\nSource directory: "${_SOURCE}"\nTarget directory: "${_TARGET}"\n"
+__contains () {
+  set -o noglob
+
+  local test_variable="${1}"
   shift
-  arr=("$@")
-  if [[ " ${arr[*]} " =~ [[:space:]]"$val"[[:space:]] ]]; then
-    true
-  else
-    false
-  fi
-}
+  local array=("$@")
 
-walk_dir () {
-  shopt -s nullglob dotglob
-
-  for stow_candidate in "$1"/*; do
-    base="${stow_candidate#"$dir"}"
-    target_path="$target/$base"
-    stow_candidate="$stow_candidate"
-
-    sanitized_base=$(sanitize_path $base)
-    if [[ "$sanitized_base" == /* ]]; then
-      sanitized_base="${sanitized_base:1}"
+  for element in ${array[*]}; do
+    if [[ "${test_variable}" =~ $element ]]; then
+      return 0
     fi
-    if contains $sanitized_base "${ignore[@]}"; then
-      continue
-    fi
-
-    if [[ "$stow_candidate" == *"##"* ]]; then
-      pass=true
-      condition_string=${stow_candidate##*##}
-      IFS=',' read -r -a conditions <<< "$condition_string"
-      for condition in "${conditions[@]}"; do
-        if [[ "$condition" == \!* ]]; then
-          condition="${condition:1}"
-          expected=1
-        else
-          expected=0
-        fi
-        IFS='.' read -r -a cond <<< "$condition"
-        "__stow_""${cond[@]}" "${cond[@]:1}"
-        if [[ $? != $expected ]]; then
-          pass=false
-          break
-        fi
-      done
-      if [[ $pass == false ]]; then
-        continue
-      fi
-    fi
-
-    if [ -f "$stow_candidate" ]; then
-      stow_targets+=("$base")
-      continue
-    fi
-    if [ -L "$target_path" ]; then
-      stow_targets+=("$base")
-      continue
-    fi
-
-    if [ ! -d "$target_path" ]; then
-      stow_targets+=("$base")
-      continue
-    fi
-
-    walk_dir $stow_candidate
   done
+  return 1
 }
 
-remove_symlink() {
-    if [[ ! -L "$1" ]]; then
-      echo \"$1\" does not exist or is not a symlink
+
+__check_conditions () {
+  local candidate="${1}"
+  if [[ ! "$candidate" == *"##"* ]]; then
+    return 0
+  fi
+  local condition_string="${candidate##*##}"
+  IFS=',' read -r -a conditions <<< "$condition_string"
+
+  for condition in "${conditions[@]}"; do
+    if [[ "$condition" == \!* ]]; then
+      condition="${condition:1}"
+      expected=1
+    else
+      expected=0
+    fi
+    IFS='.' read -r -a cond <<< "$condition"
+    "__stow_""${cond[@]}" "${cond[@]:1}"
+    if [[ $? != $expected ]]; then
+      _log debug 1 condition "${condition}" not met for "${candidate}"
       return 1
     fi
-    rm "$1"
-    echo \"$1\" removed
-    return 0
+  done
+  return 0
 }
 
-sanitize_path() {
-  a=($(echo "$1" | tr '/' '\n'))
+__sanitize() {
+  local unsanitized=($(echo "$1" | tr '/' '\n'))
   sanitized=""
-  for token in ${a[@]}; do
-    sanitized+="/${token%##*}"
+  for token in ${unsanitized[@]}; do
+    sanitized+="${token%##*}"/
   done
+  sanitized="${sanitized%/}"
   echo $sanitized
 }
 
-unstow () {
-  for candidate in $@; do
-    target_path="$target/$candidate"
-    target_path=$(sanitize_path $target_path)
-    remove_symlink "$target_path"
-  done
+__unstow() {
+  local unstow_target="${1}"
+  local target_path="${_TARGET}"/"$(__sanitize "${unstow_target}")"
+
+  _log debug 1 unstowing "${unstow_target}"
+
+  if [[ ! -L "${target_path}" ]]; then
+    _log error "${target_path}" does not exists or is not a symlink
+    return 1
+  fi
+  if [[ $dry_run == false ]]; then
+    \rm "${target_path}"
+  fi
+  _log info "${target_path}" removed
+
 }
 
-stow () {
-  for candidate in $@; do
+__stow() {
+  local stow_target="${1}"
+  local source_path="${_SOURCE}"/"${stow_target}"
+  local target_path="${_TARGET}"/"$(__sanitize "${stow_target}")"
+  local relative_path="$(realpath -s --relative-to="$(dirname "${target_path}")" "${source_path}")"
 
-    target_path="$target/$candidate"
-    stow_path="$dir/$candidate"
+  _log debug 2 stow_target $stow_target
+  _log debug 2 source_path $source_path
+  _log debug 2 target_path $target_path
+  _log debug 2 relative_path $relative_path
 
-    target_path=$(sanitize_path $target_path)
+  _log debug 1 "\nstowing "${stow_target}""
+  __contains "${stow_target}" "${ignore[@]}"
+  if [[ "${?}" == 0 ]]; then
+    _log debug "${stow_target}" ignored
+    return 1
+  fi
 
-    if [[ ! -e "$stow_path" ]]; then
-      echo \"$stow_path\" not a stowable object!
+  __check_conditions "${stow_target}"
+  if [[ $? != 0 ]]; then
+    return 1
+  fi
+
+  if [[ ! -e "${source_path}" ]]; then
+    _log error "${stow_target}" is not a stowable object!
+    return 1
+  fi
+
+  if [[ -e "${target_path}" ]]; then
+    if [[ $force == false ]]; then
+      _log error "${target_path}" already exists! use -f to overwrite
+      return 1
+    fi
+    __unstow "${stow_target}"
+    if [[ $? != 0 ]]; then
+      return $?
+    fi
+  fi
+
+  if [[ ! -d "$(dirname "$target_path")" ]]; then
+    if [[ $dry_run == false ]]; then
+      \mkdir --parents "$(dirname "${target_path}")"
+    fi
+    _log info created path: "$(dirname "${target_path}")"
+  fi
+  (
+    cd "$(dirname "${target_path}")"
+    if [[ $dry_run == false ]]; then
+      \ln --symbolic "${relative_path}" "$(basename "${target_path}")"
+    fi
+  )
+  _log info "${target_path}" "->" "${relative_path}"
+}
+
+__walk_dir () {
+  shopt -s nullglob dotglob
+
+  local root_path="${1}"
+  root_path="${root_path%/}"
+  _log debug 1 "\n"root_path: $root_path
+
+  for child_path in "${root_path}"/*; do
+    local stow_candidate="${child_path#"${_SOURCE}"/}"
+    local source_path="${_SOURCE}"/"${stow_candidate}"
+    local target_path="${_TARGET}"/"$(__sanitize "${stow_candidate}")"
+
+    _log debug 2 "\n"stow_candidate: "${stow_candidate}"
+    _log debug 2 source_path: "${source_path}"
+    _log debug 2 target_path: "${target_path}"
+
+    if [[ -f "${source_path}" ]]; then
+      stow_targets+=("${stow_candidate}")
+      _log debug 1 adding "${stow_candidate}" to stow stow_targets
+      continue
+    fi
+    if [[ -L "${target_path}" ]]; then
+      stow_targets+=("${stow_candidate}")
+      _log debug adding "${stow_candidate}" to stow stow_targets
+      continue
+    fi
+    if [[ ! -d "${target_path}" ]]; then
+      stow_targets+=("${stow_candidate}")
+      _log debug 1 adding "${stow_candidate}" to stow stow_targets
       continue
     fi
 
-    if [[ -e "$target_path" ]]; then
-      if [[ $force == false ]]; then
-        echo "$target_path" already exist. Use the \"\(-f\)orce\"
-        continue
-      fi
-      unstow $candidate
-      if [[ $? != 0 ]]; then
-        continue
-      fi
-    fi
-
-    target_dir="$(dirname $target_path)"
-    stow_dir="$(dirname $stow_path)"
-    relative_path=$(realpath -s --relative-to="$target_dir" "$stow_path")
-
-    mkdir -p $target_dir
-    pushd $target_dir
-      ln -s "$relative_path" "$(basename $target_path)"
-    popd
-    echo "$target_path -> $relative_path"
-
+    __walk_dir "${stow_candidate}"
   done
+
 }
 
-if [[ ! -z $unstow_targets ]]; then
-  unstow "${unstow_targets[@]}"
-  exit 0
-fi
-if [[ -z $stow_targets ]]; then
-  walk_dir $dir
-fi
-stow "${stow_targets[@]}"
 
-# >&2 cat << EOF
-# stow_targets=${stow_targets[*]}
-# dir=$dir
-# target=$target
-# force=$force
-# ignore=${ignore[*]}
-# stow=${stow[*]}
-# delete=${delete[*]}
-# EOF
+if [[ ! -z $unstow_targets ]]; then
+  for unstow_target in "${unstow_targets[@]}"; do
+    __unstow "${unstow_target}"
+  done
+fi
+
+if [[ -z $stow_targets && -z $unstow_targets ]]; then
+  __walk_dir "${_SOURCE}"
+fi
+
+for stow_target in "${stow_targets[@]}"; do
+  __stow "${stow_target}"
+done
+
+if [[ $dry_run == true ]]; then
+  _log info "\n-n flag. Nothing was written to filesystem\n"
+fi
+
+_log debug 3 "\
+debug=$debug\n\
+stows=${stows[*]}\n\
+dir=$_SOURCE\n\
+target=$_TARGET\n\
+force=$force\n\
+ignore=${ignore[*]}\n\
+stow_targets=${stow_targets[*]}\n\
+unstow_targets=${unstow_targets[*]}\n\
+"

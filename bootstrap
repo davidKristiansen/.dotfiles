@@ -27,10 +27,8 @@ mkdir -p $HOME/.local/share
 git submodule update --init
 
 ./.local/bin/stow.sh \
-  -i $(basename $0) \
-  -i .git \
-  -i .gitmodules \
-  -i .gitignore \
+  -i "^\.git" \
+  -i "^"$(basename "${0}")"$"\
   -f
 
 export ASDF_DIR="${HOME}"/.local/share/asdf

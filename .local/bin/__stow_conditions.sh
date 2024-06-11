@@ -15,7 +15,7 @@ __stow_os () {
 }
 
 __stow_shell () {
-  if [[ ! -z  $SHELL ]]; then
+  if [[ -z  $SHELL ]]; then
     return $(__stow_exe $1)
   fi
 
