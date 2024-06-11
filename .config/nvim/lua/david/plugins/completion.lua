@@ -134,10 +134,10 @@ return {
         })
       })
 
-      -- cmp.event:on(
-      --   'confirm_done',
-      --   cmp_autopairs.on_confirm_done()
-      -- )
+      cmp.event:on(
+        'confirm_done',
+        cmp_autopairs.on_confirm_done()
+      )
 
       local ind = cmp.lsp.CompletionItemKind
       local function ls_name_from_event(event)
@@ -145,26 +145,26 @@ return {
       end
 
       -- Add parenthesis on completion confirmation
-      cmp.event:on('confirm_done', function(event)
-        local ok, ls_name = pcall(ls_name_from_event, event)
-        if ok and vim.tbl_contains({ 'rust_analyzer', 'lua_ls' }, ls_name) then
-          return
-        end
-
-        local completion_kind = event.entry:get_completion_item().kind
-        if vim.tbl_contains({ ind.Function, ind.Method }, completion_kind) then
-          local left = vim.api.nvim_replace_termcodes('<Left>', true, true, true)
-          vim.api.nvim_feedkeys('()' .. left, 'n', false)
-        end
-      end)
+      -- cmp.event:on('confirm_done', function(event)
+      --   local ok, ls_name = pcall(ls_name_from_event, event)
+      --   if ok and vim.tbl_contains({ 'rust_analyzer', 'lua_ls' }, ls_name) then
+      --     return
+      --   end
+      --
+      --   local completion_kind = event.entry:get_completion_item().kind
+      --   if vim.tbl_contains({ ind.Function, ind.Method }, completion_kind) then
+      --     local left = vim.api.nvim_replace_termcodes('<Left>', true, true, true)
+      --     vim.api.nvim_feedkeys('()' .. left, 'n', false)
+      --   end
+      -- end)
     end
   },
-  {
-    'altermo/ultimate-autopair.nvim',
-    -- event = { 'InsertEnter', 'CmdlineEnter' },
-    branch = 'v0.6', --recomended as each new version will have breaking changes
-    opts = {
-      --Config goes here
-    },
-  }
+  -- {
+  --   'altermo/ultimate-autopair.nvim',
+  --   event = { 'InsertEnter', 'CmdlineEnter' },
+  --   branch = 'v0.6', --recomended as each new version will have breaking changes
+  --   opts = {
+  --     --Config goes here
+  --   },
+  -- }
 }

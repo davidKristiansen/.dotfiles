@@ -25,12 +25,12 @@ M.opts = {
     end,
 
   },
-  -- pyright = {
-  --
-  -- },
-  -- ruff_lsp = {
-  --
-  -- },
+  bashls = {
+
+  },
+  ruff = {
+
+  },
   pylsp = {
     flags = {
       debounce_text_changes = 200,

@@ -13,6 +13,7 @@ return {
     opts = {
       formatters_by_ft = {
         python = { "isort", "autopep8" },
+        bash = { "beautysh" },
         c = { "clang-format" },
         cpp = { "clang-format" },
         -- json = { "fixjson" },

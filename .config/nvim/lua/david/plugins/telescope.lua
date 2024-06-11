@@ -5,6 +5,8 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     version = false,
+    lazy = false,
+    event = { "VeryLazy" },
     dependencies = {
       'nvim-lua/plenary.nvim',
       {
@@ -166,6 +168,9 @@ return {
         desc = "Goto Symbol (Workspace)",
       },
     },
+    config = function (_, opts)
+      require("telescope").setup(opts)
+    end
   },
   {
     "nvim-telescope/telescope-media-files.nvim",

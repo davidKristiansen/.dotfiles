@@ -11,7 +11,7 @@ return {
       },
       "p00f/clangd_extensions.nvim",
       {
-        "folke/neodev.nvim",
+        "folke/lazydev.nvim",
         opts = {}
       },
       "folke/trouble.nvim",

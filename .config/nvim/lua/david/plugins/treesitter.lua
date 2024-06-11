@@ -10,7 +10,7 @@ return {
       { "<bs>",      desc = "Decrement selection", mode = "x" },
     },
     opts = {
-      ensure_installed = { "c", "lua", "vim", "python", "jsonc" },
+      ensure_installed = { "c", "lua", "vim", "python", "jsonc", "dockerfile" },
       auto_install = true,
       highlight = {
         enable = true
