@@ -3,6 +3,8 @@ XDG_CACHE_HOME="${HOME}"/.cache
 XDG_DATA_HOME="${HOME}"/.local/share
 XDG_STATE_HOME="${HOME}"/.local/state
 
+ZSH_CACHE_DIR="${XDG_CACHE_HOME}"/zsh
+
 ASDF_DIR="${XDG_DATA_HOME}"/asdf
 ASDF_DATA_DIR="${XDG_DATA_HOME}"/asdf_data
 ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/config/asdf/config"
