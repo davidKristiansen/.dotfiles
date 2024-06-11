@@ -5,6 +5,7 @@ ohmyzsh/ohmyzsh path:lib
 ohmyzsh/ohmyzsh path:plugins/magic-enter
 # ohmyzsh/ohmyzsh path:plugins/asdf
 ohmyzsh/ohmyzsh path:plugins/command-not-found
+ohmyzsh/ohmyzsh path:plugins/thefuck
 # ohmyzsh/ohmyzsh path:plugins/direnv
 
 zdharma-continuum/fast-syntax-highlighting
