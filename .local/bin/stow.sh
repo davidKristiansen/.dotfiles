@@ -16,12 +16,20 @@ __usage () {
 
 _log() {
   local level="${1}"
+  local debug_level="${2}"
+
+
   shift 1
   if [[ $level == "debug" ]]; then
-    debug_level="${1}"
-    shift 1
+    if [[ "${debug_level}" =~ "^[0-9]+$" ]] ; then
+      debug_level=1
+    else
+      debug_level="${1}"
+      shift 1
+    fi
   fi
   local message="${@}"
+
 
   case $level in
     debug)
@@ -155,10 +163,10 @@ __stow() {
   _log debug 2 target_path $target_path
   _log debug 2 relative_path $relative_path
 
-  _log debug 1 "\nstowing "${stow_target}""
+  _log debug 1 "stowing "${stow_target}""
   __contains "${stow_target}" "${ignore[@]}"
   if [[ "${?}" == 0 ]]; then
-    _log debug "${stow_target}" ignored
+    _log debug 1 "${stow_target}" ignored
     return 1
   fi
 
@@ -203,14 +211,14 @@ __walk_dir () {
 
   local root_path="${1}"
   root_path="${root_path%/}"
-  _log debug 1 "\n"root_path: $root_path
+  _log debug 1 root_path: $root_path
 
   for child_path in "${root_path}"/*; do
     local stow_candidate="${child_path#"${_SOURCE}"/}"
     local source_path="${_SOURCE}"/"${stow_candidate}"
     local target_path="${_TARGET}"/"$(__sanitize "${stow_candidate}")"
 
-    _log debug 2 "\n"stow_candidate: "${stow_candidate}"
+    _log debug 2 stow_candidate: "${stow_candidate}"
     _log debug 2 source_path: "${source_path}"
     _log debug 2 target_path: "${target_path}"
 
@@ -221,7 +229,7 @@ __walk_dir () {
     fi
     if [[ -L "${target_path}" ]]; then
       stow_targets+=("${stow_candidate}")
-      _log debug adding "${stow_candidate}" to stow stow_targets
+      _log debug  adding "${stow_candidate}" to stow stow_targets
       continue
     fi
     if [[ ! -d "${target_path}" ]]; then
