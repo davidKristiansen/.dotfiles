@@ -53,7 +53,7 @@ alias ssh="kitty +kitten ssh"
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tmux="tmux -u -f '${XDG_CONFIG_HOME}'/tmux/tmux.conf"
 
-alias dotfiles='/usr/bin/git -C $HOME/.dotfiles'
+alias dotfiles='/usr/bin/git -C "${DOT_DIR}"'
 alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion"
 
 # function rm mv () {
@@ -71,7 +71,7 @@ alias dce="devcontainer exec"
 
 function git () {
   if [[ -z "${1}" ]]; then
-    command lazygit
+    command \lazygit
   else
     command \git "${@}"
   fi
@@ -79,7 +79,7 @@ function git () {
 
 function docker () {
   if [[ -z "${1}" ]]; then
-    command lazydocker
+    command \lazydocker
   else
     command \docker "${@}"
   fi

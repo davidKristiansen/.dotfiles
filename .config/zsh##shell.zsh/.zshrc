@@ -3,6 +3,7 @@ set -a
 . "${ZDOTDIR}"/.zshenv
 set +a
 
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -101,3 +102,20 @@ export LC_ALL="en_US.UTF-8"
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f "${ZDOTDIR}"/.p10k.zsh ]] || source "${ZDOTDIR}"/.p10k.zsh
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+(
+  setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
+  {
+    # updated=$(dotfiles pull | \grep -v "Already up to date." 2>/dev/null)
+    updated=$(dotfiles pull 2>/dev/null)
+    if [ ! -z "${updated}" ]; then
+      echo $updated
+      echo Hold on to your bootstraps
+      source "${DOT_DIR}/bootstrap"
+    else
+      echo Nothing to do
+    fi
+    wait
+  } &
+)
