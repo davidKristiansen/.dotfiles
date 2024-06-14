@@ -113,8 +113,6 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
       echo $updated
       echo Hold on to your bootstraps
       ./bootstrap
-    else
-      echo Nothing to do
     fi
     wait
   } &
