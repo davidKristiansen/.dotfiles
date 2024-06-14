@@ -107,12 +107,12 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 (
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
   {
-    # updated=$(dotfiles pull | \grep -v "Already up to date." 2>/dev/null)
-    updated=$(dotfiles pull 2>/dev/null)
+    cd "${DOT_DIR}"
+    updated=$(dotfiles pull | \grep -v "Already up to date." 2>/dev/null)
     if [ ! -z "${updated}" ]; then
       echo $updated
       echo Hold on to your bootstraps
-      source "${DOT_DIR}/bootstrap"
+      ./bootstrap
     else
       echo Nothing to do
     fi
