@@ -16,21 +16,6 @@ return {
         end
       },
       "folke/trouble.nvim",
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        config = function(_, opts)
-          require('telescope').load_extension('fzf')
-        end,
-        build =
-        'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
-      },
-      {
-        "danielfalk/smart-open.nvim",
-        dependencies = {
-          "kkharji/sqlite.lua",
-        },
-      },
-      "danielfalk/smart-open.nvim"
     },
     cmd = "Telescope",
     opts = {
@@ -48,7 +33,7 @@ return {
           require("telescope.themes").get_dropdown {
             -- even more opts
           }
-        }
+        },
       }
     },
     keys = {
@@ -168,7 +153,7 @@ return {
         desc = "Goto Symbol (Workspace)",
       },
     },
-    config = function (_, opts)
+    config = function(_, opts)
       require("telescope").setup(opts)
     end
   },
@@ -176,6 +161,14 @@ return {
     "nvim-telescope/telescope-media-files.nvim",
     opts = {}
 
+  },
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    config = function(_, opts)
+      require('telescope').load_extension('fzf')
+    end,
+    build =
+    'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   },
   {
     "danielfalk/smart-open.nvim",
