@@ -3,7 +3,6 @@ set -a
 . "${ZDOTDIR}"/.zshenv
 set +a
 
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -84,9 +83,6 @@ if [ -d "${GOPATH}"/bin ]; then
 	export PATH="${GOPATH}"/bin:$PATH
 fi
 
-if [ -f $ZDOTDIR/aliases ]; then
-    . $ZDOTDIR/aliases
-fi
 if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
@@ -96,13 +92,29 @@ eval "$("${ASDF_DATA_DIR}"/shims/zoxide init zsh --cmd cd)"
 export LC_ALL="en_US.UTF-8"
 
 
+## fzf-tab
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+
 # if [[ ! $(tmux ls) ]] 2> /dev/null; then
 #   tmux new -s λ
 # fi
 
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f "${ZDOTDIR}"/.p10k.zsh ]] || source "${ZDOTDIR}"/.p10k.zsh
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+if [ -f $ZDOTDIR/aliases ]; then
+    . $ZDOTDIR/aliases
+fi
 
 (
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
@@ -117,3 +129,8 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
     wait
   } &
 )
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f "${ZDOTDIR}"/.p10k.zsh ]] || source "${ZDOTDIR}"/.p10k.zsh
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
