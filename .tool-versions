@@ -11,3 +11,4 @@ lazygit 0.42.0
 cmake 3.29.5
 stylua 0.20.0
 direnv 2.34.0
+sqlite 3.46.0
