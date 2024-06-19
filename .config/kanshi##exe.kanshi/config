@@ -7,8 +7,8 @@ profile {
 
 profile office {
     output eDP-1                           disable
-    output "Unknown HP Z27k G3 CN41363981" position 0,0      mode 3840x2160@30Hz transform 90 scale 1.5
-    output "Unknown HP Z38c 6CM0141HKL"    position 1440,285 mode 3840x1600@29.998Hz
+    output "Unknown HP Z27k G3 CN41363981" position 0,0      mode 3840x2160@30Hz transform 270 scale 1.5
+    output "Unknown HP Z38c 6CM0141HKL"    position 1440,420 mode 3840x1600@29.998Hz
 }
 
 profile odin {
