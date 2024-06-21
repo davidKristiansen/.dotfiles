@@ -22,9 +22,9 @@ _log() {
   shift 1
   if [[ $level == "debug" ]]; then
     if [[ "${debug_level}" =~ "^[0-9]+$" ]] ; then
-      debug_level=1
-    else
       debug_level="${1}"
+    else
+      debug_level=1
       shift 1
     fi
   fi
@@ -83,7 +83,6 @@ else
   readonly _TARGET="$(realpath "$target")"
 fi
 
-# printf "Running "${0}" with\nSource directory: "${_SOURCE}"\nTarget directory: "${_TARGET}"\n"
 __contains () {
   set -o noglob
 
