@@ -12,7 +12,7 @@ return {
       "hrsh7th/cmp-cmdline",
       'hrsh7th/cmp-buffer',
       "petertriho/cmp-git",
-      "/hrsh7th/cmp-path",
+      "hrsh7th/cmp-path",
       "windwp/nvim-autopairs",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
