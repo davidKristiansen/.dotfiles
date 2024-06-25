@@ -1,0 +1,10 @@
+[Unit]
+Description=Start Devcontainer from %I
+
+[Service]
+ConditionPathExists=/var/run/docker.sock
+Type=simple
+ExecStart=/usr/local/bin/devcontainer up --workspace-folder %I
+
+[Install]
+WantedBy=multi-user.target
