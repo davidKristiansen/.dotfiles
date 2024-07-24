@@ -1,0 +1,11 @@
+#! /bin/bash
+
+declare -a fortunes=()  # Array of fortunes
+declare -i curr_idx=0   # Index of fortune currently being read
+
+while IFS= read -r line ; do
+    [[ $line == '%' ]] && curr_idx+=1 || fortunes[curr_idx]+="$line"$'\n'
+done < "${XDG_DATA_HOME}"/fortune/fortunes
+
+printf '%s\n' "${fortunes[RANDOM % ${#fortunes[*]}]}"
+
