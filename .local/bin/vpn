@@ -29,7 +29,7 @@ connect_sweden () {
 }
 
 connect_uk () {
-  $anyconnect -s connect $SE_VPN < <(echo -e "$sGID\n$(stoken)\nexit\n")
+  $anyconnect -s connect $UK_VPN < <(echo -e "$sGID\n$(stoken)\nexit\n")
 }
 
 disconnect () {
