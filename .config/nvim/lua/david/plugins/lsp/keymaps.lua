@@ -38,8 +38,8 @@ function M.on_attach(client, buffer)
       function()
         if client.supports_method("textDocument/formatting") then
           vim.lsp.buf.format { async = false }
-        else
-          require('conform').format()
+        -- else
+        --   require('conform').format()
         end
       end,
       mode = { "n", "v" },
