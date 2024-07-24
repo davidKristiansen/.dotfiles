@@ -12,7 +12,7 @@ ASDF_DATA_DIR="${XDG_DATA_HOME}"/asdf_data
 ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/config/asdf/config"
 
 CARGO_HOME="${XDG_DATA_HOME}"/cargo
-RUSTUP_HOME="$}DG_DATA_HOME}"/rustup
+RUSTUP_HOME="${XDG_DATA_HOME}"/rustup
 CUDA_CACHE_PATH="${XDG_CACHE_HOME}"/nv
 DOCKER_CONFIG="${XDG_CONFIG_HOME}"/docker
 DOTNET_CLI_HOME="${XDG_DATA_HOME}"/dotnet
@@ -26,10 +26,14 @@ WORKON_HOME="${XDG_DATA_HOME}"/virtualenvs
 
 HISTFILE="${XDG_STATE_HOME}"/zsh/history
 
+PYENV_ROOT="${XDG_DATA_HOME}"/pyenv
+PATH="${PYENV_ROOT}"/bin:"${PATH}"
+
 PATH="${XDG_DATA_HOME}"/npm/bin:"${PATH}"
 PATH="${GOPATH}/bin:$PATH"
 # PATH="${ASDF_DATA_DIR}"/shims:$PATH
 PATH="${HOME}"/.local/bin:"${PATH}"
+
 
 TERM='xterm-256color'
 

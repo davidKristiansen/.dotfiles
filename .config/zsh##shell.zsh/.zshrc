@@ -69,6 +69,10 @@ export BAT_THEME="gruvbox-dark"
 export GCM_CREDENTIAL_STORE=secretservice
 
 
+if type pyenv >/dev/null; then
+  eval "$(pyenv init --path)"
+fi
+
 if [ -d /opt/python/bin ]; then
 	export PATH=/opt/python/bin:$PATH
 fi
