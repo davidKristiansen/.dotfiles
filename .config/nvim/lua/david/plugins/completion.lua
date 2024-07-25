@@ -17,7 +17,6 @@ return {
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "petertriho/cmp-git",
-      "windwp/nvim-autopairs",
       "onsails/lspkind.nvim",
       "alexander-born/cmp-bazel",
 
@@ -159,12 +158,48 @@ return {
       -- end)
     end
   },
-  -- {
-  --   'altermo/ultimate-autopair.nvim',
-  --   event = { 'InsertEnter', 'CmdlineEnter' },
-  --   branch = 'v0.6', --recomended as each new version will have breaking changes
-  --   opts = {
-  --     --Config goes here
-  --   },
-  -- }
+  {
+    'windwp/nvim-autopairs',
+    init = function()
+      vim.api.nvim_create_augroup("py-fstring", { clear = true })
+      vim.api.nvim_create_autocmd("InsertCharPre", {
+        pattern = { "*.py" },
+        group = "py-fstring",
+        callback = function(opts)
+          -- Only run if f-string escape character is typed
+          if vim.v.char ~= "{" then
+            return
+          end
+
+          -- Get node and return early if not in a string
+          local node = vim.treesitter.get_node()
+
+          if node:type() ~= "string" then
+            node = node:parent()
+          end
+
+          if node:type() ~= "string" then
+            return
+          end
+
+          -- Get parent string node and its range
+          local row, col, _, _ = vim.treesitter.get_node_range(node:parent())
+          col = col + 1
+
+          -- Return early if string is already a format string
+          local first_char = vim.api.nvim_buf_get_text(opts.buf, row, col, row, col + 1, {})[1]
+          if first_char == "f" then
+            return
+          end
+
+          -- Otherwise, make the string a format string
+          vim.api.nvim_input("<Esc>m'" .. row + 1 .. "gg" .. col + 1 .. "|if<Esc>`'la")
+        end,
+      })
+    end,
+    event = "InsertEnter",
+    config = true
+    -- use opts = {} for passing setup options
+    -- this is equalent to setup({}) function
+  }
 }
