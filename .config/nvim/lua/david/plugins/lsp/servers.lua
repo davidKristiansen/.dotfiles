@@ -31,6 +31,19 @@ M.opts = {
   ruff = {
 
   },
+  -- pyright = {
+  --   python = {
+  --     analysis = {
+  --       useLibraryCodeForTypes = true,
+  --       diagnosticSeverityOverrides = {
+  --         reportGeneralTypeIssues = "none",
+  --         reportOptionalMemberAccess = "none",
+  --         reportOptionalSubscript = "none",
+  --         reportPrivateImportUsage = "none",
+  --       },
+  --     },
+  --   },
+  -- },
   pylsp = {
     flags = {
       debounce_text_changes = 200,
@@ -38,19 +51,19 @@ M.opts = {
     settings = {
       pylsp = {
         plugins = {
-          black = { enabled = true },
+          black = { enabled = false },
           autopep8 = { enabled = false },
           yapf = { enabled = false },
           -- linter options
-          pylint = { enabled = true, executable = "pylint" },
+          pylint = { enabled = false },
           pyflakes = { enabled = false },
           pycodestyle = { enabled = false },
           -- type checker
-          pylsp_mypy = { enabled = true },
+          pylsp_mypy = { enabled = false },
           -- auto-completion options
           jedi_completion = { fuzzy = true },
           -- import sorting
-          pyls_isort = { enabled = true },
+          pyls_isort = { enabled = false },
 
         }
       }

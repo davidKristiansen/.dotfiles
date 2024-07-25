@@ -75,7 +75,9 @@ return {
       ensure_installed = {
         "lua_ls",
         "clangd",
-        "jsonls"
+        "jsonls",
+        "ruff",
+        "python-lsp-server"
       },
       automatic_installation = true
     }
