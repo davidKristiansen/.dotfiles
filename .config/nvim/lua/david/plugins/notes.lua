@@ -35,7 +35,7 @@ return {
               },
               index = "index.norg",
               default_workspace = "work",
-              open_last_workspace = true,
+              open_last_workspace = false,
             },
           },
           ["core.completion"] = {
