@@ -32,17 +32,17 @@ M.opts = {
 
   },
   -- pyright = {
-  --   python = {
-  --     analysis = {
-  --       useLibraryCodeForTypes = true,
-  --       diagnosticSeverityOverrides = {
-  --         reportGeneralTypeIssues = "none",
-  --         reportOptionalMemberAccess = "none",
-  --         reportOptionalSubscript = "none",
-  --         reportPrivateImportUsage = "none",
-  --       },
-  --     },
-  --   },
+    --   python = {
+    --     analysis = {
+    --       useLibraryCodeForTypes = true,
+    --       diagnosticSeverityOverrides = {
+    --         reportGeneralTypeIssues = "none",
+    --         reportOptionalMemberAccess = "none",
+    --         reportOptionalSubscript = "none",
+    --         reportPrivateImportUsage = "none",
+    --       },
+    --     },
+    --   },
   -- },
   pylsp = {
     flags = {
@@ -62,6 +62,13 @@ M.opts = {
           pylsp_mypy = { enabled = false },
           -- auto-completion options
           jedi_completion = { fuzzy = true },
+          jedi_hover = { enabled = true },
+          jedi_references = { enabled = true },
+          jedi_signature_help = { enabled = true },
+          jedi_symbols = {
+            enabled = true,
+            all_scopes = true
+          },
           -- import sorting
           pyls_isort = { enabled = false },
 
