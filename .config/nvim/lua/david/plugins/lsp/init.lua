@@ -77,7 +77,7 @@ return {
         "clangd",
         "jsonls",
         "ruff",
-        "python-lsp-server"
+        "pylsp"
       },
       automatic_installation = true
     }
