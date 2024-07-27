@@ -1,11 +1,11 @@
 # exec mako
-exec dunst
+# exec dunst
 
 # exec gammastep-indicator
 
 exec libinput-gestures-setup start
 
-exec pulseaudio --start
+# exec pulseaudio --start
 
 # exec ydotoold
 
@@ -17,15 +17,15 @@ exec pulseaudio --start
 
 # exec --no-startup-id speedcrunch
 
-exec_always fcitx5 -d --replace
+# exec_always fcitx5 -d --replace
 
 # exec foot --server
 
-exec caffein-indicator
+# exec caffein-indicator
 
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
-exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
+# exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+# exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+# exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
 
 # exec swayidle -w \
 #     timeout 120 '$lock' \
@@ -33,15 +33,15 @@ exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
 #     resume 'swaymsg "output * dpms on"' \
 #     before-sleep '$lock'
 
-exec swayidle -w \
-    timeout 120 '$lock' \
-    timeout 240 'swaymsg "output * dpms off"' \
-       resume 'swaymsg "output * dpms on"' \
-    before-sleep '$lock'
+# exec swayidle -w \
+#     timeout 120 '$lock' \
+#     timeout 240 'swaymsg "output * dpms off"' \
+#        resume 'swaymsg "output * dpms on"' \
+#     before-sleep '$lock'
 
-exec sworkstyle &> /tmp/sworkstyle.log
+# exec sworkstyle &> /tmp/sworkstyle.log
 
-exec_always 'systemctl --user restart wireplumber.service'
+# exec_always 'systemctl --user restart wireplumber.service'
 
 
 # vim: filetype=i3config
