@@ -3,7 +3,8 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term $HOME/.local/bin/kitty
+# set $term $HOME/.local/bin/kitty
+set $term kitty
 # set $menu rofi -modi drun -show-icons -show drun
 
 set $menu swaymsg 'exec $term --class __launcher -e fzf-launcher'
