@@ -107,7 +107,7 @@
 }
 
 window#waybar {
-    font-family: "Hack Nerd Font Propo";
+    font-family: "Cascadia Mono";
     font-size: 12px;
     color: @base0F;
     background:  @base00;
@@ -134,7 +134,7 @@ window#waybar {
 }
 
 #clock {
-    font-family: "0xProto Nerd Font";
+    font-family: "Cascadia Mono";
     padding-right: 5px;
     font-size: 13px;
 }
