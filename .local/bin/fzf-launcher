@@ -18,7 +18,8 @@ export TIME_STAMP="20240113.184222"
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-FZF=$HOME/.fzf_git/bin/fzf
+# FZF=$HOME/.fzf_git/bin/fzf
+FZF=fzf
 PROG=$( basename "$0" )
 TEMP=$( getopt --options hvn: --longoptions verbose,help,nlines: -- "$@" ) || exit 1
 eval set -- "$TEMP"
