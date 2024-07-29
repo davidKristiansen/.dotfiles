@@ -3,7 +3,7 @@ XDG_CACHE_HOME="${HOME}"/.cache
 XDG_DATA_HOME="${HOME}"/.local/share
 XDG_STATE_HOME="${HOME}"/.local/state
 
-DOT_DIR="${HOME}/.dotfiles"
+# DOT_DIR="${HOME}/dotfiles"
 
 ZSH_CACHE_DIR="${XDG_CACHE_HOME}"/zsh
 

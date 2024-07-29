@@ -120,6 +120,13 @@ if [ -f $ZDOTDIR/aliases ]; then
     . $ZDOTDIR/aliases
 fi
 
+# deduce dotfiles dir
+if [ -d $HOME/dotfiles ]; then
+  export DOT_DIR=$HOME/dotfiles
+else
+  export DOT_DIR=$HOME/.dotfiles
+fi
+
 (
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
   {
