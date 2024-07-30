@@ -1,10 +1,13 @@
 [Unit]
 Description=Start Devcontainer from %I
+PartOf=wayland-session-pre.target
+Requires=wayland-session-pre.target
+After=wayland-session-pre.target
 
 [Service]
 ConditionPathExists=/var/run/docker.sock
 Type=simple
-ExecStart=/usr/local/bin/devcontainer up --workspace-folder %I
+ExecStart=%h/.local/share/npm/bin/devcontainer up --workspace-folder %I
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=wayland-session-pre.target
