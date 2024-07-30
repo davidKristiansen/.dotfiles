@@ -9,11 +9,9 @@ return {
     cmd = { "Gitsigns" },
     init = function()
       local wk = require('which-key')
-      wk.register({
-        g = {
-          name = "+git"
-        }
-      }, { prefix = "<leader>" })
+      wk.add({
+        { "<leader>g", group = "git"},
+      })
     end,
     opts = {
       on_attach = function(bufnr)

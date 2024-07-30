@@ -7,6 +7,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      { 'echasnovski/mini.icons', version = false },
       "MunifTanjim/nui.nvim",
       {
         's1n7ax/nvim-window-picker',
@@ -17,7 +18,7 @@ return {
             -- filter using buffer options
             bo = {
               -- if the file type is one of following, the window will be ignored
-              filetype = { 'neo-tree', "neo-tree-popup", "notify" , "alpha" },
+              filetype = { 'neo-tree', "neo-tree-popup", "notify", "alpha" },
               -- if the buffer type is one of following, the window will be ignored
               buftype = { 'terminal', "quickfix", "alpha" },
             },
@@ -124,24 +125,33 @@ return {
       vim.o.timeoutlen = 300
     end,
     opts = {
-      plugins = { spelling = true },
+      plugins = {
+        spelling = true,
+        registers = true,
+        marks = true
+      },
       defaults = {
-        mode = { "n", "v" },
-        ["g"] = { name = "+goto" },
-        ["z"] = { name = "+folds" },
-        ["]"] = { name = "+next" },
-        ["["] = { name = "+prev" },
-        ["<leader>r"] = { name = "+rename" },
-        ["<leader>f"] = { name = "+file/find" },
-        ["<leader>t"] = { name = "+tasks" },
-        ["<leader>s"] = { name = "+search" },
-      }
+        {
+          mode = { "n", "v" },
+          { "<leader>f", group = "file/find" },
+          { "<leader>r", group = "rename" },
+          { "<leader>s", group = "search" },
+          { "<leader>t", group = "tasks" },
+          { "[",         group = "prev" },
+          { "]",         group = "next" },
+          { "g",         group = "goto" },
+          { "z",         group = "folds" },
+        } }
     },
-    config = function(_, opts)
-      local wk = require("which-key")
-      wk.setup(opts)
-      wk.register(opts.defaults)
-    end
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
   },
   {
     -- amongst your other plugins

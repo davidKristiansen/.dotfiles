@@ -21,14 +21,12 @@ return {
         mode = { "n", "v" },
       },
     },
-    cmd = {"Translate"},
+    cmd = { "Translate" },
     init = function()
       local wk = require('which-key')
-      wk.register({
-        t = {
-          name = "+translate"
-        }
-      }, { prefix = "g" })
+      wk.add({
+        { "gt", group = "translate" },
+      })
     end,
     opts = {
       default = {
