@@ -3,11 +3,10 @@ set $left h
 set $down j
 set $up k
 set $right l
-# set $term $HOME/.local/bin/kitty
 set $term kitty
-# set $menu rofi -modi drun -show-icons -show drun
 
-set $menu swaymsg 'exec $term --class __launcher -e fzf-launcher'
+set $dmenu j4-dmenu-desktop --no-exec --dmenu="fzf --prompt='Run: ' --height 100% --cycle"
+set $menu swaymsg 'exec $term --class __launcher -e $dmenu'
 
 
 set $lock swaylock \
