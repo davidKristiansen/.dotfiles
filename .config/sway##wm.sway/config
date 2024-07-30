@@ -5,8 +5,8 @@ set $up k
 set $right l
 set $term kitty
 
-set $dmenu j4-dmenu-desktop --no-exec --dmenu="fzf --prompt='Run: ' --height 100% --cycle"
-set $menu swaymsg 'exec $term --class __launcher -e $dmenu'
+set $dmenu j4-dmenu-desktop --no-exec --dmenu='fzf --prompt="Run: "' | xargs -I{} swaymsg "exec {}"
+set $menu swaymsg 'exec $term --class __launcher -e fzf-launcher'
 
 
 set $lock swaylock \
