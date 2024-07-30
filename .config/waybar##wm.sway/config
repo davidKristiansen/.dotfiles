@@ -50,7 +50,7 @@
         "max-length": 50
     },
     "sway/language": {
-      "format": "{short} {variant}  ",
+      "format": "{short} {variant}",
       "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
     },
     "custom/separator": {
@@ -81,7 +81,7 @@
         "on-click": "playerctl next"
     },
     "battery": {
-        "format": "{icon} {capacity}%",
+        "format": "{capacity}% {icon}",
         "format-icons": ["", "", "", "", ""]
     },
     "clock": {
@@ -100,12 +100,12 @@
         "format-muted": "",
         "format-icons": {
             "headphone": "",
-            "hands-free": "",
-            "headset": "",
+            "hands-free": "",
+            "headset": "",
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", ""]
+            "default": ["", "", ""]
         },
         "scroll-step": 1,
         "on-click-right": "pavucontrol",
@@ -114,7 +114,7 @@
     "backlight": {
         "device": "intel_backlight",
         "format": "{percent}% {icon}",
- //       "format-icons": ["", ""],
+       "format-icons": ["", ""],
         "on-scroll-up": "brightnessctl set 1%+",
         "on-scroll-down": "brightnessctl set 1%-"
     },
@@ -170,5 +170,4 @@
 
 }
 
-// vim: set syntax=json:
-// vim: filetype=json
+// vim: filetype=jsonc
