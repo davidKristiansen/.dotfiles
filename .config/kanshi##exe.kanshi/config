@@ -5,6 +5,11 @@ profile {
     output eDP-1 enable
 }
 
+profile home {
+    output eDP-1  position 0,360 mode 1920x1080
+    output "HP Inc. HP Z38c 6CM04204LJ" position 1920,0 mode 3840x1600
+}
+
 profile office {
     output eDP-1                           disable
     output "HP Inc. HP Z27k G3 CN41363981" position 0,0      mode 3840x2160@30Hz transform 270 scale 1.5
