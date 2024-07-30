@@ -107,7 +107,7 @@
 }
 
 window#waybar {
-    font-family: "Cascadia Mono";
+    font-family: "CaskaydiaCove Nerd Font Propo";
     font-size: 12px;
     color: @base0F;
     background:  @base00;
@@ -134,7 +134,7 @@ window#waybar {
 }
 
 #clock {
-    font-family: "Cascadia Mono";
+    font-family: "CaskaydiaCove Nerd Font";
     padding-right: 5px;
     font-size: 13px;
 }
