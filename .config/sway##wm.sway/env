@@ -1,0 +1,16 @@
+# EGL_PLATFORM= # (sway>1.9) Being empty also fixes `eglgears_x11` segfaulting, though gears in `eglgears_wayland` still often stop rotating.
+# WLR_RENDERER=gles2 # (sway>1.9) Because with `vulkan` the screen flickers when the last screen update was "long ago", even with `output "*" max_render_time off`
+
+
+# GBM_BACKEND=nvidia-drm
+WLR_NO_HARDWARE_CURSORS=1 # Without this, you can’t see your cursors
+
+
+QT_QPA_PLATFORM=wayland
+CLUTTER_BACKEND=wayland
+SDL_VIDEODRIVER=wayland
+XDG_SESSION_TYPE=wayland
+
+# Firefox:
+MOZ_ENABLE_WAYLAND=1
+MOZ_USE_XINPUT2=1
