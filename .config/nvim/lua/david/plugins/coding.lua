@@ -41,8 +41,13 @@ return {
   {
     "smjonas/inc-rename.nvim",
     opts = {},
+    init = function()
+      local wk = require("which-key")
+      wk.add({
+        { "<leader>r", group = "Rename" },
+      })
+    end,
     keys = {
-      { "<leader>r", group = "Rename" },
       { "<leader>rn", "<leader>rn", ":IncRename ", desc = "Rename" },
       {
         "<leader>rN",
