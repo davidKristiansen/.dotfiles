@@ -32,17 +32,17 @@ M.opts = {
 
   },
   -- pyright = {
-    --   python = {
-    --     analysis = {
-    --       useLibraryCodeForTypes = true,
-    --       diagnosticSeverityOverrides = {
-    --         reportGeneralTypeIssues = "none",
-    --         reportOptionalMemberAccess = "none",
-    --         reportOptionalSubscript = "none",
-    --         reportPrivateImportUsage = "none",
-    --       },
-    --     },
-    --   },
+  --   python = {
+  --     analysis = {
+  --       useLibraryCodeForTypes = true,
+  --       diagnosticSeverityOverrides = {
+  --         reportGeneralTypeIssues = "none",
+  --         reportOptionalMemberAccess = "none",
+  --         reportOptionalSubscript = "none",
+  --         reportPrivateImportUsage = "none",
+  --       },
+  --     },
+  --   },
   -- },
   pylsp = {
     flags = {
@@ -94,10 +94,8 @@ M.setup = {
   clangd = function(_, opts)
     local wk = require("which-key")
 
-    wk.register({
-      g = {
-        h = { "<cmd>ClangdSwitchSourceHeader<cr>", "Switch source header" }
-      }
+    wk.add({
+      { "gh", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source header" },
     })
 
     require("clangd_extensions").setup({

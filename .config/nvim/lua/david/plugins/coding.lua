@@ -27,11 +27,9 @@ return {
     },
     init = function()
       local wk = require("which-key")
-      wk.register({
-        s = {
-          name = "Surround",
-          a = { "<cmd><cr>", "Add Surrounding" }
-        }
+      wk.add({
+        { "s",  group = "Surround" },
+        { "sa", "<cmd><cr>",       desc = "Add Surrounding" },
       })
     end,
     keys = {
@@ -44,6 +42,7 @@ return {
     "smjonas/inc-rename.nvim",
     opts = {},
     keys = {
+      { "<leader>r", group = "Rename" },
       { "<leader>rn", "<leader>rn", ":IncRename ", desc = "Rename" },
       {
         "<leader>rN",

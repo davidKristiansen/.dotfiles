@@ -49,12 +49,10 @@ return {
     end,
     init = function()
       local wk = require("which-key")
-      wk.register({
-        n = {
-          name = "notes",
-          i = { "<cmd>Neorg index<cr>", "Open index" },
-        },
-      }, { prefix = "<leader>" })
+      wk.add({
+        { "<leader>n",  group = "notes" },
+        { "<leader>ni", "<cmd>Neorg index<cr>", desc = "Open index" },
+      })
     end,
   },
   {
