@@ -112,4 +112,7 @@ return {
 
     }
   },
+  {
+    'terminalnode/sway-vim-syntax'
+  }
 }

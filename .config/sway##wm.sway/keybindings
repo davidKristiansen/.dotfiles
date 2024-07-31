@@ -2,6 +2,8 @@
 # mouse button for dragging.
 floating_modifier $mod normal
 
+bindsym $mod+Shift+n exec swaync-client -t -sw
+
 bindsym $mod+Delete exec $lock
 
 # Start a terminal

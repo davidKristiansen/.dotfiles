@@ -4,6 +4,10 @@
 # exec gammastep-indicator
 
 exec_always 'systemctl --user restart kanshi.service'
+exec_always 'systemctl --user restart swayidle.service'
+exec swaync
+exec_always swaync-client -R
+exec_always swaync-client -rs
 # exec_always 'systemctl --user restart wireplumber.service'
 #
 # exec libinput-gestures-setup start
