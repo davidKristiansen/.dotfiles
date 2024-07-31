@@ -5,7 +5,6 @@ Requires=wayland-session-pre.target
 After=wayland-session-pre.target
 
 [Service]
-ConditionPathExists=/var/run/docker.sock
 Type=simple
 ExecStart=%h/.local/share/npm/bin/devcontainer up --workspace-folder %I
 
