@@ -1,173 +1,197 @@
 {
-    "layer": "bottom",
-    "height": 20,
-    "spacing": 5,
-    "modules-left": [
-        "sway/workspaces",
-        "custom/spotify",
-        "sway/mode"
+  "layer": "bottom",
+  "height": 20,
+  "spacing": 5,
+  "modules-left": [
+    "sway/workspaces",
+    "custom/spotify",
+    "sway/mode"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "sway/language",
+    "custom/separator",
+    "network",
+    "custom/vpn",
+    "custom/separator",
+    "pulseaudio",
+    "custom/separator",
+    "backlight",
+    "idle_inhibitor",
+    "custom/gammastep",
+    "custom/separator",
+    "battery",
+    "custom/separator",
+    "cpu",
+    "custom/separator",
+    "memory",
+    "custom/separator",
+    "tray"
+  ],
+  "tray": {
+    "icon-size": 13,
+    "spacing": 5
+  },
+  "sway/workspaces": {
+    "persitant_workspaces": {
+      "9": [
+        "DP-5"
+      ]
+    }
+  },
+  "sway/mode": {
+    "format": "|  {}",
+    "max-length": 50
+  },
+  "cpu": {
+    "interval": 10,
+    "format": "{load:3.1f}% ",
+    "max-length": 10,
+    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
+  },
+  "memory": {
+    "format": "{}% ",
+    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
+  },
+  "sway/window": {
+    "max-length": 50
+  },
+  "sway/language": {
+    "format": "{short} {variant}",
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
+  },
+  "custom/separator": {
+    "format": "|",
+    "interval": "once",
+    "tooltip": false
+  },
+  "custom/gammastep": {
+    "format": "{}",
+    "interval": 5,
+    "on-update": "",
+    "exec": "sleep 0.05; $HOME/.local/bin/gammastep.sh",
+    "on-click": "$HOME/.local/bin/gammastep.sh toggle"
+  },
+  "custom/vpn": {
+    "exec": "$HOME/.local/bin/vpn",
+    "restart-interval": 60,
+    "on-click": "$HOME/.local/bin/vpn toggle",
+    "on-right-click": "$HOME/.local/bin/vpn ui"
+  },
+  "custom/spotify": {
+    "format": "|  {}",
+    "return-type": "json",
+    "max-length": 40,
+    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
+    "exec-if": "pgrep spotify",
+    "on-click-right": "playerctl play-pause",
+    "on-click": "playerctl next"
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:%a, %d. %b  %H:%M}"
+  },
+  "wireplumber": {
+    "format": "{volume}% {icon}",
+    "format-muted": "",
+    "on-click": "pavucontrol",
+    "format-icons": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "pulseaudio": {
+    "format": "{volume}% {icon}",
+    "format-bluetooth": "{volume}% {icon}",
+    "format-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "scroll-step": 1,
+    "on-click-right": "pavucontrol",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{percent}% {icon}",
+    "format-icons": [
+      "",
+      ""
     ],
-    "modules-center": [
-        "clock"
-    ],
-    "modules-right": [
-        "sway/language",
-        "custom/separator",
-        "network",
-        "custom/vpn",
-        "custom/separator",
-        "pulseaudio",
-        "custom/separator",
-        "backlight",
-        "idle_inhibitor",
-        "custom/gammastep",
-        "custom/separator",
-        "battery",
-        "custom/separator",
-        "cpu",
-        "custom/separator",
-        "memory",
-        "custom/separator",
-        "tray"
-    ],
-    "sway/workspaces": {
-        "persitant_workspaces": {
-            "9": ["DP-5"]
-        }
-    },
-    "cpu": {
-        "interval": 10,
-        "format": "{load:3.1f}% ",
-        "max-length": 10,
-	    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
-    },
-    "memory": {
-        "format": "{}% ",
-	    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
-    },
-
-    "sway/window": {
-        "max-length": 50
-    },
-    "sway/language": {
-      "format": "{short} {variant}",
-      "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
-    },
-    "custom/separator": {
-        "format": "|",
-        "interval": "once",
-        "tooltip": false
-    },
-    "custom/gammastep": {
-      "format": "{}",
-      "interval": 5,
-      "on-update": "",
-      "exec": "sleep 0.05; $HOME/.local/bin/gammastep.sh",
-      "on-click": "$HOME/.local/bin/gammastep.sh toggle"
-    },
-    "custom/vpn": {
-        "exec": "$HOME/.local/bin/vpn",
-        "restart-interval": 60,
-        "on-click": "$HOME/.local/bin/vpn toggle",
-        "on-right-click": "$HOME/.local/bin/vpn ui"
-    },
-    "custom/spotify": {
-        "format": " {}",
-        "return-type": "json",
-        "max-length": 40,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
-        "exec-if": "pgrep spotify",
-        "on-click-right": "playerctl play-pause",
-        "on-click": "playerctl next"
-    },
-    "battery": {
-        "format": "{capacity}% {icon}",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "clock": {
-        "format": "{:%H:%M}",
-        "format-alt": "{:%a, %d. %b  %H:%M}"
-    },
-    "wireplumber": {
-      "format": "{volume}% {icon}",
-      "format-muted": "",
-      "on-click": "pavucontrol",
-      "format-icons": ["", "", ""]
-    },
-    "pulseaudio": {
-        "format": "{volume}% {icon}",
-        "format-bluetooth": "{volume}% {icon}",
-        "format-muted": "",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
-        "scroll-step": 1,
-        "on-click-right": "pavucontrol",
-        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-    },
-    "backlight": {
-        "device": "intel_backlight",
-        "format": "{percent}% {icon}",
-       "format-icons": ["", ""],
-        "on-scroll-up": "brightnessctl set 1%+",
-        "on-scroll-down": "brightnessctl set 1%-"
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
-    "network": {
-        "interface": "wlp0s20f3",
-        "format": "{ifname}",
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ifname} ",
-        "format-disconnected": "",
-        "tooltip-format": "{ifname}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-        "tooltip-format-ethernet": "{ifname} ",
-        "tooltip-format-disconnected": "Disconnected",
-        "max-length": 50,
-        "on-click": "$HOME/.local/bin/wifi-menu.sh 2>/dev/null"
-        // "on-click": "kitty --class='termfloat' -e nmtui"
-    },
-	"custom/arrow1": {
-		"format": ""
-	},
-	"custom/arrow3": {
-		"format": ""
-	},
-	"custom/arrow0": {
-		"format": ""
-	},
-	"custom/arrow4": {
-		"format": ""
-	},
-	"custom/arrow5": {
-		"format": ""
-	},
-	"custom/arrow6": {
-		"format": ""
-	},
-	"custom/arrow7": {
-		"format": ""
-	},
-	"custom/arrow8": {
-		"format": "",
-        "exec-if": "pgrep spotify"
-	},
-    "custom/arrow2": {
-		"format": ""
-	}
-
+    "on-scroll-up": "brightnessctl set 1%+",
+    "on-scroll-down": "brightnessctl set 1%-"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+  "network": {
+    "interface": "wlp0s20f3",
+    "format": "{ifname}",
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ifname} ",
+    "format-disconnected": "",
+    "tooltip-format": "{ifname}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+    "tooltip-format-ethernet": "{ifname} ",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+    "on-click": "$HOME/.local/bin/wifi-menu.sh 2>/dev/null"
+    // "on-click": "kitty --class='termfloat' -e nmtui"
+  },
+  "custom/arrow1": {
+    "format": ""
+  },
+  "custom/arrow3": {
+    "format": ""
+  },
+  "custom/arrow0": {
+    "format": ""
+  },
+  "custom/arrow4": {
+    "format": ""
+  },
+  "custom/arrow5": {
+    "format": ""
+  },
+  "custom/arrow6": {
+    "format": ""
+  },
+  "custom/arrow7": {
+    "format": ""
+  },
+  "custom/arrow8": {
+    "format": "",
+    "exec-if": "pgrep spotify"
+  },
+  "custom/arrow2": {
+    "format": ""
+  }
 }
-
 // vim: filetype=jsonc
