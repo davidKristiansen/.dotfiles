@@ -1,3 +1,5 @@
+# vim: ft=swayconfig
+
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10, opacity 0.9
 
 for_window [app_id="termfloat"] floating enable, sticky enable, resize set 58 ppt 46 ppt, opacity 0.9
@@ -20,4 +22,99 @@ for_window [app_id="__btop"] floating enable, sticky enable, resize set 650 400,
 
 for_window [app_id="__launcher"] floating enable, sticky enable, resize set 1200 800, opacity 0.9
 
-# vim: filetype=i3config
+for_window {
+    # Floating
+    [window_role="PictureInPicture"] sticky enable
+    [app_id="firefox" title="Picture-in-Picture"] sticky enable; floating enable
+    [instance="origin.exe"] floating enable
+    [title="Origin"] floating enable
+    [title="Microsoft Teams Notification"] floating enable
+    [title="Calculator"] floating enable
+    [title="Color Picker"] floating enable
+    [title="Reminders"] floating enable resize set 200px 400px
+    [title="jetbrains-studio"] floating enable resize set 200px 400px
+    [title="^Android Emulator -"] floating enable
+    [title="sun-awt-X11-XWindowPeer"] floating enable resize set 200px 400px
+    [app_id="zenity"] floating enable
+    [title="Firefox — Sharing Indicator"] floating enable
+
+    # [class=".*"] border pixel $border_size
+    # [app_id=".*"] border pixel $border_size
+    # [title=.] border pixel $border_size
+
+    # Saturation
+    # [class="csgo_linux64"] saturation set 2.0
+    # [class="csgo_linux64"] max_render_time 1
+    [class="csgo_linux64"] tearing_allowed on
+    [class="league of legends.exe"] saturation set 2
+
+    # Borders
+    [class="Ulauncher"] border pixel 0
+
+    [title="Reminders"] floating enable resize set 200px 400px
+    [class="^Pavucontrol$"] floating enable  resize set 1000px 600px
+
+    # The Chrome "Page Unresponsive" dialog is not floating...
+    [title="Page Unresponsive"] floating enable
+
+    # Share your screen from Google Cast extension
+    [title="Share your screen - Google Cast"] floating enable
+
+    # Android Device Monitor startup window
+    [class="^Monitor$" instance="^Monitor$" title="^Monitor$"] floating enable
+
+    # Unity
+    [class="^Unity$" title="^Starting Unity...$"] floating enable
+    [class="^Unity$" title="^Hold On$"] floating enable
+    [class="^Unity$" title="^Preparing Package$"] floating enable
+    [class="^Unity$" title="^Importing Package$"] floating enable
+
+    # Steam
+    # https://github.com/ValveSoftware/steam-for-linux/issues/1040
+    # [class="^steamwebhelper$"] floating enable
+    [class="^(s|S)team$" title="^Friends List$"] floating enable
+    [class="^(s|S)team$" title="Steam - News"] floating enable
+    [class="^(s|S)team$" title=".* - Chat"] floating enable
+    [class="^(s|S)team$" title="^Settings$"] floating enable
+    [class="^(s|S)team$" title=".* - event started"] floating enable
+    [class="^(s|S)team$" title=".* CD key"] floating enable
+    [class="^(s|S)team$" title="^Steam - Self Updater$"] floating enable
+    [class="^(s|S)team$" title="^Screenshot Uploader$"] floating enable
+    [class="^(s|S)team$" title="^Steam Guard - Computer Authorization Required$"] floating enable
+    [class="^(s|S)team$" title="^Add Non-Steam Game$"] floating enable
+    [title="^(s|S)team Keyboard$"] floating enable
+    # Games
+    [class="gamescope"] floating enable;
+    [class="steam_app.*"] floating enable;
+
+    # VirtualBox
+    [class="^VirtualBoxVM$" title=" - Settings$"] floating enable
+    [class="^VirtualBoxVM$" title=" - Soft Keyboard$"] floating enable
+
+    # Dolphin
+    # Class
+    [title="^(File|Folder)\s*Already Exists\s*—\s*" class="dolphin|org.kde.ark"] floating enable
+    [title="^(Copying|Moving)\s*—\s*Dolphin" class="dolphin"] inhibit_idle open; floating enable
+    [title="^Extracting\s" class="(dolphin|org.kde.ark)"] inhibit_idle open; floating enable
+    [title="^Information\s*—\s*Dolphin" class="dolphin"] floating enable
+    [title="^Loading archive" class="org.kde.ark"] floating enable
+    # Appid
+    [title="^(File|Folder)\s*Already Exists\s*—\s*" app_id="dolphin|org.kde.ark"] floating enable
+    [title="^(Copying|Moving)\s*—\s*Dolphin" app_id="dolphin"] inhibit_idle open; floating enable
+    [title="^Extracting\s" app_id="(dolphin|org.kde.ark)"] inhibit_idle open; floating enable
+    [title="^Information\s*—\s*Dolphin" app_id="dolphin"] floating enable
+    [title="^Loading archive" app_id="org.kde.ark"] floating enable
+
+    # Save/Open file/folder dialog
+    # [title="(?:Open|Save) (?:File|Folder|As)"] floating enable; sticky enable
+    [window_role="pop-up"] floating enable
+    [window_role="bubble"] floating enable
+    [window_role="task_dialog"] floating enable
+    [window_role="Preferences"] floating enable
+    [window_type="dialog"] floating enable
+    [window_type="menu"] floating enable
+
+    # All nested wlroots comps should be floating
+    [app_id="wlroots"] floating true
+}
+
