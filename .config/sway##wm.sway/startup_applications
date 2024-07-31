@@ -3,7 +3,10 @@
 
 # exec gammastep-indicator
 
-exec libinput-gestures-setup start
+exec_always 'systemctl --user restart kanshi.service'
+# exec_always 'systemctl --user restart wireplumber.service'
+#
+# exec libinput-gestures-setup start
 
 # exec pulseaudio --start
 
