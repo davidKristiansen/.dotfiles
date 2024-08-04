@@ -5,7 +5,7 @@ set $up k
 set $right l
 set $term kitty
 
-set $dmenu j4-dmenu-desktop --no-exec --dmenu='fzf --prompt="Run: "' | xargs -I{} swaymsg "exec {}"
+# set $dmenu j4-dmenu-desktop --no-exec --dmenu='fzf --prompt="Run: "' | xargs -I{} swaymsg "exec {}"
 set $menu swaymsg 'exec $term --class __launcher -e fzf-launcher'
 
 
