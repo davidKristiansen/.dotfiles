@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-source $(dirname $0)/__stow_conditions.sh
+source "$(dirname "${0}")/__stow_conditions.sh"
 
 force=false
 debug=0
@@ -10,8 +10,8 @@ dry_run=false
 # declare -A stow_targets=()
 
 __usage () {
-  echo $(basename $0) [dtfiSDh]
-  exit $1
+  echo "$(basename $"0")" [dtfiSDh]
+  exit "$1"
 }
 
 _log() {
@@ -21,27 +21,27 @@ _log() {
 
   shift 1
   if [[ $level == "debug" ]]; then
-    if [[ "${debug_level}" =~ "^[0-9]+$" ]] ; then
+    if [[ "${debug_level}" =~ ^[0-9]+$ ]] ; then
       debug_level="${1}"
     else
       debug_level=1
       shift 1
     fi
   fi
-  local message="${@}"
+  local message="${*}"
 
 
   case $level in
     debug)
       if [[ "$debug" -ge "$debug_level" ]]; then
-        printf "${message}""\n"
+        printf "%s""\n" "$message"
       fi
       ;;
     info)
-        printf "${message}""\n"
+        printf "%s""\n" "$message"
       ;;
     error)
-        printf "${message}""\n" 1>&2
+        printf "%s""\n" "$message" 1>&2
       ;;
   esac
 }
@@ -63,7 +63,7 @@ while getopts ${OPTSTRING} opt; do
     ?) __usage 1                   ;;
   esac
 done
-shift $(expr $OPTIND - 1 )
+shift [[ expr $OPTIND - 1 ]]
 
 if [ $# -gt 1 ]; then
   __usage 1
@@ -72,16 +72,20 @@ elif [ $# -eq 1 ]; then
 fi
 
 if [[ -z $dir ]]; then
-  readonly _SOURCE=$(pwd)
+  _SOURCE=$(pwd)
 else
-  readonly _SOURCE="$(realpath "$dir")"
+  _SOURCE="$(realpath "$dir")"
 fi
 
+readonly _SOURCE
+
 if [[ -z $target ]]; then
-  readonly _TARGET="$(dirname "$_SOURCE")"
+  _TARGET="$(dirname "$_SOURCE")"
 else
-  readonly _TARGET="$(realpath "$target")"
+  _TARGET="$(realpath "$target")"
 fi
+
+readonly _TARGET
 
 __contains () {
   set -o noglob
@@ -90,7 +94,7 @@ __contains () {
   shift
   local array=("$@")
 
-  for element in ${array[*]}; do
+  for element in "${array[@]}"; do
     if [[ "${test_variable}" =~ $element ]]; then
       return 0
     fi
@@ -115,8 +119,8 @@ __check_conditions () {
       expected=0
     fi
     IFS='.' read -r -a cond <<< "$condition"
-    "__stow_""${cond[@]}" "${cond[@]:1}"
-    if [[ $? != $expected ]]; then
+    "__stow_" "${cond[@]}" "${cond[@]:1}"
+    if [[ $? != "$expected" ]]; then
       _log debug 1 condition "${condition}" not met for "${candidate}"
       return 1
     fi
@@ -125,18 +129,20 @@ __check_conditions () {
 }
 
 __sanitize() {
-  local unsanitized=($(echo "$1" | tr '/' '\n'))
+  local unsanitized=("$(echo "$1" | tr '/' '\n')")
   sanitized=""
-  for token in ${unsanitized[@]}; do
+  for token in "${unsanitized[@]}"; do
     sanitized+="${token%##*}"/
   done
   sanitized="${sanitized%/}"
-  echo $sanitized
+  echo "$sanitized"
 }
 
 __unstow() {
+  local target_path
   local unstow_target="${1}"
-  local target_path="${_TARGET}"/"$(__sanitize "${unstow_target}")"
+
+  target_path="${_TARGET}"/"$(__sanitize "${unstow_target}")"
 
   _log debug 1 unstowing "${unstow_target}"
 
@@ -154,23 +160,24 @@ __unstow() {
 __stow() {
   local stow_target="${1}"
   local source_path="${_SOURCE}"/"${stow_target}"
-  local target_path="${_TARGET}"/"$(__sanitize "${stow_target}")"
-  local relative_path="$(realpath -s --relative-to="$(dirname "${target_path}")" "${source_path}")"
+  local target_path
+  local relative_path
 
-  _log debug 2 stow_target $stow_target
-  _log debug 2 source_path $source_path
-  _log debug 2 target_path $target_path
-  _log debug 2 relative_path $relative_path
+  target_path="${_TARGET}"/"$(__sanitize "${stow_target}")"
+  relative_path="$(realpath -s --relative-to="$(dirname "${target_path}")" "${source_path}")"
 
-  _log debug 1 "stowing "${stow_target}""
-  __contains "${stow_target}" "${ignore[@]}"
-  if [[ "${?}" == 0 ]]; then
+  _log debug 2 stow_target "$stow_target"
+  _log debug 2 source_path "$source_path"
+  _log debug 2 target_path "$target_path"
+  _log debug 2 relative_path "$relative_path"
+
+  _log debug 1 "stowing ""${stow_target}"""
+  if __contains "${stow_target}" "${ignore[@]}"; then
     _log debug 1 "${stow_target}" ignored
     return 1
   fi
 
-  __check_conditions "${stow_target}"
-  if [[ $? != 0 ]]; then
+  if __check_conditions "${stow_target}"; then
     return 1
   fi
 
@@ -184,8 +191,7 @@ __stow() {
       _log error "${target_path}" already exists! use -f to overwrite
       return 1
     fi
-    __unstow "${stow_target}"
-    if [[ $? != 0 ]]; then
+    if __unstow "${stow_target}"; then
       return $?
     fi
   fi
@@ -197,7 +203,7 @@ __stow() {
     _log info created path: "$(dirname "${target_path}")"
   fi
   (
-    cd "$(dirname "${target_path}")"
+    cd "$(dirname "${target_path}")" || exit
     if [[ $dry_run == false ]]; then
       \ln --symbolic "${relative_path}" "$(basename "${target_path}")"
     fi
@@ -210,12 +216,14 @@ __walk_dir () {
 
   local root_path="${1}"
   root_path="${root_path%/}"
-  _log debug 1 root_path: $root_path
+  _log debug 1 root_path: "$root_path"
 
   for child_path in "${root_path}"/*; do
     local stow_candidate="${child_path#"${_SOURCE}"/}"
     local source_path="${_SOURCE}"/"${stow_candidate}"
-    local target_path="${_TARGET}"/"$(__sanitize "${stow_candidate}")"
+    local target_path
+
+    target_path="${_TARGET}"/"$(__sanitize "${stow_candidate}")"
 
     _log debug 2 stow_candidate: "${stow_candidate}"
     _log debug 2 source_path: "${source_path}"
