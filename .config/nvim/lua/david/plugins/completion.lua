@@ -18,7 +18,7 @@ return {
       "saadparwaiz1/cmp_luasnip",
       "petertriho/cmp-git",
       "onsails/lspkind.nvim",
-      "alexander-born/cmp-bazel",
+      -- "alexander-born/cmp-bazel",
 
     },
     event = { "InsertEnter", "CmdlineEnter" },
