@@ -63,7 +63,7 @@ while getopts ${OPTSTRING} opt; do
     ?) __usage 1                   ;;
   esac
 done
-shift [[ expr $OPTIND - 1 ]]
+shift $((OPTIND - 1))
 
 if [ $# -gt 1 ]; then
   __usage 1
@@ -119,7 +119,7 @@ __check_conditions () {
       expected=0
     fi
     IFS='.' read -r -a cond <<< "$condition"
-    "__stow_" "${cond[@]}" "${cond[@]:1}"
+    "__stow_""${cond[0]}" "${cond[@]:1}"
     if [[ $? != "$expected" ]]; then
       _log debug 1 condition "${condition}" not met for "${candidate}"
       return 1
@@ -251,7 +251,7 @@ __walk_dir () {
 }
 
 
-if [[ ! -z $unstow_targets ]]; then
+if [[ ! -z "$unstow_targets[0]" ]]; then
   for unstow_target in "${unstow_targets[@]}"; do
     __unstow "${unstow_target}"
   done
