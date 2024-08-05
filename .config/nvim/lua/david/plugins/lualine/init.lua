@@ -17,7 +17,7 @@ return {
     dependencies = {
       'kazhala/close-buffers.nvim',
       'nvim-tree/nvim-web-devicons',
-      'linrongbin16/lsp-progress.nvim',
+      -- 'linrongbin16/lsp-progress.nvim',
       "SmiteshP/nvim-navic",
       {
         "vimpostor/vim-tpipeline",
@@ -85,12 +85,12 @@ return {
             'filename', path = 1
           },
         },
-        lualine_x = {
-          function()
-            -- invoke `progress` here.
-            return require('lsp-progress').progress()
-          end,
-        },
+        -- lualine_x = {
+        --   function()
+        --     -- invoke `progress` here.
+        --     return require('lsp-progress').progress()
+        --   end,
+        -- },
         lualine_y = { 'encoding', 'fileformat', 'filetype', 'progress' },
         lualine_z = {
           'location',

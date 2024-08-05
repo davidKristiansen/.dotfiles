@@ -29,11 +29,6 @@ return {
           match_algorithm = "fzf",
           show_scores = true,
         },
-        ["ui-select"] = {
-          require("telescope.themes").get_dropdown {
-            -- even more opts
-          }
-        },
       }
     },
     keys = {
