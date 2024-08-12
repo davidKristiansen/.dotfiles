@@ -10,7 +10,7 @@ return {
       require('mini.bracketed').setup()
       require('mini.bufremove').setup()
       require('mini.cursorword').setup()
-      require('mini.diff').setup()
+      -- require('mini.diff').setup()
       require('mini.extra').setup()
       -- require('mini.git').setup()
       require('mini.hipatterns').setup()
