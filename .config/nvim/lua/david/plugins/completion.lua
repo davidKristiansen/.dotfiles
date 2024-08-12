@@ -18,6 +18,7 @@ return {
       "saadparwaiz1/cmp_luasnip",
       "petertriho/cmp-git",
       "onsails/lspkind.nvim",
+      "rcarriga/cmp-dap"
       -- "alexander-born/cmp-bazel",
 
     },
@@ -48,6 +49,11 @@ return {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
+
+        enabled = function()
+          return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+              or require("cmp_dap").is_dap_buffer()
+        end,
 
         formatting = {
           format = lspkind.cmp_format({
@@ -137,6 +143,12 @@ return {
         'confirm_done',
         cmp_autopairs.on_confirm_done()
       )
+
+      cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+        sources = {
+          { name = "dap" },
+        },
+      })
 
       local ind = cmp.lsp.CompletionItemKind
       local function ls_name_from_event(event)
