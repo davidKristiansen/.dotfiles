@@ -136,7 +136,7 @@ bindsym $mod+p exec playerctl previous
 bindsym $mod+Shift+s exec $screengrab
 
 bindsym $mod+r mode "resize"
-bindsym $mod+g mode "$mode_gaps"
+bindsym $mod+g mode "gaps"
 #
 bindsym button2 kill
 
