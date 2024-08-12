@@ -12,7 +12,7 @@ return {
       require('mini.cursorword').setup()
       require('mini.diff').setup()
       require('mini.extra').setup()
-      require('mini.git').setup()
+      -- require('mini.git').setup()
       require('mini.hipatterns').setup()
       require('mini.icons').setup()
       require('mini.indentscope').setup({
