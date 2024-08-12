@@ -1,3 +1,6 @@
+
+
+
 return {
   {
     'mfussenegger/nvim-dap',
@@ -5,6 +8,7 @@ return {
       "rcarriga/nvim-dap-ui",
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-dap.nvim",
+      -- "Joakker/lua-json5"
     },
     init = function()
       local wk = require('which-key')
@@ -15,6 +19,9 @@ return {
     end,
     config = function()
       require('telescope').load_extension('dap')
+
+      -- table.insert(vim._so_trails, "/?.dylib")
+      require('dap.ext.vscode').json_decode = require("david.util").decode_json
 
       local dap, dapui = require("dap"), require("dapui")
       dap.listeners.before.attach.dapui_config = function()
@@ -67,11 +74,16 @@ return {
     ft = { "python" },
     config = function()
       require("dap-python").setup("python")
+      require('dap.ext.vscode').load_launchjs()
     end,
     keys = {
       { "<leader>dn", function() require('dap-python').test_method() end,     desc = "Test mesthod" },
       { "<leader>df", function() require('dap-python').test_class() end,      desc = "Test class" },
       { "<leader>ds", function() require('dap-python').debug_selection() end, desc = "Test selection", mode = { "v" } }
     }
-  }
+  },
+  -- {
+  --   "Joakker/lua-json5",
+  --   build = "./install.sh"
+  -- }
 }
