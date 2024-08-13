@@ -3,54 +3,83 @@
   "positionX": "right",
   "positionY": "top",
   "layer": "overlay",
+  "control-center-layer": "top",
+  "layer-shell": true,
   "cssPriority": "user",
-  "control-center-margin-top": 10,
-  "control-center-margin-bottom": 10,
-  "control-center-margin-right": 0,
+  "control-center-margin-top": 0,
+  "control-center-margin-bottom": 0,
+  "control-center-margin-right": 7,
   "control-center-margin-left": 0,
+  "notification-2fa-action": true,
+  "notification-inline-replies": false,
+  "notification-icon-size": 24,
+  "notification-body-image-height": 100,
+  "notification-body-image-width": 200,
+  "timeout": 6,
+  "timeout-low": 3,
+  "timeout-critical": 0,
+  "fit-to-screen": false,
+  "control-center-width": 400,
+  "control-center-height": 1027,
+  "notification-window-width": 400,
+  "keyboard-shortcuts": true,
+  "image-visibility": "when-available",
+  "transition-time": 200,
+  "hide-on-clear": false,
+  "hide-on-action": true,
+  "script-fail-notify": true,
   "widgets": [
-    "buttons-grid",
     "dnd",
-    "title",
     "mpris",
-    "notification"
+    "buttons-grid",
+    "title",
+    "notifications"
   ],
   "widget-config": {
     "title": {
-      "text": "Notification Center",
+      "text": "Notifications",
       "clear-all-button": true,
-      "button-text": "󰆴 Clear All"
+      "button-text": "Clear"
     },
     "dnd": {
       "text": "Do Not Disturb"
     },
     "label": {
-      "max-lines": 1,
-      "text": "Notification Center"
+      "max-lines": 3,
+      "text": "Notification"
     },
     "mpris": {
-      "image-size": 96,
-      "image-radius": 7
-    },
-    "volume": {
-      "label": "󰕾",
-      "show-per-app": true
+      "image-size": 60,
+      "image-radius": 10
     },
     "buttons-grid": {
       "actions": [
         {
-          "label": "󰐥",
-          "command": "systemctl poweroff"
+          "label": "󰶐",
+          "command": "niri msg action power-off-monitors"
+        },
+        {
+          "label": "󰌾",
+          "command": "swaylock -f"
+        },
+        {
+          "label": "󰂠",
+          "command": "systemctl suspend-then-hibernate"
+        },
+        {
+          "label": "󰒲",
+          "command": "systemctl hibernate"
         },
         {
           "label": "󰜉",
           "command": "systemctl reboot"
         },
         {
-          "label": "󰌾",
-          "command": "swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 7x5 --effect-pixelate 10 --effect-vignette 0.5:0.5 --ring-color b8bb26 --key-hl-color 458588 --line-color 00000000 --inside-color 1d2021ef --separator-color 00000000 --grace 15 --fade-in 10"
+          "label": "󰐥",
+          "command": "systemctl poweroff"
         }
       ]
     }
   }
 }
+
