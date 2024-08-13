@@ -65,9 +65,19 @@ alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion"
 #   fi
 # }
 
-alias dc="devcontainer"
+
 alias dcu="devcontainer up"
 alias dce="devcontainer exec"
+
+function dc () {
+  local workspace_folder="${1}"
+  local command=${2}
+  command \devcontainer exec --workspace-folder "${workspace_folder}" "${command}" ||
+  (
+    command \devcontainer up --workspace-folder "${workspace_folder}" &&
+    command \devcontainer exec --workspace-folder "${workspace_folder}" "${command}"
+  )
+}
 
 function git () {
   if [[ -z "${1}" ]]; then
@@ -85,7 +95,7 @@ function docker () {
   fi
 }
 
-alias macpyver='$HOME/Work/ISX038/es2_eval/MacPyver_SilEval/macpyver/macpyver.py'
+# alias macpyver='$HOME/Work/ISX038/es2_eval/MacPyver_SilEval/macpyver/macpyver.py'
 alias ollama='docker exec -ti ollama ollama'
 
 # vim: set filetype=bash:
