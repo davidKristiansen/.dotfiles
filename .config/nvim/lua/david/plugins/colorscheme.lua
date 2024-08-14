@@ -33,7 +33,7 @@ return {
           TabLineSel = { bg = "none" },
           StatusLine = { bg = "none" },
           StatusLineNC = { bg = "none" },
-           CursorLine = { bg = "none" },
+          CursorLine = { bg = "none" },
         },
         dim_inactive = false,
         transparent_mode = false,
@@ -41,8 +41,19 @@ return {
       vim.cmd([[
                 set background=dark
                 colorscheme gruvbox
+                highlight! link StatusLine Normal
+                highlight! link StatusLineNC NormalNC
             ]])
     end,
+  },
+  {
+    "folke/todo-comments.nvim",
+    event        = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts         = {},
+    keys         = {
+      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "TODO's" }
+    }
   },
   -- {
   --   "rebelot/kanagawa.nvim",

@@ -1,10 +1,8 @@
-
-
-
 return {
   {
     'mfussenegger/nvim-dap',
     dependencies = {
+      -- "theHamsta/nvim-dap-virtual-text",
       "rcarriga/nvim-dap-ui",
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-dap.nvim",
@@ -65,6 +63,17 @@ return {
       "nvim-neotest/nvim-nio"
     },
     opts = {},
+  },
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    opts = {
+      commented = true,
+      enabled = false,
+      virt_text_pos = 'inline'
+    },
+    keys = {
+      {"<leader>dv", "<cmd>DapVirtualTextToggle<cr>", "Toogle virtual text"}
+    }
   },
   {
     'mfussenegger/nvim-dap-python',
