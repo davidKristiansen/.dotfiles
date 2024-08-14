@@ -114,12 +114,12 @@ return {
         desc =
         "Selection (cwd)"
       },
-      {
-        "<leader>uC",
-        Util.telescope("colorscheme", { enable_preview = true }),
-        desc =
-        "Colorscheme with preview"
-      },
+      -- {
+      --   "<leader>uC",
+      --   Util.telescope("colorscheme", { enable_preview = true }),
+      --   desc =
+      --   "Colorscheme with preview"
+      -- },
       {
         "<leader>ss",
         Util.telescope("lsp_document_symbols", {
