@@ -32,6 +32,14 @@ return {
         },
       }
     },
+    init = function()
+      local wk = require('which-key')
+      wk.add({
+        { "<leader>s",  group = "search" },
+        { "<leader>f", group = "find" },
+      })
+    end,
+
     keys = {
       { "<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer" },
       { "<leader>/", Util.telescope("live_grep"),                        desc = "Grep (root dir)" },
@@ -218,6 +226,12 @@ return {
     config = function(_, opts)
       require('telescope').load_extension('vstask')
       require("vstask").setup(opts)
+    end,
+    init = function()
+      local wk = require('which-key')
+      wk.add({
+        { "<leader>t",  group = "tasks" },
+      })
     end,
     keys = {
       {
