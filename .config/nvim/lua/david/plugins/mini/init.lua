@@ -38,7 +38,7 @@ return {
     init    = function()
       local wk = require("which-key")
       wk.add({
-        { "m", group = "map" },
+        { "<leader>m", group = "map" },
       })
     end,
     keys    = {
