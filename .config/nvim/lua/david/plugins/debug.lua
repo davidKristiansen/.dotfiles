@@ -34,6 +34,9 @@ return {
       dap.listeners.before.event_exited.dapui_config = function()
         dapui.close()
       end
+      dap.listeners.before.disconnect.dapui_config = function()
+        dapui.close()
+      end
     end,
     keys = {
       { "<leader>db",  function() require("dap").toggle_breakpoint() end, desc = "Toogle breakpoint" },
@@ -62,7 +65,46 @@ return {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio"
     },
-    opts = {},
+    opts = {
+      layouts = {
+        {
+          elements = {
+            {
+              id = "scopes",
+              size = 0.39
+            },
+            {
+              id = "stacks",
+              size = 0.39
+            },
+            {
+              id = "breakpoints",
+              size = 0.11
+            },
+            {
+              id = "watches",
+              size = 0.11
+            }
+          },
+          position = "left",
+          size = 40
+        },
+        {
+          elements = {
+            {
+              id = "repl",
+              size = 0.5
+            },
+            {
+              id = "console",
+              size = 0.50
+            },
+          },
+          position = "bottom",
+          size = 10
+        }
+      },
+    },
   },
   {
     "theHamsta/nvim-dap-virtual-text",
@@ -72,7 +114,7 @@ return {
       virt_text_pos = 'inline'
     },
     keys = {
-      {"<leader>dv", "<cmd>DapVirtualTextToggle<cr>", "Toogle virtual text"}
+      { "<leader>dv", "<cmd>DapVirtualTextToggle<cr>", "Toogle virtual text" }
     }
   },
   {
