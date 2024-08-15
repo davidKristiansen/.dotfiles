@@ -14,8 +14,8 @@ return {
       },
       scope = {
         show_exact_scope = false,
-        show_start = false,
-        show_end = false
+        show_start = true,
+        show_end = true
       }
     },
     config = function(_, opts)
