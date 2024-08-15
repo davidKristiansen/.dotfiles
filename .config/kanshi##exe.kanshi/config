@@ -23,5 +23,5 @@ profile odin {
 
 profile thor {
     output eDP-1  position 0,360 mode 1920x1080
-    output "Sony SONY TV  *00 0x00000101" position 1920,0 mode 3840x2160 scale 2
+    output "Sony SONY TV  *30 0x01010101" position 1920,0 mode 3840x2160 scale 2
 }
