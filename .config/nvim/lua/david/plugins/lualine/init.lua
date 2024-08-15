@@ -19,18 +19,18 @@ return {
       'nvim-tree/nvim-web-devicons',
       -- 'linrongbin16/lsp-progress.nvim',
       "SmiteshP/nvim-navic",
-      {
-        "vimpostor/vim-tpipeline",
-        config = function()
-          -- vim.g.tpipeline_refreshcmd = "kitty @ set-tab-title Master test"
-          -- vim.g.tpipeline_clearstl = 1
-          -- vim.g.tpipeline_restore = 1
-          vim.g.tpipeline_autoembed = 1
-          vim.g.tpipeline_clearstl = 1
-          -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
-          -- vim.opt.fillchars:append({ eob = " " })
-        end
-      }
+      -- {
+      --   "vimpostor/vim-tpipeline",
+      --   config = function()
+      --     -- vim.g.tpipeline_refreshcmd = "kitty @ set-tab-title Master test"
+      --     -- vim.g.tpipeline_clearstl = 1
+      --     -- vim.g.tpipeline_restore = 1
+      --     vim.g.tpipeline_autoembed = 1
+      --     vim.g.tpipeline_clearstl = 1
+      --     -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
+      --     -- vim.opt.fillchars:append({ eob = " " })
+      --   end
+      -- }
     },
     opts = {
       options = {
