@@ -10,7 +10,7 @@ return {
     init = function()
       local wk = require('which-key')
       wk.add({
-        { "<leader>g", group = "git"},
+        { "<leader>g", group = "git" },
       })
     end,
     opts = {
@@ -25,6 +25,37 @@ return {
         ignore_whitespace = false,
         virt_text_priority = 1000,
       },
+    }
+  },
+  {
+    'sindrets/diffview.nvim',
+    dependencies = {
+      "tpope/vim-fugitive"
+    },
+    opts = {
+      keymaps = {
+        file_panel = {
+          {
+            "n", "cc",
+            "<Cmd>Git commit <bar> wincmd J<CR>",
+            { desc = "Commit staged changes" },
+          },
+          {
+            "n", "ca",
+            "<Cmd>Git commit --amend <bar> wincmd J<CR>",
+            { desc = "Amend the last commit" },
+          },
+          {
+            "n", "c<space>",
+            ":Git commit ",
+            { desc = "Populate command line with \":Git commit \"" },
+          },
+        },
+      }
+    },
+    cmd = { "DiffviewOpen" },
+    keys = {
+      { "<leader>fg", "<cmd>DiffviewToggleFiles<cr>", "Gitview" }
     }
   },
   {
@@ -80,7 +111,7 @@ return {
     "tpope/vim-fugitive",
     event = { "BufReadPost", "BufNewFile" },
     keys = {
-      { '<leader>gD', ':Gvdiffsplit ', "Diff (vsplit)"}
+      { '<leader>gD', ':Gvdiffsplit ', "Diff (vsplit)" }
     }
   }
 }
