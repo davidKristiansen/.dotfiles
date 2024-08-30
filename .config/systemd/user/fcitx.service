@@ -1,0 +1,10 @@
+[Unit]
+Description=Stars fcitx5
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/fcitx5
+
+[Install]
+WantedBy=sway-session.target
