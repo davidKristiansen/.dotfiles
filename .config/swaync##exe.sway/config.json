@@ -56,11 +56,11 @@
       "actions": [
         {
           "label": "󰶐",
-          "command": "niri msg action power-off-monitors"
+          "command": "swaymsg 'output * dpms off'"
         },
         {
           "label": "󰌾",
-          "command": "swaylock -f"
+          "command": "swaylock.sh"
         },
         {
           "label": "󰂠",
@@ -77,6 +77,10 @@
         {
           "label": "󰐥",
           "command": "systemctl poweroff"
+        },
+        {
+          "label": "",
+          "command": "vpn toggle&"
         }
       ]
     }
