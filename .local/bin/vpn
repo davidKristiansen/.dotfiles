@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
-source ~/.secrets
+source "${HOME}"/.secrets
+
+LOCKFILE="/tmp/_vpn.lock"
+
+# Check is Lock File exists, if not create it and set trap on exit
+ if { set -C; 2>/dev/null >"${LOCKFILE}"; }; then
+         trap 'rm -f "${LOCKFILE}"' EXIT
+ else
+         echo "Lock file exists… exiting"
+         exit
+ fi
+
 anyconnect=/opt/cisco/secureclient/bin/vpn
 anyconnect_ui=/opt/cisco/secureclient/bin/vpnui
 LABEL_ICON=
@@ -42,7 +53,7 @@ case $1 in
     if [[ $state == "Connected" ]]; then
       disconnect
     else
-      connect
+      connect_sweden
     fi
   ;;
   "sweden")
@@ -85,10 +96,12 @@ esac
 
 if [ -t 0 ]
 then
-  echo $( get_state )
+  get_state
 else
-  echo $( print_state )
+  print_state
 fi
+
+# rm -f "${LOCKFILE}"
 
 exit 0
 
