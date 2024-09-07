@@ -30,7 +30,9 @@ exec_always swaync-client -rs
 
 # exec caffein-indicator
 
-# exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec teams-for-linux --minimized
+
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 # exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 # exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
 
