@@ -1,9 +1,10 @@
 #!/bin/bash
 
-if [[ ! $(ps aux | grep "[_]_scratchpad") ]]; then
-  kitty --class __scratchpad; swaymsg '[app_id="__scratchpad"] scratchpad show'
+if [[ ! $(ps aux | \grep "__scratchpad" | \grep -v grep) ]]; then
+  swaymsg 'exec --no-startup-id "wezterm start --class=__scratchpad"'
+  sleep 0.5
 fi
 
-swaymsg '[app_id="__scratchpad"] scratchpad show'
+swaymsg '[app_id=__scratchpad] scratchpad show'
 
 # vim.filetype=bash:
