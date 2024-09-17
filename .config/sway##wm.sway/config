@@ -3,8 +3,8 @@ set $left h
 set $down j
 set $up k
 set $right l
-# set $term kitty
-set $term 'wezterm start'
+set $term kitty
+# set $term 'wezterm start'
 
 set $menu swaymsg 'exec $term --class __launcher -e $HOME/.local/bin/fzf-launcher'
 
