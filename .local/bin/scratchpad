@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ ! $(ps aux | \grep "__scratchpad" | \grep -v grep) ]]; then
-  swaymsg 'exec --no-startup-id "wezterm start --class=__scratchpad"'
+  swaymsg 'exec --no-startup-id "kitty --class=__scratchpad"'
   sleep 0.5
 fi
 

@@ -4,11 +4,9 @@ wait: true
 
 timeouts:
   - timeout: 120
-    command: >
-      swaylock.sh
+    command: ~/.local/bin/swaylock.sh
 
   - timeout: 240
     command: 'swaymsg "output * dpms off"'
     resume: 'swaymsg "output * dpms on"'
-before-sleep: >
-      swaylock.sh
+before-sleep: ~/.local/bin/swaylock.sh

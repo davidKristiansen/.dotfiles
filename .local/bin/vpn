@@ -71,7 +71,7 @@ case $1 in
   "connect")
     state=$( get_state )
     if [[ $state != "Connected" ]]; then
-      connect_sweden
+      connect_uk
     fi
   ;;
   "disconnect")

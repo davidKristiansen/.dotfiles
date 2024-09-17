@@ -5,14 +5,16 @@ return {
       "kwkarlwang/bufresize.nvim",
     },
     lazy = false,
-    opts = {
-      ignored_filetypes = { 'neo-tree' },
+    config = function ()
+      local opts = {      ignored_filetypes = { 'neo-tree' },
       resize_mode = {
-        -- hooks = {
-        --   on_leave = require("bufresize").register
-        -- }
+        hooks = {
+          on_leave = require("bufresize").register
+        }
       },
     }
+    require("smart-splits").setup(opts)
+    end,
   },
   {
     "kwkarlwang/bufresize.nvim",

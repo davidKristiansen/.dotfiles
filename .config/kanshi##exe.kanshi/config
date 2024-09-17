@@ -6,7 +6,7 @@ profile {
 }
 
 profile home {
-    output eDP-1  position 0,360 mode 1920x1080
+    output eDP-1  position 0,1150 mode 1920x1080
     output "HP Inc. HP Z38c 6CM04204LJ" position 1920,0 mode 3840x1600
 }
 
