@@ -1,29 +1,75 @@
-  return {
-  "epwalsh/obsidian.nvim",
-  version = "*",  -- recommended, use latest release instead of latest commit
-  lazy = false,
-  ft = "markdown",
-  -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-  -- event = {
-  --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-  --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-  --   -- refer to `:h file-pattern` for more examples
-  --   "BufReadPre path/to/my-vault/*.md",
-  --   "BufNewFile path/to/my-vault/*.md",
-  -- },
-  dependencies = {
-    -- Required.
-    "nvim-lua/plenary.nvim",
-
-    -- see below for full list of optional dependencies 👇
-  },
-  opts = {
-    workspaces = {
-      {
-        name = "personal",
-        path = "~/Documents/Obsidian Vault/",
-      },
+return {
+  {
+    "nvim-neorg/neorg",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-neorg/neorg-telescope" }
     },
-    notes_subdir = "notes"
+    lazy = true,
+    ft = "norg",
+    version = "*",
+    cmd = { "Neorg" },
+    config = {
+      load = {
+        ["core.defaults"] = {},
+        ["core.dirman"] = {
+          config = {
+            workspaces = {
+              notes = vim.env.XDG_DATA_HOME .. "/notes"
+            },
+            index = "index.norg",
+            default_workspace = "notes",
+          }
+        },
+        ["core.concealer"] = {
+          config = {
+            icon_preset = "varied"
+          }
+        },
+        ["core.completion"] = {
+          config = {
+            engine = "nvim-cmp"
+          }
+        },
+        ["core.journal"] = {
+          config = {
+            workspace = "notes"
+          }
+        },
+        ["core.esupports.metagen"] = {
+          config = {
+            author = "David Kristiansen",
+            timezone = "implicit-local",
+            type = "auto",
+            tab = "  "
+          }
+        },
+        ["core.integrations.telescope"] = {}
+      }
+    },
+    init = function()
+      local wk = require("which-key")
+      wk.add({
+        { "<leader>j",  group = "journal" },
+        { "<leader>n",  group = "notes" },
+        { "<leader>ns", group = "search" }
+      })
+    end,
+    keys = {
+      { "<leader>jt",  "<cmd>Neorg journal today<cr>",           desc = "today" },
+      { "<leader>jy",  "<cmd>Neorg journal yesterday<cr>",       desc = "yesterday" },
+      { "<leader>jm",  "<cmd>Neorg journal tomorrow<cr>",        desc = "tomorrow" },
+      { "<leader>ni",  "<cmd>Neorg index<cr>",                   desc = "index" },
+      { "<leader>nr",  "<cmd>Neorg return<cr>",                  desc = "return",   ft = "norg" },
+      { "<leader>nt",  "<cmd>Neorg toc<cr>",                     desc = "toc",      ft = "norg" },
+      { "<leader>nsh", "<Plug>(neorg.telescope.search_heading)", desc = "heading",  ft = "norg" },
+    }
   },
+  -- {
+  --   "pysan3/neorg-templates",
+  --   dependencies = {
+  --     "L3MON4D3/LuaSnip"
+  --   },
+  --   config = true
+  -- }
 }
