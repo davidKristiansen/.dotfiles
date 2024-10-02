@@ -93,6 +93,8 @@ fi
 
 eval "$("${ASDF_DATA_DIR}"/shims/zoxide init zsh --cmd cd)"
 
+eval $(thefuck --alias)
+
 export LC_ALL="en_US.UTF-8"
 
 
