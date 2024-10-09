@@ -38,3 +38,5 @@ PATH="${HOME}"/.local/bin:"${PATH}"
 TERM='xterm-256color'
 
 LS_COLORS=$LS_COLORS:'di=0;34:'
+
+MAKEFLAGS='--jobs '
