@@ -39,4 +39,4 @@ TERM='xterm-256color'
 
 LS_COLORS=$LS_COLORS:'di=0;34:'
 
-MAKEFLAGS='--jobs '
+MAKEFLAGS='--jobs=4'
