@@ -6,6 +6,7 @@ return {
       "rcarriga/nvim-dap-ui",
       "nvim-telescope/telescope.nvim",
       "nvim-telescope/telescope-dap.nvim",
+      "jay-babu/mason-nvim-dap.nvim",
       -- "Joakker/lua-json5"
     },
     init = function()
@@ -20,6 +21,7 @@ return {
 
       -- table.insert(vim._so_trails, "/?.dylib")
       require('dap.ext.vscode').json_decode = require("david.util").decode_json
+      require('dap.ext.vscode').load_launchjs()
 
       local dap, dapui = require("dap"), require("dapui")
       dap.listeners.before.attach.dapui_config = function()
@@ -48,7 +50,7 @@ return {
       { "<leader>do",  function() require("dap").step_out() end,          desc = "Step out" },
       { "<leader>du",  function() require("dapui").toggle() end,          desc = "Toggle UI" },
       { "<leader>dt",  function() require("dapui").toggle() end,          desc = "Toggle UI" },
-      { "<leader>dr",  function() require("dap").restart() end,         desc = "Restart" },
+      { "<leader>dr",  function() require("dap").restart() end,           desc = "Restart" },
       { "<F5>",        function() require("dap").continue() end,          desc = "Continue" },
       { "<F10>",       function() require("dap").step_over() end,         desc = "Step over" },
       { "<F11>",       function() require("dap").step_into() end,         desc = "Step into" },
@@ -58,6 +60,14 @@ return {
       { "<leader>dlv", "<cmd>Telescope dap variables<cr>",                desc = "Variables" },
       { "<leader>dlC", "<cmd>Telescope dap configurations<cr>",           desc = "Configurations" },
       { "<leader>dlb", "<cmd>Telescope dap list_breakpoints<cr>",         desc = "Breakpoints" },
+    }
+  },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    setup = {
+      ensure_installed = { "python", "cortex-debug" },
+      automatic_installation = true,
+      handlers = {}
     }
   },
   {
@@ -138,6 +148,17 @@ return {
     keys = {
       { "<leader>dv", "<cmd>DapVirtualTextToggle<cr>", "Toogle virtual text" }
     }
+  },
+  {
+    'jedrzejboczar/nvim-dap-cortex-debug',
+    dependencies = {
+      'mfussenegger/nvim-dap'
+    },
+    ft = { "c" },
+    opts = {},
+    -- config = function()
+    --
+    -- end
   },
   {
     'mfussenegger/nvim-dap-python',
