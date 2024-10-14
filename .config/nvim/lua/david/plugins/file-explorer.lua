@@ -126,48 +126,39 @@ return {
     }
     -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
   },
-
+  ---@type LazySpec
   {
-    "folke/which-key.nvim",
+    "mikavilpas/yazi.nvim",
     event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
-    opts = {
-      plugins = {
-        spelling = true,
-        registers = true,
-        marks = true
-      },
-      defaults = {
-        {
-          mode = { "n", "v" },
-          { "<leader>f", group = "file/find" },
-          { "<leader>r", group = "rename" },
-          { "<leader>s", group = "search" },
-          { "<leader>t", group = "tasks" },
-          { "[",         group = "prev" },
-          { "]",         group = "next" },
-          { "g",         group = "goto" },
-          { "z",         group = "folds" },
-        } }
-    },
     keys = {
+      -- 👇 in this section, choose your own keymappings!
       {
-        "<leader>?",
-        function()
-          require("which-key").show({ global = false })
-        end,
-        desc = "Buffer Local Keymaps (which-key)",
+        "<leader>-",
+        "<cmd>Yazi<cr>",
+        desc = "Open yazi at the current file",
+      },
+      {
+        -- Open in the current working directory
+        "<leader>cw",
+        "<cmd>Yazi cwd<cr>",
+        desc = "Open the file manager in nvim's working directory",
+      },
+      {
+        -- NOTE: this requires a version of yazi that includes
+        -- https://github.com/sxyazi/yazi/pull/1305 from 2024-07-18
+        '<c-up>',
+        "<cmd>Yazi toggle<cr>",
+        desc = "Resume the last yazi session",
       },
     },
-  },
-  {
-    -- amongst your other plugins
-    'akinsho/toggleterm.nvim',
-    lazy = false,
-    version = "*",
-    config = true
-  },
+    ---@type YaziConfig
+    opts = {
+      -- if you want to open yazi instead of netrw, see below for more info
+      open_for_directories = false,
+      keymaps = {
+        show_help = '<f1>',
+      },
+    },
+  }
+
 }

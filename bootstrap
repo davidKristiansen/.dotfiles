@@ -1,20 +1,23 @@
 #!/bin/bash
 
+CRATE_DEFAULT_PACKAGES_FILE_PATH="$(dirname "$(realpath "${0}")")"/default-cargo-crates
 
-mkdir -p $HOME/.config
-mkdir -p $HOME/.local/bin
-mkdir -p $HOME/.local/share
+mkdir -p "${HOME}"/.config
+mkdir -p "${HOME}"/.local/bin
+mkdir -p "${HOME}"/.local/share
 
 git submodule update --init
 
-./.local/bin/stow.sh \
-  -i "^\.git" \
-  -i "^"$(basename "${0}")"$"\
+./.local/bin/stow.sh        \
+  -i "^\.git"               \
+  -i "default-cargo-crates" \
+  -i "$(basename "${0}")"   \
   -f
 
 export ASDF_DIR="${HOME}"/.local/share/asdf
 export ASDF_DATA_DIR="${HOME}"/.local/share/asdf_data
 export ASDF_CONFIG_FILE="${HOME}"/.config/asdf/config
+export ASDF_CRATE_DEFAULT_PACKAGES_FILE=${CRATE_DEFAULT_PACKAGES_FILE_PATH}
 
 if type zsh >/dev/null; then
   direnv_shell="zsh"
@@ -23,10 +26,15 @@ else
 fi
 
 
+for tool in $(asdf plugin list); do
+  asdf install "${tool}" latest
+  asdf global "${tool}" latest
+done
+
 (
  cd $HOME
   asdf plugin add lazydocker https://github.com/comdotlinux/asdf-lazydocker.git
-  cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i "${ASDF_DIR}"/bin/asdf plugin add  {}
+  cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i "${ASDF_DIR}"/bin/asdf plugin add {}
   cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -i "${ASDF_DIR}"/bin/asdf install {}
 )
 
