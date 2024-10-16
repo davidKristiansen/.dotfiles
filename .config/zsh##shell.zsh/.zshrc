@@ -16,10 +16,10 @@ if [ ! -f "${HISTFILE}" ]; then
 fi
 
 
-. "${ASDF_DIR}"/asdf.sh
+#. "${ASDF_DIR}"/asdf.sh
+#fpath+=("${ASDF_DIR}"/completions)
 
 fpath+=("${ZDOTDIR}"/zsh_completions.d)
-fpath+=("${ASDF_DIR}"/completions)
 autoload -Uz compinit
 compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
 
@@ -59,14 +59,6 @@ source ${zsh_plugins}.zsh
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 bindkey '^r' fzf-history-widget
 
-export BROWSER='firefox'
-export EDITOR='nvim'
-export MANPAGER='nvim +Man!'
-export MANWIDTH=9999
-export VISUAL=$EDITOR
-export PAGER='less'
-export BAT_THEME="gruvbox-dark"
-export GCM_CREDENTIAL_STORE=secretservice
 
 
 if type pyenv >/dev/null; then
@@ -91,7 +83,8 @@ if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
 
-eval "$("${ASDF_DATA_DIR}"/shims/zoxide init zsh --cmd cd)"
+#eval "$("${ASDF_DATA_DIR}"/shims/zoxide init zsh --cmd cd)"
+eval "$(~/.local/bin/mise activate zsh)"
 
 eval $(thefuck --alias)
 

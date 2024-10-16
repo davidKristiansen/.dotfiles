@@ -2,6 +2,3 @@
 	path = ".config/zsh##shell.zsh/antidote"
 	url = https://github.com/mattmc3/antidote.git
 	shallow = true
-[submodule ".asdf"]
-	path = .local/share/asdf
-	url = https://github.com/asdf-vm/asdf.git

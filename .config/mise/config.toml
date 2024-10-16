@@ -1,0 +1,25 @@
+[settings]
+pipx_uvx = true
+experimental = true
+
+[tools]
+python = "latest"
+go = "latest"
+rust = "latest"
+uv = "latest"
+cargo-binstall = "latest"
+neovim = "latest"
+tmux = "3.4"
+bat = "latest"
+ripgrep = "latest"
+fzf = "latest"
+cmake = "latest"
+github-cli = "latest"
+sqlite = "latest"
+stylua = "latest"
+bat-extras = "latest"
+"pipx:thefuck" = "latest"
+"cargo:eza" = "latest"
+"pipx:ruff" = "latest"
+"go:github.com/jesseduffield/lazydocker" = "latest"
+"go:github.com/jesseduffield/lazygit" = "latest"
