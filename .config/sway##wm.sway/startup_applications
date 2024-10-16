@@ -53,4 +53,6 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 # exec_always 'systemctl --user restart wireplumber.service'
 
 
+exec_always 'gsettings set org.gnome.desktop.interface color-scheme '"prefer-dark"'
+
 # vim: filetype=i3config
