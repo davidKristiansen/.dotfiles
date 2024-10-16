@@ -27,6 +27,8 @@ if ! type mise &>/dev/null; then
   \curl https://mise.run | sh
 fi
 
+mise install --yes
+
 # for tool in $(asdf plugin list); do
 #   asdf install "${tool}" latest
 #   asdf global "${tool}" latest
