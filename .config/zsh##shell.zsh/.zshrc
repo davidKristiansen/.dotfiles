@@ -83,10 +83,12 @@ if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
 
-#eval "$("${ASDF_DATA_DIR}"/shims/zoxide init zsh --cmd cd)"
+eval "$(zoxide init zsh --cmd cd)"
 eval "$(~/.local/bin/mise activate zsh)"
 
-eval $(thefuck --alias)
+# if type thefuck &> /dev/null; then
+#   eval $(thefuck --alias)
+# fi
 
 export LC_ALL="en_US.UTF-8"
 
