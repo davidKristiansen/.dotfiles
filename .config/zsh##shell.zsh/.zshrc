@@ -83,8 +83,8 @@ if [ -f ~/.fzf.zsh ]; then
   . ~/.fzf.zsh
 fi
 
-eval "$(zoxide init zsh --cmd cd)"
 eval "$(~/.local/bin/mise activate zsh)"
+eval "$("${XDG_DATA_HOME}"/mise/installs/cargo-zoxide/latest/bin/zoxide init zsh --cmd cd)"
 
 # if type thefuck &> /dev/null; then
 #   eval $(thefuck --alias)
