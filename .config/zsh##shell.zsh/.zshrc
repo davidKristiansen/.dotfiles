@@ -1,4 +1,3 @@
-
 set -a
 . "${ZDOTDIR}"/.zshenv
 set +a
@@ -123,6 +122,15 @@ if [ -d $HOME/dotfiles ]; then
 else
   export DOT_DIR=$HOME/.dotfiles
 fi
+
+{
+  setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
+  MACCHINA="${XDG_DATA_HOME}"/mise/installs/cargo-macchina/latest/bin/macchina
+  if type "${MACCHINA}" >/dev/null; then
+    "${MACCHINA}"
+  fi
+  wait
+} &
 
 (
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
