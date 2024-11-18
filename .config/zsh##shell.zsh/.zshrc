@@ -129,8 +129,7 @@ fi
   if type "${MACCHINA}" >/dev/null; then
     "${MACCHINA}"
   fi
-  wait
-} &
+}
 
 (
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
