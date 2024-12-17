@@ -15,10 +15,10 @@ return {
       -- require('mini.git').setup()
       -- require('mini.hipatterns').setup()
       require('mini.icons').setup()
-      require('mini.indentscope').setup({
-        symbol = '▏',
-        options = { try_as_border = true },
-      })
+      -- require('mini.indentscope').setup({
+      --   symbol = '▏',
+      --   options = { try_as_border = true },
+      -- })
       require('mini.jump').setup()
       require('mini.jump2d').setup()
       require('mini.map').setup()
