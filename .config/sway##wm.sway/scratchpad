@@ -19,8 +19,18 @@ for_window [app_id="__scratchpad"] move scratchpad
 # bindsym $mod+q [app_id="__scratchpad"] scratchpad show
 bindsym $mod+q exec --no-startup-id sh -c $HOME/.local/bin/scratchpad
 
-exec_always --no-startup-id spotify
+exec --no-startup-id spotify
 for_window [class="Spotify"] move scratchpad
 bindsym $mod+s [class="Spotify"] scratchpad show
+
+# ## Scratchpad // Show Enterprise LLM //  <> [ ##
+exec_always --no-startup-id gtk-launch enterprise_llm
+for_window [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] move scratchpad
+bindsym $mod+bracketleft [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] scratchpad show, move position center, resize set 90 ppt 90 ppt
+#
+# ## Scratchpad // Show e LLM //  <> ] ##
+exec_always --no-startup-id gtk-launch llm
+for_window [instance="crx__cadlkienfkclaiaibeoongdcgmdikeeg"] move scratchpad
+bindsym $mod+bracketright [instance="crx__cadlkienfkclaiaibeoongdcgmdikeeg"] scratchpad show, move position center, resize set 90 ppt 90 ppt
 
 # vim: filetype=i3config

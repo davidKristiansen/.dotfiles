@@ -2,6 +2,9 @@ return {
   {
     "folke/noice.nvim",
     event = "VeryLazy",
+    cond = function ()
+      return vim.fn.exists('g.vscode') ~= 0
+    end,
     opts = {
       -- add any options here
     },

@@ -58,20 +58,20 @@ return {
       { "<leader>fg", "<cmd>DiffviewToggleFiles<cr>", "Gitview" }
     }
   },
-  {
-    "kdheepak/lazygit.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    cmd = { "LazyGit" },
-    keys = {
-      { "<leader>gl", "<cmd>LazyGit<CR>", desc = "Lazygit" }
-    },
-    opts = {},
-    config = function(_, opts)
-      require("telescope").load_extension("lazygit")
-    end
-  },
+  -- {
+  --   "kdheepak/lazygit.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   cmd = { "LazyGit" },
+  --   keys = {
+  --     { "<leader>gl", "<cmd>LazyGit<CR>", desc = "Lazygit" }
+  --   },
+  --   opts = {},
+  --   config = function(_, opts)
+  --     require("telescope").load_extension("lazygit")
+  --   end
+  -- },
   {
     "NeogitOrg/neogit",
     lazy = false,
