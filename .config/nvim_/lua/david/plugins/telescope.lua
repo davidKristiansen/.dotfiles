@@ -9,6 +9,8 @@ return {
     event = { "VeryLazy" },
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-fzf-native.nvim',
+      "nvim-telescope/telescope-live-grep-args.nvim",
       {
         'nvim-telescope/telescope-ui-select.nvim',
         config = function()
@@ -29,13 +31,16 @@ return {
           match_algorithm = "fzf",
           show_scores = true,
         },
-        ["ui-select"] = {
-          require("telescope.themes").get_dropdown {
-            -- even more opts
-          }
-        },
       }
     },
+    init = function()
+      local wk = require('which-key')
+      wk.add({
+        { "<leader>s", group = "search" },
+        { "<leader>f", group = "find" },
+      })
+    end,
+
     keys = {
       { "<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer" },
       { "<leader>/", Util.telescope("live_grep"),                        desc = "Grep (root dir)" },
@@ -79,7 +84,13 @@ return {
         desc =
         "Workspace diagnostics"
       },
-      { "<leader>sg", Util.telescope("live_grep"),                  desc = "Grep (root dir)" },
+      {
+        "<leader>sg",
+        function()
+          require('telescope').extensions.live_grep_args.live_grep_args()
+        end,
+        desc = "Grep (root dir)"
+      },
       { "<leader>sG", Util.telescope("live_grep", { cwd = false }), desc = "Grep (cwd)" },
       { "<leader>sh", "<cmd>Telescope help_tags<cr>",               desc = "Help Pages" },
       {
@@ -110,12 +121,12 @@ return {
         desc =
         "Selection (cwd)"
       },
-      {
-        "<leader>uC",
-        Util.telescope("colorscheme", { enable_preview = true }),
-        desc =
-        "Colorscheme with preview"
-      },
+      -- {
+      --   "<leader>uC",
+      --   Util.telescope("colorscheme", { enable_preview = true }),
+      --   desc =
+      --   "Colorscheme with preview"
+      -- },
       {
         "<leader>ss",
         Util.telescope("lsp_document_symbols", {
@@ -154,7 +165,9 @@ return {
       },
     },
     config = function(_, opts)
-      require("telescope").setup(opts)
+      local telescope = require("telescope")
+      telescope.setup(opts)
+      telescope.load_extension("live_grep_args")
     end
   },
   {
@@ -222,6 +235,12 @@ return {
     config = function(_, opts)
       require('telescope').load_extension('vstask')
       require("vstask").setup(opts)
+    end,
+    init = function()
+      local wk = require('which-key')
+      wk.add({
+        { "<leader>t", group = "tasks" },
+      })
     end,
     keys = {
       {

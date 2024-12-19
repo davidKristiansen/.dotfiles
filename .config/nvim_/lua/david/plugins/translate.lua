@@ -4,19 +4,19 @@ return {
     keys = {
       {
         "gtr",
-        "<cmd>Translate EN -source=JA -command=translate_shell -output=replace<cr>",
+        "<cmd>Translate -command=translate_shell -output=replace en<cr>",
         desc = "Replace",
         mode = { "n", "v" },
       },
       {
         "gtf",
-        "<cmd>Translate EN -source=JA -command=translate_shell -output=float<cr>",
+        "<cmd>Translate -command=translate_shell -output=floating en<cr>",
         desc = "Float",
         mode = { "n", "v" },
       },
       {
         "gts",
-        "<cmd>Translate EN -source=JA -command=translate_shell -output=split<cr>",
+        "<cmd>Translate -command=translate_shell -output=split en<cr>",
         desc = "Split",
         mode = { "n", "v" },
       },

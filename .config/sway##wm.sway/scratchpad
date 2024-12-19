@@ -1,20 +1,19 @@
 ## Scratchpad // Show SpeedCrunch //  <> s ##
-exec --no-startup-id speedcrunch
+# exec --no-startup-id speedcrunch
 for_window [app_id="org.speedcrunch.speedcrunch"] move scratchpad
 bindsym $mod+c [app_id="org.speedcrunch.speedcrunch"] scratchpad show
 
 ## Scratchpad // Show Kuro Todo //  <> o ##
-exec --no-startup-id kuro
+# exec --no-startup-id kuro
 for_window [class="Kuro"] move scratchpad
 bindsym $mod+m [class="Kuro"] scratchpad show
 
 # ## Scratchpad // Show 1Password //  <> [ ##
-exec --no-startup-id 1password
+# exec --no-startup-id 1password
 for_window [class="1Password"] move scratchpad
 bindsym $mod+o [class="1Password"] scratchpad show, move position center
 #
 # ## Scratchpad // Show kitty (quake mode) //  <> [ ##
-exec --no-startup-id '$term --class __scratchpad'
 for_window [app_id="__scratchpad"] move scratchpad
 # bindsym $mod+q [app_id="__scratchpad"] scratchpad show
 bindsym $mod+q exec --no-startup-id sh -c $HOME/.local/bin/scratchpad

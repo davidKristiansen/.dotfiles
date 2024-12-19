@@ -22,6 +22,12 @@ return {
         enabled = false
       }
     },
+    init = function()
+      local wk = require('which-key')
+      wk.add({
+        { "<leader>c",  group = "code actions" },
+      })
+    end,
     config = function(_, opts)
       local lspconfig = require("lspconfig")
       local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -73,7 +79,6 @@ return {
     },
     opts = {
       ensure_installed = {
-        "bashls",
         "lua_ls",
         "clangd",
         "jsonls",

@@ -1,107 +1,118 @@
 return {
   {
-    "vhyrro/luarocks.nvim",
-    priority = 1000,
-    config = true,
-  },
-  {
     "nvim-neorg/neorg",
-    lazy = false,
-    version = "*",
     dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "folke/which-key.nvim",
-      "luarocks.nvim"
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-neorg/neorg-telescope" }
     },
-    opts = true,
+    lazy = true,
     ft = "norg",
-    cmd = "Neorg",
-    config = function()
-      require("neorg").setup({
-        load = {
-          ["core.defaults"] = {},
-          ["core.esupports.metagen"] = {
-            config = {
-              type = "auto"
-            }
-          },
-          ["core.summary"] = {},
-          ["core.export"] = {},
-          ["core.ui.calendar"] = {},
-          ["core.dirman"] = {
-            config = {
-              workspaces = {
-                work = "~/.notes",
-              },
-              index = "index.norg",
-              default_workspace = "work",
-              open_last_workspace = false,
+    version = "*",
+    cmd = { "Neorg" },
+    config = {
+      load = {
+        ["core.defaults"] = {},
+        ["core.dirman"] = {
+          config = {
+            workspaces = {
+              notes = vim.env.XDG_DATA_HOME .. "/notes"
             },
-          },
-          ["core.completion"] = {
-            config = {
-              engine = "nvim-cmp",
-            },
-          },
-          ["core.concealer"] = {},
+            index = "index.norg",
+            default_workspace = "notes",
+          }
         },
-      })
-    end,
+        ["core.concealer"] = {
+          config = {
+            icon_preset = "varied"
+          }
+        },
+        ["core.completion"] = {
+          config = {
+            engine = "nvim-cmp"
+          }
+        },
+        ["core.journal"] = {
+          config = {
+            workspace = "notes"
+          }
+        },
+        ["core.esupports.metagen"] = {
+          config = {
+            author = "David Kristiansen",
+            timezone = "implicit-local",
+            type = "auto",
+            tab = "  "
+          }
+        },
+        ["core.integrations.telescope"] = {}
+      }
+    },
     init = function()
       local wk = require("which-key")
       wk.add({
+        { "<leader>j",  group = "journal" },
         { "<leader>n",  group = "notes" },
-        { "<leader>ni", "<cmd>Neorg index<cr>", desc = "Open index" },
+        { "<leader>ns", group = "search" }
       })
     end,
+    keys = {
+      { "<leader>jt",  "<cmd>Neorg journal today<cr>",           desc = "today" },
+      { "<leader>jy",  "<cmd>Neorg journal yesterday<cr>",       desc = "yesterday" },
+      { "<leader>jm",  "<cmd>Neorg journal tomorrow<cr>",        desc = "tomorrow" },
+      { "<leader>ni",  "<cmd>Neorg index<cr>",                   desc = "index" },
+      { "<leader>nr",  "<cmd>Neorg return<cr>",                  desc = "return",   ft = "norg" },
+      { "<leader>nt",  "<cmd>Neorg toc<cr>",                     desc = "toc",      ft = "norg" },
+      { "<leader>nsh", "<Plug>(neorg.telescope.search_heading)", desc = "heading",  ft = "norg" },
+    }
   },
   {
-    -- 'renerocksai/telekasten.nvim',
-    -- dependencies = {
-    --   'nvim-telescope/telescope.nvim',
-    --   "nvim-telescope/telescope-media-files.nvim",
-    --   {
-    --     "renerocksai/calendar-vim"
-    --   }
-    -- },
-    -- cmd = "Telekasten",
-    -- keys = {
-    --   -- {"<leader>z", ":lua require('telekasten').panel()<CR>", desc = "Panel"},
-    --
-    --   -- " Function mappings
-    --   { "<leader>zf", ":lua require('telekasten').find_notes()<CR>",                desc = "Find Notes" },
-    --   { "<leader>zd", ":lua require('telekasten').find_daily_notes()<CR>",          desc = "Find Daily Notes" },
-    --   { "<leader>zg", ":lua require('telekasten').search_notes()<CR>",              desc = "Search Notes" },
-    --   { "<leader>zz", ":lua require('telekasten').follow_link()<CR>",               desc = "Follow Link" },
-    --   { "<leader>zT", ":lua require('telekasten').goto_today()<CR>",                desc = "Goto Today" },
-    --   { "<leader>zW", ":lua require('telekasten').goto_thisweek()<CR>",             desc = "Goto This Week" },
-    --   { "<leader>zw", ":lua require('telekasten').find_weekly_notes()<CR>",         desc = "Find Weekly Notes" },
-    --   { "<leader>zn", ":lua require('telekasten').new_note()<CR>",                  desc = "New Notes" },
-    --   { "<leader>zN", ":lua require('telekasten').new_templated_note()<CR>",        desc = "New Templated Note" },
-    --   { "<leader>zy", ":lua require('telekasten').yank_notelink()<CR>",             desc = "Yank Noteline" },
-    --   { "<leader>zc", ":lua require('telekasten').show_calendar()<CR>",             desc = "Show Calendar" },
-    --   { "<leader>zC", ":CalendarT<CR>",                                             desc = "Calendar" },
-    --   { "<leader>zi", ":lua require('telekasten').paste_img_and_link()<CR>",        desc = "Past Image and Link" },
-    --   { "<leader>zt", ":lua require('telekasten').toggle_todo()<CR>",               desc = "Toggle Today" },
-    --   { "<leader>zb", ":lua require('telekasten').show_backlinks()<CR>",            desc = "Show Backlinks" },
-    --   { "<leader>zF", ":lua require('telekasten').find_friends()<CR>",              desc = "Find Friends" },
-    --   { "<leader>zI", ":lua require('telekasten').insert_img_link({ i=true })<CR>", desc = "Insert Image Link" },
-    --   { "<leader>zp", ":lua require('telekasten').preview_img()<CR>",               desc = "Preview Image" },
-    --   { "<leader>zm", ":lua require('telekasten').browse_media()<CR>",              desc = "Browser Media" },
-    --   { "<leader>za", ":lua require('telekasten').show_tags()<CR>",                 desc = "Show Tags" },
-    --   { "<leader>#",  ":lua require('telekasten').show_tags()<CR>",                 desc = "Show Tags" },
-    --   { "<leader>zr", ":lua require('telekasten').rename_note()<CR>",               desc = "Rename Note" },
-    -- },
-    -- opts = {
-    --   home = vim.fn.expand("~/.zettelkasten"),
-    -- },
-    -- init = function()
-    --   local wk = require("which-key")
-    --   wk.register({
-    --     z = {
-    --       name = "+zettelkasten",
-    --     },
-    --   }, { prefix = "<leader>" })
-    -- end,
-  },
+    "epwalsh/obsidian.nvim",
+    version = "*", -- recommended, use latest release instead of latest commit
+    cmd = { "Obsidian" },
+    event = { "BufReadPre " .. vim.env.XDG_DATA_HOME .. "/vault/**/*.md" },
+    dependencies = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+
+      "hrsh7th/nvim-cmp",
+      "nvim-telescope/telescope.nvim",
+      "nvim-treesitter/nvim-treesitter"
+    },
+    opts = {
+      -- A list of workspace names, paths, and configuration overrides.
+      -- If you use the Obsidian app, the 'path' of a workspace should generally be
+      -- your vault root (where the `.obsidian` folder is located).
+      -- When obsidian.nvim is loaded by your plugin manager, it will automatically set
+      -- the workspace to the first workspace in the list whose `path` is a parent of the
+      -- current markdown file being edited.
+      workspaces = {
+        {
+          name = "vault",
+          path = vim.env.XDG_DATA_HOME .. "/vault",
+          overrides = {
+            notes_subdir = "notes",
+          },
+        },
+      },
+      daily_notes = {
+        -- Optional, if you keep daily notes in a separate directory.
+        folder = "notes/dailies",
+        -- Optional, if you want to change the date format for the ID of daily notes.
+        date_format = "%Y-%m-%d",
+        -- Optional, if you want to change the date format of the default alias of daily notes.
+        alias_format = "%B %-d, %Y",
+        -- Optional, default tags to add to each new daily note created.
+        default_tags = { "daily-notes" },
+        -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
+        template = nil
+      },
+      -- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
+      completion = {
+        -- Set to false to disable completion.
+        nvim_cmp = true,
+        -- Trigger completion at 2 chars.
+        min_chars = 2,
+      },
+    }
+  }
 }

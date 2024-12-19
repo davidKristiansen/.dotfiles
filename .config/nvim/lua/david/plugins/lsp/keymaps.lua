@@ -32,7 +32,7 @@ function M.on_attach(client, buffer)
       end,
       desc = "Goto Definition (split)"
     },
-    { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
+    -- { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
     {
       "<leader>cf",
       function()

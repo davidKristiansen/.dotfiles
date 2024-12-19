@@ -1,0 +1,10 @@
+[Unit]
+Description=Start Teams for Linux
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/teams-for-linux --minimized
+
+[Install]
+WantedBy=sway-session.target

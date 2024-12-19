@@ -18,7 +18,8 @@ return {
       "saadparwaiz1/cmp_luasnip",
       "petertriho/cmp-git",
       "onsails/lspkind.nvim",
-      "alexander-born/cmp-bazel",
+      "rcarriga/cmp-dap"
+      -- "alexander-born/cmp-bazel",
 
     },
     event = { "InsertEnter", "CmdlineEnter" },
@@ -49,6 +50,11 @@ return {
           documentation = cmp.config.window.bordered(),
         },
 
+        enabled = function()
+          return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+              or require("cmp_dap").is_dap_buffer()
+        end,
+
         formatting = {
           format = lspkind.cmp_format({
             mode = 'symbol',       -- show only symbol annotations
@@ -62,7 +68,7 @@ return {
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
@@ -137,6 +143,12 @@ return {
         'confirm_done',
         cmp_autopairs.on_confirm_done()
       )
+
+      cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+        sources = {
+          { name = "dap" },
+        },
+      })
 
       local ind = cmp.lsp.CompletionItemKind
       local function ls_name_from_event(event)
