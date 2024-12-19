@@ -1,0 +1,10 @@
+[Unit]
+Description=Idle manager for Wayland
+Documentation=man:swayidle(1)
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c "${HOME}/.local/bin/idle.sh"
+[Install]
+WantedBy=sway-session.target

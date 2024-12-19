@@ -11,8 +11,8 @@ else
   direnv_shell="bash"
 fi
 
-\mkdir -p "${XDG_CONFIG_HOME}"
-\mkdir -p "${XDG_BIN_HOME}"/.local/bin
+\mkdir -p "${HOME}"/.config
+\mkdir -p "${HOME}"/.local/bin
 \mkdir -p "${HOME}"/.local/share
 
 git submodule update --init
@@ -41,4 +41,4 @@ mise install --yes
  #   \cut -d' ' -f1 < .tool-versions | grep "^[^\#]" | xargs -I{} mise install {}
  # )
 
-exec /bin/zsh
+#exec /bin/zsh

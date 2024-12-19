@@ -30,7 +30,8 @@ return {
     end,
     config = function(_, opts)
       local lspconfig = require("lspconfig")
-      local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+      -- local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
       local servers = require("david.plugins.lsp.servers")
       local mason_lspconfig = require("mason-lspconfig")
       local trouble = require("trouble")

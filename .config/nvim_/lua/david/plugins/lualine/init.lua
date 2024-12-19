@@ -17,19 +17,20 @@ return {
     dependencies = {
       'kazhala/close-buffers.nvim',
       'nvim-tree/nvim-web-devicons',
-      'linrongbin16/lsp-progress.nvim',
+      -- 'linrongbin16/lsp-progress.nvim',
       "SmiteshP/nvim-navic",
-      {
-        "vimpostor/vim-tpipeline",
-        config = function()
-          -- vim.g.tpipeline_refreshcmd = "kitty @ set-tab-title Master test"
-          -- vim.g.tpipeline_clearstl = 1
-          vim.g.tpipeline_restore = 1
-          vim.g.tpipeline_autoembed = 1
-          -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
-          -- vim.opt.fillchars:append({ eob = " " })
-        end
-      }
+      -- {
+      --   "vimpostor/vim-tpipeline",
+      --   config = function()
+      --     -- vim.g.tpipeline_refreshcmd = "kitty @ set-tab-title Master test"
+      --     -- vim.g.tpipeline_clearstl = 1
+      --     -- vim.g.tpipeline_restore = 1
+      --     vim.g.tpipeline_autoembed = 1
+      --     vim.g.tpipeline_clearstl = 1
+      --     -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
+      --     -- vim.opt.fillchars:append({ eob = " " })
+      --   end
+      -- }
     },
     opts = {
       options = {
@@ -38,9 +39,23 @@ return {
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
         globalstatus = true,
+         icons_enabled = true,
+        ignore_focus = {
+          -- "neo-tree",
+          "dapui_watches", "dapui_breakpoints",
+          "dapui_scopes", "dapui_console",
+          "dapui_stacks", "dap-repl"  --dap-repl and not dap_repl -.-
+        },
         disabled_filetypes = {
-          statusline = { "neo-tree" },
-          winbar = { "neo-tree" },
+          "neo-tree",
+          "alpha",
+          -- winbar = {
+          -- },
+          statusline = {
+          "dapui_watches", "dapui_breakpoints",
+          "dapui_scopes", "dapui_console",
+          "dapui_stacks", "dap-repl"
+          },
         },
       },
       extensions = {
@@ -85,12 +100,12 @@ return {
             'filename', path = 1
           },
         },
-        lualine_x = {
-          function()
-            -- invoke `progress` here.
-            return require('lsp-progress').progress()
-          end,
-        },
+        -- lualine_x = {
+        --   function()
+        --     -- invoke `progress` here.
+        --     return require('lsp-progress').progress()
+        --   end,
+        -- },
         lualine_y = { 'encoding', 'fileformat', 'filetype', 'progress' },
         lualine_z = {
           'location',

@@ -1,5 +1,5 @@
 local f = require("david.plugins.lualine.functions")
-local telescope = require("telescope")
+-- local telescope = require("telescope")
 
 local debug = require("david.debug")
 
