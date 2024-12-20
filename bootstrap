@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# CRATE_DEFAULT_PACKAGES_FILE_PATH="$(dirname "$(realpath "${0}")")"/default-cargo-crates
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 if type zsh >/dev/null; then
   direnv_shell="zsh"
   set -a
-  . .zshenv##shell.zsh/.zshenv
+  for _rc in "${SCRIPT_DIR}"/.config/environment.d/*.conf; do
+    . $_rc
+  done
+  unset _rc
   set +a
 else
   direnv_shell="bash"
@@ -19,7 +22,6 @@ git submodule update --init
 
 ./.local/bin/stow.sh        \
   -i "^\.git"               \
-  -i "default-cargo-crates" \
   -i "$(basename "${0}")"   \
   -f
 
@@ -28,17 +30,3 @@ if ! type mise &>/dev/null; then
 fi
 
 mise install --yes
-
-# for tool in $(asdf plugin list); do
-#   asdf install "${tool}" latest
-#   asdf global "${tool}" latest
-# done
-#
- # (
- #  cd "${HOME}" || exit
- #   asdf plugin add lazydocker https://github.com/comdotlinux/asdf-lazydocker.git
- #   \cut -d' ' -f1 < .tool-versions | grep "^[^\#]" | xargs -I{} mise plugin add {} --yes
- #   \cut -d' ' -f1 < .tool-versions | grep "^[^\#]" | xargs -I{} mise install {}
- # )
-
-#exec /bin/zsh

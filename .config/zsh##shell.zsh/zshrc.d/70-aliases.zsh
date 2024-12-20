@@ -96,6 +96,6 @@ function docker () {
 }
 
 # alias macpyver='$HOME/Work/ISX038/es2_eval/MacPyver_SilEval/macpyver/macpyver.py'
-alias ollama='docker exec -ti ollama ollama'
+# alias ollama='docker exec -ti ollama ollama'
 
 # vim: set filetype=bash:

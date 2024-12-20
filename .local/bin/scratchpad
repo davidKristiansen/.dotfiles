@@ -2,7 +2,7 @@
 
 if [[ ! $(ps aux | \grep "__scratchpad" | \grep -v grep) ]]; then
   swaymsg 'exec --no-startup-id "kitty --class=__scratchpad"'
-  sleep 0.5
+  sleep 1.5
 fi
 
 swaymsg '[app_id=__scratchpad] scratchpad show'
