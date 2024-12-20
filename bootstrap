@@ -14,10 +14,10 @@ else
   direnv_shell="bash"
 fi
 
-\mkdir -p "${HOME}"/.config
-\mkdir -p "${HOME}"/.local/bin
-\mkdir -p "${HOME}"/.local/share
-\mkdir -p "${HOME}"/.local/share/gnupg
+\mkdir --parents "${HOME}"/.config
+\mkdir --parents "${HOME}"/.local/bin
+\mkdir --parents "${HOME}"/.local/share
+\mkdir --parents --mode=700 "${HOME}"/.local/share/gnupg
 
 ./.local/bin/stow.sh        \
   -i "^\.git"               \
