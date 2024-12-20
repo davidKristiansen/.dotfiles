@@ -22,7 +22,7 @@
 
 # exec_always pkill kanshi && kanshi
 
-# exec --no-startup-id speedcrunch
+# exec --no-startup-id speedcrunch0
 
 # exec_always fcitx5 -d --replace
 
@@ -50,6 +50,8 @@
 # exec sworkstyle &> /tmp/sworkstyle.log
 
 # exec_always 'systemctl --user restart wireplumber.service'
+
+exec '${XDG_BIN_HOME}/idle.sh'
 
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway

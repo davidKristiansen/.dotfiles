@@ -14,3 +14,6 @@ fi
 if [ -d "${GOPATH}"/bin ]; then
 	export PATH="${GOPATH}"/bin:$PATH
 fi
+
+# Ensure path arrays do not contain duplicates.
+typeset -gU path fpath

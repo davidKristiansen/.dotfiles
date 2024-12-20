@@ -1,4 +1,0 @@
-[submodule ".config/zsh##shell.zsh/antidote"]
-	path = ".config/zsh##shell.zsh/antidote"
-	url = https://github.com/mattmc3/antidote.git
-	shallow = true
