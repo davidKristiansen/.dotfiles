@@ -4,3 +4,5 @@ zsh_plugins.zsh
 .zsh_history
 .luarc.json
 .zcompcache
+
+sway-session.target.wants
