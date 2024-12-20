@@ -17,8 +17,12 @@ return {
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
       -- see the "default configuration" section below for full documentation on how to define
       -- your own keymap.
-      keymap = { preset = 'enter' },
-
+      keymap = {
+        preset      = 'default',
+        ['<Tab>']   = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+        ['<CR>']    = { 'accept', 'fallback' },
+      },
       appearance = {
         -- Sets the fallback highlight groups to nvim-cmp's highlight groups
         -- Useful for when your theme doesn't support blink.cmp
@@ -32,13 +36,21 @@ return {
       -- default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline' },
         -- optionally disable cmdline completions
         -- cmdline = {},
       },
-
       -- experimental auto-brackets support
-      completion = { accept = { auto_brackets = { enabled = true } } },
+      completion = {
+        accept = {
+          auto_brackets = {
+            enabled = true
+          }
+        },
+        list = {
+          selection = "manual"
+        },
+      },
 
       -- experimental signature help support
       signature = { enabled = true }
