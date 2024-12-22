@@ -22,7 +22,6 @@ nodejs = "latest"
 python = "latest"
 uv = "latest"
 "pipx:thefuck" = "latest"
-"pipx:ruff" = "latest"
 
 # Go
 go = "latest"
@@ -36,4 +35,5 @@ cargo-binstall = "latest"
 "cargo:eza" = "latest"
 "cargo:zoxide" = "latest"
 "cargo:macchina" = "latest"
+tmux = "3.5a"
 # "cargo:nu" = "latest"
