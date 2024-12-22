@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! (ps aux | \grep "[[:space:]]speedcrunch$" | grep -v grep > /dev/null); then
+  swaymsg 'exec --no-startup-id speedcrunch'
+  sleep 1.5
+fi
+
+swaymsg '[app_id=org.speedcrunch.speedcrunch] scratchpad show'
