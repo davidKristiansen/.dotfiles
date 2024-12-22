@@ -1,0 +1,11 @@
+[Unit]
+Description=Adjust the color temperature of your screen
+Documentation=man:gammastep(1)
+PartOf=graphical-session.target
+
+[Service]
+Environment=LATLONG=%I
+Type=simple
+ExecStart=/usr/bin/gammastep -l $LATLONG
+[Install]
+WantedBy=sway-session.target
