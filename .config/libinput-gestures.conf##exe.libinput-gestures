@@ -1,8 +1,7 @@
 gesture swipe left 3 ydotool key Super+Left
 gesture swipe right 3 ydotool key Super+Right
+gesture swipe up 3 swaymsg -t command fullscreen enable
+gesture swipe down 3 swaymsg -t command fullscreen disable
 
 gesture swipe left 4 swaymsg -t command workspace prev
 gesture swipe right 4 swaymsg -t command workspace next
-gesture swipe up 4 swaymsg -t command fullscreen enable
-gesture swipe down 4 swaymsg -t command fullscreen disable
-
