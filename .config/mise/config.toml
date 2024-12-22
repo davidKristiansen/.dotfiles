@@ -6,6 +6,7 @@ experimental = true
 neovim = "latest"
 # tmux = "3.5a"
 bat = "latest"
+fd = "latest"
 ripgrep = "latest"
 fzf = "latest"
 cmake = "latest"
