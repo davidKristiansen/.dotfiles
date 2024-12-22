@@ -2,6 +2,7 @@ return {
   {
     "ibhagwan/fzf-lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    cmd = { "FzfLua" },
     opts = {},
     keys = {
       { "<leader>,",       "<cmd>FzfLua buffers<cr>",               desc = "Switch Buffer" },
