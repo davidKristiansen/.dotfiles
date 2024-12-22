@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! (ps aux | grep Spotify | grep -v grep > /dev/null); then
+  swaymsg 'exec --no-startup-id spotify'
+  sleep 1.5
+fi
+
+swaymsg '[class=Spotify] scratchpad show'

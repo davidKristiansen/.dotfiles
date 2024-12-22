@@ -1,7 +1,7 @@
 ## Scratchpad // Show SpeedCrunch //  <> s ##
 # exec --no-startup-id speedcrunch
 for_window [app_id="org.speedcrunch.speedcrunch"] move scratchpad
-bindsym $mod+c [app_id="org.speedcrunch.speedcrunch"] scratchpad show
+bindsym $mod+c exec --no-startup-id sh -c $XDG_BIN_HOME/speedcrunch.sh
 
 ## Scratchpad // Show Kuro Todo //  <> o ##
 # exec --no-startup-id kuro
@@ -11,16 +11,15 @@ bindsym $mod+m [class="Kuro"] scratchpad show
 # ## Scratchpad // Show 1Password //  <> [ ##
 # exec --no-startup-id 1password
 for_window [class="1Password"] move scratchpad
-bindsym $mod+o [class="1Password"] scratchpad show, move position center
+bindsym $mod+o exec --no-startup-id sh -c $XDG_BIN_HOME/1password.sh
 #
 # ## Scratchpad // Show kitty (quake mode) //  <> [ ##
 for_window [app_id="__scratchpad"] move scratchpad
 # bindsym $mod+q [app_id="__scratchpad"] scratchpad show
-bindsym $mod+q exec --no-startup-id sh -c $HOME/.local/bin/scratchpad
+bindsym $mod+q exec --no-startup-id sh -c $XDG_BIN_HOME/scratchpad.sh
 
-exec --no-startup-id spotify
 for_window [class="Spotify"] move scratchpad
-bindsym $mod+s [class="Spotify"] scratchpad show
+bindsym $mod+s exec --no-startup-id sh -c $XDG_BIN_HOME/spotify.sh
 
 # ## Scratchpad // Show Enterprise LLM //  <> [ ##
 for_window [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] move scratchpad
@@ -28,7 +27,7 @@ bindsym $mod+bracketleft [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] scra
 #
 # ## Scratchpad // Show e LLM //  <> ] ##
 for_window [instance="crx__cadlkienfkclaiaibeoongdcgmdikeeg"] move scratchpad
-bindsym $mod+bracketright [instance="crx__cadlkienfkclaiaibeoongdcgmdikeeg"] scratchpad show, move position center, resize set 90 ppt 90 ppt
+bindsym $mod+bracketright exec --no-startup-id sh -c $XDG_BIN_HOME/llm.sh
 
 for_window [class="teams-for-linux"] move scratchpad
 bindsym $mod+t [class="teams-for-linux"] scratchpad show, move position center, resize set 90 ppt 90 ppt
