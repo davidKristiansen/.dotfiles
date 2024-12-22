@@ -33,9 +33,22 @@ M.opts = {
   bashls = {
 
   },
-  ruff = {
-
+  basedpyright = {
+    settings = {
+      basedpyright = {
+        disableOrganizeImports = true,
+        -- disableTaggedHints = true,
+        analysis = {
+          ignore = { '*' },
+          typeCheckingMode = "off",
+          diagnosticMode = "openFilesOnly",
+          -- autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+        }
+      },
+    },
   },
+  ruff = {},
   -- pyright = {
   --   python = {
   --     analysis = {
@@ -49,38 +62,38 @@ M.opts = {
   --     },
   --   },
   -- },
-  pylsp = {
-    flags = {
-      debounce_text_changes = 200,
-    },
-    settings = {
-      pylsp = {
-        plugins = {
-          black = { enabled = false },
-          autopep8 = { enabled = false },
-          yapf = { enabled = false },
-          -- linter options
-          pylint = { enabled = false },
-          pyflakes = { enabled = false },
-          pycodestyle = { enabled = false },
-          -- type checker
-          pylsp_mypy = { enabled = false },
-          -- auto-completion options
-          jedi_completion = { fuzzy = true },
-          jedi_hover = { enabled = true },
-          jedi_references = { enabled = true },
-          jedi_signature_help = { enabled = true },
-          jedi_symbols = {
-            enabled = true,
-            all_scopes = true
-          },
-          -- import sorting
-          pyls_isort = { enabled = false },
-
-        }
-      }
-    }
-  },
+  -- pylsp = {
+  --   flags = {
+  --     debounce_text_changes = 200,
+  --   },
+  --   settings = {
+  --     pylsp = {
+  --       plugins = {
+  --         black = { enabled = false },
+  --         autopep8 = { enabled = false },
+  --         yapf = { enabled = false },
+  --         -- linter options
+  --         pylint = { enabled = false },
+  --         pyflakes = { enabled = false },
+  --         pycodestyle = { enabled = false },
+  --         -- type checker
+  --         pylsp_mypy = { enabled = false },
+  --         -- auto-completion options
+  --         jedi_completion = { fuzzy = true },
+  --         jedi_hover = { enabled = true },
+  --         jedi_references = { enabled = true },
+  --         jedi_signature_help = { enabled = true },
+  --         jedi_symbols = {
+  --           enabled = true,
+  --           all_scopes = true
+  --         },
+  --         -- import sorting
+  --         pyls_isort = { enabled = false },
+  --
+  --       }
+  --     }
+  --   }
+  -- },
   clangd = {
     cmd = {
       "/usr/bin/clangd",

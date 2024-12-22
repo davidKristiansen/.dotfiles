@@ -5,16 +5,14 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      {
-        "hrsh7th/cmp-nvim-lsp",
-        dependencies = { "hrsh7th/nvim-cmp" }
-      },
+      -- "MysticalDevil/inlay-hints.nvim",
+      'saghen/blink.cmp',
       "p00f/clangd_extensions.nvim",
       {
         "folke/lazydev.nvim",
         opts = {}
       },
-      "folke/trouble.nvim",
+      -- "folke/trouble.nvim",
       "folke/which-key.nvim",
     },
     opts = {
@@ -25,7 +23,7 @@ return {
     init = function()
       local wk = require('which-key')
       wk.add({
-        { "<leader>c",  group = "code actions" },
+        { "<leader>c", group = "code actions" },
       })
     end,
     config = function(_, opts)
@@ -34,7 +32,7 @@ return {
       local lsp_capabilities = require("blink.cmp").get_lsp_capabilities()
       local servers = require("david.plugins.lsp.servers")
       local mason_lspconfig = require("mason-lspconfig")
-      local trouble = require("trouble")
+      -- local trouble = require("trouble")
 
       require("david.plugins.lsp.util").on_attach(function(client, buffer)
         require("david.plugins.lsp.keymaps").on_attach(client, buffer)
@@ -84,42 +82,60 @@ return {
         "clangd",
         "jsonls",
         "ruff",
-        "pylsp"
+        "basedpyright"
+        -- "pylsp"
       },
       automatic_installation = true
+    }
+  },
+  {
+    "MysticalDevil/inlay-hints.nvim",
+    -- config = {
+    --   require("lazy").setup({
+    --     "MysticalDevil/inlay-hints.nvim",
+    --     event = "LspAttach",
+    --     dependencies = { "neovim/nvim-lspconfig" },
+    --     config = function()
+    --       require("inlay-hints").setup()
+    --     end
+    --   }) },
+    opts = {},
+    cmd = { "InlayHintsToggle" },
+    keys = {
+      { "<leader>ci", "<cmd>InlayHintsToggle<cr>", "Toggle inlay hintes" }
     }
   },
   {
     'Fymyte/rasi.vim',
     ft = 'rasi',
   },
-  {
-    "folke/trouble.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
-    keys = {
-      {
-        "]t",
-        function()
-          require("trouble").next({ skip_groups = true, jump = true });
-        end,
-        desc = "Next Trouble"
-      },
-      {
-        "[t",
-        function()
-          require("trouble").previous({ skip_groups = true, jump = true });
-        end,
-        desc = "Previous Trouble"
-      },
-
-    }
-  },
-  {
-    'terminalnode/sway-vim-syntax'
-  }
+  -- {
+  --   "folke/trouble.nvim",
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --   opts = {
+  --     -- your configuration comes here
+  --     -- or leave it empty to use the default settings
+  --     -- refer to the configuration section below
+  --   },
+  --   keys = {
+  --     {
+  --       "]t",
+  --       function()
+  --         require("trouble").next({ skip_groups = true, jump = true });
+  --       end,
+  --       desc = "Next Trouble"
+  --     },
+  --     {
+  --       "[t",
+  --       function()
+  --         require("trouble").previous({ skip_groups = true, jump = true });
+  --       end,
+  --       desc = "Previous Trouble"
+  --     },
+  --
+  --   }
+  -- },
+  -- {
+  --   'terminalnode/sway-vim-syntax'
+  -- }
 }
