@@ -31,6 +31,7 @@ zvm_after_init_commands+=('source <(fzf --zsh)')
 # To make fzf-tab follow FZF_DEFAULT_OPTS.
 # NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
+zstyle ':autocomplete:tab:*' completion fzf
 
 export FZF_COMPLETION_TRIGGER='`'
 
