@@ -17,7 +17,7 @@ return {
     },
     opts = {
       inlay_hints = {
-        enabled = false
+        enabled = true
       }
     },
     init = function()
@@ -38,7 +38,7 @@ return {
         require("david.plugins.lsp.keymaps").on_attach(client, buffer)
 
         if opts.inlay_hints.enabled and client.supports_method("textDocument/inlayHint") then
-          vim.lsp.inlay_hint.enable(buffer, true)
+          vim.lsp.inlay_hint.enable(true)
         end
       end)
 
@@ -88,54 +88,21 @@ return {
       automatic_installation = true
     }
   },
-  {
-    "MysticalDevil/inlay-hints.nvim",
-    -- config = {
-    --   require("lazy").setup({
-    --     "MysticalDevil/inlay-hints.nvim",
-    --     event = "LspAttach",
-    --     dependencies = { "neovim/nvim-lspconfig" },
-    --     config = function()
-    --       require("inlay-hints").setup()
-    --     end
-    --   }) },
-    opts = {},
-    cmd = { "InlayHintsToggle" },
-    keys = {
-      { "<leader>ci", "<cmd>InlayHintsToggle<cr>", "Toggle inlay hintes" }
-    }
-  },
-  {
-    'Fymyte/rasi.vim',
-    ft = 'rasi',
-  },
   -- {
-  --   "folke/trouble.nvim",
-  --   dependencies = { "nvim-tree/nvim-web-devicons" },
-  --   opts = {
-  --     -- your configuration comes here
-  --     -- or leave it empty to use the default settings
-  --     -- refer to the configuration section below
-  --   },
+  --   "MysticalDevil/inlay-hints.nvim",
+  --   -- config = {
+  --   --   require("lazy").setup({
+  --   --     "MysticalDevil/inlay-hints.nvim",
+  --   --     event = "LspAttach",
+  --   --     dependencies = { "neovim/nvim-lspconfig" },
+  --   --     config = function()
+  --   --       require("inlay-hints").setup()
+  --   --     end
+  --   --   }) },
+  --   opts = {},
+  --   cmd = { "InlayHintsToggle" },
   --   keys = {
-  --     {
-  --       "]t",
-  --       function()
-  --         require("trouble").next({ skip_groups = true, jump = true });
-  --       end,
-  --       desc = "Next Trouble"
-  --     },
-  --     {
-  --       "[t",
-  --       function()
-  --         require("trouble").previous({ skip_groups = true, jump = true });
-  --       end,
-  --       desc = "Previous Trouble"
-  --     },
-  --
+  --     { "<leader>ci", "<cmd>InlayHintsToggle<cr>", "Toggle inlay hintes" }
   --   }
   -- },
-  -- {
-  --   'terminalnode/sway-vim-syntax'
-  -- }
 }

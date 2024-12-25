@@ -1,35 +1,41 @@
 return {
   {
     'saghen/blink.cmp',
-    -- optional: provides snippets for the snippet source
-    dependencies = 'rafamadriz/friendly-snippets',
-
-    -- use a release tag to download pre-built binaries
-    version = 'v0.*',
-    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    -- build = 'cargo build --release',
-    -- If you use nix, you can build from source using latest nightly rust with:
-    -- build = 'nix run .#build-plugin',
-
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      "onsails/lspkind.nvim",
+    },
+    version = '*',
     opts = {
-      -- 'default' for mappings similar to built-in completion
-      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-      -- see the "default configuration" section below for full documentation on how to define
-      -- your own keymap.
       keymap = {
-        preset      = 'default',
-        ['<Tab>']   = { 'select_next', 'fallback' },
-        ['<S-Tab>'] = { 'select_prev', 'fallback' },
-        ['<CR>']    = { 'accept', 'fallback' },
+        preset        = 'default',
+        ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-e>"]     = { "hide", "fallback" },
+        ['<Tab>']     = {
+          function(cmp)
+            return cmp.select_next()
+          end,
+          "snippet_forward",
+          "fallback"
+        },
+        ['<S-Tab>']   = {
+          function(cmp)
+            return cmp.select_prev()
+          end,
+          "snippet_backward",
+          "fallback"
+        },
+        ['<CR>']      = { 'accept', 'fallback' },
+
+        ["<Up>"]      = { "select_prev", "fallback" },
+        ["<Down>"]    = { "select_next", "fallback" },
+        ["<C-p>"]     = { "select_prev", "fallback" },
+        ["<C-n>"]     = { "select_next", "fallback" },
+        ["<C-up>"]    = { "scroll_documentation_up", "fallback" },
+        ["<C-down>"]  = { "scroll_documentation_down", "fallback" },
       },
       appearance = {
-        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
-        -- Useful for when your theme doesn't support blink.cmp
-        -- will be removed in a future release
         use_nvim_cmp_as_default = true,
-        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-        -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = 'mono'
       },
 
@@ -37,23 +43,66 @@ return {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline' },
-        -- optionally disable cmdline completions
-        -- cmdline = {},
       },
-      -- experimental auto-brackets support
       completion = {
-        accept = {
-          auto_brackets = {
-            enabled = true
-          }
-        },
+        -- experimental auto-brackets support
+        accept = { auto_brackets = { enabled = true } },
         list = {
           selection = "manual"
+        },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 250,
+          treesitter_highlighting = true,
+          window = { border = "rounded" },
+        },
+        menu = {
+          border = "rounded",
+
+          cmdline_position = function()
+            if vim.g.ui_cmdline_pos ~= nil then
+              local pos = vim.g.ui_cmdline_pos           -- (1, 0)-indexed
+              return { pos[1] - 1, pos[2] }
+            end
+            local height = (vim.o.cmdheight == 0) and 1 or vim.o.cmdheight
+            return { vim.o.lines - height, 0 }
+          end,
+
+          draw = {
+            columns = {
+              { "kind_icon", "label", gap = 1 },
+              { "kind" },
+            },
+            components = {
+              kind_icon = {
+                text = function(item)
+                  local kind = require("lspkind").symbol_map[item.kind] or ""
+                  return kind .. " "
+                end,
+                highlight = "CmpItemKind",
+              },
+              label = {
+                text = function(item)
+                  return item.label
+                end,
+                highlight = "CmpItemAbbr",
+              },
+              kind = {
+                text = function(item)
+                  return item.kind
+                end,
+                highlight = "CmpItemKind",
+              },
+            },
+          },
         },
       },
 
       -- experimental signature help support
-      signature = { enabled = true }
+      signature = {
+        enabled = true,
+        window = { border = "rounded" },
+      }
     },
     -- allows extending the providers array elsewhere in your config
     -- without having to redefine it
