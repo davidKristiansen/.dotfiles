@@ -56,7 +56,7 @@ function zvm_after_lazy_keybindings () {
 }
 
 ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE
-ZVM_LINE_INIT_MODE=ZVM_MODE_NORMAL
+# ZVM_LINE_INIT_MODE=ZVM_MODE_NORMAL
 
 
 # bindkey '^e' find_f
