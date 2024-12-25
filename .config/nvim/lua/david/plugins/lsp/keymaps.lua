@@ -4,14 +4,21 @@ local M = {}
 function M.on_attach(client, buffer)
   local wik = require("which-key")
   local keys = {
-    { "<leader>cd",    vim.diagnostic.open_float, desc = "Line Diagnostics" },
-    { "<leader>cl",    "<cmd>LspInfo<cr>",        desc = "Lsp Info" },
-    { "K",             vim.lsp.buf.hover,         desc = "Peek" },
+    { "<leader>cd", vim.diagnostic.open_float, desc = "Line Diagnostics" },
+    { "<leader>cl", "<cmd>LspInfo<cr>",        desc = "Lsp Info" },
+    {
+      "<leader>ci",
+      function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+      end,
+      desc = "Inlay Hints (toggle)"
+    },
+    { "K",             vim.lsp.buf.hover,       desc = "Peek" },
     -- { "<c-k>",         vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
     -- { "<LeftMouse>",   vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
-    { "<c-LeftMouse>", vim.lsp.buf.declaration,   mode = { "n", "i" },      desc = "Goto Declaration" },
-    { "gD",            vim.lsp.buf.declaration,   desc = "Goto Declaration" },
-    { "gd",            vim.lsp.buf.definition,    desc = "Goto Definition" },
+    { "<c-LeftMouse>", vim.lsp.buf.declaration, mode = { "n", "i" },      desc = "Goto Declaration" },
+    { "gD",            vim.lsp.buf.declaration, desc = "Goto Declaration" },
+    { "gd",            vim.lsp.buf.definition,  desc = "Goto Definition" },
     {
       "gvD",
       function()
@@ -38,8 +45,8 @@ function M.on_attach(client, buffer)
       function()
         if client.supports_method("textDocument/formatting") then
           vim.lsp.buf.format { async = false }
-        -- else
-        --   require('conform').format()
+          -- else
+          --   require('conform').format()
         end
       end,
       mode = { "n", "v" },

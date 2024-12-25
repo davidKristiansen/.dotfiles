@@ -28,7 +28,9 @@ M.opts = {
         }
       })
     end,
-
+    settings = {
+      Lua = {}
+    }
   },
   bashls = {
 
@@ -109,41 +111,41 @@ M.opts = {
 }
 
 M.setup = {
-  clangd = function(_, opts)
-    local wk = require("which-key")
-
-    wk.add({
-      { "gh", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source header" },
-    })
-
-    require("clangd_extensions").setup({
-      server = opts,
-      extensions = {
-        inlay_hints = {
-          only_current_line = true,
-        },
-        role_icons = {
-          type = "",
-          declaration = "",
-          expression = "",
-          specifier = "",
-          statement = "",
-          ["template argument"] = "",
-        },
-
-        kind_icons = {
-          Compound = "",
-          Recovery = "",
-          TranslationUnit = "",
-          PackExpansion = "",
-          TemplateTypeParm = "",
-          TemplateTemplateParm = "",
-          TemplateParamObject = "",
-        },
-      },
-    })
-    return true
-  end,
+  -- clangd = function(_, opts)
+  --   local wk = require("which-key")
+  --
+  --   wk.add({
+  --     { "gh", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch source header" },
+  --   })
+  --
+  --   require("clangd_extensions").setup({
+  --     server = opts,
+  --     extensions = {
+  --       inlay_hints = {
+  --         only_current_line = true,
+  --       },
+  --       role_icons = {
+  --         type = "",
+  --         declaration = "",
+  --         expression = "",
+  --         specifier = "",
+  --         statement = "",
+  --         ["template argument"] = "",
+  --       },
+  --
+  --       kind_icons = {
+  --         Compound = "",
+  --         Recovery = "",
+  --         TranslationUnit = "",
+  --         PackExpansion = "",
+  --         TemplateTypeParm = "",
+  --         TemplateTemplateParm = "",
+  --         TemplateParamObject = "",
+  --       },
+  --     },
+  --   })
+  --   return true
+  -- end,
 }
 
 return M
