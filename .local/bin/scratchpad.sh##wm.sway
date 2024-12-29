@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [[ ! $(ps aux | \grep "__scratchpad" | \grep -v grep) ]]; then
-  swaymsg 'exec --no-startup-id "kitty --class=__scratchpad"'
+TERMINAL="${XDG_BIN_HOME}/ghostty"
+
+if [[ ! $(ps aux | \grep "term.scratchpad" | \grep -v grep) ]]; then
+  swaymsg 'exec --no-startup-id /home/SONY/s7000026748/.local/bin/ghostty --class="term.scratchpad"'
   sleep 1.5
 fi
 
-swaymsg '[app_id=__scratchpad] scratchpad show'
+swaymsg '[app_id=term.scratchpad] scratchpad show'
 
 # vim.filetype=bash:
