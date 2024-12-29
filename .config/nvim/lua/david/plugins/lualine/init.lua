@@ -83,15 +83,14 @@ return {
             'branch',
             on_click = function(num, but, mod)
               -- for x, v in pairs(debug.locals()) do print(x, v) end
-              print("HELLO")
-              telescope.builtin.git_branches()
+              require("fzf-lua").git_branches()
             end
           },
           'diff',
           {
             'diagnostics',
             on_click = function()
-              require("telescope.builtin").diagnostics()
+              require("fzf-lua").lsp_document_diagnostics()
             end
           }
         },
