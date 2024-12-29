@@ -1,28 +1,31 @@
-# sindresorhus/pure   # enhance your prompt
+#############################################################
+# Completion
+#############################################################
+zsh-users/zsh-completions
+mattmc3/ez-compinit
+zsh-users/zsh-completions kind:fpath path:src
+
+#############################################################
+# Utilities
+#############################################################
 romkatv/powerlevel10k
-
 ohmyzsh/ohmyzsh path:lib
-# ohmyzsh/ohmyzsh path:plugins/magic-enter
-# ohmyzsh/ohmyzsh path:plugins/asdf
 ohmyzsh/ohmyzsh path:plugins/command-not-found
-# ohmyzsh/ohmyzsh path:plugins/thefuck
-# ohmyzsh/ohmyzsh path:plugins/direnv
-
-zdharma-continuum/fast-syntax-highlighting
-
 jeffreytse/zsh-vi-mode
 soimort/translate-shell
 
-# add even more completions
-zsh-users/zsh-completions
-# now, configure and run compinit to initialize completions
-belak/zsh-utils path:completion
 
+#############################################################
+# Fzf
+#############################################################
+# unixorn/fzf-zsh-plugin
 Aloxaf/fzf-tab
 Freed-Wu/fzf-tab-source
 
 
+#############################################################
 # add fish-like features
+#############################################################
 zdharma-continuum/fast-syntax-highlighting kind:defer
 zsh-users/zsh-autosuggestions kind:defer
 zsh-users/zsh-history-substring-search kind:defer
