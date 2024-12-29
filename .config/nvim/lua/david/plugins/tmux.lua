@@ -14,6 +14,7 @@ return {
     }
   },
   {
-    'vimpostor/vim-tpipeline'
+    'vimpostor/vim-tpipeline',
+    lazy = false
   }
 }
