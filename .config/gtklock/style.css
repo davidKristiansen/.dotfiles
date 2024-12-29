@@ -1,7 +1,24 @@
-window {
+/*window {*/
+/*    background-size: contain;*/
+/*    background-repeat: no-repeat;*/
+/*    background-position: center;*/
+/*    background-color: black;*/
+/*}*/
+
+window#DP-1 {
+	background-image: url("/tmp/DP-1.png");
+}
+window#eDP-1 {
+	background-image: url("/tmp/eDP-1.png");
+}
+
+#window-box {
+	/*padding: 64px;*/
+	/*border: 1px solid black;*/
+	/*border-radius: 4px;*/
+	/*box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 12px;*/
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     background-color: black;
-    background-image: url("/tmp/bgc.png");
 }

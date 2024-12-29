@@ -1,10 +1,15 @@
 #!/bin/sh
 
-CORRUPTER="${XDG_DATA_HOME}"/mise/installs/go-github-com-r00tman-corrupter/latest/bin/corrupter
-DUMP=/tmp/bg.png
-CORRUPTED=/tmp/bgc.png
+CORRUPTER="${XDG_DATA_HOME}/mise/installs/go-github-com-r00tman-corrupter/latest/bin/corrupter"
+# DUMP=/tmp/bg.png
+# CORRUPTED=/tmp/bgc.png
 
-grim "${DUMP}"
-"${CORRUPTER}" -mag 1 -boffset 3 -meanabber 5 "${DUMP}" "${CORRUPTED}"
+for output in eDP-1 DP-1; do
+  grim -o "${output}" "/tmp/${output}.png"
+  "${CORRUPTER}" -mag 1 -boffset 3 -meanabber 5 "/tmp/${output}.png" "/tmp/${output}.png"
+done
+wait
 
-gtklock --daemonize -s "${XDG_CONFIG_HOME}"/gtklock/style.css
+exec gtklock -s "${HOME}/.config/gtklock/style.css" "$@"
+
+# gtklock --daemonize -s "${XDG_CONFIG_HOME}"/gtklock/style.css
