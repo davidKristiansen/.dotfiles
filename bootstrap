@@ -2,17 +2,19 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-if type zsh >/dev/null; then
-  direnv_shell="zsh"
-  set -a
-  for _rc in "${SCRIPT_DIR}"/.config/environment.d/*.conf; do
-    . $_rc
-  done
-  unset _rc
-  set +a
-else
-  direnv_shell="bash"
-fi
+set -a
+for _rc in "${SCRIPT_DIR}"/.config/environment.d/*.conf; do
+  . $_rc
+done
+set +a
+
+# Ensure XDG directories exist.
+for dir in XDG_{CONFIG,CACHE,DATA,STATE,BIN}_HOME; do
+  [[ -d "${!dir}" ]] || mkdir -p -- "${!dir}"
+done
+
+
+exit 0
 
 \mkdir --parents "${HOME}"/.config
 \mkdir --parents "${HOME}"/.local/bin
