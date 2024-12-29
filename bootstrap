@@ -13,12 +13,6 @@ for dir in XDG_{CONFIG,CACHE,DATA,STATE,BIN}_HOME; do
   [[ -d "${!dir}" ]] || mkdir -p -- "${!dir}"
 done
 
-
-exit 0
-
-\mkdir --parents "${HOME}"/.config
-\mkdir --parents "${HOME}"/.local/bin
-\mkdir --parents "${HOME}"/.local/share
 \mkdir --parents --mode=700 "${HOME}"/.local/share/gnupg
 
 ./.local/bin/stow.sh        \
