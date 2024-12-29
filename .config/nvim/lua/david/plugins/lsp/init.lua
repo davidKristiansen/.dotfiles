@@ -88,6 +88,9 @@ return {
       automatic_installation = true
     }
   },
+  {
+    'jamespeapen/swayconfig.vim'
+  }
   -- {
   --   "MysticalDevil/inlay-hints.nvim",
   --   -- config = {
