@@ -2,7 +2,6 @@ export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{n
 
 export FZF_DEFAULT_OPTS="--layout=reverse \
   --inline-info \
-  --tmux top,40% \
   --height 40% \
   --bind 'tab:down' \
   --bind 'shift-tab:up'"
@@ -29,11 +28,6 @@ export FZF_ALT_C_OPTS="
 # source fzf after zsh-vi is done
 zvm_after_init_commands+=('source <(fzf --zsh)')
 
-# To make fzf-tab follow FZF_DEFAULT_OPTS.
-# NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
-zstyle ':fzf-tab:*' use-fzf-default-opts yes
-zstyle ':autocomplete:tab:*' completion fzf
-
 export FZF_COMPLETION_TRIGGER='`'
 
 # Options to fzf command
@@ -56,7 +50,7 @@ _fzf_comprun() {
     cd)           fzf --preview 'eza -tree --color=always {} | head -200'   "$@" ;;
     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
     ssh)          fzf --preview 'dig {}'                   "$@" ;;
-    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+    *)            fzf --preview 'bat -n --color=always --theme=gruvbox-dark {}' "$@" ;;
   esac
 }
 
