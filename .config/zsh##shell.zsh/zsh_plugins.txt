@@ -18,7 +18,8 @@ zsh-users/zsh-completions
 # now, configure and run compinit to initialize completions
 belak/zsh-utils path:completion
 
-# Aloxaf/fzf-tab
+Aloxaf/fzf-tab
+Freed-Wu/fzf-tab-source
 
 
 # add fish-like features
