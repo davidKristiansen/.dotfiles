@@ -3,11 +3,11 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term kitty
-# set $term 'wezterm start'
+set $term $HOME/.local/bin/ghostty
+# set $term kitty
 
 # set $menu swaymsg 'exec $term --class __launcher -e sleep 10'
-set $menu swaymsg 'exec $term --class __launcher -e $HOME/.local/bin/fzf-launcher'
+set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'
 
 set $lock '~/.local/bin/lock.sh'
 # set $lock swaylock \
