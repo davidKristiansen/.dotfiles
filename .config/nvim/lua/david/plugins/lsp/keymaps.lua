@@ -18,6 +18,7 @@ function M.on_attach(client, buffer)
     -- { "<LeftMouse>",   vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
     { "<c-LeftMouse>", vim.lsp.buf.declaration, mode = { "n", "i" },      desc = "Goto Declaration" },
     { "gD",            vim.lsp.buf.declaration, desc = "Goto Declaration" },
+    { "gr",            vim.lsp.buf.rename, desc = "Rename" },
     { "gd",            vim.lsp.buf.definition,  desc = "Goto Definition" },
     {
       "gvD",
@@ -43,11 +44,11 @@ function M.on_attach(client, buffer)
     {
       "<leader>cf",
       function()
-        if client.supports_method("textDocument/formatting") then
-          vim.lsp.buf.format { async = false }
-          -- else
-          --   require('conform').format()
-        end
+        -- if client.supports_method("textDocument/formatting") then
+        vim.lsp.buf.format { async = false }
+        -- else
+        --   require('conform').format()
+        -- end
       end,
       mode = { "n", "v" },
       desc = "Format"
