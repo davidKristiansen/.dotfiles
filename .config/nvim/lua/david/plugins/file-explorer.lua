@@ -112,7 +112,7 @@ return {
       }
     },
     keys = {
-      { "<leader>fe", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" },
+      { "<leader>e", "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" },
       -- { "\\",         "<cmd>Neotree toggle reveal dir=./<cr>", desc = "Explorer" }
     }
   }
