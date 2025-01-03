@@ -1,7 +1,7 @@
 return {
   'RaafatTurki/hex.nvim',
   opts = {
-    dump_cmd = 'xxd -g 1 -u -R always',
+    -- dump_cmd = 'xxd -g 1 -u -R always',
   },
   keys = {
     { "<leader>hd", ":silent lua require 'hex'.dump()<cr>",     desc = "dump" },
