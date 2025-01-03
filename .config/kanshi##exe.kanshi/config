@@ -1,8 +1,13 @@
 
 # include /etc/kanshi/config.d/*
 
-profile {
+profile laptop {
     output eDP-1 enable
+}
+
+profile on_the_move {
+    output eDP-1  position 1080,720 mode 1920x1200
+    output "ASUSTek COMPUTER INC ASUS MB16AP JBLMTF129716" position 0,0 mode 1920x1080 transform 90
 }
 
 profile home {
