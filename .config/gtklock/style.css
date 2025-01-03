@@ -20,5 +20,9 @@ window#eDP-1 {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: black;
+    background-color: rgba(0,0,0,0);
+}
+
+#input-field {
+  background-color: black;
 }
