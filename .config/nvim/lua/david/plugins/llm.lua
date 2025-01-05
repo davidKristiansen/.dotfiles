@@ -10,7 +10,20 @@ return {
           disable = false,
           endpoint = "https://api.openai.com/v1/chat/completions",
         },
-      }
+      },
+      cmd = {
+        "CodeReview",
+      },
+      hooks = {
+        -- example of usig enew as a function specifying type for the new buffer
+        CodeReview = function(gp, params)
+          local template = "I have the following code from {{filename}}:\n\n"
+              .. "```{{filetype}}\n{{selection}}\n```\n\n"
+              .. "Please analyze for code smells and suggest improvements."
+          local agent = gp.get_chat_agent()
+          gp.Prompt(params, gp.Target.enew("markdown"), agent, template)
+        end,
+      },
     },
     init = function()
       require("which-key").add({
