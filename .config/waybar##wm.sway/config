@@ -92,7 +92,15 @@
     "on-click": "playerctl next"
   },
   "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
     "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% {icon} 󱐋",
+    "format-plugged": "{capacity}% {icon} ",
+    "format-alt": "{time} {icon}",
+    //"format-full": " {capacity}%",
     "format-icons": [
       "",
       "",
@@ -167,7 +175,7 @@
     // "on-click": "$HOME/.local/bin/wifi-menu.sh 2>/dev/null"
     "on-click": "$term --class='termfloat' -e nmtui"
   },
-    "custom/notification": {
+  "custom/notification": {
     "tooltip": false,
     "format": "{icon}",
     "format-icons": {
