@@ -20,7 +20,8 @@ zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
 
-# zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # Way too small window
+zstyle ':fzf-tab:*' popup-min-size 50 8
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # Way too small window
 
 zstyle ':fzf-tab:*' continuous-trigger '/'
 
@@ -28,3 +29,5 @@ zstyle ':fzf-tab:*' continuous-trigger '/'
 # NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':autocomplete:tab:*' completion fzf
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -tree --color=always $realpath'

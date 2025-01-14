@@ -3,6 +3,7 @@ export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{n
 export FZF_DEFAULT_OPTS="--layout=reverse \
   --inline-info \
   --height 40% \
+  --tmux bottom,40%
   --bind 'tab:down' \
   --bind 'shift-tab:up'"
 
