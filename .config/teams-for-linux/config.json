@@ -1,0 +1,9 @@
+{
+  "spellCheckerLanguages": [
+    "en",
+    "nb"
+  ],
+  "closeAppOnCross": true,
+  "watchConfigFile" :true,
+  "defaultURLHandler": "link_handler.sh"
+}
