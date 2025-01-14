@@ -37,6 +37,7 @@ for_window {
     [title="sun-awt-X11-XWindowPeer"] floating enable resize set 200px 400px
     [app_id="zenity"] floating enable
     [title="Firefox — Sharing Indicator"] floating enable
+    [title="Cisco Secure Client - Login"] floating enable
 
     # [class=".*"] border pixel $border_size
     # [app_id=".*"] border pixel $border_size
