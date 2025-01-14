@@ -41,6 +41,7 @@ M.opts = {
         disableOrganizeImports = true,
         -- disableTaggedHints = true,
         analysis = {
+          autoImportCompletions = false,
           ignore = { '*' },
           typeCheckingMode = "off",
           diagnosticMode = "openFilesOnly",
