@@ -8,8 +8,9 @@ unset _rc
 # Ensure path arrays do not contain duplicates.
 typeset -gU path fpath
 
-[[ -f "${HOME}"/.secrets ]] && emulate zsh -o all_export -c 'source "${HOME}"/.secrets'
 
+[[ -f "${HOME}"/.secrets ]] && emulate zsh -o all_export -c 'source "${HOME}"/.secrets'
+[[ -z "${XDG_RUNTIME_DIR}" ]] && export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
 {
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
