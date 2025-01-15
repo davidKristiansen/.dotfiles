@@ -95,7 +95,7 @@ return {
           -- experimental auto-brackets support
           accept = { auto_brackets = { enabled = true } },
           list = {
-            selection = "manual"
+            selection = { preselect = false, auto_insert = true },
           },
           documentation = {
             auto_show = true,
