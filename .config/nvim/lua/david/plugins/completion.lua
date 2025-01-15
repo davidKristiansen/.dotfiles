@@ -89,7 +89,7 @@ return {
         -- default list of enabled providers defined so that you can extend it
         -- elsewhere in your config, without redefining it, due to `opts_extend`
         sources = {
-          default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline' },
+          default = { 'lsp', 'path', 'snippets', 'buffer' },
         },
         completion = {
           -- experimental auto-brackets support
