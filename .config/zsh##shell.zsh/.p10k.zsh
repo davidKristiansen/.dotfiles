@@ -37,6 +37,7 @@
     vcs                     # git status
     # =========================[ Line #2 ]=========================
     newline                 # \n
+    docker
     prompt_char             # prompt symbol
   )
 
@@ -1656,6 +1657,14 @@
   # Type `p10k help segment` for documentation and a more sophisticated example.
   function prompt_example() {
     p10k segment -f 208 -i '⭐' -t 'hello, %n'
+  }
+
+  function prompt_docker() {
+    [[ -f /.dockerenv ]] && p10k segment -f 208 -i '' -f 'Docker'
+  }
+
+  function instant_prompt_docker () {
+    prompt_docker
   }
 
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
