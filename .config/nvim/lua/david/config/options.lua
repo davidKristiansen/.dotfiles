@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 local opt = vim.opt
+local cmd = vim.cmd
 
 opt.autowrite = true -- Enable auto write
 opt.clipboard = "unnamedplus" -- Sync with system clipboard
@@ -32,7 +33,8 @@ opt.sidescrolloff = 8 -- Columns of context
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
-opt.spelllang = { "en" }
+opt.spell = true
+opt.spelllang = { "en_us" }
 opt.splitbelow = true -- Put new windows below current
 opt.splitright = true -- Put new windows right of current
 opt.tabstop = 2 -- Number of spaces tabs count for
@@ -60,6 +62,9 @@ opt.swapfile = false
 
 opt.fileencodings = "ucs-bom,utf-8,sjis,default"
 
+-- Undercurl
+cmd([[let &t_Cs = "\e[4:3m"]])
+cmd([[let &t_Ce = "\e[4:0m"]])
 
 -- vim.cmd([[
 -- let &t_fe = "\<Esc>[?1004h"
