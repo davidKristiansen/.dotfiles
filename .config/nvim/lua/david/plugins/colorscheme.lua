@@ -34,6 +34,9 @@ return {
           StatusLine = { bg = "none" },
           StatusLineNC = { bg = "none" },
           CursorLine = { bg = "none" },
+          Comments = {
+            undercurl = true
+          }
         },
         dim_inactive = false,
         transparent_mode = false,
