@@ -10,7 +10,7 @@ typeset -gU path fpath
 
 
 [[ -f "${HOME}"/.secrets ]] && emulate zsh -o all_export -c 'source "${HOME}"/.secrets'
-[[ -z "${XDG_RUNTIME_DIR}" ]] && export XDG_RUNTIME_DIR=/run/user/$(id -u)
+[[ -z "${XDG_RUNTIME_DIR}" ]] && export XDG_RUNTIME_DIR=$XDG_CACHE_HOME
 
 {
   setopt LOCAL_OPTIONS NO_NOTIFY NO_MONITOR
