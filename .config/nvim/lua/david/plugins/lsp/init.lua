@@ -61,7 +61,16 @@ return {
       end
 
       mason_lspconfig.setup({
-        handlers = { setup }
+        handlers = { setup },
+        ensure_installed = {
+          "lua_ls",
+          "clangd",
+          "jsonls",
+          "ruff",
+          "basedpyright"
+          -- "pylsp"
+        },
+        automatic_installation = true
       })
     end
   },
@@ -76,17 +85,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim"
     },
-    opts = {
-      ensure_installed = {
-        "lua_ls",
-        "clangd",
-        "jsonls",
-        "ruff",
-        "basedpyright"
-        -- "pylsp"
-      },
-      automatic_installation = true
-    }
   },
   {
     'jamespeapen/swayconfig.vim'
