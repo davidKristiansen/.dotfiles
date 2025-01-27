@@ -20,7 +20,7 @@ zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
 
-zstyle ':fzf-tab:*' popup-min-size 50 8
+zstyle ':fzf-tab:*' popup-min-size 80 8
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # Way too small window
 
 zstyle ':fzf-tab:*' continuous-trigger '/'
