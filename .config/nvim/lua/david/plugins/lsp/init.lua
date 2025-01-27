@@ -38,7 +38,7 @@ return {
         require("david.plugins.lsp.keymaps").on_attach(client, buffer)
 
         if opts.inlay_hints.enabled and client.supports_method("textDocument/inlayHint") then
-          vim.lsp.inlay_hint.enable(true)
+          vim.lsp.inlay_hint.enable(false)
         end
       end)
 
