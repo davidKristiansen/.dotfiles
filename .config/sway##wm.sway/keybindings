@@ -83,6 +83,9 @@ bindsym $mod+Control+right workspace next
 bindsym Alt+Control+left move workspace to output left
 bindsym Alt+Control+right move workspace to output right
 
+
+bindsym Ctrl+Space exec swaymsg input type:keyboard xkb_switch_layout next
+
 #
 # Layout stuff:
 #

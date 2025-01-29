@@ -29,8 +29,8 @@ bindsym $mod+bracketleft [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] scra
 for_window [instance="crx__cadlkienfkclaiaibeoongdcgmdikeeg"] move scratchpad
 bindsym $mod+bracketright exec --no-startup-id sh -c $XDG_BIN_HOME/llm.sh
 
-for_window [class="teams-for-linux"] move scratchpad
-bindsym $mod+t [class="teams-for-linux"] scratchpad show, move position center, resize set 90 ppt 90 ppt
+# for_window [class="teams-for-linux"] move scratchpad
+# bindsym $mod+t [class="teams-for-linux"] scratchpad show, move position center, resize set 90 ppt 90 ppt
 
 
 # vim: filetype=i3config
