@@ -13,6 +13,7 @@ ohmyzsh/ohmyzsh path:lib
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 jeffreytse/zsh-vi-mode
 soimort/translate-shell
+ohmyzsh/ohmyzsh path:plugins/magic-enter
 
 
 #############################################################

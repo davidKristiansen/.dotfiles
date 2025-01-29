@@ -46,4 +46,5 @@ zstyle ':zim:input' double-dot-expand yes
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
