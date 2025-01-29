@@ -16,7 +16,7 @@ if type bat >/dev/null; then
 fi
 
 if command -v eza &>/dev/null; then
-    alias ls='eza --color=auto'
+    alias ls='eza --color=auto --icons=auto'
     alias ll='ls \
       --total-size \
       --long \
