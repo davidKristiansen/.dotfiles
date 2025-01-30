@@ -33,7 +33,7 @@ require("lazy").setup({
     lazy = true,
     version = false
   },
-  install = {colorscheme = {"kanagawa"}},
+  install = {colorscheme = {"gruvbox"}},
   checker = {
     enabled = true,
     notify = false,
