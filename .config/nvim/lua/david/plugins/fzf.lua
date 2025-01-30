@@ -7,7 +7,7 @@ return {
     keys = {
       { "<leader>,",       "<cmd>FzfLua buffers<cr>",               desc = "Switch Buffer" },
       -- { "/", "<cmd>FzfLua grep<cr>",                        desc = "Grep (root dir)" },
-      { "<leader>/",       "<cmd>FzfLua live_grep<cr>",             desc = "Grep (root dir)" },
+      { "<leader>/",       "<cmd>FzfLua grep<cr>",                  desc = "Grep (root dir)" },
       { "<leader>:",       "<cmd>FzfLua command_history<cr>",       desc = "Command History" },
       { "<leader><space>", "<cmd>FzfLua resume<cr>",                desc = "Smart Open" },
       -- find
@@ -27,7 +27,7 @@ return {
       { "<leader>sC",      "<cmd>FzfLua commands<cr>",              desc = "Commands" },
       { "<leader>sd",      "<cmd>FzfLua diagnostics_document<cr>",  desc = "Document diagnostics" },
       { "<leader>sD",      "<cmd>FzfLua diagnostics_workspace<cr>", desc = "Workspace diagnostics" },
-      { "<leader>sg",      "<cmd>FzfLua live_grep<cr>",             desc = "Grep (root dir)" },
+      { "<leader>sg",      "<cmd>FzfLua live_grep_glob<cr>",        desc = "Grep (root dir)" },
       -- { "<leader>sG", Util.telescope("live_grep", { cwd = false }), desc = "Grep (cwd)" },
       { "<leader>sh",      "<cmd>FzfLua helptags<cr>",              desc = "Help Pages" },
       { "<leader>sH",      "<cmd>FzfLua highlights<cr>",            desc = "Search Highlight Groups" },
