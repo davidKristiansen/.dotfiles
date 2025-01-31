@@ -14,12 +14,19 @@ return {
       bigfile = { enabled = true },
       bufdelete = { enabled = true },
       dim = { enabled = true },
+      explorer = { enabled = true },
       git = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },
       lazygit = { enabled = true },
       notifier = { enabled = true },
       quickfile = { enabled = true },
+      picker = {
+        enabled = true,
+        sources = {
+          explorer = {}
+        }
+      },
       rename = { enabled = true },
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
@@ -30,7 +37,7 @@ return {
           keys = {
             { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
             { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-            { icon = " ", key = "e", desc = "File Tree", action = "<cmd>Neotree toggle reveal dir=./<cr>" },
+            { icon = " ", key = "e", desc = "File Tree", action = ":lua Snacks.explorer()" },
             { icon = " ", key = "s", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
             { icon = " ", key = "g", desc = "Git", action = ":lua Snacks.lazygit()" },
             { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
@@ -71,6 +78,7 @@ return {
       },
     },
     keys = {
+      { "<leader>e",  function() Snacks.explorer() end,                desc = "Explorer" },
       { "<leader>d",  function() Snacks.dashboard() end,               desc = "Dashboard" },
       { "<leader>z",  function() Snacks.zen() end,                     desc = "Toggle Zen Mode" },
       { "<leader>Z",  function() Snacks.zen.zoom() end,                desc = "Toggle Zoom" },
