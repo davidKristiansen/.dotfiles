@@ -14,6 +14,7 @@ bindsym $mod+shift+q kill
 
 # Start your launcher
 bindsym $mod+d exec $menu
+bindsym $mod+shift+d exec $menu_fallback
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
