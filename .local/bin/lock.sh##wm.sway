@@ -8,7 +8,7 @@ outputs=($(swaymsg -t get_outputs | jq -r ".[] | .name"))
 
 for output in "${outputs[@]}"; do
   grim -o "${output}" "/tmp/${output}.png"
-  "${CORRUPTER}" -mag 3 -boffset 4 -meanabber 7 "/tmp/${output}.png" "/tmp/${output}.png"
+  "${CORRUPTER}" -add 0 -mag 3 -boffset 4 -meanabber 7 "/tmp/${output}.png" "/tmp/${output}.png"
 done
 wait
 
