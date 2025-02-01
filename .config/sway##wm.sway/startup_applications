@@ -56,5 +56,6 @@ exec '${XDG_BIN_HOME}/idle.sh'
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec_always 'gsettings set org.gnome.desktop.interface color-scheme '"prefer-dark"'
+exec_always 'xdg-settings set default-web-browser firefox.desktop'
 
 # vim: filetype=i3config
