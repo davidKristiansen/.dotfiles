@@ -1,11 +1,15 @@
 #!/bin/bash
 
-TERMINAL="${XDG_BIN_HOME}/ghostty"
+TERMINAL="ghostty"
 
+echo 1
 if [[ ! $(ps aux | \grep "term.scratchpad" | \grep -v grep) ]]; then
-  swaymsg 'exec --no-startup-id /home/SONY/s7000026748/.local/bin/ghostty --class="term.scratchpad"'
+echo 2
+  swaymsg 'exec --no-startup-id ghostty --class="term.scratchpad"'
+echo 3
   sleep 1.5
 fi
+echo 4
 
 swaymsg '[app_id=term.scratchpad] scratchpad show'
 
