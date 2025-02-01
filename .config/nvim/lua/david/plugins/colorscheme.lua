@@ -25,6 +25,7 @@ return {
         contrast = "hard", -- can be "hard", "soft" or empty string
         palette_overrides = {},
         overrides = {
+          ColorColumn = { bg = "none" },
           SignColumn = { bg = "none" },
           WinBar = { bg = "none" },
           WinBarNC = { bg = "none" },
@@ -39,7 +40,7 @@ return {
           }
         },
         dim_inactive = false,
-        transparent_mode = false,
+        transparent_mode = true,
       })
       vim.cmd([[
                 set background=dark
