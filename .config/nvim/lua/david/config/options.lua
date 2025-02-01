@@ -1,6 +1,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+vim.diagnostic.config { virtual_lines = true }
+
 local opt = vim.opt
 local cmd = vim.cmd
 
