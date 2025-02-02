@@ -2,7 +2,7 @@ return {
   {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
-    cmd = { "Obsidian" },
+    cmd = { "ObsidianSearch" },
     event = { "BufReadPre " .. vim.env.XDG_DATA_HOME .. "/vault/**/*.md" },
     dependencies = {
       -- Required.
