@@ -2,14 +2,14 @@ return {
   {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
-    cmd = { "ObsidianSearch" },
+    cmd = { "ObsidianQuickSwitch" },
     event = { "BufReadPre " .. vim.env.XDG_DATA_HOME .. "/vault/**/*.md" },
     dependencies = {
       -- Required.
       "nvim-lua/plenary.nvim",
 
       -- "hrsh7th/nvim-cmp",
-      "nvim-telescope/telescope.nvim",
+      "ibhagwan/fzf-lua",
       "nvim-treesitter/nvim-treesitter"
     },
     opts = {
@@ -19,6 +19,9 @@ return {
       -- When obsidian.nvim is loaded by your plugin manager, it will automatically set
       -- the workspace to the first workspace in the list whose `path` is a parent of the
       -- current markdown file being edited.
+      picker = {
+        name = "fzf-lua"
+      },
       workspaces = {
         {
           name = "vault",
@@ -47,6 +50,9 @@ return {
         -- Trigger completion at 2 chars.
         min_chars = 2,
       },
-    }
+    },
+    keys = {
+      { "<leader>fn", "<cmd>ObsidianQuickSwitch<cr>", desc = "Notes" },
+    },
   }
 }
