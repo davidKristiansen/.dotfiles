@@ -37,7 +37,7 @@ return {
             { icon = " ", key = "g", desc = "Find Text", action = function() require("fzf-lua").live_grep() end },
             { icon = " ", key = "s", desc = "Sessions", action = function() require("nvim-possession").list() end },
             { icon = " ", key = "n", desc = "Notes", action = "<cmd>ObsidianQuickSwitch<cr>" },
-            { icon = " ", key = "g", desc = "Git", action = ":lua Snacks.lazygit()" },
+            { icon = " ", key = "G", desc = "Git", action = ":lua Snacks.lazygit()" },
             { icon = " ", key = "r", desc = "Recent Files", action = function() require("fzf-lua").oldfiles() end },
             {
               icon = " ",
