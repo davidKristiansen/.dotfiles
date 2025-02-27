@@ -140,7 +140,9 @@
         ""
       ]
     },
-    "scroll-step": 1,
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+ && ${XDG_BIN_HOME}/wp-vol",
+    "on-scroll-down": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%- && ${XDG_BIN_HOME}/wp-vol",
+    //"scroll-step": 1,
     "on-click-right": "pavucontrol",
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
   },
