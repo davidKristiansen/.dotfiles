@@ -1,8 +1,8 @@
 -- Highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-  pattern = "*",
-  command = [[silent! lua vim.highlight.on_yank() {higroup="IncSearch", timeout=400}]],
-})
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+--   pattern = "*",
+--   command = [[silent! lua vim.highlight.on_yank() {higroup="IncSearch", timeout=400}]],
+-- })
 
 -- Hybrid line numbers
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnter", "TermOpen" }, {
