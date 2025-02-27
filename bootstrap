@@ -15,9 +15,9 @@ done
 
 \mkdir --parents --mode=700 "${HOME}"/.local/share/gnupg
 
-./.local/bin/stow.sh        \
-  -i "^\.git"               \
-  -i "$(basename "${0}")"   \
+"${SCRIPT_DIR}"/.local/bin/stow.sh \
+  -i "^\.git"                      \
+  -i "$(basename "${0}")"          \
   -f
 
 if ! type mise &>/dev/null; then
