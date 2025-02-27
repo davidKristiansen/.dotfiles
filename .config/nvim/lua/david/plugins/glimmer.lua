@@ -14,7 +14,7 @@ return {
     },
     presets = {
       pulsar = {
-        enabled = true,
+        enabled = false,
       },
     },
     overwrite = {
