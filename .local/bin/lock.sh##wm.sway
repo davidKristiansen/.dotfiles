@@ -12,4 +12,11 @@ for output in "${outputs[@]}"; do
 done
 wait
 
-exec gtklock --daemonize --follow-focus -s "${HOME}/.config/gtklock/style.css" "$@"
+exec gtklock \
+  --daemonize \
+  --follow-focus \
+  --style "${HOME}/.config/gtklock/style.css" \
+  --idle-hide \
+  --idle-timeout 5 \
+  --start-hidden \
+  "$@"
