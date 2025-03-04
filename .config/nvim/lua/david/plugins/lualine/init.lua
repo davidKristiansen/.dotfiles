@@ -4,6 +4,7 @@ local f = require("david.plugins.lualine.functions")
 local debug = require("david.debug")
 
 
+
 -- local colors = require("kanagawa.colors").setup({ theme = 'dragon' })
 return {
   {
@@ -15,6 +16,7 @@ return {
     --   vim.cmd("highlight lualine_c_normal guibg=NONE")
     -- end,
     dependencies = {
+      "gennaro-tedesco/nvim-possession",
       'kazhala/close-buffers.nvim',
       'nvim-tree/nvim-web-devicons',
       -- 'linrongbin16/lsp-progress.nvim',
@@ -39,12 +41,12 @@ return {
         section_separators = { left = '', right = '' },
         component_separators = { left = '╲', right = '╱ ' },
         globalstatus = true,
-         icons_enabled = true,
+        icons_enabled = true,
         ignore_focus = {
           -- "neo-tree",
           "dapui_watches", "dapui_breakpoints",
           "dapui_scopes", "dapui_console",
-          "dapui_stacks", "dap-repl"  --dap-repl and not dap_repl -.-
+          "dapui_stacks", "dap-repl" --dap-repl and not dap_repl -.-
         },
         disabled_filetypes = {
           "neo-tree",
@@ -52,9 +54,9 @@ return {
           -- winbar = {
           -- },
           statusline = {
-          "dapui_watches", "dapui_breakpoints",
-          "dapui_scopes", "dapui_console",
-          "dapui_stacks", "dap-repl"
+            "dapui_watches", "dapui_breakpoints",
+            "dapui_scopes", "dapui_console",
+            "dapui_stacks", "dap-repl"
           },
         },
       },
@@ -95,8 +97,14 @@ return {
           }
         },
         lualine_c = {
+          -- {
+          --   'filename', path = 1
+          -- },
           {
-            'filename', path = 1
+            "require('nvim-possession').status()",
+            cond = function()
+              return require("nvim-possession").status() ~= nil
+            end,
           },
         },
         -- lualine_x = {
