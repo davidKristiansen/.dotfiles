@@ -18,11 +18,31 @@ function M.on_attach(buffer)
     -- { '<leader>gb', function() gs.blame_line { full = true } end, desc = "Blame line"},
     { '<leader>gb', gs.toggle_current_line_blame,                                        desc = "Blame line toggle" },
     { '<leader>gd', gs.diffthis,                                                         desc = "Diff this" },
-    { ']h',         gs.next_hunk,                                                        desc = "Next hunk" },
-    { '[h',         gs.prev_hunk,                                                        desc = "Previous hunk" },
+    {
+      ']h',
+      function()
+        if vim.wo.diff then
+          vim.cmd.normal({ ']c', bang = true })
+        else
+          gs.nav_hunk('next')
+        end
+      end,
+      desc = "Next hunk"
+    },
+    {
+      '[h',
+      function()
+        if vim.wo.diff then
+          vim.cmd.normal({ '[c', bang = true })
+        else
+          gs.nav_hunk('prev')
+        end
+      end,
+      desc = "Previous hunk"
+    },
     -- { '<leader>gD', function() gs.diffthis('~') end,                                     desc = "Diff this (~)" },
     -- { '<leader>gd', gs.toggle_deleted, desc = "Toggle deleted"},
-    { 'ih',         ':<C-U>Gitsigns select_hunk<CR>',                                    desc = "Select hunk",      mode = { 'o', 'x' }, }
+    { 'ih', ':<C-U>Gitsigns select_hunk<CR>', desc = "Select hunk", mode = { 'o', 'x' }, }
   }
 
   local opts = {
