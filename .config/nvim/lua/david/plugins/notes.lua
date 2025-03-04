@@ -1,6 +1,6 @@
 return {
   {
-    "epwalsh/obsidian.nvim",
+    "obsidian-nvim/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
     cmd = { "ObsidianQuickSwitch" },
     event = { "BufReadPre " .. vim.env.XDG_DATA_HOME .. "/vault/**/*.md" },
@@ -47,6 +47,7 @@ return {
       completion = {
         -- Set to false to disable completion.
         nvim_cmp = false,
+        blink = true,
         -- Trigger completion at 2 chars.
         min_chars = 2,
       },
