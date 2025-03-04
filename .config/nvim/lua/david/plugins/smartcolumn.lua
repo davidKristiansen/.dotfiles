@@ -4,7 +4,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     opts = {
       disabled_filetypes = { "help", "text" },
-      colorcolumn = "80",
+      colorcolumn = "120",
     }
   },
 }
