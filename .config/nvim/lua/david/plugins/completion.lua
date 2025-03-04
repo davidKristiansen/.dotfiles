@@ -46,12 +46,21 @@ return {
           ["<C-up>"]    = { "scroll_documentation_up", "fallback" },
           ["<C-down>"]  = { "scroll_documentation_down", "fallback" },
         },
+        cmdline = {
+          keymap = {
+            ['<Tab>'] = { 'accept' },
+            ['<CR>'] = { 'accept_and_enter', 'fallback' },
+          },
+          -- (optionally) automatically show the menu
+          completion = { menu = { auto_show = true } }
+        },
         appearance = {
           use_nvim_cmp_as_default = true,
           nerd_font_variant = 'mono'
         },
 
         fuzzy = {
+          implementation = "prefer_rust_with_warning",
           -- When enabled, allows for a number of typos relative to the length of the query
           -- Disabling this matches the behavior of fzf
           -- use_typo_resistance = false,
@@ -91,6 +100,13 @@ return {
         sources = {
           default = { 'lsp', 'path', 'snippets', 'buffer', 'markdown' },
           providers = {
+            cmdline = {
+              min_keyword_length = function(ctx)
+                -- when typing a command, only show when the keyword is 3 characters or longer
+                if ctx.mode == 'cmdline' and string.find(ctx.line, ' ') == nil then return 3 end
+                return 0
+              end
+            },
             markdown = {
               name = 'RenderMarkdown',
               module = 'render-markdown.integ.blink',
@@ -101,6 +117,7 @@ return {
         completion = {
           -- experimental auto-brackets support
           accept = { auto_brackets = { enabled = true } },
+          ghost_text = { enabled = true },
           list = {
             selection = { preselect = false, auto_insert = true },
           },
