@@ -48,11 +48,26 @@ return {
         },
         cmdline = {
           keymap = {
-            ['<Tab>'] = { 'accept' },
-            ['<CR>'] = { 'accept_and_enter', 'fallback' },
+            ['<Tab>'] = {
+              function(cmp)
+                if cmp.is_ghost_text_visible() and not cmp.is_menu_visible() then return cmp.accept() end
+              end,
+              'show_and_insert',
+              'select_next',
+            },
+            ['<S-Tab>'] = { 'show_and_insert', 'select_prev' },
+            ['<CR>'] = { 'accept', 'fallback' },
           },
           -- (optionally) automatically show the menu
-          completion = { menu = { auto_show = true } }
+          completion = {
+            menu = {
+              auto_show = function(ctx)
+                return vim.fn.getcmdtype() == ':'
+                -- enable for inputs as well, with:
+                -- or vim.fn.getcmdtype() == '@'
+              end,
+            }
+          }
         },
         appearance = {
           use_nvim_cmp_as_default = true,
