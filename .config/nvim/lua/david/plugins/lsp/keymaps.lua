@@ -18,7 +18,7 @@ function M.on_attach(client, buffer)
     -- { "<LeftMouse>",   vim.lsp.buf.hover,         mode = { "n", "i" },      desc = "Peek" },
     { "<c-LeftMouse>", vim.lsp.buf.declaration, mode = { "n", "i" },      desc = "Goto Declaration" },
     { "gD",            vim.lsp.buf.declaration, desc = "Goto Declaration" },
-    { "gr",            vim.lsp.buf.rename, desc = "Rename" },
+    -- { "gr",            vim.lsp.buf.rename, desc = "Rename" },
     { "gd",            vim.lsp.buf.definition,  desc = "Goto Definition" },
     {
       "gvD",
