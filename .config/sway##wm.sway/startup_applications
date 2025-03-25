@@ -58,4 +58,6 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 exec_always 'gsettings set org.gnome.desktop.interface color-scheme '"prefer-dark"'
 exec_always 'xdg-settings set default-web-browser firefox.desktop'
 
+exec_always 'gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"'
+
 # vim: filetype=i3config
