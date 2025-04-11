@@ -33,7 +33,16 @@ M.opts = {
     }
   },
   bashls = {
-
+    settings = {
+      bashIde = {
+        shellcheckPath = "shellcheck",
+        explainshellEndpoint = "",
+        globPattern = "**/*.sh",
+        includeAllWorkspaceSymbols = true,
+        highlightParsingErrors = true,
+        enableSourceErrorDiagnostics = true,
+      }
+    }
   },
   basedpyright = {
     settings = {

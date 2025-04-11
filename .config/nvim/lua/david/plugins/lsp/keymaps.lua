@@ -41,19 +41,19 @@ function M.on_attach(client, buffer)
       desc = "Goto Definition (split)"
     },
     -- { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
-    {
-      "<leader>cf",
-      function()
-        -- if client.supports_method("textDocument/formatting") then
-        vim.lsp.buf.format { async = false }
-        -- else
-        --   require('conform').format()
-        -- end
-      end,
-      mode = { "n", "v" },
-      desc = "Format"
-    },
     -- {
+    --   "<leader>cf",
+    --   function()
+    --     -- if client.supports_method("textDocument/formatting") then
+    --     vim.lsp.buf.format { async = false }
+    --     -- else
+    --     --   require('conform').format()
+    --     -- end
+    --   end,
+    --   mode = { "n", "v" },
+    --   desc = "Format"
+    -- },
+    -- -- {
     --   "[d",
     --   function()
     --     vim.diagnostic.goto_prev()

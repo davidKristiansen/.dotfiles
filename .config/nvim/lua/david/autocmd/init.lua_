@@ -1,0 +1,26 @@
+-- global toggle
+_G.autoformat_enabled = false
+
+
+vim.api.nvim_create_augroup("FormatOnSave", { clear = true })
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = "FormatOnSave",
+  callback = function()
+    if _G.autoformat_enabled then
+      vim.lsp.buf.format({ async = false })
+    end
+  end,
+})
+
+vim.api.nvim_create_user_command("ToggleAutoformat", function()
+  _G.autoformat_enabled = not _G.autoformat_enabled
+  print("Autoformat on save: " .. tostring(_G.autoformat_enabled))
+end, {})
+
+
+
+vim.keymap.set("n", "<leader>af", function()
+  _G.autoformat_enabled = not _G.autoformat_enabled
+  vim.notify("Autoformat on save: " .. tostring(_G.autoformat_enabled))
+end, { desc = "Toggle Autoformat on Save" })
