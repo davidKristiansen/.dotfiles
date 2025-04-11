@@ -9,6 +9,10 @@ unset _rc
 typeset -gU path fpath
 
 
+fpath+=(${XDG_DATA_HOME}/zsh/site-functions)
+# autoload -Uz compinit && compinit
+
+
 [[ -f "${HOME}"/.secrets ]] && emulate zsh -o all_export -c 'source "${HOME}"/.secrets'
 [[ -z "${XDG_RUNTIME_DIR}" ]] && export XDG_RUNTIME_DIR=$XDG_CACHE_HOME
 
@@ -48,3 +52,4 @@ zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
