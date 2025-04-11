@@ -73,7 +73,7 @@ return {
               return Snacks.git.get_root() ~= nil
             end,
             -- cmd = "git status --short --branch --renames",
-            cmd = "onefetch --no-title --no-art",
+            cmd = "onefetch --no-title --no-art || true",
             height = 20,
             padding = 1,
             ttl = 5 * 60,
@@ -138,7 +138,7 @@ return {
       -- { "<leader>sR",      function() Snacks.picker.resume() end,                                  desc = "Resume" },
       -- { "<leader>sq",      function() Snacks.picker.qflist() end,                                  desc = "Quickfix List" },
       -- { "<leader>uC",      function() Snacks.picker.colorschemes() end,                            desc = "Colorschemes" },
-      -- { "<leader>qp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
+      -- { "<leader>qp",      function() Snack s.picker.projects() end,                                desc = "Projects" },
       -- -- LSP
       -- { "gd",              function() Snacks.picker.lsp_definitions() end,                         desc = "Goto Definition" },
       -- { "gr",              function() Snacks.picker.lsp_references() end,                          nowait = true,                        desc = "References" },

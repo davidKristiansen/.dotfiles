@@ -1,7 +1,7 @@
 return {
   {
     "giusgad/pets.nvim",
-    cmd = {"PetsNew"},
+    cmd = { "PetsNew" },
     dependencies = { "MunifTanjim/nui.nvim", "giusgad/hologram.nvim" },
     opts = {},
     keys = {
