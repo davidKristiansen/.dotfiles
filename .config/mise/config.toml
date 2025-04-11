@@ -16,16 +16,18 @@ stylua = "latest"
 bat-extras = "latest"
 tmux = "3.5a"
 zig = "latest"
+ruff = "latest"
+pipx = "latest"
 
 # node
 nodejs = "latest"
 "npm:devcontainer" = "latest"
+"npm:prettier" = "latest"
 
 # Python
 python = "latest"
 uv = "latest"
 "pipx:thefuck" = "latest"
-"pipx:ruff" = "latest"
 
 # Go
 go = "latest"
@@ -42,3 +44,4 @@ cargo-binstall = "latest"
 "cargo:yazi-fm" = "latest"
 "cargo:onefetch" = "latest"
 "cargo:binsider" = "latest"
+"npm:markdown-toc" = "latest"
