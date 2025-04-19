@@ -12,7 +12,5 @@ function y() {
   eza -TL 1 --icons=always
 }
 
-MAGIC_ENTER_GIT_COMMAND=y
-MAGIC_ENTER_OTHER_COMMAND=y
 
 

@@ -49,6 +49,11 @@ zstyle ':zim:input' double-dot-expand yes
 \mkdir -p "${XDG_CACHE_HOME}"/zsh
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
 
+# Thefuck
+eval $(thefuck --alias)
+MAGIC_ENTER_GIT_COMMAND=fuck
+MAGIC_ENTER_OTHER_COMMAND=fuck
+
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
