@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
+
+- repo: https://github.com/nshepperd/license-headers
+  rev: v1.2.0
+  hooks:
+    - id: license-headers
+      args: [--license, "MIT", --spdx, --extension=lua]

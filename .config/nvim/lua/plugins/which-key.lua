@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
@@ -7,19 +10,6 @@ return {
       spelling = true,
       registers = true,
       marks = true
-    },
-    defaults = {
-      ["<leader>b"] = { name = "+buffer" },
-      ["<leader>c"] = { name = "+code" },
-      ["<leader>f"] = { name = "+file" },
-      ["<leader>g"] = { name = "+git" },
-      ["<leader>r"] = { name = "+refactor" },
-      ["<leader>s"] = { name = "+search" },
-      ["<leader>u"] = { name = "+ui" },
-      ["["] = { name = "+prev" },
-      ["]"] = { name = "+next" },
-      ["g"] = { name = "+goto" },
-      ["z"] = { name = "+folds" },
     },
   },
   keys = {
@@ -31,4 +21,21 @@ return {
       desc = "Buffer Local Keymaps (which-key)",
     },
   },
+  init = function()
+    local wk = require('which-key')
+    wk.add({
+      { "<leader>b", group = "buffer" },
+      { "<leader>c", group = "code" },
+      { "<leader>f", group = "file" },
+      { "<leader>g", group = "git" },
+      { "<leader>r", group = "refactor" },
+      { "<leader>s", group = "search" },
+      { "<leader>u", group = "ui" },
+      { "[",         group = "prev" },
+      { "]",         group = "next" },
+      { "g",         group = "goto" },
+      { "z",         group = "folds" },
+
+    })
+  end
 }

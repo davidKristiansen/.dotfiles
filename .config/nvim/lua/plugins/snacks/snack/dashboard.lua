@@ -1,5 +1,7 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 return {
-  enabled = true,
   preset = {
     keys = {
       { icon = " ", key = "f", desc = "Find File", action = function() Snacks.picker.files() end },

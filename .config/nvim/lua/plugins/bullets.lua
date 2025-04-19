@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 return {
   "bullets-vim/bullets.vim",
   init = function()
