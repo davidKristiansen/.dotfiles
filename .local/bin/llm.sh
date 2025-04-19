@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 #/bin/sh
 
 APP_ID=cadlkienfkclaiaibeoongdcgmdikeeg

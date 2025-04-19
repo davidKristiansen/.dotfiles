@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 eval "$(~/.local/bin/mise activate zsh)"
 eval "$(mise activate --shims)"
 

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 function
 _FZF_CMD_D='fzf \
   --height 80% \

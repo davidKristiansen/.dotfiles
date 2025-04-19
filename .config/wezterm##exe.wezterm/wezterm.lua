@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 local wezterm = require 'wezterm'
 local action = wezterm.action
 local config = wezterm.config_builder()

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 python_venv() {
   MYVENV=./.venv
   # when you cd into a folder that contains $MYVENV

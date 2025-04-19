@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_AUTOCONNECT=true
 ZSH_TMUX_AUTOQUIT=true

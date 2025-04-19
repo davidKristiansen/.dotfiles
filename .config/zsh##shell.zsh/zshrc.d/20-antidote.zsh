@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 
 export ANTIDOTE_HOME="${XDG_DATA_HOME}"/antidote/data
 ANTIDOTE_CLONE="${XDG_DATA_HOME}"/antidote/clone

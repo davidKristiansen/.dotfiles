@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false

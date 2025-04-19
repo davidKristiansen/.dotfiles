@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 # deduce dotfiles dir
 if [ -d $HOME/dotfiles ]; then
   export DOT_DIR=$HOME/dotfiles

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 #!/bin/bash
 
 browser=firefox
@@ -12,8 +15,10 @@ case "${1}" in
     full_path="${doc_svn_base}"/"${path}"
 
     if [ -d "${full_path}" ]; then
+      svn update "${full_path}"
       nautilus "${full_path}"
     elif [ -d "$(dirname "${full_path}")" ]; then
+      svn update "$(dirname "${full_path}")"
       nautilus "$(dirname "${full_path}")"
     else
       "${browser}" $1

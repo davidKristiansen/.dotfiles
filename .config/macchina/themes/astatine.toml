@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 hide_ascii      = false
 spacing         = 1
 padding         = 0
