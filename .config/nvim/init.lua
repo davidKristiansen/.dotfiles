@@ -1,3 +1,5 @@
-require("david.config.options")
-require("david.config.lazy")
-require("david.config.autocmds")
+require("config.options")
+require("config.autocmd")
+require("config.keymaps")
+require("config.lsp")
+require("config.lazy")
