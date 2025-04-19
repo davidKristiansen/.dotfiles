@@ -16,17 +16,8 @@ return {
       { "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>",       desc = "Navigate next" }
     }
   },
-  -- {
-  --   'vimpostor/vim-tpipeline',
-  --   lazy = false,
-  --   config = function()
-  --     -- -- vim.g.tpipeline_refreshcmd = "kitty @ set-tab-title Master test"
-  --     -- -- vim.g.tpipeline_clearstl = 1
-  --     -- -- vim.g.tpipeline_restore = 1
-  --     -- vim.g.tpipeline_autoembed = 1
-  --     -- vim.g.tpipeline_clearstl = 1
-  --     -- -- vim.o.fcs = "stlnc:─,stl:─,vert:│"
-  --     -- -- vim.opt.fillchars:append({ eob = " " })
-  --   end
-  -- }
+  {
+    'vimpostor/vim-tpipeline',
+    lazy = false,
+  }
 }

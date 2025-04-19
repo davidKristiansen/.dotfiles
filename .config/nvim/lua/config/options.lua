@@ -1,18 +1,23 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 -- Set <leader> keys
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Diagnostic display config
 vim.diagnostic.config({
-  virtual_text = {
-    spacing = 2,
-    source = "if_many",  -- optional: shows source only when there are multiple
-  },
-  virtual_lines = false, -- disable inline virtual lines
-  signs = true,          -- still show gutter signs
-  underline = true,
-  update_in_insert = false,
-  severity_sort = true,
+  virtual_text     = false,
+  -- virtual_text     = {
+  --   spacing = 2,
+  --   source = "if_many",  -- optional: shows source only when there are multiple
+  --   current_line = false,
+  -- },
+  virtual_lines    = { current_line = true },
+  signs            = true, -- still show gutter signs
+  underline        = true,
+  update_in_insert = true,
+  severity_sort    = true,
 })
 
 

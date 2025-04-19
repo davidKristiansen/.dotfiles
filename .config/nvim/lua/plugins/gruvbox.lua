@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 return {
   "ellisonleao/gruvbox.nvim",
   version = false,

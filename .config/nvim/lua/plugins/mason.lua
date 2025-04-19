@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 -- plugins/mason.lua
 return {
   "williamboman/mason.nvim",

@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright David Kristiansen
+
 return {
 	{
 		"m4xshen/smartcolumn.nvim",
