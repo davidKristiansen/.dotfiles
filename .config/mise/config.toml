@@ -19,8 +19,7 @@ stylua = "latest"
 bat-extras = "latest"
 tmux = "3.5a"
 zig = "latest"
-ruff = "latest"
-pipx = "latest"
+pre-commit = "latest"
 
 # node
 nodejs = "latest"
@@ -29,6 +28,8 @@ nodejs = "latest"
 
 # Python
 python = "latest"
+ruff = "latest"
+pipx = "latest"
 uv = "latest"
 "pipx:thefuck" = "latest"
 
@@ -48,4 +49,3 @@ cargo-binstall = "latest"
 "cargo:onefetch" = "latest"
 "cargo:binsider" = "latest"
 "npm:markdown-toc" = "latest"
-pre-commit = "latest"
