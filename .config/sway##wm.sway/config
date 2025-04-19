@@ -3,8 +3,8 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $term ghostty
-# set $term kitty
+# set $term ghostty
+set $term kitty
 
 # set $menu swaymsg 'exec $term --class __launcher -e sleep 10'
 set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'
