@@ -7,6 +7,21 @@ return {
   cmd = { "Mason" },
   build = ":MasonUpdate",
   opts = {
+    ensure_installed = {
+      "lua_ls",
+      "clangd",
+      "jsonls",
+      "basedpyright",
+      "bashls",
+      "marksman",
+      "markdown-toc",
+      "efm",
+      "yamlfmt",
+      "yamllint",
+      "ruff",
+      "prettier",
+      "taplo"
+    },
     automatic_installation = true,
   },
   config = function(_, opts)
@@ -30,6 +45,7 @@ return {
       basedpyright = "basedpyright",
       bashls = "bash-language-server",
       marksman = "marksman",
+      efm = "efm",
     }
 
     -- 3. Ensure each server is installed
@@ -48,4 +64,3 @@ return {
     vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
   end,
 }
-

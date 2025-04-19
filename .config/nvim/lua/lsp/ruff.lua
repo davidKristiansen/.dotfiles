@@ -7,6 +7,7 @@ return {
   filetypes = { "python" },
   root_markers = { "pyproject.toml", ".git", ".venv" },
   init_options = {
+    provideFormatter = false,
     settings = {
       args = {}, -- optional extra args
     },

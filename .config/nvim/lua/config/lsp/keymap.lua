@@ -28,8 +28,8 @@ function M.setup(buf)
   map("n", "<leader>d", vim.diagnostic.open_float, "Show Diagnostic")
   map("n", "<leader>q", vim.diagnostic.setloclist, "Quickfix Diagnostics")
 
-  map("n", "<leader>cf", function() vim.lsp.buf.format({ async = true }) end, "Format Buffer")
   map("n", "<leader>uf", function() require("config.lsp.format").toggle() end, "Toggle Autoformat-on-Save")
+  map("n", "<leader>cf", function() vim.lsp.buf.format({ async = true }) end, "Format Buffer")
 end
 
 return M
