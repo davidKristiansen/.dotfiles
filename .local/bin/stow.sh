@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 #!/usr/bin/env bash
 
 set -o pipefail

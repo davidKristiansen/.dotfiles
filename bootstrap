@@ -1,6 +1,9 @@
 #!/bin/bash
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 set -a
 for _rc in "${SCRIPT_DIR}"/.config/environment.d/*.conf; do
@@ -16,8 +19,8 @@ done
 \mkdir --parents --mode=700 "${HOME}"/.local/share/gnupg
 
 "${SCRIPT_DIR}"/.local/bin/stow.sh \
-  -i "^\.git"                      \
-  -i "$(basename "${0}")"          \
+  -i "^\.git" \
+  -i "$(basename "${0}")" \
   -f
 
 if ! type mise &>/dev/null; then

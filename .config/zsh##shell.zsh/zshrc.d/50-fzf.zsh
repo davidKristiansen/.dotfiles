@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*,.venv/*}"'
 
 export FZF_DEFAULT_OPTS="--layout=reverse \

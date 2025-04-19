@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 #!/usr/bin/env python3
 import gi
 gi.require_version("Playerctl", "2.0")

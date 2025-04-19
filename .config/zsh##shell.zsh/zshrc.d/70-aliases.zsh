@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
 alias vim=$EDITOR
 alias :e=$EDITOR
 alias e=$EDITOR
