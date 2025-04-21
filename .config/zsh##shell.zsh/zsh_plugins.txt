@@ -1,34 +1,34 @@
 #############################################################
-# Completion
+# Completion / Init
 #############################################################
 mattmc3/ez-compinit
 zsh-users/zsh-completions kind:fpath path:src
 
 #############################################################
-# Utilities
+# Core Shell Utilities
 #############################################################
 romkatv/powerlevel10k
+jeffreytse/zsh-vi-mode
 ohmyzsh/ohmyzsh path:lib
 ohmyzsh/ohmyzsh path:plugins/command-not-found
-jeffreytse/zsh-vi-mode
-soimort/translate-shell
 ohmyzsh/ohmyzsh path:plugins/magic-enter
 ohmyzsh/ohmyzsh path:plugins/tmux
 
-
 #############################################################
-# Fzf
+# Fuzzy Finder / Tab Completion
 #############################################################
-# unixorn/fzf-zsh-plugin
 Aloxaf/fzf-tab
 Freed-Wu/fzf-tab-source
-
+# unixorn/fzf-zsh-plugin  # optional
 
 #############################################################
-# add fish-like features
+# Fish-like Enhancements
 #############################################################
 zdharma-continuum/fast-syntax-highlighting kind:defer
 zsh-users/zsh-autosuggestions kind:defer
-#zsh-users/zsh-history-substring-search kind:defer
+zsh-users/zsh-history-substring-search kind:defer  # optional
 
-
+#############################################################
+# External Utilities
+#############################################################
+soimort/translate-shell
