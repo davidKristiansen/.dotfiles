@@ -1,0 +1,614 @@
+Nick Foster on evolving code:
+
+"You know, when you have a program that does something really cool,
+and you wrote it from scratch, and it took a significant part of your
+life, you grow fond of it. When it’s finished, it feels like some
+kind of amorphous sculpture that you’ve created... Elegant, simple,
+beautiful.
+
+Then, only a year later, after making dozens of pragmatic alterations
+to suit the people who use it, not only has your Venus de Milo lost
+both arms, she also has a giraffe’s head sticking out of her chest
+and a cherubic penis that squirts colored water into a plastic bucket.
+
+The romance has become so painful that each day you struggle with an
+overwhelming urge to smash the thing to pieces with a hammer."
+------
+A QA Engineer walks into a bar:
+
+- Orders a beer.
+- Orders 0 beers.
+- Orders 99999999 beers.
+- Orders a lizard.
+- Orders -1 beers.
+- Orders a NULL beer.
+
+Finally, the first real customer walks in and asks, “Where’s the bathroom?”
+**The bar bursts into flames.**
+
+(The QA tester found all the edge cases, but the one thing no one
+tested caused the program — or bar — to crash!)
+------
+The First Actual Computer Bug – *a true story from 1947*:
+
+On September 9, 1947, engineers working on the Harvard Mark II computer
+found that the machine was malfunctioning. Upon investigation, they
+discovered a **moth** trapped in Relay #70, causing the error.
+
+The team carefully removed the moth and taped it into the logbook with
+the caption: “First actual case of bug being found.” Ever since,
+removing errors from programs has been known as “debugging.”
+
+— Grace Hopper, a computing pioneer on the Mark II team
+------
+The Programmer’s Limerick:
+
+A programmer started to cuss
+Because getting to sleep was a fuss.
+As he lay there in bed
+Looping ’round in his head,
+was: `while(!asleep()) sheep++;`
+------
+Ward Cunningham on accepting others’ ideas:
+
+“I’d be talking about code with someone, and I’d say,
+‘I think the best way to do it is A.’ And they’d say,
+‘I think the best way to do it is B.’ I’d argue, ‘No,
+it’s really A.’ They’d insist, ‘Well, we want to do B.’
+
+It was a turning point when I could finally say, ‘Fine, do B.
+It’s not going to hurt us much if I’m wrong. And if I’m right
+and you do B, it’s also okay, we can correct it later.
+Let’s just find out.’
+
+…Usually it turns out the best solution is something C –
+something neither of us initially proposed.”
+
+— *Ward Cunningham, reflecting on teamwork and humility*
+------
+The UNIX Philosophy summed up:
+
+“Unix was not designed to stop **you** from doing stupid things,
+because that would also stop **you** from doing clever things.”
+
+In other words, Unix gives you enough rope to hang yourself – or to
+build something truly innovative. It’s a double-edged sword of freedom
+and responsibility!
+
+— Doug Gwyn (computer scientist)
+------
+The Story of the “Brain” Virus (1986):
+
+In 1986, two brothers from Pakistan, Basit and Amjad Farooq Alvi,
+created one of the first PC viruses, dubbed **Brain**. It was a
+boot-sector virus that spread via floppy disks.
+
+In a twist, the brothers weren’t malicious – they included their names,
+address, and a message in the virus code asking anyone affected
+to contact them!
+
+The virus spread worldwide, surprising its creators. They eventually
+received so many calls about “Brain” that they started a business
+in antivirus software.
+
+This legendary virus – essentially an early form of “malware” –
+is an ironic part of tech history because its creators openly
+took credit (and responsibility) for it.
+------
+Tony Hoare’s “Billion-Dollar Mistake”:
+
+“I call it my **billion-dollar mistake**. It was the invention of the
+null reference in 1965... At that time, I was designing the first
+comprehensive type system for references in an object oriented language
+(ALGOL W).
+
+My goal was to ensure that all use of references should be absolutely safe.
+But I couldn’t resist the temptation to put in a null reference, simply
+because it was so easy to implement.”
+
+Sir Charles Anthony Hoare admitted that introducing `NULL` pointers –
+which since caused countless null-reference bugs and system crashes –
+was a huge regret.
+
+He jokingly apologized for this “null mistake” decades later,
+recognizing it as a billion-dollar blunder due to the bugs and problems
+it created in software over many years.
+------
+Real Programmers (from a classic 1980s essay):
+
+- Real Programmers don’t write specs. Users should be grateful
+  to get *any* code at all.
+- Real Programmers don’t comment their code. If it was hard to write,
+  it *should* be hard to understand.
+- Real Programmers aren’t afraid of assembly language.
+  In fact, they can write FORTRAN in any language.
+- Real Programmers don’t use Pascal (the essay’s title says it all!).
+
+*(Above are tongue-in-cheek “rules” from **“Real Programmers Don’t Use Pascal,”**
+a humorous essay that pokes fun at programmer habits.)*
+------
+Grace Hopper on Changing Tradition:
+
+During her lectures, Navy Admiral Grace Hopper would illustrate the
+importance of challenging the status quo by holding up a 30-centimeter
+(one-foot) length of wire. She explained that it represented the
+distance electricity travels in a nanosecond.
+
+She passed out these wires to colleagues to remind engineers that
+computing work shouldn’t be constrained by old ideas of time and distance.
+
+Once, when told “we’ve always done it this way,” Hopper replied:
+**“That’s no excuse for not adopting new ideas!”**
+
+She championed innovation over tradition. This attitude helped Hopper
+lead breakthroughs like developing the first compiler and popularizing
+high-level programming languages.
+------
+The Day the Internet Broke:
+
+On October 21, 2016, a massive DDoS attack hit Dyn, a major DNS provider,
+taking down sites like GitHub, Reddit, Netflix, and Twitter.
+The attack used a botnet of IoT devices — baby monitors, DVRs, and webcams —
+infected with the Mirai malware.
+
+Lesson? Your smart toaster might one day help bring down the internet.
+------
+Why You Don’t Hardcode Credentials:
+
+A developer once committed an AWS secret key into a public repo.
+
+Within minutes, bots scanned the repo, spun up hundreds of EC2 instances,
+and started mining crypto. The dev noticed only after receiving a
+five-figure bill from Amazon.
+
+Lesson: `.gitignore` isn't just a suggestion — it's a survival mechanism.
+------
+The Stack Overflow Effect:
+
+A junior dev copy-pastes a clever but obscure answer from Stack Overflow.
+It works. No one touches it for three years.
+
+Eventually, it becomes business-critical logic.
+No one knows what it does.
+The original post has been deleted.
+
+Legacy is born.
+------
+The Ping of Death:
+
+In the late 1990s, a notorious vulnerability allowed attackers to crash
+or reboot remote systems simply by sending a malformed ping packet —
+an "oversized" ICMP echo request.
+
+The so-called "Ping of Death" haunted sysadmins worldwide.
+
+Even now, every time you `ping google.com`, know that it's been tamed.
+But it still remembers.
+------
+The Fork Bomb:
+
+One line. One terminal. Endless chaos.
+
+`:(){ :|:& };:`
+
+This innocuous-looking bash function causes an endless chain of forks,
+quickly exhausting system resources and rendering your shell (and system)
+useless.
+
+Do not try this at home.
+Okay — maybe try it in a VM.
+------
+One Day in Production:
+
+Engineer: “This is odd.”
+Engineer: “This can’t be right.”
+Engineer: “There’s no way this worked yesterday.”
+
+— The three stages of discovering a bug in production.
+------
+The Day Slashdot Took Down NASA:
+
+In 1999, NASA posted a climate change article with a cool simulation.
+
+Slashdot linked it. The public swarmed it.
+The NASA servers melted.
+
+Lesson: Never underestimate the power of a front-page post.
+------
+Vim vs. Emacs – The Eternal War:
+
+Two great tribes. One bound by keystrokes, the other by Lisp.
+
+Each believes their editor is the One True Way.
+Both know the enemy is actually Nano.
+
+In the end, most of us just use what ships with Git.
+------
+The Time a Semicolon Cost Millions:
+
+In 1962, NASA’s Mariner 1 spacecraft veered off course
+and had to be destroyed shortly after launch.
+
+The cause? A missing overbar in a handwritten formula.
+This minor omission translated to a software bug.
+
+It’s still called the "most expensive hyphen in history."
+------
+The UNIX Room:
+
+Bell Labs, 1970s. The original UNIX developers worked in Room 1127.
+Ken Thompson, Dennis Ritchie, and others.
+
+They weren’t just building a system.
+They were laying the foundation for modern computing.
+
+UNIX Room 1127 became legendary — a small room with an enormous legacy.
+------
+GitHub Horror Story:
+
+A dev accidentally ran `git reset --hard` on the wrong branch.
+Then force-pushed it to remote.
+
+The team lost 3 weeks of unpushed local commits.
+
+Lesson: Git giveth, Git taketh away.
+Use `--force-with-lease` and pray to Linus.
+------
+The Wi-Fi Password That Broke Everything:
+
+In 2014, a researcher created a Wi-Fi network with the SSID `%n%n%n%n%n%n%n%n%n%n`.
+When some Windows systems tried to display the SSID, it triggered a format string
+vulnerability and crashed the system.
+
+Even naming your network can be a denial-of-service attack.
+------
+Let Me Tell You About That Time With cron:
+
+"I set up a cron job to clean up old files.
+Wrote it to delete anything older than 7 days.
+Forgot to `cd` into the right folder.
+
+My script deleted *everything* from `/var/`.
+
+We found out when the system rebooted and couldn’t log in.
+
+Now I `echo` everything before I `rm`."
+------
+Tale of a Broken CDN:
+
+A typo in a single Fastly configuration update took down Reddit, Twitch,
+Spotify, the UK government website, and more in June 2021.
+
+One engineer, one keyboard, global outage.
+
+They fixed it in 49 minutes.
+The internet sighed in relief.
+------
+How One Man Took Down AWS:
+
+In 2017, an Amazon engineer debugging the S3 billing system mistyped a command
+and accidentally removed too many servers.
+
+For hours, a huge chunk of the internet ground to a halt.
+Sites failed. Dashboards froze. Deployments broke.
+
+It all came down to one mistyped command — and poor failover configs.
+------
+Ever Tried to Escape JSON?
+
+A dev once tried escaping special characters in a JSON string.
+They escaped too hard.
+
+`\\n` became `\\\\n`, then `\\\\\\n`.
+
+Eventually, the data broke the parser, then the backup parser.
+Then the entire logging service.
+
+Escaping is hard. Escaping properly? Heroic.
+------
+The Tale of the Self-Deleting Script:
+
+A bash script was written to clean up build artifacts.
+To be tidy, the final line was: `rm -- "$0"`
+
+Unfortunately, one day the script was copied into a shared directory.
+Another dev renamed it.
+
+The script executed.
+Then deleted itself.
+No backups.
+
+A true tale of digital seppuku.
+------
+Docker Gone Wrong:
+
+A junior dev decided to "clean up" unused images and volumes.
+They ran:
+`docker system prune -a --volumes`
+
+Two services were down for 4 hours.
+No one remembered where the config volumes lived.
+
+Lesson: containers are clean — until someone nukes `/var/lib/docker`.
+------
+When a Monitor Became a Signal Jammer:
+
+A team noticed intermittent Wi-Fi dropouts every day around noon.
+They traced it to a monitor's power supply in a conference room.
+
+When the sunlight hit it just right, the temperature changed enough
+to cause the shielding to fail — the PSU emitted interference.
+
+Yes, their monitor was jamming the office Wi-Fi.
+
+Lesson: RF gremlins are real.
+
+------
+
+The Curse of January 1, 1970:
+
+A user set the time on their Mac to 1 Jan 1970, thinking it was funny.
+The device bricked.
+
+Why? Unix time zero is 1970-01-01.
+Setting the clock there on 64-bit systems confused the kernel’s time math.
+
+Apple had to release a patch. The meme lives on.
+
+------
+
+Shellshock — A Real Shell Nightmare:
+
+In 2014, a severe vulnerability in `bash` was discovered.
+It allowed attackers to execute arbitrary code by manipulating environment variables.
+
+Web servers, IoT devices, routers — millions were exposed.
+
+The fix took days. The fear lasted weeks.
+
+------
+
+The Day Google Killed Its Own Search:
+
+A buggy deployment marked every URL as malicious.
+For 40 minutes, Google showed a red warning banner on every search result.
+
+Even Google's own pages.
+
+The issue? A misconfigured flag file with a rogue slash.
+
+It wasn’t malicious — just a typo.
+
+------
+
+The Missing `;` That Destroyed a Build:
+
+In a massive C project, a missing semicolon caused a cascading
+series of syntax errors across dozens of files.
+
+The compiler didn’t help — it blamed completely unrelated lines.
+
+The dev spent hours chasing ghosts...
+only to find the truth one character away.
+
+------
+
+The Alert Storm That Broke the Pager:
+
+A monitoring config update lacked rate limiting.
+An innocuous spike triggered 45,000 alerts.
+
+On-call phones crashed. PagerDuty froze.
+The team debugged under the eerie silence of not being alerted.
+
+Now they test their alerts like they test their code.
+
+------
+
+How an Emoji Took Down Slack:
+
+In 2019, a malformed emoji in a status update caused
+Slack’s desktop client to crash in a loop.
+
+The emoji string was valid Unicode — but their parser didn’t agree.
+
+Hotfixes were deployed in record time.
+The emoji now lives on in infamy.
+
+------
+
+The Infinite Recursion of doom.js:
+
+A frontend developer wrote a recursive render loop in a React app.
+It didn’t error. It didn’t warn. It just... looped.
+
+Memory climbed. CPU spiked. Fans roared.
+
+It took down Chrome tabs across QA.
+
+Lesson: always include a base case. And maybe some self-respect.
+
+------
+
+When a Laptop Took Down a Train Network:
+
+In Sweden, a system admin used his personal laptop to debug a train control system.
+
+His antivirus mistook the signaling protocol for malware.
+It blocked it. Trains stopped.
+
+He was demoted. The antivirus was deleted.
+
+------
+
+The 25-Minute Build That Took 2 Weeks to Debug:
+
+A seemingly minor build config was causing full rebuilds on every run.
+
+They traced it to a `mtime` inconsistency from a faulty system clock.
+
+The fix? Install `ntp`.
+The learning? Sometimes it’s not your code. It’s *time* itself.
+
+------
+The Kernel Panic That Haunted DevOps:
+
+A cloud VM image contained a bad kernel config.
+It ran fine — until day 29 uptime.
+A scheduled cleanup triggered a race condition.
+All instances rebooted. All at once.
+
+Thousands of customers. One root cause.
+Uptime is a blessing. But entropy always wins.
+
+------
+
+The Tale of the SSH Key in the Wrong Repo:
+
+An intern accidentally pushed the team’s production private SSH key
+to a public GitHub repo.
+
+Within 20 minutes, multiple servers were under brute-force attack.
+The team rotated credentials, revoked access, and drank heavily.
+
+Lesson: `.gitignore` is your friend.
+So is not using the intern’s machine for prod deployments.
+
+------
+
+The Missing `break`:
+
+A switch statement in C lacked a `break;`.
+It caused a chain of unintended executions.
+
+The result? A misfired satellite antenna.
+Instead of pointing to Earth, it aimed at deep space.
+
+Bitfields. Big consequences.
+
+------
+
+When `chmod` Wrecked a Dev's Day:
+
+A dev needed to allow write access to `/dev/null` for debugging.
+They ran: `chmod 777 /dev/null` — then forgot to change it back.
+
+Two days later, rogue processes flooded logs and pipes.
+Disk usage maxed out. Monitoring failed.
+
+They now tell this story before every code freeze.
+
+------
+
+Systemd vs. Humanity:
+
+A small misconfiguration in a systemd service caused a boot loop.
+Each restart attempted to fix a file that no longer existed.
+
+The server rebooted itself 432 times before they caught it.
+
+Lesson: log early. Log often.
+And maybe... don’t daemonize everything.
+
+------
+
+The Crontab That Killed a Database:
+
+`0 0 * * * psql -c "DELETE FROM logs;"`
+
+No `WHERE` clause.
+No backup.
+
+They now prefix every cron job with `echo` for a week before removing it.
+
+------
+
+A Tale of Redefining `true`:
+
+In a makefile, someone added: `true = false`
+Every script that relied on `true` started failing.
+Deployments halted. CI broke.
+
+Lesson: make doesn't care who you are — it just does what you say.
+
+------
+
+The Dev Who Aliased `cd`:
+
+They aliased `cd` to a function that printed a funny quote.
+It was a hit... until a build script used `cd` 400 times.
+
+The log was unreadable. Build times doubled.
+The fun quote became infamous.
+
+------
+
+The Infinite Git Submodule:
+
+A repo had a submodule pointing to its own parent.
+`git clone --recursive` turned into a black hole.
+
+The dev watched as the disk filled.
+He hit Ctrl-C. The prompt didn't return.
+
+They rebooted.
+They never cloned with `--recursive` again.
+
+------
+
+The Tale of the 6-Hour Merge:
+
+Two devs worked on the same monorepo.
+One rebased. The other merged.
+
+Three weeks of changes.
+200+ files.
+Merge conflicts in 50.
+
+Git tried. Git failed.
+They resolved each one by hand.
+
+Lesson: communicate before you `rebase -i`.
+
+------
+
+The JavaScript Timestamp That Broke Time:
+
+A JavaScript app relied on `Date.now()` to generate IDs.
+During a daylight saving transition, some IDs collided.
+
+Duplicate IDs.
+Overwritten data.
+Hours of chaos.
+
+Never trust the wall clock.
+Use `uuid()`.
+
+------
+
+The Hacker That Used a Printer:
+
+In 2010, a security researcher used an internet-connected HP printer
+to pivot into a corporate network.
+
+They uploaded a malicious firmware update.
+Through the printer, they scanned internal subnets,
+gathered credentials, and accessed production.
+
+Lesson: a printer is just a Linux box with paper output.
+
+------
+
+The Story of `DROP DATABASE` in Production:
+
+It was a Friday. A sleepy engineer wanted to remove a test DB.
+They typed: `DROP DATABASE test_db;`
+
+Autocompletion failed.
+The command became: `DROP DATABASE;`
+
+It ran. It committed. It took everything.
+
+No one deployed on Fridays after that.
+
+------
