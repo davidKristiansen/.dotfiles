@@ -4,7 +4,7 @@
 -- plugins/mason.lua
 return {
   "williamboman/mason.nvim",
-  cmd = { "Mason" },
+  cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonUpdate", "MasonLog", },
   build = ":MasonUpdate",
   opts = {
     ensure_installed = {

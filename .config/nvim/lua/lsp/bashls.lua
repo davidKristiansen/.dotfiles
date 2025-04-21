@@ -4,13 +4,13 @@
 return {
   name = "bashls",
   cmd = { "bash-language-server", "start" },
-  filetypes = { "sh" },
+  filetypes = { "sh", "zsh" },
   root_markers = { ".git" },
   settings = {
     bashIde = {
       shellcheckPath = "shellcheck",
       explainshellEndpoint = "",
-      globPattern = "**/*.sh",
+      globPattern = "**/*.[sh,zsh]",
       includeAllWorkspaceSymbols = true,
       highlightParsingErrors = true,
       enableSourceErrorDiagnostics = true,
