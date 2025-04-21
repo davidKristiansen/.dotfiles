@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 
-ZDOTDIR=$HOME/.config/zsh
+# Prefer XDG layout
+export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
 ###############################################################################
 # Load user environment variables

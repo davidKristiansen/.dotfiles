@@ -1,12 +1,12 @@
+#!/usr/bin/env bash
+
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
-
-#/bin/sh
 
 APP_ID=cadlkienfkclaiaibeoongdcgmdikeeg
 APP_URL=https://chatgpt.com/
 
-if ! (ps aux | grep "${APP_ID}"| grep -v grep > /dev/null); then
+if ! (ps aux | grep "${APP_ID}" | grep -v grep >/dev/null); then
   swaymsg "exec                          \
     --no-startup-id                      \
     /opt/microsoft/msedge/microsoft-edge \
