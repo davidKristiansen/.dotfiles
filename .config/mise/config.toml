@@ -17,7 +17,7 @@ github-cli = "latest"
 sqlite = "latest"
 stylua = "latest"
 bat-extras = "latest"
-tmux = "3.5a"
+tmux = "latest"
 zig = "latest"
 pre-commit = "latest"
 
