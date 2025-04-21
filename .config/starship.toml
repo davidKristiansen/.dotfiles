@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 
+
 add_newline = true
+command_timeout = 1000
 [line_break]
 disabled = false
-
-command_timeout = 1000
 
 # [character]
 # success_symbol = "[➜](bold green) "
