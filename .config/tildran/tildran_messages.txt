@@ -1,0 +1,771 @@
+
+A programmer is someone who solves a problem you didn’t know you had in a way
+you don’t understand.
+------
+I love deadlines. I like the whooshing sound they make as they fly by.
+— Douglas Adams
+------
+To understand recursion, you must first understand recursion.
+------
+Code never lies. Comments sometimes do.
+------
+Software is like entropy: hard to grasp, easy to spread.
+------
+A C program is like a fast dance on a newly waxed floor by people carrying
+razor blades.
+------
+Weeks of coding can save you hours of planning.
+------
+In theory, there is no difference between theory and practice. In practice,
+there is.
+------
+Programming is like writing a book... except if you miss a single comma,
+the whole thing makes no sense.
+------
+I would love to change the world, but they won’t give me the source code.
+------
+"Hello, World" is the most dangerous program. Once it works, you’re hooked.
+------
+I don’t always test my code, but when I do, I do it in production.
+------
+One man’s crappy software is another man’s full-time job.
+------
+Beware of bugs in the above code; I have only proved it correct,
+not tried it.
+— Donald Knuth
+------
+Programming is the art of algorithm design and the craft of debugging errant
+thoughts.
+------
+Software and cathedrals are much the same — first we build them,
+then we pray.
+------
+Fix the cause, not the symptom.
+------
+To iterate is human, to recurse divine.
+------
+Simplicity is the soul of efficiency.
+— Austin Freeman
+------
+Good code is its own best documentation.
+------
+The best thing about a boolean is even if you are wrong, you are only off
+by a bit.
+------
+Real programmers don’t document. If it was hard to write, it should be hard
+to understand.
+------
+Documentation is like sex: when it is good, it is very, very good; and when
+it is bad, it is better than nothing.
+------
+Debugging: Being the detective in a crime movie where you are also the
+murderer.
+------
+When in doubt, use brute force.
+— Ken Thompson
+------
+There are two ways to write error-free programs; only the third one works.
+------
+Never attribute to malice that which is adequately explained by stupidity.
+------
+If debugging is the process of removing bugs, then programming must be the
+process of putting them in.
+------
+If it works, don’t fix it.
+------
+Programmers are tools for converting caffeine into code.
+------
+"Knock, knock."
+"Who’s there?"
+...long pause...
+"Java."
+------
+99 bugs in the code, 99 bugs in the code,
+Take one down, patch it around,
+127 bugs in the code.
+------
+A user interface is like a joke. If you have to explain it, it’s not that good.
+------
+There’s no place like 127.0.0.1
+------
+I don’t have bugs. I have random features.
+------
+You know you’re a programmer when your coffee mug has more code than coffee.
+------
+I used to be indecisive, but now I’m not so sure.
+------
+The code that is the hardest to debug is the code that you know cannot possibly
+be wrong.
+------
+Software developers like to solve problems. If there are no problems
+handily available, they will create their own problems.
+------
+If comments are written well, they explain why, not what.
+------
+A clever person solves a problem. A wise person avoids it.
+------
+Never underestimate the bandwidth of a station wagon full of tapes hurtling
+down the highway.
+------
+A program is never less than 90% complete and never more than 95% complete.
+------
+The only valid measurement of code quality: WTFs/minute.
+------
+“Always code as if the guy who ends up maintaining your code will be a
+violent psychopath who knows where you live.”
+— John Woods
+------
+There is no Ctrl-Z in life.
+------
+First rule of programming: if it works, don’t touch it.
+------
+If it compiles, ship it.
+------
+Computers are fast. Programmers keep it slow.
+------
+I see dead code.
+------
+A language that doesn’t affect the way you think about programming is
+not worth knowing.
+— Alan Perlis
+------
+One man’s feature is another man’s bug.
+------
+Make it work, make it right, make it fast.
+— Kent Beck
+------
+A truly great software developer delivers working code and takes
+a nap afterward.
+------
+A commit a day keeps the merge conflicts away.
+------
+When your hammer is C++, everything starts looking like a thumb.
+------
+It’s not a bug – it’s an undocumented feature.
+------
+A meeting is an event where minutes are taken and hours are wasted.
+------
+The best performance improvement is the transition from the nonworking
+state to the working state.
+------
+The trouble with programmers is that you can never tell what a programmer
+is doing until it’s too late.
+— Seymour Cray
+------
+Never trust a computer you can’t throw out a window.
+— Steve Wozniak
+------
+Computers are useless. They can only give you answers.
+— Pablo Picasso
+------
+The perfect project plan is possible if one first documents a list
+of all the unknowns.
+------
+The sooner you start to code, the longer the program will take.
+------
+There are two ways of constructing a software design: one way is to make
+it so simple that there are obviously no deficiencies, and the other way
+is to make it so complicated that there are no obvious deficiencies.
+— Tony Hoare
+------
+“null” is not zero, not empty, not even a value. It is the Voldemort of
+programming: He-Who-Must-Not-Be-Used.
+------
+A program is like a poem: you cannot write a poem without writing it.
+— E. W. Dijkstra
+------
+Don’t comment bad code—rewrite it.
+— Brian Kernighan
+------
+If the code and the comments disagree, both are probably wrong.
+------
+Programmers don’t burn out on hard work. They burn out on change-without-notice,
+lack of clarity, and management politics.
+------
+To understand what recursion is, you must first understand recursion.
+------
+Python is executable pseudocode. Perl is executable line noise.
+------
+The best thing since sliced bread is still bread.
+------
+Programming without an overall architecture or design in mind is like
+exploring a cave with only a flashlight.
+------
+Measuring programming progress by lines of code is like measuring aircraft
+building progress by weight.
+— Bill Gates
+------
+I’ve finally learned what “upward compatible” means. It means we get to keep all
+our old mistakes.
+------
+No matter how slick your demo is in rehearsal, when you do it in front of
+a live audience, the probability of a crash is directly proportional
+to the number of people watching, squared.
+------
+Backup regularly. Your data is one `rm -rf` away from digital oblivion.
+------
+A good programmer is someone who always looks both ways before crossing
+a one-way street.
+------
+Debugging is like being blindfolded in a maze, with the walls made of rubber,
+and the floor constantly shifting.
+------
+Fast. Good. Cheap. Pick two.
+------
+Good programmers write code. Great programmers delete code.
+------
+The best way to get a project done faster is to start sooner.
+— Jim Highsmith
+------
+Why do we never have time to do it right, but always have time to do it over?
+------
+If you automate a mess, you get an automated mess.
+------
+If you think good architecture is expensive, try bad architecture.
+— Brian Foote & Joseph Yoder
+------
+What one programmer can do in one month, two programmers can do in two months.
+------
+Give a programmer the solution and they'll implement it once.
+Teach a programmer to reason and they'll ask for a week to refactor it.
+------
+Writing code is easy. Thinking is hard.
+------
+The most dangerous phrase in software: "We’ve always done it this way."
+------
+Some days you write code. Some days the code writes you.
+------
+Be the compiler you wish to see in the world.
+------
+It’s not broken. It’s creatively reinterpreting the spec.
+------
+Every great developer you know got there by solving problems they were unqualified
+to solve until they actually did it.
+------
+Don’t worry if it doesn’t work right. If everything did, you’d be out of a job.
+------
+I once changed a single line of CSS and unleashed a thousand layout horrors.
+------
+Programmer: A machine that turns caffeine and anxiety into stack traces.
+------
+On the seventh day, God refactored.
+------
+Commit early. Commit often. Commit something. Please.
+------
+A framework is a place to lose your originality in the name of conformity.
+------
+If your code doesn’t embarrass you in six months, it means you’re not improving.
+------
+Copy-pasting from Stack Overflow is the new rubber duck debugging.
+------
+It’s not a memory leak – it’s just a surprise feature.
+------
+The only valid comment is the one you didn’t need to write.
+------
+When in doubt, blame the compiler.
+------
+No tests, no trust.
+------
+When the build breaks and you didn’t touch anything, you definitely touched
+something.
+------
+"Move fast and break things" was clearly coined by someone who never worked
+on a medical device.
+------
+There’s no such thing as “done” in software — just “shipped for now.”
+------
+The cloud is just someone else’s computer that you trust too much.
+------
+I told my boss I needed more RAM. He gave me a motivational poster.
+------
+Legacy code: It works, but no one knows why.
+------
+My code doesn’t have bugs. It has “experimental behavior.”
+------
+Sometimes your code works not because you wrote it correctly,
+but because the universe accidentally aligned just right.
+------
+A linter is just a really nitpicky coworker you can’t fire.
+------
+Who needs performance when you have caches?
+(…and who needs caches when you have denial?)
+------
+Don't touch the production server.
+Wait, what do you mean this *is* the production server?
+------
+The safest way to ship bug-free code is to never write any.
+------
+When in production, no one can hear you scream.
+------
+If code is poetry, then bugfixes are limericks written in blood.
+------
+Errors are red,
+Logs are blue,
+Your tests just passed,
+But the bug's still with you.
+------
+Keep your scripts close and your backups closer.
+------
+SUDO MODE ACTIVATED: Proceed with godlike confidence and no rollback.
+------
+Python was made for humans. Perl was made for sorcerers.
+------
+I asked my code to be robust. It misunderstood and became rebellious.
+------
+You haven’t truly lived until you’ve run `:wq` in a panic.
+------
+A codebase is a living, breathing beast. Feed it structure or suffer.
+------
+A clean codebase is a sign of a dirty mind with good habits.
+------
+`git blame` – Because we all need a little catharsis.
+------
+If it ain’t broke, ship it.
+If it is broke… well… ship it anyway. Let QA deal with it.
+------
+In a world of microservices, no one hears your scream across the API.
+------
+My dev environment is a shrine.
+Please remove your shoes and `npm install` quietly.
+------
+There's no such thing as "too many logs" — until the disk fills up.
+------
+Clever is good. Clear is better.
+------
+Writing code is like writing a novel. Except the characters are semicolons,
+and if you mess one up, the whole plot collapses.
+------
+Linux: because rebooting is for installing new kernels, not fixing bugs.
+------
+When you say "it’s just a simple change," a sysadmin cries somewhere.
+------
+There’s no such thing as a small PR. There’s only the illusion of one.
+------
+If you're writing your own scheduler, you're either building an OS or
+in way too deep.
+------
+Why did the developer go broke?
+Because he used up all his cache.
+------
+Keyboard not detected. Press F1 to continue.
+------
+Give a dev a script and they’ll automate for a day.
+Teach them shell and they’ll automate for life.
+------
+Writing shell scripts is the dark art of making something fragile
+look powerful.
+------
+The road to hell is paved with magic constants.
+------
+I used to think comments were optional.
+Then I saw my own code after 3 months.
+------
+Shell tip: If you ever need to test your faith in humanity, `find . -name "*~"` it.
+------
+One does not simply grep for meaning.
+------
+If the flag is undocumented, it’s probably important.
+------
+The only reason your program isn’t segfaulting is pure cosmic luck.
+------
+C is like a chainsaw.
+Python is like a laser scalpel.
+JavaScript is like an axe made of spaghetti.
+------
+Shell: where whitespace matters, but only when it ruins your day.
+------
+My printf statement works.
+That means this bug is officially haunted.
+------
+Never underestimate the power of an off-by-one error to ruin your weekend.
+------
+If you're using `eval`, the script now owns you.
+------
+Heisenbug: Disappears the moment you look at it.
+------
+Programming is an exercise in managing disappointment creatively.
+------
+There’s no problem that can’t be solved with a quick `rm -rf /`.
+Except the aftermath.
+------
+First you write tests.
+Then the tests write you.
+------
+Always trust your instincts.
+Unless your instincts say "just try it in production."
+------
+The best way to make software stable is to stop touching it.
+Forever.
+------
+If you can’t convince them, confuse them with compile-time templates.
+------
+Shell scripting: where every bug is an ancient curse.
+------
+You can grep my heart but you’ll never sed my soul.
+------
+A missing quote has destroyed more lives than heartbreak ever did.
+------
+Never go full regex.
+------
+My cron job runs at 3 AM because I don’t want to witness its crimes.
+------
+Just because it passed CI doesn’t mean it works.
+------
+Tabs vs spaces is the real religious war.
+------
+Your code is only safe until the intern hits `git push -f`.
+------
+Never trust a developer who says “this will be quick.”
+------
+A shell script grows in complexity until it becomes a bad Python app.
+------
+The most portable code is the one you never write.
+------
+Unit tests: the illusion of safety in a sea of chaos.
+------
+CI green? Good.
+Deployed to prod? Better.
+Monitoring on fire? Perfect.
+------
+Once you hit production, all bets are off.
+------
+`find . -name sanity | xargs rm -rf`
+------
+I wrote a script to fix my scripts.
+Now I debug that script instead.
+------
+Shell tip: Always quote your variables. Unless you enjoy pain.
+------
+It’s not a memory leak if no one remembers it.
+------
+Always be logging.
+Until the disk is full.
+------
+My Makefile is sentient.
+It started deleting my backups.
+------
+C is for Code.
+C++ is for Crisis.
+------
+Never write a build system from scratch unless you want to know what fear is.
+------
+The elegance of your algorithm is directly proportional to its ability
+to cause stack overflows.
+------
+Segmentation fault (core dumped).
+So is my will to continue.
+------
+I gave up on commenting.
+Now I just tweet bug fixes to myself.
+------
+The best test is no test — said no one after 2 AM.
+------
+Fix one bug, insert two new ones.
+This is the conservation of sorrow.
+------
+grep -v hope *
+------
+If your code compiles on the first try, it’s probably wrong.
+------
+Brace yourself. Winter is coming... and your curly braces don’t match.
+------
+Error: Keyboard not found. Press Enter to continue.
+------
+Every terminal window is a potential act of violence.
+------
+Pro tip: All problems look like `rm -rf` if you’re brave enough.
+------
+My CI pipeline works until I look at it.
+------
+What do you call it when a shell script becomes self-aware?
+Systemd.
+------
+To the bash shell, all humans are equally incompetent.
+------
+Be kind to your sysadmin. They hold the keys to your uptime.
+------
+The best compression algorithm is guilt.
+------
+A clean terminal is a sign of a dirty mind — or a reboot.
+------
+The most reliable program is one that does nothing.
+------
+I've seen shell one-liners that summon demons.
+------
+Give a dev a GUI and they'll click for a day.
+Teach them CLI and they'll automate for life.
+------
+Writing logs is the first step to realizing you’ve lost control.
+------
+You don’t truly understand UNIX until you've accidentally fork-bombed yourself.
+------
+There's no such thing as cross-platform.
+Just platform-specific bugs wearing a disguise.
+------
+A newline at the wrong place can be the difference between "Oops" and "Outage".
+------
+If it takes more than one pipe, it’s already cursed.
+------
+My Git history is a horror novel written by a confused time traveler.
+------
+Push to main like nobody’s watching.
+Then blame Jenkins.
+------
+Makefiles are like onions.
+They have layers. They also make you cry.
+------
+Shell: where `[` is not a bracket, and `[[` is not a hug.
+------
+If `rm` had an undo button, I’d sleep better at night.
+------
+Don’t worry about those zombie processes.
+They’re just... resting.
+------
+DNS: It's always DNS.
+Until it’s not.
+Then it's TLS.
+------
+ls -la | grep sanity
+(no output)
+------
+My bash prompt has Stockholm syndrome.
+------
+When everything else fails, blame the scheduler.
+------
+I installed Arch Linux.
+Now I configure my keyboard hourly.
+------
+I turned off JavaScript in my browser and gained +30 IQ.
+------
+alias rm="echo 'Are you sure, buddy?'"
+------
+You can’t spell `crash` without `sh`.
+------
+The default answer is always: "try turning it off and on again."
+------
+Do not meddle in the affairs of shell scripts, for they are quick to anger
+and hard to debug.
+------
+The code compiled. Now the real terror begins.
+------
+$ sudo make me a sandwich
+Okay.
+------
+A null pointer walks into a bar.
+The bar explodes.
+------
+Every dev has a branch that must never be pushed.
+------
+My debugger knows more about my code than I do.
+------
+Plan carefully. But not *too* carefully.
+Otherwise you’ll miss the chaos.
+------
+The keyboard is mightier than the mouse.
+------
+Shell tip: Don’t grep blindly.
+You might catch feelings.
+------
+Trust, but verify.
+Especially the output of `lsblk` and `fdisk`.
+------
+A script is a poem with the potential to format your hard drive.
+------
+Never put a production system next to someone with caffeine and root access.
+------
+Why use `awk` when you can rewrite your entire data pipeline from scratch?
+------
+If “just one more change” is your motto, welcome to the jungle.
+------
+Real sysadmins document everything...
+somewhere.
+------
+My monitor is wide enough to show two broken logs at once.
+------
+All roads lead to `/etc/`.
+------
+My cron job runs at 4:03 because it’s haunted.
+------
+The `&` symbol is just a polite way to say: “Good luck, see you in hell.”
+------
+The best part of waking up is realizing the bug fixed itself overnight.
+------
+Famous last words: “It’s just a config change.”
+------
+A good alias saves a thousand keystrokes — and sometimes your sanity.
+------
+If you give a monkey a shell, soon you’ll have a startup.
+------
+Wrote a bash one-liner so good I had to reboot to stop it.
+------
+Nothing teaches you more than deleting the wrong partition.
+------
+Shell is great until you try to escape a quote inside a quoted string
+in a quoted command inside a script.
+------
+You haven’t lived until you’ve seen grep used in a love poem.
+------
+The terminal is where dreams are made...
+and file systems are unmade.
+------
+Ctrl-C: The "Oh no, never mind" button.
+------
+You can `dd` your soul into /dev/null.
+------
+Yes, this script is portable — as long as you don’t mind redefining
+portable.
+------
+99 problems but `grep` ain't one.
+------
+Nothing runs faster than a shell script with zero error handling.
+------
+Somewhere deep inside every programmer is a frightened intern
+asking, "Did I just deploy to prod?"
+------
+I don’t fear death.
+I fear overwriting my root partition.
+------
+Shell tip: Always `echo` before you `do`.
+------
+If you love something, `chmod +x` it.
+------
+Sometimes I stare at my terminal just to feel something.
+------
+I added `--force` and everything worked.
+I fear I’ve learned nothing.
+------
+Uptime over 100 days?
+Restart now. You're living a lie.
+------
+My favorite color is `#000000` — like my hopes after debugging.
+------
+The only difference between screwing around and science is writing it down.
+------
+Shell scripts are like spells: if you say them wrong, demons are summoned.
+------
+When a command works, I stop and ask: "Why? What did I *really* do?"
+------
+My `~/.bashrc` is now longer than my résumé.
+------
+Find someone who looks at you the way I look at top(1).
+------
+There's no room for ego in `chmod 777`.
+------
+My logs are a cry for help.
+My alerts are just screams.
+------
+Never trust a man who says "just run this curl | bash"
+------
+The best shell script is the one you didn't need to write.
+------
+“Hello world” is just the beginning of the descent.
+------
+I once loved a process. Then I sent it SIGKILL.
+------
+There are two kinds of logs: too verbose and completely useless.
+------
+Scripting is the art of describing what you want the computer to
+do incorrectly.
+------
+Shell programming: where `true` isn't always true and `false` isn’t always false.
+------
+Some say the shell is elegant.
+Others say it's ancient runes.
+They're both right.
+------
+You haven’t really made a mistake until you've `sudo rm -rf`ed the wrong root.
+------
+It was working until you asked why it was working.
+------
+Every shell script eventually becomes self-aware and turns on its creator.
+------
+The fastest code is the one you deleted.
+------
+I don’t always alias `rm`, but when I do, I sleep better at night.
+------
+"Why does this work?" is a question best left unanswered.
+------
+I use Vim. Not because it's better, but because I forgot how to quit.
+------
+The best way to end a meeting is to run `:q!`.
+------
+Never let your users know you're afraid.
+------
+A clean `/tmp` is a sign of someone who just rebooted.
+------
+Sometimes I stare into `dmesg` and it stares back.
+------
+There are no bad ideas in brainstorming, only bash scripts gone too far.
+------
+What doesn't kill you makes your `.bash_profile` more powerful.
+------
+I like my errors like my coffee: strong and verbose.
+------
+There's a `sed` one-liner for everything.
+It just takes 5 years to write.
+------
+If a cron job runs in the woods and no one reads the log, did it succeed?
+------
+Wrote a backup script that backs up my fear of losing backups.
+------
+Never ask "What’s the worst that could happen?" in a shell script.
+------
+There’s an elegance to well-formatted code.
+Then there’s shell.
+------
+I once rewrote a script I didn’t understand.
+Now I don’t understand two scripts.
+------
+“rm -rf” is both a command and a life philosophy.
+------
+My cat walked on my keyboard and improved my `awk` script.
+------
+The only thing more terrifying than regex is remembering you wrote it.
+------
+echo "I regret nothing!" > /dev/null
+------
+Behind every sysadmin is a graveyard of old servers they won’t talk about.
+------
+Be kind to your future self: comment your bash hacks.
+------
+The number of bugs is directly proportional to your confidence in the fix.
+------
+Always `sleep 1` before disaster.
+It gives you time to appreciate your mistake.
+------
+Shell scripting is like herding cats with regular expressions.
+------
+Once you understand `xargs`, you gain +1 in UNIX wizardry.
+------
+There's a script for that.
+There’s also a better way.
+You chose the script.
+------
+Your bash history is a diary of pain and coping mechanisms.
+------
+In the beginning there was `/bin/sh`.
+Then came madness.
+------
+Every file is sacred.
+Until you run a recursive find with `-exec rm`.
+------
+A tab character once cost me a weekend and my last shred of sanity.
+------
+Always test on production.
+It’s the only environment that truly matters.
+------
+Give a man a shell, and he’ll write 50 aliases.
+Teach a man POSIX, and he’ll rewrite `ls`.
+------
+Never trust a tool that says “just works.”
+------
+My favorite optimization is commenting out the function.
+------
+“Temporary” is a state of mind. Especially in `/tmp`.
+------
+That which you do not understand, you must not chmod.
+------
+I dream in pipes and wake up in segfaults.
+------
+Shell is where hope goes to die... but with style.
+------
