@@ -70,17 +70,8 @@ alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion"
 
 
 alias dcu="devcontainer up"
-alias dce="devcontainer exec"
+alias dce="devcontainer exec --remote-env TERM=$(echo $TERM)"
 
-function dc () {
-  local workspace_folder="${1}"
-  local command=${2}
-  command \devcontainer exec --workspace-folder "${workspace_folder}" "${command}" ||
-  (
-    command \devcontainer up --workspace-folder "${workspace_folder}" &&
-    command \devcontainer exec --workspace-folder "${workspace_folder}" "${command}"
-  )
-}
 
 function git () {
   if [[ -z "${1}" ]]; then
