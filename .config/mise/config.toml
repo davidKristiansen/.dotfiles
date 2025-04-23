@@ -4,6 +4,7 @@
 [settings]
 pipx_uvx = true
 experimental = true
+jobs = 32
 
 [tools]
 neovim = "latest"
@@ -27,7 +28,7 @@ nodejs = "latest"
 "npm:prettier" = "latest"
 
 # Python
-python = "latest"
+python = ["3.13", "3.11"]
 ruff = "latest"
 pipx = "latest"
 uv = "latest"
