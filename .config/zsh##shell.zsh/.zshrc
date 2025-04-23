@@ -1,6 +1,17 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 
+# load variables from environment.d
+for _rc in "${XDG_CONFIG_HOME:-$HOME/.config}"/environment.d/*.conf; do
+  # Ignore tilde files.
+  if [[ "${_rc}:t" != '~' ]]; then
+    emulate zsh -o all_export -c 'source "${_rc}"'
+  fi
+done
+unset _rc
+# Ensure path arrays do not contain duplicates.
+typeset -gU path fpath
+
 # Exit early if not interactive
 [[ -o interactive ]] || return
 if [ -f "${XDG_BIN_HOME:-$HOME/.local/bin}/tildranfetch.sh" ]; then
