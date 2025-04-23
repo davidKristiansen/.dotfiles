@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: MIT
-// Copyright David Kristiansen
-
 {
   "$schema": "/etc/xdg/swaync/configSchema.json",
   "positionX": "right",
@@ -31,13 +28,7 @@
   "hide-on-clear": false,
   "hide-on-action": true,
   "script-fail-notify": true,
-  "widgets": [
-    "dnd",
-    "mpris",
-    "buttons-grid",
-    "title",
-    "notifications"
-  ],
+  "widgets": ["dnd", "mpris", "buttons-grid", "title", "notifications"],
   "widget-config": {
     "title": {
       "text": "Notifications",
@@ -89,4 +80,3 @@
     }
   }
 }
-
