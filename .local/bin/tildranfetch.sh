@@ -32,7 +32,13 @@ get_username() { whoami; }
 get_hostname() { hostname; }
 get_shell() { echo "$SHELL"; }
 get_uptime() { uptime -p | sed 's/^up //'; }
-get_last_login() { last -1 "$USER" | awk 'NR==1 {print $4,$5,$6,$7}'; }
+get_last_login() {
+  if [[ -f /.dockerenv ]]; then
+    echo Docker bby
+    return
+  fi
+  last -1 "$USER" | awk 'NR==1 {print $4,$5,$6,$7}';
+}
 get_mem() { free -h | awk '/^Mem:/ {print $3 "/" $2}'; }
 get_cpu() { uptime | awk -F'load average:' '{print $2}' | sed 's/^ //'; }
 
@@ -44,7 +50,6 @@ get_weather() {
   now=$(date +%s)
 
   mkdir -p "$(dirname "$cache")"
-  touch "$cache"
 
   local mtime
   mtime=$(stat -c %Y "$cache" 2>/dev/null || echo 0)
