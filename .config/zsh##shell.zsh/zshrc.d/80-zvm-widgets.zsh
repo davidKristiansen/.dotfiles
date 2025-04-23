@@ -40,12 +40,12 @@ function w_tmux_session() {
 }
 zle -N w_tmux_session
 
-
 function w_open_nvim_here() {
   zle kill-whole-line
   zle -I
   nvim +":lua Snacks.dashboard()"
   zle reset-prompt
+  zle accept-line
 }
 zle -N w_open_nvim_here
 
@@ -69,8 +69,6 @@ function w_zoxide_interactive() {
   zle accept-line
 }
 zle -N w_zoxide_interactive
-
-
 
 function w_cdi() {
   zle kill-whole-line
