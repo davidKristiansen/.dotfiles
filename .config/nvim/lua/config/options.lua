@@ -13,8 +13,8 @@ vim.diagnostic.config({
   --   source = "if_many",  -- optional: shows source only when there are multiple
   --   current_line = false,
   -- },
-  virtual_lines    = { current_line = true },
-  signs            = true, -- still show gutter signs
+  virtual_lines    = false, -- { current_line = true },
+  signs            = true,  -- still show gutter signs
   underline        = true,
   update_in_insert = true,
   severity_sort    = true,
