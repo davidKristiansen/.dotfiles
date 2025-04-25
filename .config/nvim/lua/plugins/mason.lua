@@ -41,7 +41,7 @@ return {
       lua_ls = "lua-language-server",
       clangd = "clangd",
       jsonls = "json-lsp",
-      ruff = "ruff-lsp",
+      ruff = "ruff",
       basedpyright = "basedpyright",
       bashls = "bash-language-server",
       marksman = "marksman",

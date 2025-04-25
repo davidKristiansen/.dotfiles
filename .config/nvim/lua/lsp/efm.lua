@@ -14,15 +14,10 @@ local yamllint = {
   lintFormats = { "%f:%l:%c: [%t%*[^]]%*] %m" },
 }
 
-local ruff_format = {
-  formatCommand = "ruff check --fix --stdin-filename %filepath -",
+-- isort used for Python import sorting via stdin
+local isort = {
+  formatCommand = "isort --stdout --filename ${INPUT} -",
   formatStdin = true,
-}
-
-local ruff_lint = {
-  lintCommand = "ruff check --stdin-filename %filepath -",
-  lintStdin = true,
-  lintFormats = { "%f:%l:%c: %m" },
 }
 
 return {
@@ -36,16 +31,17 @@ return {
     "python",
   },
   root_dir = function(fname)
-    return vim.fs.root(fname, { ".yamllint", ".prettierrc", ".git" }) or vim.fn.getcwd()
+    return vim.fs.root(fname, { ".yamllint", ".prettierrc", "pyproject.toml", ".git" })
+        or vim.fn.getcwd()
   end,
   settings = {
-    rootMarkers = { ".yamllint", ".prettierrc" },
+    rootMarkers = { ".yamllint", ".prettierrc", "pyproject.toml" },
     languages = {
       yaml = { yamllint, prettier_for("yaml") },
       json = { prettier_for("json") },
       markdown = { prettier_for("markdown") },
       html = { prettier_for("html") },
-      python = { ruff_format, ruff_lint },
+      python = { isort },
     },
   },
   init_options = {
