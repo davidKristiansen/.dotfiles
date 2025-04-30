@@ -11,8 +11,8 @@ profile on_the_move {
 }
 
 profile home {
-    output eDP-1  position 0,1150 mode 1920x1200
-    output "HP Inc. HP Z38c 6CM04204LJ" position 1920,0 mode 3840x1600
+    output "HP Inc. HP Z38c 6CM04204LJ" position 0,0 mode 3840x1600
+    output eDP-1  position 3840,400 mode 1920x1200
 }
 
 profile office {
