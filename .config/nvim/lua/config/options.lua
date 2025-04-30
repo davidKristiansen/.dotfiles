@@ -7,7 +7,7 @@ vim.g.maplocalleader = "\\"
 
 -- Diagnostic display config
 vim.diagnostic.config({
-  virtual_text     = false,
+  virtual_text     = true,
   -- virtual_text     = {
   --   spacing = 2,
   --   source = "if_many",  -- optional: shows source only when there are multiple
