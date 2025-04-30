@@ -1,6 +1,10 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 
+if [[ -f ${HOME}/.secrets ]]; then
+    emulate zsh -o all_export -c 'source "${HOME}/.secrets"'
+fi
+
 # load variables from environment.d
 for _rc in "${XDG_CONFIG_HOME:-$HOME/.config}"/environment.d/*.conf; do
   # Ignore tilde files.
