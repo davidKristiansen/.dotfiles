@@ -21,7 +21,7 @@ function M.setup(buf)
 
   -- Classic LSP bindings
   map("n", "K", vim.lsp.buf.hover, "Hover Documentation")
-  map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
+  -- map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
   map("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Previous Diagnostic")
   map("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Next Diagnostic")

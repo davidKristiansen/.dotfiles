@@ -4,6 +4,7 @@
 -- plugins/mason.lua
 return {
   "williamboman/mason.nvim",
+  event = { "VeryLazy" },
   cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonUpdate", "MasonLog", },
   build = ":MasonUpdate",
   opts = {
@@ -11,7 +12,7 @@ return {
       "lua_ls",
       "clangd",
       "jsonls",
-      "basedpyright",
+      -- "basedpyright",
       "bashls",
       "marksman",
       "markdown-toc",

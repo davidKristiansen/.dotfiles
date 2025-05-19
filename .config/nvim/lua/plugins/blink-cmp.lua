@@ -5,7 +5,10 @@ return {
   "saghen/blink.cmp",
   version = "1.*",
   event = { "InsertEnter" },
-  dependencies = { "rafamadriz/friendly-snippets" },
+  dependencies = {
+    "rafamadriz/friendly-snippets",
+    "Kaiser-Yang/blink-cmp-avante",
+  },
 
   opts = {
     keymap = {
@@ -47,8 +50,15 @@ return {
       per_filetype = {
         codecompanion = { "codecompanion" },
       },
-      default = { "lsp", "path", "snippets", "buffer", "markdown" },
+      default = { "avante", "lsp", "path", "snippets", "buffer", "markdown" },
       providers = {
+        avante = {
+          module = 'blink-cmp-avante',
+          name = 'Avante',
+          opts = {
+            -- options for blink-cmp-avante
+          }
+        },
         cmdline = {
           min_keyword_length = function(ctx)
             -- when typing a command, only show when the keyword is 3 characters or longer
