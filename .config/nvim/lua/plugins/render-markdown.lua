@@ -8,7 +8,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
     },
-    ft = { "markdown", "codecompanion" },
+    ft = { "markdown", "codecompanion", "Avante" },
     opts = {
       html = { comment = { conceal = true } },
       code = {
@@ -16,7 +16,7 @@ return {
         style = "full",
         disable_background = true,
         width = "block",
-        position = "right",
+        position = "left",
         border = "none",
         highlight = "RenderMarkdownCode",
       },

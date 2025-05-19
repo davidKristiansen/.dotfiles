@@ -1,0 +1,23 @@
+ignore-empty-password
+show-failed-attempts
+hide-keyboard-layout
+# daemonize
+indicator-radius=100
+indicator-thickness=8
+
+color=1d2021
+inside-color=1d2021
+ring-color=689d6a
+line-color=1d2021
+text-color=ebdbb2
+
+key-hl-color=d79921
+bs-hl-color=cc241d
+
+inside-wrong-color=1d2021
+ring-wrong-color=cc241d
+text-wrong-color=cc241d
+
+inside-ver-color=1d2021
+ring-ver-color=458588
+text-ver-color=458588

@@ -74,7 +74,8 @@ get_weather() {
     fi
   } &
 
-  printf "☁️ loading...\n"
+  # Display a placeholder message while fetching weather data
+  printf "☁️ Weather data is being fetched...\n"
 }
 
 get_message() {

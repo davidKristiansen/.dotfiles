@@ -52,7 +52,7 @@ function M.setup(server_names)
   require("config.lsp.format")
 
   -- Logging on attach
-  M.log_on_attach()
+  -- M.log_on_attach()
 
   -- LSP keymaps (remember to use buffer-local mappings in your setup)
   M.setup_keymaps(require("config.lsp.keymap").setup)

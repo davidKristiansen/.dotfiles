@@ -1,22 +1,31 @@
 #!/bin/bash
+set -euo pipefail
 
 CORRUPTER="${XDG_DATA_HOME}/mise/installs/go-github-com-r00tman-corrupter/latest/bin/corrupter"
-# DUMP=/tmp/bg.png
-# CORRUPTED=/tmp/bgc.png
+dir=/tmp/lock.sh/
+mkdir -p "$dir"
 
-outputs=($(swaymsg -t get_outputs | jq -r ".[] | .name"))
+outputs=($(swaymsg -t get_outputs | jq -r '.[] | select(.active == true) | .name'))
+
+image_args=()
 
 for output in "${outputs[@]}"; do
-  grim -o "${output}" "/tmp/${output}.png"
-  "${CORRUPTER}" -add 0 -mag 3 -boffset 4 -meanabber 7 "/tmp/${output}.png" "/tmp/${output}.png"
-done
-wait
+  raw="${dir}/${output}.png"
+  corrupted="${dir}/${output}_corrupted.png"
 
-exec gtklock \
-  --daemonize \
-  --follow-focus \
-  --style "${HOME}/.config/gtklock/style.css" \
-  --idle-hide \
-  --idle-timeout 5 \
-  --start-hidden \
-  "$@"
+  # Capture screen
+  grim -o "$output" "$raw"
+
+  # Randomize corrupter parameters
+  add=$((RANDOM % 10 + 3))
+  mag=$((RANDOM % 8 + 3))
+  boffset=$((RANDOM % 10 + 3))
+  meanabber=$((RANDOM % 10 + 5))
+
+  "$CORRUPTER" -add "$add" -mag "$mag" -boffset "$boffset" -meanabber "$meanabber" "$raw" "$corrupted"
+
+  image_args+=(--image "$output:$corrupted")
+done
+
+# Use swaylock with dynamically generated images per output
+exec swaylock "${image_args[@]}"

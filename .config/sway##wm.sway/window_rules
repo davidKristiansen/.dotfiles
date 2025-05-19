@@ -38,6 +38,12 @@ for_window {
     [app_id="zenity"] floating enable
     [title="Firefox — Sharing Indicator"] floating enable
     [title="Cisco Secure Client - Login"] floating enable
+    [title="QtPreview"] floating enable
+
+    [class="GStreamer"] floating enable
+    [class="GStreamer"] move position center
+    [class="GStreamer"] resize set 1280 720
+    [class="GStreamer"] focus
 
     # [class=".*"] border pixel $border_size
     # [app_id=".*"] border pixel $border_size
