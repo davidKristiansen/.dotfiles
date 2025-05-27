@@ -29,7 +29,6 @@ nodejs = "latest"
 
 # Python
 python = "latest"
-ruff = "latest"
 pipx = "latest"
 uv = "latest"
 "pipx:thefuck" = "latest"
@@ -51,3 +50,6 @@ cargo-binstall = "latest"
 "cargo:binsider" = "latest"
 "npm:markdown-toc" = "latest"
 "pipx:isort" = "latest"
+
+# Aqua
+"aqua:ruff" = "latest"
