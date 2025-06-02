@@ -35,7 +35,9 @@ return {
       blink = true,
       min_chars = 2,
     },
+    follow_url_func = vim.ui.open
   },
+  cmd = { "ObsidianQuickSwitch" },
   keys = {
     { "<leader>fn", "<cmd>ObsidianQuickSwitch<cr>", desc = "Notes" },
   },
