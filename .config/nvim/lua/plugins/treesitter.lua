@@ -8,7 +8,18 @@ return {
   config = function()
     require("nvim-treesitter.configs").setup({
       sync_install = false,
-      ensure_installed = { "python", "c", "bash", "lua", "markdown", "markdown_inline", "yaml", "html" },
+      ensure_installed = {
+        "python",
+        "c",
+        "bash",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "yaml",
+        "html",
+        "bibtex",
+        "latex",
+      },
       auto_install = true,
       highlight = { enable = true },
     })

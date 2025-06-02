@@ -53,3 +53,4 @@ cargo-binstall = "latest"
 
 # Aqua
 "aqua:ruff" = "latest"
+"npm:tree-sitter-cli" = "latest"
