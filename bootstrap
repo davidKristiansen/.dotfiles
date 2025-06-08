@@ -20,6 +20,8 @@ done
 
 "${SCRIPT_DIR}"/.local/bin/stow.sh \
   -i "^\.git" \
+  -i "^\.pre-commit-config.yaml" \
+  -i "^\.secrets.baseline" \
   -i "$(basename "${0}")" \
   -f
 
