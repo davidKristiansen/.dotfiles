@@ -8,8 +8,11 @@ return {
       resources_path = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/fpga_resources.yaml",
       output_root    = "/tmp/macpyver.out/",
       min_width      = 90,
+      min_wheight    = 30,
       auto_close     = true,
       autoscroll     = true,
+      focus_on_run   = false,
+      split_type     = "vertical"
     },
     keys = {
       { "<leader>mr", "<cmd>MacpyverRun<cr>",  desc = "Macpyver Run" },
