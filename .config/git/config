@@ -6,6 +6,8 @@
 [includeIf "gitdir:~/Work/"]
   path = ~/.config/git/work.conf
 
+[includeIf "gitdir:/Project/"]
+    path = ~/.config/git/work.conf
 
 [commit]
 	gpgSign = true
