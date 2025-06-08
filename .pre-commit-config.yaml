@@ -2,8 +2,12 @@
 # Copyright David Kristiansen
 
 repos:
-  - repo: https://github.com/nshepperd/license-headers
-    rev: v1.2.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
     hooks:
-      - id: license-headers
-        args: [--license, "MIT", --spdx, --extension=lua]
+      - id: detect-private-key
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
