@@ -6,6 +6,9 @@
 [includeIf "gitdir:~/Work/"]
   path = ~/.config/git/work.conf
 
+[includeIf "gitdir:~/ROOTDIR/"]
+  path = ~/.config/git/work.conf
+
 [includeIf "gitdir:/Project/"]
     path = ~/.config/git/work.conf
 
