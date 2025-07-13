@@ -4,6 +4,7 @@
 return {
   "saghen/blink.cmp",
   version = "1.*",
+  -- build = 'cargo build --release',
   event = { "InsertEnter" },
   dependencies = {
     "rafamadriz/friendly-snippets",
@@ -50,8 +51,14 @@ return {
       per_filetype = {
         codecompanion = { "codecompanion" },
       },
-      default = { "avante", "lsp", "path", "snippets", "buffer", "markdown" },
+      default = { "lazydev", "avante", "lsp", "path", "snippets", "buffer", "markdown" },
       providers = {
+        lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          -- make lazydev completions top priority (see `:h blink.cmp`)
+          score_offset = 100,
+        },
         avante = {
           module = 'blink-cmp-avante',
           name = 'Avante',
@@ -76,10 +83,12 @@ return {
       },
     },
     fuzzy = {
-      implementation = "prefer_rust_with_warning",
+      implementation = "lua",
       use_frecency = true,
       use_proximity = true,
-
+      --   prebuilt_binaries = {
+      --     force_version = "v1.3.1"
+      --   },
     },
 
     cmdline = {

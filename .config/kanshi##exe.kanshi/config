@@ -6,27 +6,33 @@ profile laptop {
 }
 
 profile on_the_move {
-    output eDP-1  position 1080,720 mode 1920x1200
+    output eDP-1    position 1080,720 mode 1920x1200
     output "ASUSTek COMPUTER INC ASUS MB16AP JBLMTF129716" position 0,0 mode 1920x1080 transform 90
+}
+
+profile thomas {
+    output eDP-1 disable
+    output "HP Inc. HP Z27q G3 CN404910DK" position 3840,0 mode 2560x1440 transform 90
+    output "HP Inc. HP Z38c 6CM0141HKJ" position    0,429    mode   3840x1600
 }
 
 profile home {
     output "HP Inc. HP Z38c 6CM04204LJ" position 0,0 mode 3840x1600
-    output eDP-1  position 3840,400 mode 1920x1200
+    output eDP-1 position 3840,400 mode 1920x1200
 }
 
 profile office {
-    output eDP-1                           position 5280,935 mode 1920x1200
-    output "HP Inc. HP Z27k G3 CN41363981" position 0,0      mode 3840x2160@30Hz transform 270 scale 1.5
-    output "HP Inc. HP Z38c 6CM0141HKL"    position 1440,415 mode 3840x1600@29.998Hz
+    output eDP-1 position 5280,935 mode 1920x1200
+    output "HP Inc. HP Z27k G3 CN41363981" position 0,0  mode 3840x2160@30Hz transform 270 scale 1.5
+    output "HP Inc. HP Z38c 6CM0141HKL" position    1440,415 mode 3840x1600@29.998Hz
 }
 
 profile odin {
-    output eDP-1  position 0,360 mode 1920x1200
-    output "Sony SONY TV  *30 0x00000101" position 1920,0 mode 3840x2160 scale 2
+    output eDP-1 position 0,360 mode 1920x1200
+    output "Sony SONY TV *30 0x00000101" position 1920,0 mode 3840x2160 scale 2
 }
 
 profile thor {
-    output eDP-1  position 0,360 mode 1920x1200
-    output "Sony SONY TV  *30 0x01010101" position 1920,0 mode 3840x2160 scale 2
+    output eDP-1 position 0,360 mode 1920x1200
+    output "Sony SONY TV *30 0x01010101" position 1920,0 mode 3840x2160 scale 2
 }
