@@ -100,4 +100,4 @@
 [gpg]
 	program = gpg
 [credential]
-	helper = store
+	helper = "!f() { /home/fw/.vscode-server/bin/91fa95bccb027ece6a968589bb1d662fa9c8e170/node /tmp/vscode-remote-containers-080b559e-76e1-4d44-9af4-fb09a524bcd2.js git-credential-helper $*; }; f"

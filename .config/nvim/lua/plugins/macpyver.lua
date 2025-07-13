@@ -1,22 +1,26 @@
 return {
   {
     dir  = "~/Projects/macpyver.nvim",
-    cmd  = { "MacpyverRun", "MacpyverCase" },
-    ft   = { "yaml" },
+    -- "davidKristiansen/macpyver.nvim",
+    cmd  = { "Macpyver" },
     opts = {
-      config_path    = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/macpyver.yaml",
-      resources_path = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/fpga_resources.yaml",
-      output_root    = "/tmp/macpyver.out/",
-      min_width      = 90,
-      min_wheight    = 30,
-      auto_close     = true,
-      autoscroll     = true,
-      focus_on_run   = false,
-      split_type     = "vertical"
+      macpyver   = {
+        config      = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/macpyver.yaml",
+        resources   = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/fpga_resources.yaml",
+        output_root = "/tmp/macpyver.out/",
+      },
+      size       = 90,
+      -- auto_close   = true,
+      autoscroll = true,
+      focus      = false,
+      split_dir  = "right",
+      keymaps    = { close = "q", ctrlc = "c" },
     },
     keys = {
-      { "<leader>mr", "<cmd>MacpyverRun<cr>",  desc = "Macpyver Run" },
-      { "<leader>mc", "<cmd>MacpyverCase<cr>", desc = "Macpyver run current case" },
+      { "<leader>mr", "<cmd>Macpyver run<cr>",          desc = "Run test" },
+      { "<leader>mc", "<cmd>Macpyver runcase<cr>",      desc = "Run current case" },
+      { "<leader>mt", "<cmd>Macpyver runcaseinput<cr>", desc = "Run case from input" },
+      { "<leader>mm", "<cmd>Macpyver rerun<cr>",        desc = "Run with args from last run" },
     },
     init = function()
       local wk = require("which-key")

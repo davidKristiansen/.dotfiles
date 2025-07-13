@@ -15,11 +15,12 @@ return {
   },
   config = function()
     require("avante").setup({
+      override_prompt_dir = vim.fn.expand("~/.config/nvim/avante_prompts"),
       provider = "openai",
       providers = {
         openai = {
           endpoint = "https://api.openai.com/v1",
-          model = "gpt-4o",
+          model = "gpt-4.1",
           timeout = 30000,
           extra_request_body = {
             temperature = 0,
