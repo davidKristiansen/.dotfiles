@@ -54,3 +54,4 @@ cargo-binstall = "latest"
 # Aqua
 "aqua:ruff" = "latest"
 "npm:tree-sitter-cli" = "latest"
+"go:github.com/ankitpokhrel/jira-cli/cmd/jira" = "latest"

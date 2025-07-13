@@ -6,7 +6,7 @@
 APP_ID=cadlkienfkclaiaibeoongdcgmdikeeg
 APP_URL=https://chatgpt.com/
 
-if ! (ps aux | grep "${APP_ID}" | grep -v grep >/dev/null); then
+# if ! (ps aux | grep "${APP_ID}" | grep -v grep >/dev/null); then
   swaymsg "exec                          \
     --no-startup-id                      \
     /opt/microsoft/msedge/microsoft-edge \
@@ -15,7 +15,7 @@ if ! (ps aux | grep "${APP_ID}" | grep -v grep >/dev/null); then
     --app-url=${APP_URL}                 \
     --class=crx__${APP_ID}"
   sleep 1.5
-fi
+# fi
 
 swaymsg "[instance=crx__${APP_ID}] scratchpad show, move position center, resize set 90 ppt 90 ppt"
 
