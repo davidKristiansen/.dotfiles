@@ -20,6 +20,7 @@ return {
       statuscolumn = true,
       words = true,
       dashboard = true,
+      scratch = true,
     }
 
     local snacks_opts = {}

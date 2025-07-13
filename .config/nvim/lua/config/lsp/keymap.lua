@@ -11,13 +11,13 @@ function M.setup(buf)
   end
 
   -- Snacks-based LSP pickers
-  map("n", "gd", Snacks.picker.lsp_definitions, "Goto Definition")
-  map("n", "gD", Snacks.picker.lsp_declarations, "Goto Declaration")
-  map("n", "gr", Snacks.picker.lsp_references, "References")
-  map("n", "gI", Snacks.picker.lsp_implementations, "Goto Implementation")
-  map("n", "gy", Snacks.picker.lsp_type_definitions, "Goto Type Definition")
-  map("n", "<leader>ss", Snacks.picker.lsp_symbols, "Document Symbols")
-  map("n", "<leader>sS", Snacks.picker.lsp_workspace_symbols, "Workspace Symbols")
+  -- map("n", "gd", Snacks.picker.lsp_definitions, "Goto Definition")
+  -- map("n", "gD", Snacks.picker.lsp_declarations, "Goto Declaration")
+  -- map("n", "gr", Snacks.picker.lsp_references, "References")
+  -- map("n", "gI", Snacks.picker.lsp_implementations, "Goto Implementation")
+  -- map("n", "gy", Snacks.picker.lsp_type_definitions, "Goto Type Definition")
+  -- map("n", "<leader>ss", Snacks.picker.lsp_symbols, "Document Symbols")
+  -- map("n", "<leader>sS", Snacks.picker.lsp_workspace_symbols, "Workspace Symbols")
 
   -- Classic LSP bindings
   map("n", "K", vim.lsp.buf.hover, "Hover Documentation")

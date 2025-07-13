@@ -4,7 +4,7 @@
 local M = {}
 
 -- Toggle state (defaults to enabled)
-M.autoformat_enabled = true
+M.autoformat_enabled = false
 
 function M.toggle()
   M.autoformat_enabled = not M.autoformat_enabled

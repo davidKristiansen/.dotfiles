@@ -28,7 +28,7 @@ nodejs = "latest"
 "npm:prettier" = "latest"
 
 # Python
-python = "latest"
+python = "3.12"
 pipx = "latest"
 uv = "latest"
 "pipx:thefuck" = "latest"

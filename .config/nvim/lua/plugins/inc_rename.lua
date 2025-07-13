@@ -2,6 +2,7 @@ return {
   {
     "smjonas/inc-rename.nvim",
     opts = {},
+    cmd = {"IncRename"},
     keys = {
       -- {
       --   "<leader>rn",

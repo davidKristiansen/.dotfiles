@@ -32,3 +32,4 @@ zsh-users/zsh-history-substring-search kind:defer  # optional
 # External Utilities
 #############################################################
 soimort/translate-shell
+so-fancy/diff-so-fancy
