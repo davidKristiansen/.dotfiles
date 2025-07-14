@@ -1,7 +1,7 @@
 return {
   {
-    dir  = "~/Projects/macpyver.nvim",
-    -- "davidKristiansen/macpyver.nvim",
+    -- dir  = "~/Projects/macpyver.nvim",
+    "davidKristiansen/macpyver.nvim",
     cmd  = { "Macpyver" },
     opts = {
       macpyver   = {
