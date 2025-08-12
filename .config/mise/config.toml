@@ -5,6 +5,7 @@
 pipx_uvx = true
 experimental = true
 jobs = 32
+idiomatic_version_file_enable_tools = ["python"]
 
 [alias]
 thefuck = "pipx:thefuck"
@@ -59,3 +60,4 @@ cargo-binstall = "latest"
 "aqua:ruff" = "latest"
 "npm:tree-sitter-cli" = "latest"
 "go:github.com/ankitpokhrel/jira-cli/cmd/jira" = "latest"
+direnv = "latest"
