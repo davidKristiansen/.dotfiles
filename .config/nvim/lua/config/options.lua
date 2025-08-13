@@ -111,3 +111,14 @@ if vim.fn.has("termguicolors") == 1 then
   cmd([[let &t_Cs = "\e[4:3m"]])
   cmd([[let &t_Ce = "\e[4:0m"]])
 end
+
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN] = '',
+      [vim.diagnostic.severity.INFO] = '',
+      [vim.diagnostic.severity.HINT] = '󰌵',
+    },
+  }
+})

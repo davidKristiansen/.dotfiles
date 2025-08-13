@@ -6,7 +6,6 @@
 ---@type LazyKeys[]
 return {
   -- Top Pickers & Explorer
-  { "<leader>e",  ":Neotree toggle<cr>",                desc = "File Explorer" },
 
   -- Git
   { "<leader>gB", function() Snacks.gitbrowse() end,               desc = "Git Browse",               mode = { "n", "v" } },
