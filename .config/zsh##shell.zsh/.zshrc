@@ -40,5 +40,6 @@ done
 compinit -d "${ZSH_COMPDUMP:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/.zcompdump}"
 
 # Load Powerlevel10k theme if available
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 [[ ! -f "${ZDOTDIR}/.p10k.zsh" ]] || source "${ZDOTDIR}/.p10k.zsh"
 
