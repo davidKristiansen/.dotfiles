@@ -24,7 +24,7 @@ return {
         end
       },
       { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-      { icon = " ", key = "e", desc = "File Tree", action = function() Snacks.explorer() end },
+      { icon = " ", key = "e", desc = "File Tree", action = ":Neotree reveal" },
       { icon = " ", key = "g", desc = "Find Text", action = function() require("fzf-lua").live_grep() end },
       { icon = " ", key = "s", desc = "Sessions", action = function() require("nvim-possession").list() end },
       { icon = " ", key = "N", desc = "Notes", action = "<cmd>ObsidianQuickSwitch<cr>" },
