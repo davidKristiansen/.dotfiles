@@ -5,8 +5,8 @@ return {
     cmd  = { "Macpyver" },
     opts = {
       macpyver   = {
-        config      = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/macpyver.yaml",
-        resources   = os.getenv("WORKSPACE") .. "/00.Environment/config/macpyver/fpga_resources.yaml",
+        config      = (os.getenv("WORKSPACE") or "/Project") .. "/00.Environment/config/macpyver/macpyver.yaml",
+        resources   = (os.getenv("WORKSPACE") or "/Project") .. "/00.Environment/config/macpyver/fpga_resources.yaml",
         output_root = "/tmp/macpyver.out/",
       },
       size       = 90,
