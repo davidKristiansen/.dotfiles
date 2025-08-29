@@ -27,6 +27,8 @@ done
 
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh
+else
+  mise self-update
 fi
 
 mise install --yes
