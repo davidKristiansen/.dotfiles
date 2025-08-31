@@ -42,40 +42,38 @@ get_last_login() {
 get_mem() { free -h | awk '/^Mem:/ {print $3 "/" $2}'; }
 get_cpu() { uptime | awk -F'load average:' '{print $2}' | sed 's/^ //'; }
 
+# New: non-blocking weather with cache + detached updater
 get_weather() {
   local data_dir="$TILDRAN_XDG_DATA_HOME"
   local cache="$data_dir/weather.cache"
   local valid_for=$((15 * 60)) # 15 minutes
-  local now
+  local now mtime age
   now=$(date +%s)
+  mkdir -p "$data_dir"
 
-  mkdir -p "$(dirname "$cache")"
-
-  local mtime
   mtime=$(stat -c %Y "$cache" 2>/dev/null || echo 0)
-  local age=$((now - mtime))
+  age=$((now - mtime))
 
-  if [ "$age" -lt "$valid_for" ]; then
-    cat "$cache"
-    echo
+  if [ "$age" -lt "$valid_for" ] && [ -s "$cache" ]; then
+    # Print cached value without trailing newline duplication
+    printf '%s' "$(cat "$cache" | tr -d '\n')"
     return
   fi
 
-  {
-    local tmpfile
-    tmpfile="$(mktemp "${cache}.XXXXXX")"
-    curl -s -A curl 'https://wttr.in/Moss?format=%C+%t' |
-      sed 's/^[[:space:]]*//;s/[[:space:]]*$//' >"$tmpfile"
+  # Print immediate placeholder
+  printf '%s' "☁️ Weather data is being fetched..."
 
+  # Update in background, fully detached, suppress job control messages
+  (
+    tmpfile="$(mktemp "$data_dir/weather.cache.XXXXXX")" || exit 0
+    curl -s -A curl "$WEATHER_URL" \
+      | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' >"$tmpfile"
     if [ -s "$tmpfile" ]; then
-      mv "$tmpfile" "$cache"
+      mv -f "$tmpfile" "$cache"
     else
       rm -f "$tmpfile"
     fi
-  } &
-
-  # Display a placeholder message while fetching weather data
-  printf "☁️ Weather data is being fetched...\n"
+  ) </dev/null >/dev/null 2>&1 & disown
 }
 
 get_message() {
@@ -117,7 +115,7 @@ for COLOR in "${COLORS[@]}"; do
   ((BEAM_WIDTH < 1)) && BEAM_WIDTH=1
 
   # Set color and render beam correctly
-  printf "[38;5;%sm" "$COLOR"
+  printf "\033[38;5;%sm" "$COLOR"
   for ((j = 0; j < BEAM_WIDTH; j++)); do
     printf "%s" "$TILDRAN_BLOCK"
   done
@@ -135,7 +133,7 @@ for COLOR in "${COLORS[@]}"; do
   5) printf "Last login: %s\n" "$(get_last_login)" ;;
   2) printf "Memory:     %s\n" "$(get_mem)" ;;
   3) printf "CPU load:   %s\n" "$(get_cpu)" ;;
-  6) printf "Weather:    %s\n" "$(get_weather)" ;;
+  6) printf "Weather:    "; get_weather; printf "\n" ;;
   *) echo ;;
   esac
 
@@ -151,3 +149,4 @@ MESSAGE=$(get_message $MODE)
 # === Center Message ===
 MESSAGE_COL=$(((TERM_COLS - ${#MESSAGE}) / 2))
 printf "\n%s\n\n" "$MESSAGE"
+
