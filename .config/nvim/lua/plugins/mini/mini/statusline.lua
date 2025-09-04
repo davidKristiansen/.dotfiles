@@ -1,6 +1,8 @@
 -- SPDX-License-Identifier: MIT
 -- Copyright David Kristiansen
 
+local fmt = require("config.lsp.format")
+
 -- Gruvbox-inspired colors for all modes
 local gruvbox = require("gruvbox").palette
 vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { fg = gruvbox.dark0_hard, bg = gruvbox.bright_green, bold = true })
@@ -11,6 +13,8 @@ vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { fg = gruvbox.dark0_hard, b
 vim.api.nvim_set_hl(0, "MiniStatuslineModeOther", { fg = gruvbox.dark0_hard, bg = gruvbox.neutral_purple, bold = true })
 vim.api.nvim_set_hl(0, "MiniStatuslineInactive", { fg = gruvbox.gray, bg = gruvbox.dark2 })
 vim.api.nvim_set_hl(0, "LualineRecording", { fg = gruvbox.neutral_red, bg = gruvbox.dark0_hard, bold = true })
+vim.api.nvim_set_hl(0, "MiniStatuslineFmt", { fg = gruvbox.bright_yellow, bg = gruvbox.dark0_hard, bold = true })
+
 
 vim.api.nvim_create_autocmd("RecordingEnter", {
   callback = function()
@@ -33,10 +37,12 @@ return {
       local filename      = MiniStatusline.section_filename({ trunc_width = 140 })
       local fileinfo      = MiniStatusline.section_fileinfo({ trunc_width = 120 })
       local location      = MiniStatusline.section_location({ trunc_width = 75 })
+      local fmt_mode      = fmt.status_icon()
+
 
       -- Macro indicator (shows when recording a macro)
-      local macro         = ''
-      local reg           = vim.fn.reg_recording()
+      local macro = ''
+      local reg   = vim.fn.reg_recording()
       if reg ~= '' then
         macro = '%#LualineRecording#●%* ' .. reg
       end
@@ -48,7 +54,7 @@ return {
         { hl = 'MiniStatuslineFilename', strings = {} },
         '%=',
         { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-        { hl = mode_hl,                  strings = { location } },
+        { hl = mode_hl,                  strings = { fmt_mode, location } },
       })
     end,
     inactive = nil,
