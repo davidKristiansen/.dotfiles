@@ -11,7 +11,7 @@ idiomatic_version_file_enable_tools = ["python"]
 thefuck = "pipx:thefuck"
 
 [tools]
-neovim = "latest"
+neovim = "nightly"
 # tmux = "3.5a"
 bat = "latest"
 fd = "latest"
@@ -62,3 +62,4 @@ cargo-binstall = "latest"
 "go:github.com/ankitpokhrel/jira-cli/cmd/jira" = "latest"
 direnv = "latest"
 gemini-cli = "latest"
+delta = "latest"

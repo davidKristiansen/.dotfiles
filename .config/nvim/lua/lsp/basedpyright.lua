@@ -16,6 +16,11 @@ return {
         diagnosticMode = "workspace",
         useLibraryCodeForTypes = true,
         typeCheckingMode = "basic", -- can also be "strict"
+        diagnosticSeverityOverrides = {
+          reportUnusedImport = "none",
+          reportUnusedVariable = "none",
+          reportUndefinedVariable = "none", -- optional if Ruff F821 is enabled
+        },
       },
     },
   },
