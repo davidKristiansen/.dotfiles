@@ -1,27 +1,27 @@
 -- SPDX-License-Identifier: MIT
--- Copyright David Kristiansen
+local M = {}
 
-return {
-  "nvim-treesitter/nvim-treesitter",
-  event = { "BufReadPost", "BufNewFile" },
-  build = ":TSUpdate",
-  config = function()
-    require("nvim-treesitter.configs").setup({
-      sync_install = false,
-      ensure_installed = {
-        "python",
-        "c",
-        "bash",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "yaml",
-        "html",
-        "bibtex",
-        "latex",
-      },
-      auto_install = true,
-      highlight = { enable = true },
-    })
-  end,
-}
+function M.setup()
+  local ok, cfg = pcall(require, "nvim-treesitter.configs")
+  if not ok then
+    vim.notify("nvim-treesitter not available", vim.log.levels.WARN)
+    return
+  end
+
+  cfg.setup({
+    highlight = { enable = true },
+    auto_install = true,
+    additional_vim_regex_highlighting = false,
+  })
+
+  -- Non-blocking first-run parser update (runs once)
+  local once = require("utils.once")
+  once.run("ts_update", function()
+    vim.schedule(function()
+      pcall(vim.cmd, "silent! TSUpdate")
+    end)
+  end)
+end
+
+return M
+
