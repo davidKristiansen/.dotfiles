@@ -24,6 +24,7 @@ function M.setup()
     "ruff",  -- Python linter LSP (diagnostics, code actions)
     "typos_lsp", -- Spelling/typos across many filetypes
     "clangd",
+    "docker_language_server", -- Dockerfile
     "taplo",     -- TOML
     "yamlls",    -- YAML
     "bashls",    -- Bash; we’ll extend to zsh filetype
@@ -33,6 +34,7 @@ function M.setup()
 
   -- Per-server settings (keep attach/keymaps in your LspAttach)
   local SERVER_SETTINGS = {
+    docker_language_server = {},
     lua_ls = {
       settings = {
         Lua = {

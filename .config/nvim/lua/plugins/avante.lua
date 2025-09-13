@@ -48,7 +48,7 @@ local PROVIDERS = {
   },
   copilot = {
     endpoint = "https://api.githubcopilot.com",
-    model = "gpt-5",           -- placeholder; Copilot internally routes
+    model = "gpt-4.1",           -- placeholder; Copilot internally routes
     timeout = 30000,
     headers = copilot_headers, -- dynamic token retrieval
   },

@@ -16,7 +16,7 @@ map("n", "<leader>e", ":Oil<CR>", { desc = "Open Oil file explorer" })
 map("n", "<leader>f", ":Pick files<CR>", { desc = "Find files" })
 map("n", "<leader>sf", ":Pick files<CR>", { desc = "Search files (alt)" })
 map("n", "<leader>sg", ":Pick grep_live<CR>", { desc = "Live grep" })
-map("n", "<leader>sb", ":Pick buffers<CR>", { desc = "List buffers" })    -- fixed <bR> typo
+map("n", "<leader>sb", ":Pick buffers<CR>", { desc = "List buffers" }) -- fixed <bR> typo
 map("n", "<leader>sh", ":Pick help<CR>", { desc = "Help tags" })
 map("n", "<leader><leader>", ":Pick resume<CR>", { desc = "Resume search" })
 
@@ -54,4 +54,33 @@ map("n", "<leader>ss", function()
   if ok then starter.open() end
 end, { desc = "Open start screen" })
 
+map("n", "<leader>gs", ":Git<CR>", { desc = "Fugitive status" })
+map("n", "<leader>gb", ":Git blame<CR>", { desc = "Git blame (fugitive)" })
+map("n", "<leader>gd", ":Gdiffsplit!<CR>", { desc = "Diff (fugitive)" })
+
 map("n", "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>", { desc = "Navigate next pane" })
+
+
+-- Diffview integrations
+map("n", "<leader>gD", function()
+  vim.cmd("DiffviewOpen")
+end, { desc = "Diffview: Open (all diffs)" })
+
+map("n", "<leader>gq", function()
+  vim.cmd("DiffviewClose")
+end, { desc = "Diffview: Close" })
+
+map("n", "<leader>gh", function()
+  -- File history for current file
+  vim.cmd("DiffviewFileHistory %")
+end, { desc = "Diffview: File history (current file)" })
+
+map("n", "<leader>gH", function()
+  -- Repository history (all)
+  vim.cmd("DiffviewFileHistory")
+end, { desc = "Diffview: Repo history" })
+
+map("n", "<leader>gr", function()
+  -- Refresh by closing and reopening (simple approach)
+  vim.cmd("DiffviewRefresh")
+end, { desc = "Diffview: Refresh" })

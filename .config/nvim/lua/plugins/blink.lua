@@ -45,7 +45,7 @@ local opts = {
       show_on_trigger_character = true,
     },
     list = {
-      selection = { preselect = true },
+      selection = { preselect = false },
     },
     -- docs window on the side
     documentation = { auto_show = true },

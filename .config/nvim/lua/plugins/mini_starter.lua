@@ -9,10 +9,11 @@ function M.setup()
   if not ok then return end
 
   local logo = {
-    '   ╔╗╔╗╔══╗╔══╗╔══╗╔╦╗╔══╗',
-    '   ║╚╝║║╔╗║║╔╗║║══╣ ║ ║╔╗║',
-    '   ║╔╗║║╠╣║║╠╣║╠══║ ║ ║╠╣║',
-    '   ╚╝╚╝╚╝╚╝╚╝╚╝╚══╝ ╩ ╚╝╚╝',
+    "     _                 _        _   _          _    ",
+    "  __| | __ ___   _____| |_ ___ | |_| |__   ___| | __",
+    " / _` |/ _` \\ \\ / / _ \\ __/ _ \\| __| '_ \\ / _ \\ |/ /",
+    "| (_| | (_| |\\ V /  __/ || (_) | |_| | | |  __/   < ",
+    " \\__,_|\\__,_| \\_/ \\___|\\__\\___/ \\__|_| |_|\\___|_|\\_\\",
   }
 
   local items = {
@@ -21,11 +22,9 @@ function M.setup()
     -- Builtin actions (new file, quit, etc.)
     starter.sections.builtin_actions(),
     -- Custom extras
-    { name = 'New file',        action = 'enew',       section = 'Actions' },
     { name = 'Find files',      action = 'Pick files', section = 'Pickers' },
     { name = 'Live grep',       action = 'Pick grep_live', section = 'Pickers' },
     { name = 'Open Oil',        action = 'Oil',        section = 'Files' },
-    { name = 'Quit',            action = 'qa',         section = 'Actions' },
   }
 
   starter.setup({
