@@ -47,6 +47,7 @@ keybind = ctrl+h=unbind
 keybind = ctrl+j=unbind
 keybind = ctrl+k=unbind
 keybind = ctrl+l=unbind
+keybind = ctrl+w=unbind
 
 # Unbind Alt number shortcuts
 keybind = alt+1=unbind
@@ -58,4 +59,5 @@ keybind = alt+6=unbind
 keybind = alt+7=unbind
 keybind = alt+8=unbind
 keybind = alt+9=unbind
+
 
