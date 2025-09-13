@@ -23,6 +23,7 @@ function M.setup()
   wk.add({
     { '<leader>a', group = 'ai' },
     { '<leader>c', group = 'code' },
+    { '<leader>g', group = 'git' },
     { '<leader>s', group = 'search' },
   })
 end

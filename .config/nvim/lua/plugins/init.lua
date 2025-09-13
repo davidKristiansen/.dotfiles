@@ -8,6 +8,12 @@ function M.setup()
     { src = "https://github.com/nvim-lua/plenary.nvim" },
     { src = "https://github.com/MunifTanjim/nui.nvim" },
 
+    -- Git plugins
+    { src = "https://github.com/NeogitOrg/neogit" },
+    { src = "https://github.com/tpope/vim-fugitive" },
+    { src = "https://github.com/sindrets/diffview.nvim" },
+    -- Lazygit is a separate binary (see instructions below)
+
     -- LSP / Language Tooling
     { src = "https://github.com/mason-org/mason.nvim" },
     { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
@@ -68,6 +74,11 @@ function M.setup()
   require("plugins.blink").setup()
   require("plugins.avante").setup()
 
+  -- Git
+  require("plugins.neogit").setup()
+  require("plugins.diffview").setup()
+  -- Fugitive does not require explicit setup, just :Git commands
+
   -- UI / Visuals
   require("plugins.which_key").setup()
   require("plugins.mini_statusline").setup()
@@ -77,6 +88,8 @@ function M.setup()
   -- Tmux Integration
   require("plugins.tmux_navigation").setup()
   require("plugins.tpipeline").setup()
+
+
 end
 
 return M
