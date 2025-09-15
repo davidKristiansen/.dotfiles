@@ -21,4 +21,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:descriptions' format '%F{yellow}%d%f'
 zstyle ':completion:*' menu select=2
+zstyle ':completion:*:descriptions' format '%F{yellow}%d%f'
+zstyle ':fzf-tab:*' switch-group ',' '.'
 setopt AUTO_MENU COMPLETE_IN_WORD NO_CASE_GLOB

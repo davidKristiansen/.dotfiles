@@ -22,4 +22,12 @@ _prepend_path "${CARGO_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/cargo}/bin"
 export PATH="${(j.:.)path}"
 export GOBIN="${XDG_BIN_HOME:-$HOME/.local/bin}"
 
+# --- resolve dotfiles dir ----------------------------------------------------
+typeset -gx DOT_DIR
+if [[ -d "$HOME/dotfiles" ]]; then
+  DOT_DIR="$HOME/dotfiles"
+else
+  DOT_DIR="$HOME/.dotfiles"
+fi
+
 # vim: set ft=zsh ts=2 sw=2:

@@ -1,5 +1,9 @@
+# ~/.config/zsh/zsh_plugins.txt
+# SPDX-License-Identifier: MIT
+# Order matters. Core/env first, UI later, fuzzy after compinit.
+
 #############################################################
-# Completion / Init
+# Completion / Init (fast compinit + extra completions)
 #############################################################
 mattmc3/ez-compinit
 zsh-users/zsh-completions kind:fpath path:src
@@ -7,29 +11,33 @@ zsh-users/zsh-completions kind:fpath path:src
 #############################################################
 # Core Shell Utilities
 #############################################################
+# powerlevel10k theme (handled by Antidote; keep your p10k config in $ZDOTDIR/p10k.zsh)
 romkatv/powerlevel10k
 jeffreytse/zsh-vi-mode
+
+# Oh My Zsh: lightweight libs first, then specific plugins
 ohmyzsh/ohmyzsh path:lib
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 ohmyzsh/ohmyzsh path:plugins/magic-enter
-ohmyzsh/ohmyzsh path:plugins/tmux
+# ohmyzsh/ohmyzsh path:plugins/tmux #TODO: Install tmux
 
 #############################################################
 # Fuzzy Finder / Tab Completion
 #############################################################
 Aloxaf/fzf-tab
 Freed-Wu/fzf-tab-source
-# unixorn/fzf-zsh-plugin  # optional
+# unixorn/fzf-zsh-plugin             # optional
 
 #############################################################
 # Fish-like Enhancements
 #############################################################
 zdharma-continuum/fast-syntax-highlighting kind:defer
 zsh-users/zsh-autosuggestions kind:defer
-zsh-users/zsh-history-substring-search kind:defer  # optional
+# zsh-users/zsh-history-substring-search kind:defer   # optional; you already bind ^P/^N
 
 #############################################################
-# External Utilities
+# External Utilities (bind as aliases separately)
 #############################################################
 soimort/translate-shell
 so-fancy/diff-so-fancy
+

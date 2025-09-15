@@ -2,14 +2,6 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 
-# --- resolve dotfiles dir ----------------------------------------------------
-typeset -gx DOT_DIR
-if [[ -d "$HOME/dotfiles" ]]; then
-  DOT_DIR="$HOME/dotfiles"
-else
-  DOT_DIR="$HOME/.dotfiles"
-fi
-
 # --- bail if repo missing ----------------------------------------------------
 [[ -d "$DOT_DIR/.git" ]] || return 0
 

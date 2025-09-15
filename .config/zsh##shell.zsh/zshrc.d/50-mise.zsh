@@ -3,7 +3,7 @@
 
 # Fast path: activate mise for zsh (manages PATH, tools, env per dir)
 if command -v mise >/dev/null 2>&1; then
-  eval "$(mise activate zsh)"
+  eval "$(mise activate zsh --shims)"
 fi
 
 # Optional: also expose shims for non-interactive shells/cron (lighter, fewer features)
