@@ -12,7 +12,7 @@ function M.setup()
     { src = "https://github.com/NeogitOrg/neogit" },
     { src = "https://github.com/tpope/vim-fugitive" },
     { src = "https://github.com/sindrets/diffview.nvim" },
-    -- Lazygit is a separate binary (see instructions below)
+    { src = "https://github.com/kdheepak/lazygit.nvim" },
 
     -- LSP / Language Tooling
     { src = "https://github.com/mason-org/mason.nvim" },
