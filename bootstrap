@@ -31,4 +31,6 @@ else
   mise self-update
 fi
 
+mise trust "${SCRIPT_DIR}/.config/mise/config.toml"
+
 mise install --yes
