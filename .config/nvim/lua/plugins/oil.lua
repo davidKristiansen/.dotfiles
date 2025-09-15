@@ -7,8 +7,16 @@ local opts = {
   view_options = {
     show_hidden = true,
     natural_order = true,
+    -- List of patterns/names always hidden in Oil explorer
     is_always_hidden = function(name, bufnr)
-      return vim.startswith(name, ".." or name == ".git")
+      local always_hidden = {"..", ".git", "__pycache__"}
+      -- Check for exact matches
+      for _, pat in ipairs(always_hidden) do
+        if name == pat then return true end
+      end
+      -- Check for *.egg-info pattern
+      if name:find("%.egg%-info$") then return true end
+      return false
     end,
   },
   win_options = {

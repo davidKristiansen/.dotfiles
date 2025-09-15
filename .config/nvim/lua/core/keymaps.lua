@@ -11,14 +11,24 @@ map({ "n", "v", "x" }, "<leader>d", '"+d', { desc = "Delete to system clipboard"
 map("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" })
 
 -- Plugin UX
-map("n", "<leader>e", ":Oil<CR>", { desc = "Open Oil file explorer" })
+map("n", "<leader>e", function() MiniFiles.open() end, { desc = "Open file explorer" })
 -- Fuzzy / search pickers (mini.pick)
 map("n", "<leader>f", ":Pick files<CR>", { desc = "Find files" })
 map("n", "<leader>sf", ":Pick files<CR>", { desc = "Search files (alt)" })
 map("n", "<leader>sg", ":Pick grep_live<CR>", { desc = "Live grep" })
 map("n", "<leader>sb", ":Pick buffers<CR>", { desc = "List buffers" }) -- fixed <bR> typo
 map("n", "<leader>sh", ":Pick help<CR>", { desc = "Help tags" })
-map("n", "<leader><leader>", ":Pick resume<CR>", { desc = "Resume search" })
+
+map("n", "<leader><leader>", function()
+  local ok, _ = pcall(function()
+    require("mini.pick").builtin.resume()
+  end)
+
+  if not ok then
+    require("mini.pick").builtin.files()
+  end
+end, { desc = "Resume search" })
+
 
 -- LSP convenience (buffer-local ones go in LspAttach)
 -- Global formatting (moved from <leader>if)

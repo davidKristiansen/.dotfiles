@@ -38,11 +38,14 @@ function M.setup()
     -- Editing Enhancements / Text Objects / Increment helpers
     { src = "https://github.com/monaqa/dial.nvim" },
     { src = "https://github.com/bullets-vim/bullets.vim" },
+    { src = "https://github.com/windwp/nvim-autopairs" },
+
 
     -- UI / Visuals
     { src = "https://github.com/folke/which-key.nvim" },
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+    { src = "https://github.com/tpope/vim-eunuch" },
 
     -- Tmux Integration
     { src = "https://github.com/alexghergh/nvim-tmux-navigation" },
@@ -51,15 +54,17 @@ function M.setup()
 
   -- Ensure commands exist in this session
   vim.cmd("packadd nvim-treesitter")
+  vim.cmd("packadd dial.nvim") -- ensure dial loaded early so custom <C-a>/<C-x> mappings take effect
 
   -- Per-plugin setups (ordered by functional groups)
   -- Navigation / File & Buffer UX
-  require("plugins.oil").setup()
+  -- require("plugins.oil").setup()
   require("plugins.mini_pick").setup()
 
   -- Editing Enhancements
   require("plugins.dial").setup()
   require("plugins.mini_surround").setup()
+  require("nvim-autopairs").setup()
 
   -- Snippets
   require("plugins.luasnip").setup()
@@ -84,12 +89,11 @@ function M.setup()
   require("plugins.mini_statusline").setup()
   require("plugins.render_markdown").setup()
   require("plugins.mini_starter").setup()
+  require("plugins.mini_files").setup()
 
   -- Tmux Integration
   require("plugins.tmux_navigation").setup()
   require("plugins.tpipeline").setup()
-
-
 end
 
 return M

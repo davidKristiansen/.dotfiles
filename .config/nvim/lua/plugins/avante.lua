@@ -48,7 +48,7 @@ local PROVIDERS = {
   },
   copilot = {
     endpoint = "https://api.githubcopilot.com",
-    model = "gpt-4.1",           -- placeholder; Copilot internally routes
+    model = "gpt-4.1",         -- placeholder; Copilot internally routes
     timeout = 30000,
     headers = copilot_headers, -- dynamic token retrieval
   },
@@ -103,6 +103,7 @@ local opts = {
   provider = "copilot", -- default provider at startup
   providers = vim.deepcopy(PROVIDERS),
   acp_providers = vim.deepcopy(ACP_PROVIDERS),
+  instructions_file = "AGENTS.md",
   window = {
     layout = "vertical", -- or "horizontal"
     width  = 50,         -- fixed columns
