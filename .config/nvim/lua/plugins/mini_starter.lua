@@ -9,11 +9,12 @@ function M.setup()
   if not ok then return end
 
   local logo = {
-    "     _                 _        _   _          _    ",
-    "  __| | __ ___   _____| |_ ___ | |_| |__   ___| | __",
-    " / _` |/ _` \\ \\ / / _ \\ __/ _ \\| __| '_ \\ / _ \\ |/ /",
-    "| (_| | (_| |\\ V /  __/ || (_) | |_| | | |  __/   < ",
-    " \\__,_|\\__,_| \\_/ \\___|\\__\\___/ \\__|_| |_|\\___|_|\\_\\",
+    "      _             _     _ _  __",
+    "     | |           (_)   | | |/ /",
+    "   __| | __ ___   ___  __| | ' / ",
+    "  / _` |/ _` \\ \\ / / |/ _` |  <  ",
+    " | (_| | (_| |\\ V /| | (_| | . \\ ",
+    "  \\__,_|\\__,_| \\_/ |_|\\__,_|_|\\_\\",
   }
 
   local items = {
@@ -50,7 +51,6 @@ function M.setup()
     "#689d6a", -- cyan/teal-ish
     "#458588", -- blue
   }
-
   vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniStarterOpened',
     callback = function(args)
@@ -58,10 +58,11 @@ function M.setup()
       if not vim.api.nvim_buf_is_valid(buf) then return end
       local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 
-      local first_logo_fragment = "_                 _"
+      -- Robust: look for trimmed first logo line
+      local first_logo_line = logo[1]:gsub("^%s*", ""):gsub("%s*$", "")
       local start_idx
       for i, line in ipairs(lines) do
-        if line:find(first_logo_fragment, 1, true) then
+        if line:gsub("^%s*", ""):gsub("%s*$", "") == first_logo_line then
           start_idx = i - 1
           break
         end
