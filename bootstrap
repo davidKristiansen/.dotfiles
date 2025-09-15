@@ -1,29 +1,31 @@
-#!/bin/bash
-
-# SPDX-License-Identifier: MIT
-# Copyright David Kristiansen
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
-set -a
-for _rc in "${SCRIPT_DIR}"/.config/environment.d/*.conf; do
-  . $_rc
-done
-set +a
+echo Hold on to your bootstraps !
 
-# Ensure XDG directories exist.
-for dir in XDG_{CONFIG,CACHE,DATA,STATE,BIN}_HOME; do
-  [[ -d "${!dir}" ]] || mkdir -p -- "${!dir}"
-done
+(
+  cd "${SCRIPT_DIR}"
 
-\mkdir --parents --mode=700 "${HOME}"/.local/share/gnupg
+  . "${SCRIPT_DIR}"/".zshenv##shell.zsh"
 
-"${SCRIPT_DIR}"/.local/bin/stow.sh \
-  -i "^\.git" \
-  -i "^\.pre-commit-config.yaml" \
-  -i "^\.secrets.baseline" \
-  -i "$(basename "${0}")" \
-  -f
+  "${SCRIPT_DIR}"/.local/bin/stow.sh \
+    -i "^\.git" \
+    -i "^\.github" \
+    -i "$(basename "${0}")" \
+    -f
+
+)
+
+# install or update p10k into XDG_DATA_HOME
+P10K_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/p10k"
+
+if [ ! -d "$P10K_DIR" ]; then
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
+else
+  git -C "$P10K_DIR" pull --ff-only
+fi
 
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh
@@ -35,3 +37,6 @@ mise trust "${SCRIPT_DIR}/.config/mise/config.toml"
 mise plugin install neovim
 
 mise install --yes
+
+# vim: set ft=sh ts=2 sw=2:
+

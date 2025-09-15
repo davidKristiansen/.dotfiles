@@ -1,6 +1,10 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 
+__stow_no() {
+  return 1
+}
+
 __stow_extension() {
   return 0
 }
