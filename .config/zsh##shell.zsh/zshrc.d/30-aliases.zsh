@@ -3,11 +3,18 @@
 # Copyright David Kristiansen
 
 # --- editor shorthands -------------------------------------------------------
-[[ -n "$EDITOR" ]] && {
-  alias vim="$EDITOR"
-  alias :e="$EDITOR"
-  alias e="$EDITOR"
-}
+# Detect VS Code integrated terminal
+if [[ -n "$VSCODE_IPC_HOOK_CLI" || "$TERM_PROGRAM" == "vscode" ]]; then
+  alias vim="code"
+  alias :e="code"
+  alias e="code"
+else
+  if [[ -n "$EDITOR" ]]; then
+    alias vim="$EDITOR"
+    alias :e="$EDITOR"
+    alias e="$EDITOR"
+  fi
+fi
 alias :q='exit'
 alias :Q=':q'
 
