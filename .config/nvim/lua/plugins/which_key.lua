@@ -7,15 +7,31 @@ function M.setup()
   if not ok then return end
 
   wk.setup({
+    preset = "helix",
+    show_help = false,
+    show_keys = false,
     plugins = {
       marks = true,
       registers = true,
-      spelling = { enabled = false },
-      presets = { operators = false, motions = false, text_objects = false, windows = true, nav = true, z = true, g = true },
+      spelling = {
+        enabled = true,
+      },
+      presets = {
+        operators = true,
+        motions = true,
+        text_objects = true,
+        windows = true,
+        nav = true,
+        z = true,
+        g = true,
+      },
     },
-    win = { border = 'rounded' }, -- migrated from deprecated `window`
+    win = {
+      border = 'rounded',
+      padding = { 1, 2 },
+      zindex = 1000,
+    },
     layout = { align = 'center' },
-    show_help = false,
   })
 
   -- New spec-style group registration (replaces legacy wk.register table form)
@@ -29,4 +45,3 @@ function M.setup()
 end
 
 return M
-

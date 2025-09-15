@@ -21,15 +21,16 @@ function M.setup()
   -- Ensure these are installed by Mason
   local ENSURE = {
     "lua_ls",
-    "ruff",  -- Python linter LSP (diagnostics, code actions)
-    "typos_lsp", -- Spelling/typos across many filetypes
+    -- "ruff",                   -- Python linter LSP (diagnostics, code actions)
+    -- "basedpyright",           -- Python linter LSP (diagnostics, code actions)
+    "typos_lsp",              -- Spelling/typos across many filetypes
     "clangd",
     "docker_language_server", -- Dockerfile
-    "taplo",     -- TOML
-    "yamlls",    -- YAML
-    "bashls",    -- Bash; we’ll extend to zsh filetype
-    "jsonls",    -- JSON
-    TS,          -- ts_ls or tsserver
+    "taplo",                  -- TOML
+    "yamlls",                 -- YAML
+    "bashls",                 -- Bash; we’ll extend to zsh filetype
+    "jsonls",                 -- JSON
+    TS,                       -- ts_ls or tsserver
   }
 
   -- Per-server settings (keep attach/keymaps in your LspAttach)
@@ -54,6 +55,21 @@ function M.setup()
         },
       },
     },
+
+    basedpyright = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "workspace",
+        useLibraryCodeForTypes = true,
+        typeCheckingMode = "basic", -- can also be "strict"
+        diagnosticSeverityOverrides = {
+          reportUnusedImport = "none",
+          reportUnusedVariable = "none",
+          reportUndefinedVariable = "none", -- optional if Ruff F821 is enabled
+        },
+      },
+    },
+
 
     ty = {},
 

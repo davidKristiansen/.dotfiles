@@ -5,4 +5,5 @@ zsh_plugins.zsh
 .luarc.json
 .zcompcache
 
+*.egg-info/  # Ignore Python egg-info directories
 sway-session.target.wants

@@ -5,13 +5,15 @@
 -- outside any plugin spec). This rewrite normalizes structure and applies
 -- keymaps during setup following existing project conventions.
 
+local opts = {
+
+}
+
 local M = {}
 
 function M.setup()
-  local ok, dial = pcall(require, 'dial')
+  local ok, augend = pcall(require, 'dial.augend')
   if not ok then return end
-
-  local augend = require('dial.augend')
 
   -- Register augend groups (values to increment / decrement through)
   require('dial.config').augends:register_group({
@@ -23,6 +25,7 @@ function M.setup()
       augend.date.alias['%Y/%m/%d'],
       augend.constant.alias.bool,
       augend.semver.alias.semver,
+      augend.constant.new({ elements = { 'true', 'false' }, word = false, cyclic = true }),
       augend.constant.new({ elements = { 'True', 'False' }, word = false, cyclic = true }),
       augend.constant.new({
         elements = { 'and', 'or' },
@@ -51,12 +54,6 @@ function M.setup()
     },
   })
 
-  -- dial.nvim currently exposes no global setup() function; nothing further needed.
-  if type(dial.setup) == 'function' then
-    -- Future-proof: call if upstream introduces setup() later.
-    dial.setup({})
-  end
-
   -- Keymaps: replicate canonical dial mappings with descriptions for which-key
   local map = vim.keymap.set
   local opts_n = { silent = true }
@@ -77,6 +74,18 @@ function M.setup()
   -- Visual mode sequential
   map('v', 'g<C-a>', function() require('dial.map').manipulate('increment', 'gvisual') end, vim.tbl_extend('force', opts_v, { desc = 'Increment sequential' }))
   map('v', 'g<C-x>', function() require('dial.map').manipulate('decrement', 'gvisual') end, vim.tbl_extend('force', opts_v, { desc = 'Decrement sequential' }))
+
+  -- Alternative leader-based mappings (useful when <C-a>/<C-x> are intercepted by terminal or tmux)
+  -- map('n', '<leader>+', function() require('dial.map').manipulate('increment', 'normal') end, vim.tbl_extend('force', opts_n, { desc = 'Increment (dial)' }))
+  -- map('n', '<leader>-', function() require('dial.map').manipulate('decrement', 'normal') end, vim.tbl_extend('force', opts_n, { desc = 'Decrement (dial)' }))
+  -- map('v', '<leader>+', function() require('dial.map').manipulate('increment', 'visual') end, vim.tbl_extend('force', opts_v, { desc = 'Increment (dial)' }))
+  -- map('v', '<leader>-', function() require('dial.map').manipulate('decrement', 'visual') end, vim.tbl_extend('force', opts_v, { desc = 'Decrement (dial)' }))
+
+  -- Debug helper: shows the active augend group for the current buffer
+  vim.api.nvim_create_user_command('DialDebug', function()
+    local group = vim.b.dial_config_group or 'default'
+    print('[dial] active group: ' .. group)
+  end, { desc = 'Dial: show active augend group' })
 end
 
 return M
