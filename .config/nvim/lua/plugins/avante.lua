@@ -8,6 +8,45 @@ local M = {}
 -- Helpers / utilities
 -- ---------------------------------------------------------------------------
 
+-- lua/plugins/avante_build.lua
+-- Auto-build avante.nvim on install/update using make only.
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "PackChanged",
+  desc = "Build avante.nvim after install/update",
+  callback = function()
+    local ev = vim.v.event or {}
+    if ev.kind ~= "install" and ev.kind ~= "update" then return end
+
+    local spec = ev.spec or {}
+    local name = spec.name or ""
+    local src  = spec.src or ""
+    if not (name == "avante.nvim" or (type(src) == "string" and src:match("avante.nvim"))) then
+      return
+    end
+
+    local path = ev.path or spec.install_path
+    if type(path) ~= "string" or path == "" then return end
+
+    if vim.fn.executable("make") ~= 1 then
+      vim.notify("make not found in PATH — cannot build avante.nvim", vim.log.levels.ERROR)
+      return
+    end
+
+    local result = vim.system({ "make", "-j" }, { cwd = path }):wait()
+    if result.code == 0 then
+      vim.schedule(function()
+        vim.notify(("Avante built successfully (%s): %s"):format(ev.kind, path), vim.log.levels.INFO)
+      end)
+    else
+      vim.schedule(function()
+        vim.notify(("Avante build failed (%s): %s"):format(ev.kind, path), vim.log.levels.ERROR)
+      end)
+    end
+  end,
+})
+
+
 -- Lock Avante related window sizes so layout doesn’t jump when content changes
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "avante", "avante-input", "avante-sidebar" },
@@ -31,6 +70,14 @@ local function copilot_headers()
   local token = auth.get_auth_token and auth.get_auth_token() or nil
   if not token then return {} end
   return { Authorization = ("Bearer %s"):format(token) }
+end
+
+-- Utility: check whether Copilot is authorized
+local function copilot_is_authorized()
+  local ok, auth = pcall(require, "copilot.auth")
+  if not ok or not auth.get_auth_token then return false end
+  local token = auth.get_auth_token()
+  return token and token ~= "" and token ~= nil
 end
 
 -- ---------------------------------------------------------------------------
@@ -145,6 +192,12 @@ local function reconfigure(provider_name)
   -- selecting: for ACP, we set provider to the ACP key as well
   opts.provider = provider_name
 
+  -- Check Copilot auth when switching to copilot provider
+  if provider_name == "copilot" and not copilot_is_authorized() then
+    vim.notify("Avante: Copilot not authorized. Opening Copilot auth...", vim.log.levels.WARN)
+    vim.cmd("Copilot auth")
+  end
+
   local ok, avante = pcall(require, "avante")
   if not ok then return end
   avante.setup(opts)
@@ -215,6 +268,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- ---------------------------------------------------------------------------
 function M.setup()
   normalize_headers(opts.providers)
+
   local ok, avante = pcall(require, "avante")
   if ok then avante.setup(opts) end
 

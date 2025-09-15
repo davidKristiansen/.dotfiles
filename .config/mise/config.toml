@@ -12,7 +12,6 @@ thefuck = "pipx:thefuck"
 
 [tools]
 neovim = "nightly"
-# tmux = "3.5a"
 bat = "latest"
 fd = "latest"
 ripgrep = "latest"
@@ -22,7 +21,6 @@ github-cli = "latest"
 sqlite = "latest"
 stylua = "latest"
 bat-extras = "latest"
-tmux = "latest"
 zig = "latest"
 pre-commit = "latest"
 

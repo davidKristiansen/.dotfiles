@@ -32,5 +32,6 @@ else
 fi
 
 mise trust "${SCRIPT_DIR}/.config/mise/config.toml"
+mise plugin install neovim
 
 mise install --yes
