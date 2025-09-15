@@ -67,6 +67,7 @@ end, { desc = "Open start screen" })
 map("n", "<leader>gs", ":Git<CR>", { desc = "Fugitive status" })
 map("n", "<leader>gb", ":Git blame<CR>", { desc = "Git blame (fugitive)" })
 map("n", "<leader>gd", ":Gdiffsplit!<CR>", { desc = "Diff (fugitive)" })
+map("n", "<leader>gg", ":LazyGit<CR>", { desc = "Lazygit" })
 
 map("n", "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>", { desc = "Navigate next pane" })
 
