@@ -28,10 +28,11 @@ _acquire_lock() {
   mkdir -p -- "$DOT_STATE_DIR"
   touch -- "$DOT_LOCK"
   if zmodload -F zsh/system b:zsystem 2>/dev/null; then
-    zsystem flock -t 0 "$DOT_LOCK" || return 1
+    zsystem flock -t 0 "$DOT_LOCK" >/dev/null 2>&1 || return 1
   else
     mkdir "$DOT_LOCK.dir" 2>/dev/null || return 1
   fi
+  # Be quiet if lock is acquired (produce no output)
 }
 
 _release_lock() {
