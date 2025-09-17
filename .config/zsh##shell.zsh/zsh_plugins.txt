@@ -36,6 +36,11 @@ zsh-users/zsh-autosuggestions kind:defer
 # zsh-users/zsh-history-substring-search kind:defer   # optional; you already bind ^P/^N
 
 #############################################################
+# AI
+#############################################################
+loiccoyle/zsh-github-copilot
+
+#############################################################
 # External Utilities (bind as aliases separately)
 #############################################################
 soimort/translate-shell
