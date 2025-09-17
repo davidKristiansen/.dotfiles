@@ -14,6 +14,7 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_BIN_HOME"
 
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export TERM=xterm-256color
 
 ###############################################################################
 # Load user environment variables and GPG_TTY if inside Docker
