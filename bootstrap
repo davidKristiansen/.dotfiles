@@ -8,24 +8,15 @@ echo Hold on to your bootstraps !
 (
   cd "${SCRIPT_DIR}"
 
-  . "${SCRIPT_DIR}"/".zshenv##shell.zsh"
-
   "${SCRIPT_DIR}"/.local/bin/stow.sh \
     -i "^\.git" \
     -i "^\.github" \
     -i "$(basename "${0}")" \
     -f
-
 )
 
-# install or update p10k into XDG_DATA_HOME
-P10K_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/p10k"
+. "${HOME}"/.zshenv
 
-if [ ! -d "$P10K_DIR" ]; then
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
-else
-  git -C "$P10K_DIR" pull --ff-only
-fi
 
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh

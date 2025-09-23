@@ -34,6 +34,7 @@ function M.setup()
     -- Navigation / File & Buffer UX
     { src = "https://github.com/stevearc/oil.nvim" },
     { src = "https://github.com/nvim-mini/mini.nvim" },
+    { src = "https://github.com/A7Lavinraj/fyler.nvim" },
 
     -- Editing Enhancements / Text Objects / Increment helpers
     { src = "https://github.com/monaqa/dial.nvim" },
@@ -90,6 +91,7 @@ function M.setup()
   require("plugins.render_markdown").setup()
   require("plugins.mini_starter").setup()
   require("plugins.mini_files").setup()
+  -- require("plugins.fyler").setup()
 
   -- Tmux Integration
   require("plugins.tmux_navigation").setup()

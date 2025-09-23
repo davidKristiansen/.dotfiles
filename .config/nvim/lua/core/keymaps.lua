@@ -1,9 +1,7 @@
 -- SPDX-License-Identifier: MIT
 local map = vim.keymap.set
 
-local minifiles_toggle = function(...)
-  if not MiniFiles.close() then MiniFiles.open(...) end
-end
+
 
 map("n", "<leader>o", ":update<CR>:source<CR>", { desc = "Write buffer and source it" })
 map("n", "<leader>w", ":write<CR>", { desc = "Write buffer" })
@@ -17,7 +15,6 @@ map("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" })
 -- Plugin UX
 -- Fuzzy / search pickers (mini.pick)
 
-map("n", "<leader>e", function() minifiles_toggle() end, { desc = "Explorer" })
 map("n", "<leader>f", ":Pick files<CR>", { desc = "Find files" })
 map("n", "<leader>sf", ":Pick files<CR>", { desc = "Search files (alt)" })
 map("n", "<leader>sg", ":Pick grep_live<CR>", { desc = "Live grep" })

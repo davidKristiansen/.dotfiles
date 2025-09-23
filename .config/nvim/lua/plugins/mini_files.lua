@@ -30,7 +30,9 @@ function M.setup()
   -- |MiniFiles.refresh()| with explicit `content.filter` functions: >lua
 
   local show_dotfiles = false
-
+  local minifiles_toggle = function(...)
+    if not MiniFiles.close() then MiniFiles.open(...) end
+  end
   local filter_show = function(fs_entry) return true end
 
   local filter_hide = function(fs_entry)
@@ -51,6 +53,8 @@ function M.setup()
       vim.keymap.set('n', '.', toggle_dotfiles, { buffer = buf_id })
     end,
   })
+
+  map("n", "<leader>e", function() minifiles_toggle() end, { desc = "Explorer" })
 end
 
 return M
