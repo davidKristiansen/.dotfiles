@@ -18,6 +18,7 @@ map("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" })
 map("n", "<leader>f", ":Pick files<CR>", { desc = "Find files" })
 map("n", "<leader>sf", ":Pick files<CR>", { desc = "Search files (alt)" })
 map("n", "<leader>sg", ":Pick grep_live<CR>", { desc = "Live grep" })
+map("n", "<leader>sw", ":Pick grep pattern='<cword>'<CR>", { desc = "Word grep" })
 map("n", "<leader>sb", ":Pick buffers<CR>", { desc = "List buffers" }) -- fixed <bR> typo
 map("n", "<leader>sh", ":Pick help<CR>", { desc = "Help tags" })
 
