@@ -28,17 +28,17 @@ local opts = {
       local macro = ''
       local reg   = vim.fn.reg_recording()
       if reg ~= '' then
-        macro = '%#LualineRecording#●%* ' .. reg
+        macro = '● ' .. reg
       end
 
       return MiniStatusline.combine_groups({
         { hl = mode_hl,                 strings = { mode, macro } },
         { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics, lsp } },
         '%<',
-        { hl = 'MiniStatuslineFilename', strings = {} },
+        { hl = 'MiniStatuslineFilename', strings = {filename} },
         '%=',
-        -- { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-        { hl = mode_hl,                  strings = {  location } },
+        { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+        { hl = mode_hl,                  strings = { location } },
       })
     end,
     inactive = nil,

@@ -24,7 +24,6 @@ if command -v trash >/dev/null 2>&1; then
 fi
 
 # --- bat-enhanced coreutils (guarded) ---------------------------------------
-# --- bat-enhanced coreutils (guarded) ---------------------------------------
 if command -v bat >/dev/null 2>&1; then
   alias cat='bat --theme gruvbox-dark --color auto --decorations auto'
 
