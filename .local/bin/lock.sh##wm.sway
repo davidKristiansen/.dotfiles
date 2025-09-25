@@ -1,31 +1,300 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Enhanced Wayland screen locker with optional per-output corrupted screenshots.
+#
+# This version is refactored to use command-line arguments instead of
+# environment variables and to be more modular and maintainable.
+
 set -euo pipefail
 
-CORRUPTER="${XDG_DATA_HOME}/mise/installs/go-github-com-r00tman-corrupter/latest/bin/corrupter"
-dir=/tmp/lock.sh/
-mkdir -p "$dir"
+# --- Default Configuration ---
+DEBUG=0
+PER_OUTPUT_MODE="force" # 'force' (default), 'force-no', 'auto'
+USE_ALL_IMAGES=0
+COOL_EFFECTS=0
+COOL_EFFECTS_STYLE=""
+CORRUPTER="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims/corrupter"
+DIR="/tmp/lock.sh"
 
-outputs=($(swaymsg -t get_outputs | jq -r '.[] | select(.active == true) | .name'))
+# --- Functions ---
 
-image_args=()
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [OPTIONS] -- [SWAYLOCK_ARGS]
 
-for output in "${outputs[@]}"; do
-  raw="${dir}/${output}.png"
-  corrupted="${dir}/${output}_corrupted.png"
+An enhanced Wayland screen locker script.
 
-  # Capture screen
-  grim -o "$output" "$raw"
+It takes a screenshot of each active output, optionally corrupts it and applies
+effects, and then uses the result as the lock screen background for that output.
 
-  # Randomize corrupter parameters
+Options:
+  -h, --help                Show this help message and exit.
+  -d, --debug               Enable debug logging (set -x).
+
+Image Generation Modes:
+  --force-per-output        Force using one image per output. This is the default.
+  --force-no-per-output     Force using a single image for all outputs.
+  --auto-detect             Auto-detect if swaylock supports per-output images,
+                            overriding the default behavior.
+  --use-all-images          In fallback mode, pass all generated images to swaylock
+                            instead of just the first one.
+
+Effects:
+  --cool-effects            Enable post-processing effects with ImageMagick.
+  --style <STYLE>           Apply a specific effect style. Implies --cool-effects.
+                            Styles: glitch, scanlines, cyberpunk, mosaic, swirl, vaporwave.
+                            If not specified, a random style is chosen.
+
+All arguments after '--' are passed directly to the swaylock command.
+EOF
+}
+
+log() {
+  printf '[lock.sh] %s\n' "$*" >&2
+}
+
+die() {
+  log "ERROR: $*"
+  exit 1
+}
+
+# --- Argument Parsing ---
+PARSED_ARGS=$(getopt -o hd --long "help,debug,force-per-output,force-no-per-output,auto-detect,use-all-images,cool-effects,style:" -n "$(basename "$0")" -- "$@")
+if [[ $? -ne 0 ]]; then
+  usage
+  exit 1
+fi
+eval set -- "$PARSED_ARGS"
+
+while true; do
+  case "$1" in
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    -d | --debug)
+      DEBUG=1
+      shift
+      ;;
+    --force-per-output)
+      PER_OUTPUT_MODE="force"
+      shift
+      ;;
+    --force-no-per-output)
+      PER_OUTPUT_MODE="force-no"
+      shift
+      ;;
+    --auto-detect)
+      PER_OUTPUT_MODE="auto"
+      shift
+      ;;
+    --use-all-images)
+      USE_ALL_IMAGES=1
+      shift
+      ;;
+    --cool-effects)
+      COOL_EFFECTS=1
+      shift
+      ;;
+    --style)
+      COOL_EFFECTS=1
+      COOL_EFFECTS_STYLE="$2"
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      log "Internal error in getopt processing!"
+      exit 1
+      ;;
+  esac
+done
+
+# --- Main Script ---
+
+[[ "${DEBUG:-}" == 1 ]] && set -x
+
+mkdir -p "$DIR"
+find "$DIR" -type f -mtime +1 -delete 2>/dev/null || true
+
+get_outputs() {
+  if command -v swaymsg >/dev/null 2>&1 && [[ -n "${SWAYSOCK-}" ]]; then
+    swaymsg -t get_outputs | jq -r '.[] | select(.active == true) | .name'
+  elif command -v wlr-randr >/dev/null 2>&1;
+  then
+    wlr-randr | awk '/ connected / {print $1}'
+  elif command -v niri >/dev/null 2>&1 && [[ -n "${NIRI_SOCKET-}" ]]; then
+    niri msg outputs 2>/dev/null | awk '/^[[:space:]]+Name: / {print $2}'
+  else
+    return 1
+  fi
+}
+
+run_corrupter() {
+  local in="$1" out="$2" add="$3" mag="$4" boffset="$5" meanabber="$6"
+  if [[ -x "$CORRUPTER" ]]; then
+    if ! "$CORRUPTER" -add "$add" -mag "$mag" -boffset "$boffset" -meanabber "$meanabber" "$in" "$out" 2>"$DIR/corrupter.err"; then
+      log "corrupter failed for $in; using original. See $DIR/corrupter.err"
+      cp -f -- "$in" "$out"
+    fi
+  else
+    log "corrupter not executable; using raw screenshot."
+    cp -f -- "$in" "$out"
+  fi
+}
+
+apply_cool_effects() {
+  local f="$1"
+  ((COOL_EFFECTS)) || return 0
+  if ! command -v convert >/dev/null 2>&1;
+  then
+    log "COOL_EFFECTS requested but 'convert' not found; skipping."
+    return 0
+  fi
+  local style="$COOL_EFFECTS_STYLE"
+  if [[ -z "$style" ]]; then
+    local styles=(glitch scanlines cyberpunk mosaic swirl vaporwave)
+    style=${styles[RANDOM % ${#styles[@]}]}
+  fi
+  local tmp
+  tmp="${f%.png}_fx.png"
+  case "$style" in
+    glitch) convert "$f" -channel R -virtual-pixel edge -motion-blur 10x80+30 -channel GB -separate +channel -compose screen -combine -colorspace RGB "$tmp" 2>/dev/null || return 0 ;;
+    scanlines) convert "$f" \( -size 1x2 pattern:gray50 -resize 100x100%! \) -tile +clone -compose overlay -composite "$tmp" 2>/dev/null || return 0 ;;
+    cyberpunk) convert "$f" -modulate 110,160,140 -colorize 5,0,15 -contrast -contrast "$tmp" 2>/dev/null || return 0 ;;
+    mosaic) convert "$f" -scale 20% -scale 500% "$tmp" 2>/dev/null || return 0 ;;
+    swirl) convert "$f" -swirl 65 "$tmp" 2>/dev/null || return 0 ;;
+    vaporwave) convert "$f" -modulate 110,150,120 -colorize 10,0,25 -gamma 0.9 "$tmp" 2>/dev/null || return 0 ;;
+    *) convert "$f" -modulate 105,120,100 "$tmp" 2>/dev/null || return 0 ;;
+  esac
+  if [[ -s "$tmp" ]]; then
+    mv -f -- "$tmp" "$f"
+    log "Applied cool effect style=$style to $f"
+  else
+    rm -f -- "$tmp"
+  fi
+}
+
+generate_image_for_output() {
+  local output="$1"
+  local raw corrupted
+  if [[ -z "$output" ]]; then
+    raw="$DIR/screen.png"
+    log "Capturing entire screen..."
+    grim "$raw" || { log "grim failed to capture full screen"; return 1; }
+  else
+    local safe_output=${output//[^A-Za-z0-9_.-]/_}
+    raw="$DIR/${safe_output}.png"
+    log "Capturing output: $output"
+    grim -o "$output" "$raw" || { log "grim failed for output $output"; return 1; }
+  fi
+
+  corrupted="${raw%.png}_corrupted.png"
+  local add mag boffset meanabber
   add=$((RANDOM % 10 + 3))
   mag=$((RANDOM % 8 + 3))
   boffset=$((RANDOM % 10 + 3))
   meanabber=$((RANDOM % 10 + 5))
+  run_corrupter "$raw" "$corrupted" "$add" "$mag" "$boffset" "$meanabber"
 
-  "$CORRUPTER" -add "$add" -mag "$mag" -boffset "$boffset" -meanabber "$meanabber" "$raw" "$corrupted"
+  [[ -s "$corrupted" ]] || corrupted="$raw"
+  apply_cool_effects "$corrupted"
+  [[ -s "$corrupted" ]] && echo "$corrupted"
+}
 
-  image_args+=(--image "$output:$corrupted")
+# --- Execution ---
+
+mapfile -t outputs < <(get_outputs || true)
+(( ${#outputs[@]} == 0 )) && log "No outputs detected; will capture entire screen."
+
+PER_OUTPUT=0
+if [[ "$PER_OUTPUT_MODE" == "force" ]]; then
+  PER_OUTPUT=1
+  log "Per-output mode is enabled by default."
+elif [[ "$PER_OUTPUT_MODE" == "force-no" ]]; then
+  PER_OUTPUT=0
+  log "Forcing single image mode."
+elif [[ "$PER_OUTPUT_MODE" == "auto" ]]; then
+  log "Auto-detecting per-output support..."
+  if swaylock --help 2>&1 | grep -q 'output:'; then
+    PER_OUTPUT=1
+    log "Swaylock supports per-output images."
+  else
+    PER_OUTPUT=0
+    log "Swaylock does not support per-output images; using fallback."
+  fi
+fi
+
+image_specs=()
+if (( ${#outputs[@]} > 0 )); then
+  for output in "${outputs[@]}"; do
+    img_path=$(generate_image_for_output "$output")
+    if [[ -n "$img_path" ]]; then
+      if ((PER_OUTPUT)); then
+        image_specs+=("$output:$img_path")
+      else
+        image_specs+=("$img_path")
+      fi
+    fi
+  done
+else
+  img_path=$(generate_image_for_output "")
+  [[ -n "$img_path" ]] && image_specs+=("$img_path")
+fi
+
+(( ${#image_specs[@]} > 0 )) || die "Failed to generate any images."
+
+swaylock_args=()
+if ((PER_OUTPUT)); then
+  for spec in "${image_specs[@]}"; do
+    swaylock_args+=(--image "$spec")
+  done
+else
+  if ((USE_ALL_IMAGES)); then
+    for path in "${image_specs[@]}"; do
+      swaylock_args+=(--image "$path")
+    done
+  else
+    swaylock_args+=(--image "${image_specs[0]}")
+  fi
+fi
+
+log "Invoking swaylock with args: ${swaylock_args[*]} $*"
+
+# --- Diagnostics ---
+log "Beginning image diagnostics..."
+idx=0
+while (( idx < ${#swaylock_args[@]} )); do
+  if [[ "${swaylock_args[idx]}" == "--image" ]]; then
+    spec="${swaylock_args[idx+1]}"
+    file_part="$spec"
+    output_part=""
+    if [[ "$spec" == *:* && -f "${spec#*:}" ]]; then
+      output_part="${spec%%:*}"
+      file_part="${spec#*:}"
+    fi
+    if [[ -f "$file_part" ]]; then
+      size=$(stat -c '%s' "$file_part" 2>/dev/null || echo '?')
+      sum=$(sha256sum "$file_part" 2>/dev/null | awk '{print $1}' || echo 'nohash')
+      dims=$(identify -format '%wx%h' "$file_part" 2>/dev/null || echo 'nodims')
+      if [[ -n "$output_part" ]]; then
+        log "Image spec output=$output_part file=$file_part size=${size}B sha256=$sum dims=$dims"
+      else
+        log "Image file=$file_part size=${size}B sha256=$sum dims=$dims"
+      fi
+    else
+      log "WARNING: Referenced image file does not exist: $file_part (from spec $spec)"
+    fi
+    (( idx+=2 ))
+  else
+    (( idx++ ))
+  fi
 done
+log "End of image diagnostics."
 
-# Use swaylock with dynamically generated images per output
-exec swaylock "${image_args[@]}"
+
+# --- Lock ---
+exec swaylock "${swaylock_args[@]}" "$@"
+
+# vim: set ft=sh ts=2 sw=2:

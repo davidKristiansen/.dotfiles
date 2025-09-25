@@ -54,5 +54,5 @@ function M.setup()
     statusline.setup(opts)
   end
 end
-return M
 
+return M
