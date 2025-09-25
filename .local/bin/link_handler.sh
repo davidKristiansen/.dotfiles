@@ -1,33 +1,39 @@
-# SPDX-License-Identifier: MIT
-# Copyright David Kristiansen
+#!/usr/bin/env bash
+# ~/.local/bin/link_handler.sh
+set -Eeuo pipefail
 
-#!/bin/bash
+LOG="${XDG_CACHE_HOME:-$HOME/.cache}/teams-url.log"
+mkdir -p "$(dirname "$LOG")"
+ts(){ date +'%F %T'; }
+log(){ echo "$(ts) $*" >>"$LOG"; }
 
-browser=firefox
-doc_svn_base="$HOME/ROOTDIR/10.DocSVN"
+# Your exact trunk regex (Bash regex, not sed): ^https://.*/svn/repos/.*/trunk/.*
+SVN_TRUNK_RE='^https://.*/svn/repos/.*/trunk/.*'
 
+# pick first URL-y arg (Teams sometimes passes extra)
+pick_url() {
+  for a in "$@"; do
+    case "$a" in
+      http://*|https://*|svn://*|svn+ssh://*|file://*|mailto:*|tel:*) printf '%s' "$a"; return 0;;
+    esac
+  done
+  return 1
+}
 
-case "${1}" in
-  https://*.*/svn/repos/*)
-    path=$(printf '%s\n' "${1#*svn/repos/}")
-    path=$(printf '%s\n' "${path/trunk\/}")
+log "args=$* PPID=$PPID"
+url="$(pick_url "$@")" || { log "no_url_found"; exit 0; }
 
-    full_path="${doc_svn_base}"/"${path}"
+# trim stray trailing punct from chat clients
+url="${url%%[),.]}"
+log "url=$url"
 
-    if [ -d "${full_path}" ]; then
-      svn update "${full_path}"
-      nautilus "${full_path}"
-    elif [ -d "$(dirname "${full_path}")" ]; then
-      svn update "$(dirname "${full_path}")"
-      nautilus "$(dirname "${full_path}")"
-    else
-      "${browser}" $1
-    fi
+# route by your regex
+if [[ "$url" =~ $SVN_TRUNK_RE ]]; then
+  log "route=svn-nav match=SVN_TRUNK_RE"
+  exec "$HOME/.local/bin/svn-nav" "$url"
+fi
 
-    echo $(dirname $path)
-    echo $1
-    ;;
-  *)
-    "${browser}" "${1}"
-  ;;
-esac
+# default: detached system opener
+log "route=xdg-open"
+exec setsid -f xdg-open "$url" >/dev/null 2>&1
+
