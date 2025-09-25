@@ -56,15 +56,41 @@ function M.setup()
         map("n", "<leader>co", "<cmd>LspOnTypeFormatToggle<CR>", "Toggle On-Type Formatting")
       end
 
-      -- Format on save (only if supported; separate from on-type)
+      -- Format on save (disabled by default, can be toggled)
       if client.server_capabilities.documentFormattingProvider then
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          group = vim.api.nvim_create_augroup("lsp_format_on_save_" .. ev.buf, { clear = true }),
-          buffer = ev.buf,
-          callback = function()
-            vim.lsp.buf.format({ async = false, bufnr = ev.buf })
-          end,
-        })
+        local format_on_save_enabled = false
+        local group_name = "lsp_format_on_save_" .. ev.buf
+
+        local function enable_format_on_save()
+          if not format_on_save_enabled then
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = vim.api.nvim_create_augroup(group_name, { clear = true }),
+              buffer = ev.buf,
+              callback = function()
+                vim.lsp.buf.format({ async = false, bufnr = ev.buf })
+              end,
+            })
+            format_on_save_enabled = true
+            vim.notify("LSP format on save: ON")
+          end
+        end
+
+        local function disable_format_on_save()
+          vim.api.nvim_clear_autocmds({ group = group_name, buffer = ev.buf })
+          format_on_save_enabled = false
+          vim.notify("LSP format on save: OFF")
+        end
+
+        vim.api.nvim_buf_create_user_command(ev.buf, "LspFormatOnSaveToggle", function()
+          if format_on_save_enabled then
+            disable_format_on_save()
+          else
+            enable_format_on_save()
+          end
+        end, { desc = "Toggle LSP format on save" })
+
+        map("n", "<leader>cf", "<cmd>LspFormatOnSaveToggle<CR>", "Toggle Format on Save")
+        -- Disabled by default. Call :LspFormatOnSaveToggle to enable per buffer.
       end
     end,
   })
