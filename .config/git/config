@@ -106,3 +106,16 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
+
+[mergetool "bc"]
+#  cmd = BComp.exe "$(wslpath -aw $LOCAL)" "$(wslpath -aw $REMOTE)" "$(wslpath -aw $BASE)" "$(wslpath -aw $MERGED)"
+  cmd = bcompare $LOCAL $REMOTE $BASE $MERGED
+  trustExitCode = true
+
+
+[difftool "bc"]
+# cmd =BComp.exe "$(wslpath -aw $LOCAL)" "$(wslpath -aw $REMOTE)"
+  cmd = bcompare $LOCAL $REMOTE
+  trustExitCode = true
+
