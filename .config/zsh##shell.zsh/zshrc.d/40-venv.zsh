@@ -13,7 +13,7 @@ _in_container() {
   [[ -f "/.dockerenv" ]] && return 0
   # cgroup/containerd/k8s hints
   command -v grep >/dev/null 2>&1 && {
-    grep -qaE '(docker|containerd|kubepods|libpod)' /proc/1/cgroup 2>/dev/null && return 0
+    \grep -qaE '(docker|containerd|kubepods|libpod)' /proc/1/cgroup 2>/dev/null && return 0
   }
   # systemd containers sometimes set envs (best-effort)
   [[ -n "$container" ]] && return 0
