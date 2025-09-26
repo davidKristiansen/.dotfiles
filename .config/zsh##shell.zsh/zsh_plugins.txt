@@ -25,7 +25,6 @@ ohmyzsh/ohmyzsh path:plugins/magic-enter
 #############################################################
 Aloxaf/fzf-tab
 Freed-Wu/fzf-tab-source
-# unixorn/fzf-zsh-plugin             # optional
 
 #############################################################
 # Fish-like Enhancements
