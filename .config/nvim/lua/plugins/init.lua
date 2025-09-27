@@ -66,6 +66,7 @@ function M.setup()
   require("plugins.dial").setup()
   require("plugins.mini_surround").setup()
   require("nvim-autopairs").setup()
+  require("plugins.mini_align").setup()
 
   -- Snippets
   require("plugins.luasnip").setup()
