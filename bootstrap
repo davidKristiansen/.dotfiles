@@ -11,6 +11,8 @@ echo Hold on to your bootstraps !
   "${SCRIPT_DIR}"/.local/bin/stow.sh \
     -i "^\.git" \
     -i "^\.github" \
+    -i "^\.pre-commit-config.yaml" \
+    -i "^\.secrets.baseline" \
     -i "$(basename "${0}")" \
     -f
 )
