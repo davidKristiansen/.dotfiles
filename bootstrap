@@ -5,35 +5,18 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 echo Hold on to your bootstraps !
 
-# ----- Safe XDG defaults (before mkdir) -----
-: "${XDG_CONFIG_HOME:=$HOME/.config}"
-: "${XDG_DATA_HOME:=$HOME/.local/share}"
-: "${XDG_STATE_HOME:=$HOME/.local/state}"
-: "${XDG_CACHE_HOME:=$HOME/.cache}"
-: "${XDG_BIN_HOME:=$HOME/.local/bin}"
-
-# Ensure XDG dirs exist
-mkdir -p "$XDG_CONFIG_HOME" \
-         "$XDG_DATA_HOME" \
-         "$XDG_STATE_HOME/zsh" \
-         "$XDG_CACHE_HOME/zsh" \
-         "$XDG_BIN_HOME"
-
 (
   cd "${SCRIPT_DIR}"
 
   "${SCRIPT_DIR}"/.local/bin/stow.sh \
     -i "^\.git" \
     -i "^\.github" \
-    -i "^\.secrets.baseline" \
-    -i "^\.pre-commit-config.yaml" \
     -i "$(basename "${0}")" \
     -f
 )
 
-source "${HOME}"/.zshenv
+. "${HOME}"/.zshenv
 
-exit 0
 
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh
