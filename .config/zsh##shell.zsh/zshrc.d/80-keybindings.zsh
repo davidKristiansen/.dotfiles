@@ -23,10 +23,10 @@ bindkey -M vicmd 'v' edit-command-line
 bindkey -M viins '^E' edit-command-line
 
 # Copilot
-bindkey -M viins '^[s' zsh_gh_copilot_suggest
-bindkey -M viins '^[e' zsh_gh_copilot_explain
-bindkey -M vicmd 'gs'  zsh_gh_copilot_suggest   # like Vim :gs
-bindkey -M vicmd 'ge'  zsh_gh_copilot_explain   # like Vim :ge
+# bindkey -M viins '^[s' zsh_gh_copilot_suggest
+# bindkey -M viins '^[e' zsh_gh_copilot_explain
+# bindkey -M vicmd 'gs'  zsh_gh_copilot_suggest   # like Vim :gs
+# bindkey -M vicmd 'ge'  zsh_gh_copilot_explain   # like Vim :ge
 
 return 0
 # vim: set ft=zsh ts=2 sw=2:

@@ -36,7 +36,7 @@ zsh-users/zsh-autosuggestions kind:defer
 #############################################################
 # AI
 #############################################################
-loiccoyle/zsh-github-copilot
+# loiccoyle/zsh-github-copilot
 
 #############################################################
 # External Utilities (bind as aliases separately)
