@@ -4,6 +4,10 @@
 
 local M = {}
 
+-- Pre-load on_attach so users can reference require('lsp').on_attach
+local on_attach = require('lsp.on_attach')
+M.on_attach = on_attach.setup
+
 -- Cache for merged configs
 local merged = {}
 
