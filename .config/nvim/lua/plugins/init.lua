@@ -9,10 +9,11 @@ function M.setup()
     { src = "https://github.com/MunifTanjim/nui.nvim" },
 
     -- Git plugins
-    { src = "https://github.com/NeogitOrg/neogit" },
-    { src = "https://github.com/tpope/vim-fugitive" },
-    { src = "https://github.com/sindrets/diffview.nvim" },
-    { src = "https://github.com/kdheepak/lazygit.nvim" },
+    -- { src = "https://github.com/NeogitOrg/neogit" },
+    -- { src = "https://github.com/tpope/vim-fugitive" },
+    -- { src = "https://github.com/sindrets/diffview.nvim" },
+    -- { src = "https://github.com/kdheepak/lazygit.nvim" },
+    -- { src = "https://github.com/lewis6991/gitsigns.nvim" },
 
     -- LSP / Language Tooling
     { src = "https://github.com/mason-org/mason.nvim" },
@@ -24,8 +25,9 @@ function M.setup()
     { src = "https://github.com/saghen/blink.cmp",                         version = "v1.6.0" },
     { src = "https://github.com/fang2hou/blink-copilot" },
     { src = "https://github.com/Kaiser-Yang/blink-cmp-avante" },
-    { src = "https://github.com/zbirenbaum/copilot.lua" },
-    { src = "https://github.com/yetone/avante.nvim" },
+    -- { src = "https://github.com/zbirenbaum/copilot.lua" },
+    -- { src = "https://github.com/yetone/avante.nvim" },
+    { src = "https://github.com/folke/sidekick.nvim" },
 
     -- Snippets
     { src = "https://github.com/L3MON4D3/LuaSnip" },
@@ -77,14 +79,16 @@ function M.setup()
   require("plugins.treesitter").setup()
 
   -- Completion & AI
-  require("plugins.copilot").setup()
   require("plugins.blink").setup()
-  require("plugins.avante").setup()
+  -- require("plugins.copilot").setup()
+  -- require("plugins.avante").setup()
+  require("plugins.sidekick").setup()
 
   -- Git
-  require("plugins.neogit").setup()
-  require("plugins.diffview").setup()
-  -- Fugitive does not require explicit setup, just :Git commands
+  require("plugins.git").setup()
+  -- require("plugins.neogit").setup()
+  -- require("plugins.diffview").setup()
+  -- require("plugins.gitsigns").setup()
 
   -- UI / Visuals
   require("plugins.which_key").setup()
