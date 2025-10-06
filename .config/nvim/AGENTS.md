@@ -122,12 +122,3 @@ Operate surgically, keep state consistent, and ensure AGENTS.md always reflects 
 
 (Previous activity log removed; rely on git history.)
 
-
-
-
-
-
-
-
-
-
