@@ -35,12 +35,12 @@ function M.setup()
         if vim.wo.diff then
           vim.cmd.normal({ "]c", bang = true })
         else
-          local cur_win = vim.api.nvim_get_current_win()
+          -- local cur_win = vim.api.nvim_get_current_win()
           gitsigns.nav_hunk("next")
-          gitsigns.preview_hunk()
-          if cur_win and vim.api.nvim_win_is_valid(cur_win) then
-            vim.api.nvim_set_current_win(cur_win)
-          end
+          gitsigns.preview_hunk_inline()
+          -- if cur_win and vim.api.nvim_win_is_valid(cur_win) then
+          --   vim.api.nvim_set_current_win(cur_win)
+          -- end
         end
       end, "Git: Next hunk (preview, keep focus)")
 
@@ -48,20 +48,21 @@ function M.setup()
         if vim.wo.diff then
           vim.cmd.normal({ "[c", bang = true })
         else
-          local cur_win = vim.api.nvim_get_current_win()
+          -- local cur_win = vim.api.nvim_get_current_win()
           gitsigns.nav_hunk("prev")
-          gitsigns.preview_hunk()
-          if cur_win and vim.api.nvim_win_is_valid(cur_win) then
-            vim.api.nvim_set_current_win(cur_win)
-          end
+          gitsigns.preview_hunk_inline()
+          -- if cur_win and vim.api.nvim_win_is_valid(cur_win) then
+          --   vim.api.nvim_set_current_win(cur_win)
+          -- end
         end
       end, "Git: Previous hunk (preview, keep focus)")
 
       -- Other hunk actions
-      map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage hunk")
-      map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset hunk")
+      map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage hunk (works on visual selection for partial)")
+      map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset hunk (works on visual selection for partial)")
+      map("n", "<leader>gh", gitsigns.select_hunk, "Select hunk (then adjust & <leader>gs / <leader>gr to split)")
       map("n", "<leader>gS", gitsigns.stage_buffer, "Stage buffer")
-      map("n", "<leader>gp", gitsigns.preview_hunk, "Preview hunk")
+      map("n", "<leader>gp", gitsigns.preview_hunk_inline, "Preview hunk")
       map("n", "<leader>gR", gitsigns.reset_buffer, "Reset buffer")
       map("n", "<leader>gp", gitsigns.preview_hunk, "Preview hunk")
       map("n", "<leader>gu", gitsigns.undo_stage_hunk, "Undo stage hunk")
