@@ -9,6 +9,8 @@ function M.setup()
       local client = vim.lsp.get_client_by_id(ev.data.client_id)
       if not client then return end
 
+      require("plugins.copilot").setup()
+
       -- basic maps
       local function map(mode, lhs, rhs, desc)
         vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, silent = true, desc = desc })

@@ -1,16 +1,30 @@
 -- lua/plugins/mason_lspconfig.lua
 -- SPDX-License-Identifier: MIT
--- Updated to avoid deprecated root require('lspconfig') usage (see :help lspconfig-nvim-0.11)
--- We now load individual server modules (require('lspconfig.SERVER')) so the new API
--- can be adopted progressively without triggering the deprecation warning.
 
 local M = {}
 
--- Try to detect whether the new ts_ls server exists without requiring the root module.
+-- Map Mason package IDs -> lspconfig server names
+local MASON_TO_LSP = {
+  ["lua_ls"]                  = "lua_ls",
+  ["typos_lsp"]               = "typos_lsp",
+  ["clangd"]                  = "clangd",
+  ["taplo"]                   = "taplo",      -- TOML
+  ["yamlls"]                  = "yamlls",
+  ["yaml-language-server"]    = "yamlls",
+  ["bashls"]                  = "bashls",
+  ["bash-language-server"]    = "bashls",
+  ["jsonls"]                  = "jsonls",
+  ["docker_language_server"]  = "dockerls",
+  ["tsserver"]                = "tsserver",
+  ["ts_ls"]                   = "ts_ls",
+  ["copilot-language-server"] = "copilot",
+  ["ruff"]                    = "ruff",       -- Ruff LSP
+  ["basedpyright"]            = "basedpyright",
+}
+
 local function detect_ts_server()
   local ok_tsls = pcall(require, "lspconfig.ts_ls")
   if ok_tsls then return "ts_ls" end
-  -- Fallback name
   return "tsserver"
 end
 
@@ -19,26 +33,27 @@ function M.setup()
   if not ok_bridge then return end
 
   local has_new_api = vim.lsp and vim.lsp.config and vim.lsp.enable
-  local TS = has_new_api and (vim.lsp.config['ts_ls'] and 'ts_ls' or 'tsserver') or detect_ts_server()
+  local TS = has_new_api and (vim.lsp.config["ts_ls"] and "ts_ls" or "tsserver") or detect_ts_server()
 
-  -- Ensure these are installed by Mason
+  -- Mason package IDs to install
   local ENSURE = {
     "lua_ls",
-    -- "ruff",                   -- Python linter LSP (diagnostics, code actions)
-    -- "basedpyright",           -- Python linter LSP (diagnostics, code actions)
-    "typos_lsp",              -- Spelling/typos across many filetypes
+    "typos_lsp",
     "clangd",
-    "docker_language_server", -- Dockerfile
-    "taplo",                  -- TOML
-    "yamlls",                 -- YAML
-    "bashls",                 -- Bash; we’ll extend to zsh filetype
-    "jsonls",                 -- JSON
-    TS,                       -- ts_ls or tsserver
+    "docker_language_server",
+    "taplo",          -- TOML
+    "yamlls",         -- YAML
+    "bashls",         -- Bash/Zsh
+    "jsonls",         -- JSON
+    "copilot-language-server",
+    "ruff",           -- Ruff diagnostics + code actions
+    "basedpyright",   -- Python types
+    TS,
   }
 
-  -- Per-server settings (keep attach/keymaps in your LspAttach)
+  -- Per-server settings keyed by lspconfig server id
   local SERVER_SETTINGS = {
-    docker_language_server = {},
+    dockerls = {},
     lua_ls = {
       settings = {
         Lua = {
@@ -48,9 +63,32 @@ function M.setup()
         },
       },
     },
+    typos_lsp = {},
+    clangd = {
+      cmd = { "clangd", "--background-index", "--clang-tidy" },
+      init_options = { clangdFileStatus = true },
+    },
+    taplo = {}, -- TOML
+    yamlls = {
+      settings = {
+        yaml = {
+          keyOrdering = false,
+        },
+      },
+    },
+    bashls = { filetypes = { "sh", "bash", "zsh" } },
+    jsonls = {
+      settings = {
+        json = {
+          validate = { enable = true },
+          -- If you add schemastore.nvim later, wire it here.
+        },
+      },
+    },
+    [TS] = { settings = { completions = { completeFunctionCalls = true } } },
 
-    -- NOTE: ruff_lsp is *not* a full Python language server; pair it with pyright
-    -- later if you want definitions/hover/etc. For now you asked just ruff.
+    -- Python pair: Ruff (lint/assist) + basedpyright (types/hover/goto)
+    -- Tip: let Ruff handle diagnostics/codeActions; let basedpyright do types.
     ruff = {
       init_options = {
         settings = {
@@ -58,100 +96,57 @@ function M.setup()
         },
       },
     },
-
     basedpyright = {
-      analysis = {
-        autoSearchPaths = true,
-        diagnosticMode = "workspace",
-        useLibraryCodeForTypes = true,
-        typeCheckingMode = "basic", -- can also be "strict"
-        diagnosticSeverityOverrides = {
-          reportUnusedImport = "none",
-          reportUnusedVariable = "none",
-          reportUndefinedVariable = "none", -- optional if Ruff F821 is enabled
+      settings = {
+        basedpyright = {
+          analysis = {
+            autoSearchPaths = true,
+            diagnosticMode = "workspace",
+            useLibraryCodeForTypes = true,
+            typeCheckingMode = "basic", -- "basic" or "strict"
+            -- Soften noisy stuff if Ruff also reports similar issues:
+            diagnosticSeverityOverrides = {
+              reportUnusedImport  = "none",
+              reportUnusedVariable= "none",
+            },
+          },
         },
       },
     },
 
-    ty = {},
-
-    typos_lsp = {
-      -- settings = { diagnosticSeverity = "Hint" }, -- Example to lower noise
-    },
-
-    clangd = {
-      cmd = { "clangd", "--background-index", "--clang-tidy" },
-      init_options = { clangdFileStatus = true },
-    },
-
-    taplo = {}, -- TOML (formatting, schema)
-
-    yamlls = {
-      settings = {
-        yaml = {
-          keyOrdering = false,
-          -- schemas = { kubernetes = "*.yaml" }, -- add if you want
-        },
-      },
-    },
-
-    bashls = {
-      filetypes = { "sh", "bash", "zsh" }, -- extend to zsh files too
-    },
-
-    jsonls = {
-      settings = {
-        json = {
-          validate = { enable = true },
-          -- schemas = require("schemastore").json.schemas(), -- if you add schemastore
-        },
-      },
-    },
-
-    ts_ls = {
-      settings = {
-        completions = { completeFunctionCalls = true },
-      },
-    },
-
-    tsserver = {
-      settings = {
-        completions = { completeFunctionCalls = true },
-      },
-    },
+    copilot = {}, -- Language Server for Copilot
   }
 
-  -- If on Neovim 0.11+ use the new vim.lsp.config data-only interface and avoid any lspconfig.* requires.
   if has_new_api then
-    for _, server in ipairs(ENSURE) do
-      local overrides = SERVER_SETTINGS[server]
-      pcall(function()
-        if overrides then
-          vim.lsp.config(server, overrides)
-        else
-          _ = vim.lsp.config(server) -- ensure default exists
-        end
-        vim.lsp.enable(server)
-      end)
+    bridge.setup({ ensure_installed = ENSURE, automatic_installation = true })
+
+    -- Enable LSP servers by lspconfig ids derived via mapping
+    local to_enable = {}
+    for _, pkg in ipairs(ENSURE) do
+      local lsp = MASON_TO_LSP[pkg] or pkg
+      to_enable[lsp] = true
+    end
+
+    for lsp, _ in pairs(to_enable) do
+      local conf = SERVER_SETTINGS[lsp]
+      if conf then
+        vim.lsp.config(lsp, conf)
+      else
+        pcall(vim.lsp.config, lsp)
+      end
+      pcall(vim.lsp.enable, lsp)
     end
     return
   end
 
-  -- Helper that sets up a server module WITHOUT using the deprecated root module.
+  -- Legacy path (pre-0.11) using lspconfig modules directly
   local function setup_server(server, conf)
-    -- Try loading the individual server module
     local ok_mod, mod = pcall(require, "lspconfig." .. server)
-    if not ok_mod then
-      return -- server module not available yet
-    end
-
-    -- Preferred: if module exposes setup (older style but allowed without root require)
+    if not ok_mod then return end
     if type(mod.setup) == "function" then
       mod.setup(conf)
       return
     end
-
-    -- Fallback: try to start manually if we can infer defaults
     if vim.lsp and vim.lsp.start and mod.document_config and mod.document_config.default_config then
       local base = mod.document_config.default_config
       local manual = vim.tbl_deep_extend("force", base, conf or {})
@@ -164,22 +159,13 @@ function M.setup()
     ensure_installed = ENSURE,
     automatic_installation = true,
     handlers = {
-      function(server)
-        local conf = SERVER_SETTINGS[server] or {}
-        setup_server(server, conf)
+      function(pkg)
+        local lsp = MASON_TO_LSP[pkg] or pkg
+        setup_server(lsp, SERVER_SETTINGS[lsp] or {})
       end,
     },
   })
-
-  -- Back-compat: older mason-lspconfig exposed setup_handlers instead
-  if type(bridge.setup_handlers) == "function" then
-    bridge.setup_handlers({
-      function(server)
-        local conf = SERVER_SETTINGS[server] or {}
-        setup_server(server, conf)
-      end,
-    })
-  end
 end
 
 return M
+

@@ -38,7 +38,7 @@ end, { desc = "Resume search" })
 map("n", "<leader>cf", function() vim.lsp.buf.format() end, { desc = "Format buffer" })
 
 -- Avante Chat
-map("n", "<leader>ac", ":AvanteChat<CR>", { desc = "Avante Chat" })
+-- map("n", "<leader>ac", ":AvanteChat<CR>", { desc = "Avante Chat" })
 
 -- Move lines (Alt-j / Alt-k)
 -- Normal mode: move current line
@@ -67,34 +67,5 @@ map("n", "<leader>ss", function()
   if ok then starter.open() end
 end, { desc = "Open start screen" })
 
-map("n", "<leader>gs", ":Git<CR>", { desc = "Fugitive status" })
-map("n", "<leader>gb", ":Git blame<CR>", { desc = "Git blame (fugitive)" })
-map("n", "<leader>gd", ":Gdiffsplit!<CR>", { desc = "Diff (fugitive)" })
-map("n", "<leader>gg", ":LazyGit<CR>", { desc = "Lazygit" })
-
 map("n", "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>", { desc = "Navigate next pane" })
 
-
--- Diffview integrations
-map("n", "<leader>gD", function()
-  vim.cmd("DiffviewOpen")
-end, { desc = "Diffview: Open (all diffs)" })
-
-map("n", "<leader>gq", function()
-  vim.cmd("DiffviewClose")
-end, { desc = "Diffview: Close" })
-
-map("n", "<leader>gh", function()
-  -- File history for current file
-  vim.cmd("DiffviewFileHistory %")
-end, { desc = "Diffview: File history (current file)" })
-
-map("n", "<leader>gH", function()
-  -- Repository history (all)
-  vim.cmd("DiffviewFileHistory")
-end, { desc = "Diffview: Repo history" })
-
-map("n", "<leader>gr", function()
-  -- Refresh by closing and reopening (simple approach)
-  vim.cmd("DiffviewRefresh")
-end, { desc = "Diffview: Refresh" })
