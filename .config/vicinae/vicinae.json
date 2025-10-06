@@ -1,0 +1,20 @@
+{
+    "closeOnFocusLoss": true,
+    "faviconService": "google",
+    "font": {
+        "size": 10
+    },
+    "keybinding": "default",
+    "popToRootOnClose": false,
+    "rootSearch": {
+        "searchFiles": true
+    },
+    "theme": {
+        "name": "gruvbox-dark.json"
+    },
+    "window": {
+        "csd": true,
+        "opacity": 1,
+        "rounding": 10
+    }
+}
