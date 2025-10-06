@@ -63,6 +63,31 @@ function M.setup()
       map("n", "<leader>gb", gitsigns.toggle_current_line_blame, "Toggle blame")
       map("n", "<leader>gd", gitsigns.diffthis, "Diff (buffer vs index)")
       map("n", "<leader>gD", function() gitsigns.diffthis("~") end, "Diff (vs HEAD)")
+      -- Change base using mini.pick (fallback to vim.ui.select)
+      map("n", "<leader>gC", function()
+        local refs = vim.fn.systemlist("git for-each-ref --format='%(refname:short)' refs/heads refs/remotes 2>/dev/null")
+        if vim.v.shell_error ~= 0 or #refs == 0 then
+          vim.notify("No git refs found", vim.log.levels.WARN)
+          return
+        end
+        local ok_pick, pick = pcall(require, "mini.pick")
+        if ok_pick and pick and pick.start then
+          pick.start({
+            source = {
+              items = refs,
+              name = "Git refs",
+              choose = function(item)
+                if item then gitsigns.change_base(item) end
+              end,
+            },
+          })
+        else
+          vim.ui.select(refs, { prompt = "Select git base ref" }, function(choice)
+            if choice then gitsigns.change_base(choice) end
+          end)
+        end
+      end, "Change base (pick ref)")
+
     end
   })
 
