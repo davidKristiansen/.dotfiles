@@ -35,12 +35,10 @@ function M.setup()
         if vim.wo.diff then
           vim.cmd.normal({ "]c", bang = true })
         else
-          -- local cur_win = vim.api.nvim_get_current_win()
           gitsigns.nav_hunk("next")
+          -- Reposition so the start of the hunk is at top of window for full visibility
+          vim.cmd("normal! zt")
           gitsigns.preview_hunk_inline()
-          -- if cur_win and vim.api.nvim_win_is_valid(cur_win) then
-          --   vim.api.nvim_set_current_win(cur_win)
-          -- end
         end
       end, "Git: Next hunk (preview, keep focus, top align)")
 
@@ -48,19 +46,16 @@ function M.setup()
         if vim.wo.diff then
           vim.cmd.normal({ "[c", bang = true })
         else
-          -- local cur_win = vim.api.nvim_get_current_win()
           gitsigns.nav_hunk("prev")
+          vim.cmd("normal! zt")
           gitsigns.preview_hunk_inline()
-          -- if cur_win and vim.api.nvim_win_is_valid(cur_win) then
-          --   vim.api.nvim_set_current_win(cur_win)
-          -- end
         end
       end, "Git: Previous hunk (preview, keep focus, top align)")
 
       -- Other hunk actions
-      map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage hunk (works on visual selection for partial)")
-      map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset hunk (works on visual selection for partial)")
-      map("n", "<leader>gh", gitsigns.select_hunk, "Select hunk (then adjust & <leader>gs / <leader>gr to split)")
+      map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage hunk")
+      map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset hunk")
+      map("n", "<leader>gh", gitsigns.select_hunk, "Select hunk")
       map("n", "<leader>gS", gitsigns.stage_buffer, "Stage buffer")
       map("n", "<leader>gp", gitsigns.preview_hunk_inline, "Preview hunk")
       map("n", "<leader>gR", gitsigns.reset_buffer, "Reset buffer")
