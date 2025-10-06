@@ -35,39 +35,59 @@ function M.setup()
         if vim.wo.diff then
           vim.cmd.normal({ "]c", bang = true })
         else
-          local cur_win = vim.api.nvim_get_current_win()
           gitsigns.nav_hunk("next")
-          gitsigns.preview_hunk()
-          if cur_win and vim.api.nvim_win_is_valid(cur_win) then
-            vim.api.nvim_set_current_win(cur_win)
-          end
+          -- Reposition so the start of the hunk is at top of window for full visibility
+          vim.cmd("normal! zt")
+          gitsigns.preview_hunk_inline()
         end
-      end, "Git: Next hunk (preview, keep focus)")
+      end, "Git: Next hunk (preview, keep focus, top align)")
 
       map("n", "[h", function()
         if vim.wo.diff then
           vim.cmd.normal({ "[c", bang = true })
         else
-          local cur_win = vim.api.nvim_get_current_win()
           gitsigns.nav_hunk("prev")
-          gitsigns.preview_hunk()
-          if cur_win and vim.api.nvim_win_is_valid(cur_win) then
-            vim.api.nvim_set_current_win(cur_win)
-          end
+          vim.cmd("normal! zt")
+          gitsigns.preview_hunk_inline()
         end
-      end, "Git: Previous hunk (preview, keep focus)")
+      end, "Git: Previous hunk (preview, keep focus, top align)")
 
       -- Other hunk actions
       map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage hunk")
       map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset hunk")
+      map("n", "<leader>gh", gitsigns.select_hunk, "Select hunk")
       map("n", "<leader>gS", gitsigns.stage_buffer, "Stage buffer")
-      map("n", "<leader>gp", gitsigns.preview_hunk, "Preview hunk")
+      map("n", "<leader>gp", gitsigns.preview_hunk_inline, "Preview hunk")
       map("n", "<leader>gR", gitsigns.reset_buffer, "Reset buffer")
-      map("n", "<leader>gp", gitsigns.preview_hunk, "Preview hunk")
       map("n", "<leader>gu", gitsigns.undo_stage_hunk, "Undo stage hunk")
       map("n", "<leader>gb", gitsigns.toggle_current_line_blame, "Toggle blame")
       map("n", "<leader>gd", gitsigns.diffthis, "Diff (buffer vs index)")
       map("n", "<leader>gD", function() gitsigns.diffthis("~") end, "Diff (vs HEAD)")
+      -- Change base using mini.pick (fallback to vim.ui.select)
+      map("n", "<leader>gC", function()
+        local refs = vim.fn.systemlist("git for-each-ref --format='%(refname:short)' refs/heads refs/remotes 2>/dev/null")
+        if vim.v.shell_error ~= 0 or #refs == 0 then
+          vim.notify("No git refs found", vim.log.levels.WARN)
+          return
+        end
+        local ok_pick, pick = pcall(require, "mini.pick")
+        if ok_pick and pick and pick.start then
+          pick.start({
+            source = {
+              items = refs,
+              name = "Git refs",
+              choose = function(item)
+                if item then gitsigns.change_base(item) end
+              end,
+            },
+          })
+        else
+          vim.ui.select(refs, { prompt = "Select git base ref" }, function(choice)
+            if choice then gitsigns.change_base(choice) end
+          end)
+        end
+      end, "Change base (pick ref)")
+
     end
   })
 
