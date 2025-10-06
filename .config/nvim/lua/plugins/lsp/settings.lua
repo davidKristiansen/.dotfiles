@@ -103,7 +103,7 @@ end
 local function setup_lsp_attach_hooks()
   vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("lsp_attach_core", { clear = true }),
-    callback = require("plugins.lsp.on_attach").setup,
+    callback = require("lsp.on_attach").setup,
   })
 end
 
