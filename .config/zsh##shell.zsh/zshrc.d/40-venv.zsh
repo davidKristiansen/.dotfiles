@@ -37,14 +37,35 @@ _nearest_venv_dir() {
 }
 
 # Activate/deactivate + keep venv/bin first in PATH
+# Track the root directory of the currently auto-activated venv
+typeset -g _SMART_VENV_ROOT
+
 __venv_switch_to() {
   local target="$1" current="$VIRTUAL_ENV"
+
+  # If we have an active env and PWD has moved outside its root, drop target to force deactivation
+  if [[ -n "$current" && -n "$_SMART_VENV_ROOT" ]]; then
+    case $PWD/ in
+      ($_SMART_VENV_ROOT/*) ;;  # still inside
+      (*) [[ "$current" == $_SMART_VENV_ROOT/* ]] && target="" ;; # left project tree
+    esac
+  fi
+
   if [[ -n "$target" && "$current" != "$target" ]]; then
     command -v deactivate >/dev/null 2>&1 && [[ -n "$current" ]] && deactivate
     # shellcheck disable=SC1090
     source "$target/bin/activate" >/dev/null 2>&1 || return 1
+    _SMART_VENV_ROOT="${target%/*}"   # parent dir of venv directory
   elif [[ -z "$target" && -n "$current" ]]; then
-    command -v deactivate >/dev/null 2>&1 && deactivate
+    if command -v deactivate >/dev/null 2>&1; then
+      deactivate
+    else
+      # Fallback manual cleanup when no deactivate function exists
+      path=(${^path:#$current/bin})
+      export PATH="${(j.:.)path}"
+      unset VIRTUAL_ENV
+    fi
+    _SMART_VENV_ROOT=""
   fi
 
   # Ensure active venv's bin is PATH[1]
