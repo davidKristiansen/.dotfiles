@@ -16,7 +16,7 @@ local opts = {
 
   -- default sources: tweak order if you like
   sources = {
-    default = { "avante", "copilot", "lsp", "path", "snippets", "buffer" },
+    default = {  "copilot", "lsp", "path", "snippets", "buffer" },
     providers = {
       copilot = {
         name         = "copilot",
@@ -24,14 +24,8 @@ local opts = {
         async        = true,
         score_offset = 100,             -- float Copilot higher than LSP if you want
       },
-      avante = {
-        module = 'blink-cmp-avante',
-        name = 'Avante',
-        opts = {}
-      }
     }, -- you can add "calc", etc., if installed
   },
-
 
   appearance = {
     nerd_font_variant = 'mono'
@@ -65,7 +59,6 @@ local opts = {
 
 }
 
-
 local M = {}
 
 function M.setup()
@@ -73,6 +66,27 @@ function M.setup()
   if not ok then return end
 
   blink.setup(opts)
+
+  -- Cmdline Enter behavior: if completion item is a directory, insert slash and keep completing;
+  -- if it's a file (or no menu), execute command as normal.
+  vim.keymap.set('c', '<CR>', function()
+    local ok_ci, ci = pcall(vim.fn.complete_info, { 'selected', 'items' })
+    if ok_ci and ci and ci.selected and ci.selected ~= -1 and ci.items then
+      local entry = ci.items[ci.selected + 1]
+      if entry then
+        local word = entry.word or entry.abbr
+        if word and vim.fn.isdirectory(word) == 1 then
+          -- ensure trailing slash and keep cmdline open
+            if not word:match('/$') then
+              vim.api.nvim_feedkeys('/', 'n', false)
+            end
+          return -- do not send <CR>
+        end
+      end
+    end
+    -- fallback: execute like normal
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, false, true), 'n', false)
+  end, { noremap = true, silent = true, desc = 'Cmdline: <CR> open file or descend into dir' })
 end
 
 return M

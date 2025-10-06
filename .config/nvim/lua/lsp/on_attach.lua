@@ -14,6 +14,13 @@ function M.setup(ev)
     vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
   end
 
+  -- Inline completion (Neovim nightly feature)
+  if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, ev.buf) then
+    vim.lsp.inline_completion.enable(true, { bufnr = ev.buf })
+    vim.keymap.set( 'i', '<C-F>', vim.lsp.inline_completion.get, { desc = 'LSP: accept inline completion', buffer = ev.buf, })
+    vim.keymap.set('i', '<C-G>', vim.lsp.inline_completion.select, { desc = 'LSP: switch inline completion', buffer = ev.buf })
+  end
+
   vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
   -- On-type formatting
