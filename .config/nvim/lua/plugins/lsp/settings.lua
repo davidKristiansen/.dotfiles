@@ -61,13 +61,7 @@ local function setup_lsp_servers()
       to_enable[lsp] = true
     end
 
-    for lsp, _ in pairs(to_enable) do
-      local conf = require("lsp").get_config(lsp)
-      if conf then
-        vim.lsp.config(lsp, conf)
-      end
-      pcall(vim.lsp.enable, lsp)
-    end
+    require('lsp').enable_servers(vim.tbl_keys(to_enable))
     return
   end
 
@@ -101,10 +95,7 @@ local function setup_lsp_servers()
 end
 
 local function setup_lsp_attach_hooks()
-  vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("lsp_attach_core", { clear = true }),
-    callback = require("lsp.on_attach").setup,
-  })
+  require('lsp').setup_attach_autocmd()
 end
 
 function M.setup()

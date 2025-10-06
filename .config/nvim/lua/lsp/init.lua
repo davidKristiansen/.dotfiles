@@ -55,4 +55,39 @@ function M.get_config(server)
   return merged[server]
 end
 
+-- Enable one or more servers (list of lspconfig ids)
+function M.enable_servers(servers)
+  if type(servers) ~= 'table' then return end
+  local has_new_api = vim.lsp and vim.lsp.config and vim.lsp.enable
+  for _, server in ipairs(servers) do
+    local conf = M.get_config(server) or {}
+    if has_new_api then
+      if conf and next(conf) ~= nil then
+        pcall(vim.lsp.config, server, conf)
+      end
+      pcall(vim.lsp.enable, server)
+    else
+      local ok_mod, mod = pcall(require, 'lspconfig.' .. server)
+      if ok_mod then
+        if type(mod.setup) == 'function' then
+          mod.setup(conf)
+        elseif vim.lsp and vim.lsp.start and mod.document_config and mod.document_config.default_config then
+          local base = mod.document_config.default_config
+          local manual = vim.tbl_deep_extend('force', base, conf or {})
+          manual.name = manual.name or server
+          vim.lsp.start(manual)
+        end
+      end
+    end
+  end
+end
+
+-- Setup autocmd for LspAttach (exposed for plugin layer to call once)
+function M.setup_attach_autocmd()
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('lsp_attach_core', { clear = true }),
+    callback = M.on_attach,
+  })
+end
+
 return M
