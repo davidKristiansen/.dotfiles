@@ -64,9 +64,11 @@ lua/utils/ (if present)
 
 ## LSP Configuration Model
 
-- Per-server override file path: lua/lsp/servers/<server>.lua returning a table merged (force) with default lspconfig definition.
-- No legacy fallback module paths are consulted (servers/ only).
-- M.enable_servers({list}) uses new vim.lsp.config/vim.lsp.enable API when available; falls back to lspconfig.setup/start otherwise.
+- Per-server override path: lua/lsp/servers/<server>.lua returning a table merged (force) over default lspconfig definition.
+- No legacy fallback module paths (servers/ only).
+- M.enable_servers({list}) uses vim.lsp.config + vim.lsp.enable when available; otherwise falls back to lspconfig.setup()/vim.lsp.start().
+- Copilot LSP (if available in nvim-lspconfig) is treated like other servers; fallback plugin-only integration still works if the server is absent.
+- Only one TS server is enabled (prefers ts_ls if present, else tsserver) to avoid duplicate clients.
 - on_attach.lua sets:
   - Buffer keymaps via lsp/keymaps.lua
   - Inlay hints (if server supports)

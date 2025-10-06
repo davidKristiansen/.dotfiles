@@ -14,7 +14,7 @@ local MASON_TO_LSP = {
   ["bashls"] = "bashls",
   ["bash-language-server"] = "bashls",
   ["jsonls"] = "jsonls",
-  ["docker_language_server"] = "dockerls",
+  ["dockerls"] = "dockerls",
   ["tsserver"] = "tsserver",
   ["ts_ls"] = "ts_ls",
   ["copilot-language-server"] = "copilot",
@@ -23,6 +23,7 @@ local MASON_TO_LSP = {
 }
 
 local function detect_ts_server()
+  -- Prefer ts_ls if available; otherwise tsserver. We do not keep both.
   local ok_tsls = pcall(require, "lspconfig.ts_ls")
   if ok_tsls then return "ts_ls" end
   return "tsserver"
@@ -32,8 +33,8 @@ local function setup_lsp_servers()
   local ok_bridge, bridge = pcall(require, "mason-lspconfig")
   if not ok_bridge then return end
 
-  local has_new_api = vim.lsp and vim.lsp.config and vim.lsp.enable
-  local TS = has_new_api and (vim.lsp.config["ts_ls"] and "ts_ls" or "tsserver") or detect_ts_server()
+  local has_new_api = vim.lsp and type(vim.lsp.config) == 'function' and type(vim.lsp.enable) == 'function'
+  local TS = detect_ts_server()
 
   -- Mason package IDs to install
   local ENSURE = {
@@ -45,10 +46,10 @@ local function setup_lsp_servers()
     "yamlls", -- YAML
     "bashls", -- Bash/Zsh
     "jsonls", -- JSON
-    "copilot-language-server",
     "ruff", -- Ruff diagnostics + code actions
     "basedpyright", -- Python types
     TS,
+    "copilot", -- GitHub Copilot LSP
   }
 
   if has_new_api then
