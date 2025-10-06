@@ -19,15 +19,12 @@ local function merge_tbl(base, extra)
 end
 
 -- Load a local server config from:
---   lua/lsp/servers/<server>.lua  (new preferred location)
---   lua/lsp/<server>.lua          (backwards compatibility fallback)
+--   lua/lsp/servers/<server>.lua
+-- (legacy fallback removed)
 local function load_local(server)
-  local paths = { 'lsp.servers.' .. server, 'lsp.' .. server }
-  for _, modname in ipairs(paths) do
-    local ok, conf = pcall(require, modname)
-    if ok and type(conf) == 'table' then
-      return conf
-    end
+  local ok, conf = pcall(require, 'lsp.servers.' .. server)
+  if ok and type(conf) == 'table' then
+    return conf
   end
   return {}
 end
