@@ -11,7 +11,4 @@ require("core.autocmds")
 -- Plugins (fetch + load + setup)
 require("plugins").setup()
 
--- LSP
-require("lsp").setup()
-
 require("core.keymaps")
