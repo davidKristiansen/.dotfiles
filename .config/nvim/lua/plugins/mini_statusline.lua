@@ -18,7 +18,7 @@ local opts = {
       local diff          = MiniStatusline.section_diff({ trunc_width = 75 })
       local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 75 })
       local lsp           = MiniStatusline.section_lsp({ trunc_width = 75 })
-      local filename      = MiniStatusline.section_filename({ trunc_width = 140 })
+      local filename      = vim.fn.expand('%:t')
       local fileinfo      = MiniStatusline.section_fileinfo({ trunc_width = 120 })
       local location      = MiniStatusline.section_location({ trunc_width = 75 })
       -- local fmt_mode      = fmt.status_icon()
