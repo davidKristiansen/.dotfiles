@@ -7,6 +7,13 @@ local opts = {
       backend = "tmux",
       enabled = true,
     },
+    prompts = {
+      refactor = "Please refactor {this} to be more maintainable",
+      security = "Review {file} for security vulnerabilities",
+      custom = function(ctx)
+        return "Current file: " .. ctx.buf .. " at line " .. ctx.row
+      end,
+    },
   },
 }
 
@@ -40,6 +47,40 @@ map(
   function() require("sidekick.cli").select_prompt() end,
   { desc = "Sidekick Ask Prompt" }
 )
+
+map(
+  { "x", "n" },
+  "<leader>at",
+  function() require("sidekick.cli").send({ msg = "{this}" }) end,
+  { desc = "Send This" }
+)
+map(
+  { "x" },
+  "<leader>aT",
+  function() require("sidekick.cli").send({ msg = "please translate this {selection}" }) end,
+  { desc = "Translate" }
+)
+
+map(
+  { "x" },
+  "<leader>av",
+  function() require("sidekick.cli").send({ msg = "{selection}" }) end,
+  { desc = "Send Visual Selection" }
+)
+map(
+  { "n", "x" },
+  "<leader>ap",
+  function() require("sidekick.cli").prompt() end,
+  { desc = "Sidekick Select Prompt" }
+)
+map(
+  { "n", "x", "i", "t" },
+  "<c-.>",
+  function() require("sidekick.cli").focus() end,
+  { desc = "Sidekick Switch Focus" }
+)
+
+
 local M = {}
 
 function M.setup()
