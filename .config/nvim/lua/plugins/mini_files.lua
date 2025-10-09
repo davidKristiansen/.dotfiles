@@ -54,7 +54,7 @@ function M.setup()
     end,
   })
 
-  vim.keymap.set("n", "<leader>e", function() minifiles_toggle() end, { desc = "Explorer" })
+  -- vim.keymap.set("n", "<leader>e", function() minifiles_toggle() end, { desc = "Explorer" })
 end
 
 return M
