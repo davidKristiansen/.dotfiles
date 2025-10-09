@@ -12,18 +12,43 @@ function M.setup()
     { src = "https://github.com/tpope/vim-fugitive" },
     { src = "https://github.com/sindrets/diffview.nvim" },
     { src = "https://github.com/kdheepak/lazygit.nvim" },
+    -- picker backend
+    { src = "https://github.com/ibhagwan/fzf-lua" },
   })
 
   ---------------------------------------------------------------------------
   -- DRY helpers
   ---------------------------------------------------------------------------
-  local function after_zt(fn_or_cmd)
-    if type(fn_or_cmd) == "function" then
-      fn_or_cmd()
-    else
-      vim.cmd.normal({ fn_or_cmd, bang = true })
+
+  -- fzf-lua driven ref picker (fallback to vim.ui.select)
+  local function pick_ref(opts)
+    opts = opts or {}
+    local refs = vim.fn.systemlist(
+      "git for-each-ref --format='%(refname:short)' refs/heads refs/remotes refs/tags 2>/dev/null"
+    )
+    if vim.v.shell_error ~= 0 or #refs == 0 then
+      vim.notify("No git refs found", vim.log.levels.WARN)
+      return
     end
-    vim.cmd("normal! zt")
+
+    local ok_fzf, fzf = pcall(require, "fzf-lua")
+    if ok_fzf then
+      fzf.fzf_exec(refs, {
+        prompt = opts.prompt or "Git refs> ",
+        fzf_opts = { ["--no-multi"] = "" },
+        winopts = opts.winopts or {},
+        actions = {
+          ["default"] = function(selected)
+            local choice = selected and selected[1]
+            if choice and opts.on_choice then opts.on_choice(choice) end
+          end,
+        },
+      })
+    else
+      vim.ui.select(refs, { prompt = opts.prompt or "Select git ref" }, function(choice)
+        if choice and opts.on_choice then opts.on_choice(choice) end
+      end)
+    end
   end
 
   -- 2) Gitsigns setup
@@ -54,42 +79,22 @@ function M.setup()
       map("n", "<leader>gd", gitsigns.diffthis, "Diff (buffer vs index)")
       map("n", "<leader>gD", function() gitsigns.diffthis("~") end, "Diff (vs HEAD)")
 
-      -- Change base using mini.pick (fallback to vim.ui.select)
+      -- Change base using fzf-lua (fallback to vim.ui.select)
       map("n", "<leader>gC", function()
-        local refs = vim.fn.systemlist(
-          "git for-each-ref --format='%(refname:short)' refs/heads refs/remotes 2>/dev/null"
-        )
-        if vim.v.shell_error ~= 0 or #refs == 0 then
-          vim.notify("No git refs found", vim.log.levels.WARN)
-          return
-        end
-        local ok_pick, pick = pcall(require, "mini.pick")
-        if ok_pick and pick and pick.start then
-          pick.start({
-            source = {
-              items = refs,
-              name = "Git refs",
-              choose = function(item)
-                if item then gitsigns.change_base(item) end
-              end,
-            },
-          })
-        else
-          vim.ui.select(refs, { prompt = "Select git base ref" }, function(choice)
-            if choice then gitsigns.change_base(choice) end
-          end)
-        end
+        pick_ref({
+          prompt = "Change base (→ right ref)> ",
+          on_choice = function(choice)
+            gitsigns.change_base(choice)
+          end,
+          winopts = {
+            row = 1.0, col = 0.0, height = 0.5, width = 0.5, border = "rounded",
+          },
+        })
       end, "Change base (pick ref)")
     end,
   })
 
   -- 3) Diffview helpers
-  local function git_list_refs()
-    return vim.fn.systemlist(
-      "git for-each-ref --format='%(refname:short)' refs/heads refs/remotes refs/tags 2>/dev/null"
-    )
-  end
-
   local function diff_local_vs(ref, only_current_file)
     if not ref or ref == "" then return end
     local cmd = ("DiffviewOpen HEAD..%s"):format(ref)
@@ -98,25 +103,11 @@ function M.setup()
   end
 
   local function pick_ref_and_open_diff(only_current_file)
-    local refs = git_list_refs()
-    if vim.v.shell_error ~= 0 or #refs == 0 then
-      vim.notify("No git refs found", vim.log.levels.WARN)
-      return
-    end
-    local ok_pick, pick = pcall(require, "mini.pick")
-    if ok_pick and pick and pick.start then
-      pick.start({
-        source = {
-          items = refs,
-          name = "Git refs (right side)",
-          choose = function(item) diff_local_vs(item, only_current_file) end,
-        },
-      })
-    else
-      vim.ui.select(refs, { prompt = "Select ref (right side)" }, function(choice)
-        diff_local_vs(choice, only_current_file)
-      end)
-    end
+    pick_ref({
+      prompt = only_current_file and "Diff file vs (→ ref)> " or "Diff repo vs (→ ref)> ",
+      on_choice = function(choice) diff_local_vs(choice, only_current_file) end,
+      winopts = { row = 1.0, col = 0.0, height = 0.5, width = 0.5, border = "rounded" },
+    })
   end
 
   require("diffview").setup({
@@ -194,3 +185,4 @@ function M.setup()
 end
 
 return M
+

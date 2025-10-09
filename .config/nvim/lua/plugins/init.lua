@@ -8,10 +8,12 @@ function M.setup()
     { src = "https://github.com/nvim-lua/plenary.nvim" },
     { src = "https://github.com/MunifTanjim/nui.nvim" },
 
+    -- Navigation / File & Buffer UX
+    { src = "https://github.com/ibhagwan/fzf-lua" },
+
     -- Completion & AI (order: engine + sources + assistants)
     { src = "https://github.com/saghen/blink.cmp",                         version = "v1.6.0" },
     { src = "https://github.com/fang2hou/blink-copilot" },
-    { src = "https://github.com/Kaiser-Yang/blink-cmp-avante" },
     { src = "https://github.com/folke/sidekick.nvim" },
 
     -- Snippets
@@ -38,6 +40,9 @@ function M.setup()
     -- Tmux Integration
     { src = "https://github.com/alexghergh/nvim-tmux-navigation" },
     { src = "https://github.com/vimpostor/vim-tpipeline" },
+
+    -- Notes
+    { src = "https://github.com/obsidian-nvim/obsidian.nvim" },
   }, { load = true })
 
   -- Ensure commands exist in this session
@@ -48,6 +53,7 @@ function M.setup()
 
   -- Navigation / File & Buffer UX
   require("plugins.mini_pick").setup()
+  require("plugins.fzf-lua").setup()
 
   -- Editing Enhancements
   require("plugins.dial").setup()
@@ -74,11 +80,14 @@ function M.setup()
   require("plugins.mini_statusline").setup()
   require("plugins.render_markdown").setup()
   require("plugins.mini_starter").setup()
-  require("plugins.mini_files").setup()
+  require("plugins.fyler").setup()
 
   -- Tmux Integration
   require("plugins.tmux_navigation").setup()
   require("plugins.tpipeline").setup()
+
+  -- Notes
+  require("plugins.obsidian").setup()
 end
 
 return M

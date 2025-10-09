@@ -61,7 +61,7 @@ local opts = {
     kind_presets = {
 
       split_left_most = {
-        width = "42abs",
+        width = "36abs",
       },
     },
   },
@@ -71,45 +71,6 @@ function M.setup()
   local ok, fyler = pcall(require, "fyler")
   if ok then
     fyler.setup(opts)
-    -- Always enforce fixed 42-column width for all Fyler windows (robust augroup)
-    local group = vim.api.nvim_create_augroup("FylerWidth", { clear = true })
-    local function set_fyler_width()
-      for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = vim.api.nvim_win_get_buf(win)
-        if vim.bo[buf].filetype == "fyler" then
-          -- pcall to avoid errors if window becomes invalid during resize events
-          pcall(vim.api.nvim_win_set_width, win, 42)
-        end
-      end
-    end
-    -- When the fyler buffer is first created
-    vim.api.nvim_create_autocmd({ "FileType" }, {
-      group = group,
-      pattern = "fyler",
-      callback = set_fyler_width,
-    })
-    -- Enforce on common layout-changing events
-    vim.api.nvim_create_autocmd({ "WinEnter", "BufWinEnter", "VimResized", "TabEnter" }, {
-      group = group,
-      callback = set_fyler_width,
-    })
-
-    -- Auto-quit Neovim if Fyler is the only remaining window
-    vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
-      group = group,
-      callback = function()
-        local wins = vim.api.nvim_list_wins()
-        if #wins == 1 then
-          local buf = vim.api.nvim_get_current_buf()
-          if vim.bo[buf].filetype == "fyler" then
-            -- Schedule to avoid interfering with current autocmd stack
-            vim.schedule(function()
-              pcall(vim.cmd, "quit")
-            end)
-          end
-        end
-      end,
-    })
   end
 end
 
@@ -120,7 +81,7 @@ map('n', '<leader>e', function()
       return vim.api.nvim_win_close(win, false)
     end
   end
-  require('fyler').open({ kind = "split_left_most" })
+  require('fyler').toggle({ kind = "split_left_most" })
   -- vim.cmd.Fyler kind="float"
 end, { desc = 'Explorer' })
 
