@@ -16,8 +16,10 @@ function M.setup(bufnr)
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
   map({ "n", "i" }, "<C-S-k>", vim.lsp.buf.signature_help, "Signature Help")
   map("n", "gl", vim.diagnostic.open_float, "Line Diagnostics")
+  map("n", "<leader>cf", vim.lsp.buf.format, "Format buffer")
   map("n", "<leader>co", "<cmd>LspOnTypeFormatToggle<CR>", "Toggle On-Type Formatting")
   map("n", "<leader>cs", "<cmd>LspFormatOnSaveToggle<CR>", "Toggle Format on Save")
+  map("n", "<leader>ch", "<cmd>LspInlayHintToggle<CR>", "Toggle Inlay Hints")
 end
 
 return M
