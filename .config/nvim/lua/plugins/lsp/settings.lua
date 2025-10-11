@@ -22,19 +22,13 @@ local MASON_TO_LSP = {
   ["basedpyright"] = "basedpyright",
 }
 
-local function detect_ts_server()
-  -- Prefer ts_ls if available; otherwise tsserver. We do not keep both.
-  local ok_tsls = pcall(require, "lspconfig.ts_ls")
-  if ok_tsls then return "ts_ls" end
-  return "tsserver"
-end
+
 
 local function setup_lsp_servers()
   local ok_bridge, bridge = pcall(require, "mason-lspconfig")
   if not ok_bridge then return end
 
   local has_new_api = vim.lsp and type(vim.lsp.config) == 'function' and type(vim.lsp.enable) == 'function'
-  local TS = detect_ts_server()
 
   -- Mason package IDs to install
   local ENSURE = {
@@ -48,7 +42,6 @@ local function setup_lsp_servers()
     "jsonls", -- JSON
     "ruff", -- Ruff diagnostics + code actions
     "basedpyright", -- Python types
-    TS,
     "copilot", -- GitHub Copilot LSP
   }
 

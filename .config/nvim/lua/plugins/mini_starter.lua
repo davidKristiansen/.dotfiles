@@ -8,6 +8,9 @@ function M.setup()
   local ok, starter = pcall(require, 'mini.starter')
   if not ok then return end
 
+  local fzf_lua = require('fzf-lua')
+  local fyler = require('fyler')
+
   local logo = {
     "      _             _     _ _  __",
     "     | |           (_)   | | |/ /",
@@ -20,9 +23,9 @@ function M.setup()
   local items = {
     starter.sections.recent_files(5, false),
     starter.sections.builtin_actions(),
-    { name = 'Find files', action = 'Pick files',                    section = 'Pickers' },
-    { name = 'Live grep',  action = 'Pick grep_live',                section = 'Pickers' },
-    { name = 'Explorer',   action = function() MiniFiles.open() end, section = 'Files' },
+    { name = 'Find files', action = fzf_lua.files,     section = 'Pickers' },
+    { name = 'Live grep',  action = fzf_lua.live_grep, section = 'Pickers' },
+    { name = 'Explorer',   action = fyler.toggle,      section = 'Pickers' },
   }
 
   starter.setup({

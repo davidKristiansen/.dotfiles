@@ -71,3 +71,4 @@ keybind = alt+8=unbind
 keybind = alt+9=unbind
 
 
+custom-shader = shaders/cursor_groovy.glsl
