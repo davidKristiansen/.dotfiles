@@ -10,7 +10,7 @@ bindsym $mod+m [class="Kuro"] scratchpad show
 
 # ## Scratchpad // Show 1Password //  <> [ ##
 # exec --no-startup-id 1password
-for_window [class="1Password" title="1Password"] move scratchpad
+for_window [app_id="1Password"] move scratchpad
 bindsym $mod+o exec --no-startup-id sh -c $XDG_BIN_HOME/1password.sh
 #
 # ## Scratchpad // Show kitty (quake mode) //  <> [ ##

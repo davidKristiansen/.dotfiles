@@ -6,8 +6,8 @@ set $right l
 set $term ghostty
 # set $term "${XDG_BIN_HOME}/kitty"
 
-# set $menu swaymsg 'exec $term --class __launcher -e sleep 10'
-set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'
+# set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'
+set $menu swaymsg 'exec vicinae toggle'
 set $menu_fallback 'bemenu-run \
   --ignorecase   \
   --fb "#1d2021" \
