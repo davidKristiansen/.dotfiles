@@ -15,6 +15,8 @@ function M.setup()
     { src = "https://github.com/saghen/blink.cmp",                         version = "v1.6.0" },
     { src = "https://github.com/fang2hou/blink-copilot" },
     { src = "https://github.com/folke/sidekick.nvim" },
+    { src = "https://github.com/ravitemer/mcphub.nvim" },
+    { src = "https://github.com/obsidian-nvim/obsidian-mcp.nvim" },
 
     -- Snippets
     { src = "https://github.com/L3MON4D3/LuaSnip" },
@@ -29,7 +31,6 @@ function M.setup()
     { src = "https://github.com/monaqa/dial.nvim" },
     { src = "https://github.com/bullets-vim/bullets.vim" },
     { src = "https://github.com/windwp/nvim-autopairs" },
-
 
     -- UI / Visuals
     { src = "https://github.com/folke/which-key.nvim" },
@@ -71,6 +72,7 @@ function M.setup()
   -- Completion & AI
   require("plugins.blink").setup()
   require("plugins.sidekick").setup()
+  require("plugins.mcphub").setup()
 
   -- Git
   require("plugins.git").setup()
