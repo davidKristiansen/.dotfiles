@@ -19,6 +19,7 @@ local diag_base = {
   severity_sort    = true,
 }
 
+
 local diag_signs = {
   signs = {
     text = {

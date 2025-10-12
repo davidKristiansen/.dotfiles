@@ -28,8 +28,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- Hybrid numbers
--- Hybrid numbers + Fyler exemptions (no gutter, no numbers)
-
+--
 -- Treat certain buffers as "special" (never toggle numbers there)
 local function is_special()
   local bt = vim.bo.buftype
@@ -74,7 +73,6 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave"
     vim.opt_local.relativenumber = false
   end,
 })
-
 
 -- Yank flash
 vim.api.nvim_create_autocmd("TextYankPost", {

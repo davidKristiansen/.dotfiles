@@ -1,19 +1,23 @@
--- lua/lsp/servers/basedpyright.lua
 -- SPDX-License-Identifier: MIT
+local util = require("lspconfig.util")
+
 return {
+  single_file_support = true,
   settings = {
     basedpyright = {
       analysis = {
         autoSearchPaths = true,
         diagnosticMode = "workspace",
         useLibraryCodeForTypes = true,
-        typeCheckingMode = "basic", -- "basic" or "strict"
-        -- Soften noisy stuff if Ruff also reports similar issues:
+        typeCheckingMode = "basic",
         diagnosticSeverityOverrides = {
           reportUnusedImport = "none",
           reportUnusedVariable = "none",
+          reportUnusedFunction = "none",
+          reportUnusedClass = "none",
         },
       },
     },
   },
 }
+

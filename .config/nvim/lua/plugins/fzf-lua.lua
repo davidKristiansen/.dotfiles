@@ -24,9 +24,9 @@ function M.setup()
       -- (set to true if you prefer prompt at top)
       -- fzf-lua: prompt is at bottom by default; leave as-is or set:
       --  preview = { default = "bat_native" },
-      preview = {
-        layout = "horizontal", -- results left, preview right
-      },
+      -- preview = {
+      --   layout = "horizontal", -- results left, preview right
+      -- },
     },
   })
 
