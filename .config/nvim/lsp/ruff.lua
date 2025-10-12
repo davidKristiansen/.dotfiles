@@ -2,9 +2,8 @@
 -- SPDX-License-Identifier: MIT
 
 return {
-  -- keep config mostly in pyproject; args non-empty to show up in :LspInfo
   settings = {
-    args = { },
+    args = {},
   },
 
   -- you already inject this globally; okay to omit here if you prefer
@@ -12,4 +11,3 @@ return {
 
   single_file_support = true,
 }
-
