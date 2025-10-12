@@ -12,11 +12,16 @@ function M.setup()
     { src = "https://github.com/ibhagwan/fzf-lua" },
 
     -- Completion & AI (order: engine + sources + assistants)
-    { src = "https://github.com/saghen/blink.cmp",                         version = "v1.6.0" },
+    { src = "https://github.com/saghen/blink.cmp",                         version = "v1.7.0" },
     { src = "https://github.com/fang2hou/blink-copilot" },
     { src = "https://github.com/folke/sidekick.nvim" },
     { src = "https://github.com/ravitemer/mcphub.nvim" },
     { src = "https://github.com/obsidian-nvim/obsidian-mcp.nvim" },
+
+    -- LSP / Language Tooling
+    { src = "https://github.com/mason-org/mason.nvim" },
+    { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+    { src = "https://github.com/neovim/nvim-lspconfig" },
 
     -- Snippets
     { src = "https://github.com/L3MON4D3/LuaSnip" },
@@ -66,7 +71,7 @@ function M.setup()
   require("plugins.luasnip").setup()
 
   -- LSP / Language Tooling
-  require("plugins.lsp").setup()
+  require("plugins.mason").setup()
   require("plugins.treesitter").setup()
 
   -- Completion & AI

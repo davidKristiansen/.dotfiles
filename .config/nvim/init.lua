@@ -7,8 +7,10 @@ vim.g.mapleader = " "
 require("core.options")
 require("core.colorscheme")
 require("core.autocmds")
+require("core.lsp")
 
 -- Plugins (fetch + load + setup)
 require("plugins").setup()
 
 require("core.keymaps")
+
