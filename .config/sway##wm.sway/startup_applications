@@ -51,6 +51,8 @@
 
 # exec_always 'systemctl --user restart wireplumber.service'
 
+exec_always 'vicinae server'
+
 exec '${XDG_BIN_HOME}/idle.sh'
 
 
