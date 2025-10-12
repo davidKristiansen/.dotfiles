@@ -11,5 +11,12 @@
   "workspace.checkThirdParty": false,
   "workspace.library": [
     "$VIMRUNTIME"
-  ]
+  ],
+    "diagnostics.disable": [
+        "param-type-mismatch",
+        "unused-local",
+        "unused-function",
+        "undefined-global",
+        "unknown-diag-code"
+    ]
 }
