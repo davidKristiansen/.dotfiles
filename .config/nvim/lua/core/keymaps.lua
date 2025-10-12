@@ -43,3 +43,20 @@ end, { desc = "Open start screen" })
 
 map("n", "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>", { desc = "Navigate next pane" })
 
+
+map("n", "<leader>th", function ()
+  vim.lsp.inlay_hint.enable( not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "Toggle Inlay Hints" })
+
+map("n", "<leader>ti", function ()
+  vim.lsp.inline_completion.enable( not vim.lsp.inline_completion.is_enabled())
+end, { desc = "Toggle Inline Completion" })
+
+map("n", "<leader>tf", function ()
+  vim.g.format_on_save = not vim.g.format_on_save
+  if vim.g.format_on_save then
+    vim.notify("Enabled format on save")
+  else
+    vim.notify("Disabled format on save")
+    end
+end, { desc = "Toggle Format on Save" })
