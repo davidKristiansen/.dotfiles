@@ -16,7 +16,7 @@ local opts = {
 
   -- default sources: tweak order if you like
   sources = {
-    default = {  "copilot", "lsp", "path", "snippets", "buffer" },
+    default = { "copilot", "lsp", "path", "snippets", "buffer" },
     providers = {
       copilot = {
         name         = "copilot",
@@ -24,16 +24,26 @@ local opts = {
         async        = true,
         score_offset = 100,             -- float Copilot higher than LSP if you want
       },
-    }, -- you can add "calc", etc., if installed
+    },                                  -- you can add "calc", etc., if installed
   },
 
   appearance = {
+    use_nvim_cmp_as_default = false,
     nerd_font_variant = 'mono'
   },
 
   -- completion behavior
   completion = {
-    accept = { auto_brackets = { enabled = true } },
+    menu = {
+      draw = {
+        treesitter = { "lsp" }
+      }
+    },
+    accept = {
+      auto_brackets = {
+        enabled = true,
+      },
+    },
     trigger = {
       show_on_insert = true,
       show_on_trigger_character = true,
@@ -41,8 +51,30 @@ local opts = {
     list = {
       selection = { preselect = false },
     },
+    ghost_text = {
+      enabled = vim.g.ai_cmp,
+    },
     -- docs window on the side
-    documentation = { auto_show = true },
+    documentation = {
+      auto_show = true,
+    },
+  },
+  cmdline = {
+    enabled = true,
+    keymap = {
+      preset = "cmdline",
+      ["<Right>"] = false,
+      ["<Left>"] = false,
+    },
+    completion = {
+      list = { selection = { preselect = false } },
+      menu = {
+        auto_show = function(ctx)
+          return vim.fn.getcmdtype() == ":"
+        end,
+      },
+      ghost_text = { enabled = true },
+    },
   },
   -- keymaps (Blink has a preset; we add Tab-friendly behavior)
   keymap = {
@@ -77,9 +109,9 @@ function M.setup()
         local word = entry.word or entry.abbr
         if word and vim.fn.isdirectory(word) == 1 then
           -- ensure trailing slash and keep cmdline open
-            if not word:match('/$') then
-              vim.api.nvim_feedkeys('/', 'n', false)
-            end
+          if not word:match('/$') then
+            vim.api.nvim_feedkeys('/', 'n', false)
+          end
           return -- do not send <CR>
         end
       end

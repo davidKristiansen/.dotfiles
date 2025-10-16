@@ -4,6 +4,8 @@ local M = {}
 function M.setup()
   -- One place to declare plugins
   vim.pack.add({
+    { src = "https://github.com/sainnhe/gruvbox-material" },
+
     -- Core Lua helpers / UI primitives
     { src = "https://github.com/nvim-lua/plenary.nvim" },
     { src = "https://github.com/MunifTanjim/nui.nvim" },
@@ -12,7 +14,7 @@ function M.setup()
     { src = "https://github.com/ibhagwan/fzf-lua" },
 
     -- Completion & AI (order: engine + sources + assistants)
-    { src = "https://github.com/saghen/blink.cmp",                         version = "v1.7.0" },
+    { src = "https://github.com/saghen/blink.cmp",                           version = "v1.7.0" },
     { src = "https://github.com/fang2hou/blink-copilot" },
     { src = "https://github.com/folke/sidekick.nvim" },
     { src = "https://github.com/ravitemer/mcphub.nvim" },
@@ -42,6 +44,8 @@ function M.setup()
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
     { src = "https://github.com/tpope/vim-eunuch" },
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
 
     -- Tmux Integration
     { src = "https://github.com/alexghergh/nvim-tmux-navigation" },
@@ -49,13 +53,19 @@ function M.setup()
 
     -- Notes
     { src = "https://github.com/obsidian-nvim/obsidian.nvim" },
+
+    -- Test
+    { src = "https://github.com/antoinemadec/FixCursorHold.nvim" },
+    { src = "https://github.com/nvim-neotest/nvim-nio" },
+    { src = "https://github.com/nvim-neotest/neotest" },
+    { src = "https://github.com/antoinemadec/FixCursorHold.nvim" },
+    { src = "https://github.com/sluongng/neotest-bazel" },
+    { src = "https://github.com/rcasia/neotest-bash" },
+    { src = "https://github.com/nvim-neotest/neotest-python" },
+
   }, { load = true })
 
-  -- Ensure commands exist in this session
-  vim.cmd("packadd nvim-treesitter")
-  vim.cmd("packadd dial.nvim") -- ensure dial loaded early so custom <C-a>/<C-x> mappings take effect
-
-  -- Per-plugin setups (ordered by functional groups)
+  require("plugins.gruvbox").setup()
 
   -- Navigation / File & Buffer UX
   require("plugins.mini_pick").setup()
@@ -95,6 +105,9 @@ function M.setup()
 
   -- Notes
   require("plugins.obsidian").setup()
+
+  -- Test
+  require("plugins.neotest").setup()
 end
 
 return M

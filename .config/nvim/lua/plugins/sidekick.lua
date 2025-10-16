@@ -80,6 +80,19 @@ map(
   { desc = "Sidekick Switch Focus" }
 )
 
+map(
+  { "n" },
+  "<TAB>",
+  function() require("sidekick").nes_jump_or_apply() end,
+  { desc = "Apply suggestion" }
+)
+
+map(
+  { "n" },
+  "<C-G>",
+  function() require("sidekick.nes").clear() end,
+  { desc = "Clear suggestion" }
+)
 
 local M = {}
 
