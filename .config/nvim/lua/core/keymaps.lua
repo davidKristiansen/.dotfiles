@@ -45,7 +45,16 @@ map("n", "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>", { desc = "Navigate next p
 
 
 map("n", "<leader>th", function ()
-  vim.lsp.inlay_hint.enable( not vim.lsp.inlay_hint.is_enabled())
+  if vim.g.inlay_hints_enabled == nil then
+    vim.g.inlay_hints_enabled = true
+  end
+  vim.g.inlay_hints_enabled = not vim.g.inlay_hints_enabled
+  vim.lsp.inlay_hint.enable(vim.g.inlay_hints_enabled)
+  if vim.g.inlay_hints_enabled then
+    vim.notify("Enabled inlay hints")
+  else
+    vim.notify("Disabled inlay hints")
+  end
 end, { desc = "Toggle Inlay Hints" })
 
 map("n", "<leader>ti", function ()

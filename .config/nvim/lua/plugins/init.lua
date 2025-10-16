@@ -54,6 +54,15 @@ function M.setup()
     -- Notes
     { src = "https://github.com/obsidian-nvim/obsidian.nvim" },
 
+    -- Git
+    { src = "https://github.com/lewis6991/gitsigns.nvim" },
+    { src = "https://github.com/NeogitOrg/neogit" },
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+    { src = "https://github.com/sindrets/diffview.nvim" },
+    { src = "https://github.com/kdheepak/lazygit.nvim" },
+    -- picker backend
+    { src = "https://github.com/ibhagwan/fzf-lua" },
+
     -- Test
     { src = "https://github.com/antoinemadec/FixCursorHold.nvim" },
     { src = "https://github.com/nvim-neotest/nvim-nio" },
@@ -68,14 +77,11 @@ function M.setup()
   require("plugins.gruvbox").setup()
 
   -- Navigation / File & Buffer UX
-  require("plugins.mini_pick").setup()
   require("plugins.fzf-lua").setup()
 
   -- Editing Enhancements
   require("plugins.dial").setup()
-  require("plugins.mini_surround").setup()
   require("nvim-autopairs").setup()
-  require("plugins.mini_align").setup()
 
   -- Snippets
   require("plugins.luasnip").setup()
@@ -94,9 +100,7 @@ function M.setup()
 
   -- UI / Visuals
   require("plugins.which_key").setup()
-  require("plugins.mini_statusline").setup()
   require("plugins.render_markdown").setup()
-  require("plugins.mini_starter").setup()
   require("plugins.fyler").setup()
 
   -- Tmux Integration
@@ -108,6 +112,9 @@ function M.setup()
 
   -- Test
   require("plugins.neotest").setup()
+
+  -- mini
+  require("plugins.mini").setup()
 end
 
 return M
