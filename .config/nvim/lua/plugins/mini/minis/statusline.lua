@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd("RecordingEnter", {
   end
 })
 
-local opts = {
+return {
   content = {
     active = function()
       local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
@@ -35,7 +35,7 @@ local opts = {
         { hl = mode_hl,                 strings = { mode, macro } },
         { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics, lsp } },
         '%<',
-        { hl = 'MiniStatuslineFilename', strings = {filename} },
+        { hl = 'MiniStatuslineFilename', strings = { filename } },
         '%=',
         { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
         { hl = mode_hl,                  strings = { location } },
@@ -45,14 +45,3 @@ local opts = {
   },
   use_icons = true,
 }
-
-local M = {}
-
-function M.setup()
-  local ok, statusline = pcall(require, "mini.statusline")
-  if ok then
-    statusline.setup(opts)
-  end
-end
-
-return M
