@@ -20,7 +20,7 @@
     "custom/separator",
     "backlight",
     "idle_inhibitor",
-    "custom/gammastep",
+    // "custom/gammastep",
     "custom/separator",
     "battery",
     "custom/separator",
@@ -28,9 +28,7 @@
     "custom/separator",
     "memory",
     "custom/separator",
-    "tray",
-    "custom/separator",
-    "custom/notification"
+    "tray"
   ],
   "tray": {
     "icon-size": 13,
@@ -176,26 +174,6 @@
     "max-length": 50,
     // "on-click": "$HOME/.local/bin/wifi-menu.sh 2>/dev/null"
     "on-click": "$term --class='termfloat' -e nmtui"
-  },
-  "custom/notification": {
-    "tooltip": false,
-    "format": "{icon}",
-    "format-icons": {
-      "notification": "<span foreground='red'><sup></sup></span>",
-      "none": "",
-      "dnd-notification": "<span foreground='red'><sup></sup></span>",
-      "dnd-none": "",
-      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
-      "inhibited-none": "",
-      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-      "dnd-inhibited-none": ""
-    },
-    "return-type": "json",
-    "exec-if": "which swaync-client",
-    "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
-    "escape": true
   },
   "custom/arrow1": {
     "format": ""
