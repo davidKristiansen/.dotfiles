@@ -9,7 +9,7 @@ function M.setup()
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
     { src = "https://github.com/NeogitOrg/neogit" },
     { src = "https://github.com/nvim-lua/plenary.nvim" },
-    { src = "https://github.com/tpope/vim-fugitive" },
+    -- { src = "https://github.com/tpope/vim-fugitive" }, -- Replaced by mini.git
     { src = "https://github.com/sindrets/diffview.nvim" },
     { src = "https://github.com/kdheepak/lazygit.nvim" },
     -- picker backend
@@ -56,7 +56,7 @@ function M.setup()
     signs = {
       add = { text = "▎" },
       change = { text = "▎" },
-      delete = { text = "▁" },
+      delete = { text = " " },
       topdelete = { text = "▔" },
       changedelete = { text = "▎" },
       untracked = { text = "┆" },
@@ -68,9 +68,8 @@ function M.setup()
       end
 
       -- Other hunk actions
-      map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", "Stage hunk")
-      map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", "Reset hunk")
-      map("n", "<leader>gh", gitsigns.select_hunk, "Select hunk")
+      map({ "n", "v" }, "<leader>gh", ":Gitsigns stage_hunk<CR>", "Stage hunk")
+      map({ "n", "v" }, "<leader>gH", ":Gitsigns reset_hunk<CR>", "Reset hunk")
       map("n", "<leader>gS", gitsigns.stage_buffer, "Stage buffer")
       map("n", "<leader>gp", gitsigns.preview_hunk_inline, "Preview hunk")
       map("n", "<leader>gR", gitsigns.reset_buffer, "Reset buffer")
@@ -158,6 +157,7 @@ function M.setup()
     vim.cmd("normal! zt")
   end, "Prev change (zt align + preview if not diffview)")
 
+  map("n", "<leader>gs", function() require('fzf-lua').git_status() end, "Git status (fzf)")
 
   -- Diffview: repo-wide and file-only pickers (local ← vs picked →)
   map("n", "<leader>gO", function() pick_ref_and_open_diff(false) end, "Diffview local ← vs pick →")
@@ -170,15 +170,15 @@ function M.setup()
 
   -- Neogit
   map("n", "<leader>gn", function() require("neogit").open({ kind = "tab" }) end, "Neogit status")
-  map("n", "<leader>gc", function() require("neogit").open({ "commit" }) end, "Commit")
+  -- map("n", "<leader>gc", function() require("neogit").open({ "commit" }) end, "Commit") -- Replaced by mini.git
   map("n", "<leader>gP", function() require("neogit").open({ "push" }) end, "Push")
   map("n", "<leader>gU", function() require("neogit").open({ "pull" }) end, "Pull")
   map("n", "<leader>gm", function() require("neogit").open({ "merge" }) end, "Merge")
 
-  -- Fugitive
-  map("n", "<leader>gG", ":Git<CR>", "Fugitive :Git")
-  map("n", "<leader>gB", ":Gblame<CR>", "Fugitive blame")
-  map("n", "<leader>gD", ":Gdiffsplit<CR>", "Fugitive diffsplit")
+  -- mini.git
+  map("n", "<leader>gc", function() require('mini.git').commit() end, "Commit")
+  map("n", "<leader>gG", function() require('mini.git').show_diff_preview() end, "Git diff preview")
+
 
   -- Lazygit
   map("n", "<leader>gg", ":LazyGit<CR>", "Open LazyGit")

@@ -15,9 +15,23 @@ return function(args)
 
   keymaps.setup(bufnr)
 
-  vim.lsp.inlay_hint.enable(true)
-  vim.lsp.on_type_formatting.enable(true)
-  vim.lsp.inline_completion.enable(true)
+  if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, bufnr) then
+    if vim.g.inlay_hints_enabled == nil then
+      vim.g.inlay_hints_enabled = true
+    end
+    if vim.g.inlay_hints_enabled then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    end
+  end
+
+  if client:supports_method(vim.lsp.protocol.Methods.textDocument_onTypeFormatting, bufnr) then
+    if vim.g.on_type_formatting_enabled == nil then
+      vim.g.on_type_formatting_enabled = true
+    end
+    if vim.g.on_type_formatting_enabled then
+      vim.lsp.on_type_formatting.enable(true, { bufnr = bufnr })
+    end
+  end
 
   if client:supports_method(vim.lsp.protocol.Methods.textDocument_formatting, bufnr) then
     vim.api.nvim_create_autocmd("BufWritePre", {
