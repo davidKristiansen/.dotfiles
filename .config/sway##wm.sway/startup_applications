@@ -20,7 +20,7 @@
 
 # exec $term --class=scratchpad -e tmux new -s scratchpad
 
-# exec_always pkill kanshi && kanshi
+exec_always pkill kanshi || true && kanshi
 
 # exec --no-startup-id speedcrunch0
 
