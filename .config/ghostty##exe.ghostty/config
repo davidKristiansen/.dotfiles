@@ -1,7 +1,7 @@
 ##############################
 # Font & Colors
 ##############################
-font-family = "Maple Mono NF CN SemiBold"
+font-family = "CaskaydiaCove Nerd Font"
 font-size   = 10
 
 theme       = Gruvbox Dark Hard
