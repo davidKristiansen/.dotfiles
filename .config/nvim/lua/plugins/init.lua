@@ -46,6 +46,7 @@ function M.setup()
     { src = "https://github.com/tpope/vim-eunuch" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
+    { src = "https://github.com/3rd/image.nvim" },
 
     -- Tmux Integration
     { src = "https://github.com/alexghergh/nvim-tmux-navigation" },
@@ -60,8 +61,17 @@ function M.setup()
     { src = "https://github.com/nvim-lua/plenary.nvim" },
     { src = "https://github.com/sindrets/diffview.nvim" },
     { src = "https://github.com/kdheepak/lazygit.nvim" },
+
+    -- Tasks
+    { src = "https://github.com/stevearc/overseer.nvim" },
+    { src = "https://github.com/Joakker/lua-json5" },
+
     -- picker backend
     { src = "https://github.com/ibhagwan/fzf-lua" },
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope-frecency.nvim" },
+    { src = "https://github.com/BurntSushi/ripgrep" },
 
     -- Test
     { src = "https://github.com/antoinemadec/FixCursorHold.nvim" },
@@ -78,6 +88,7 @@ function M.setup()
 
   -- Navigation / File & Buffer UX
   require("plugins.fzf-lua").setup()
+  require("plugins.telescope").setup()
 
   -- Editing Enhancements
   require("plugins.dial").setup()
@@ -102,6 +113,11 @@ function M.setup()
   require("plugins.which_key").setup()
   require("plugins.render_markdown").setup()
   require("plugins.fyler").setup()
+
+
+  -- Tasks
+  require("plugins.overseer").setup()
+  require("plugins.lua-json5").setup()
 
   -- Tmux Integration
   require("plugins.tmux_navigation").setup()
