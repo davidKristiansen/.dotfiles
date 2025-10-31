@@ -43,4 +43,3 @@ zsh-users/zsh-autosuggestions kind:defer
 #############################################################
 soimort/translate-shell
 so-fancy/diff-so-fancy
-

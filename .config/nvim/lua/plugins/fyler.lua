@@ -2,6 +2,7 @@
 local M = {}
 
 local opts = {
+  delete_to_trash = true,
   -- Changes explorer closing behaviour when a file get selected
   close_on_select = false,
   -- Changes explorer behaviour to auto confirm simple edits
@@ -21,6 +22,10 @@ local opts = {
       Conflict = "‼",
       Ignored = "○",
     },
+  },
+  source_selector = {
+    winbar = true,
+    statusline = false,
   },
   hooks = {
     on_delete = nil,   -- function(path) end
