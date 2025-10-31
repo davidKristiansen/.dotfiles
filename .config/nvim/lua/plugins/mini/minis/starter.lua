@@ -7,7 +7,7 @@ if not ok then
   return
 end
 
-local fzf_lua = require('fzf-lua')
+local telescope = require('telescope.builtin')
 local fyler = require('fyler')
 
 local logo = {
@@ -22,8 +22,8 @@ local logo = {
 local items = {
   starter.sections.recent_files(5, false),
   starter.sections.builtin_actions(),
-  { name = 'Find files', action = fzf_lua.files,     section = 'Pickers' },
-  { name = 'Live grep',  action = fzf_lua.live_grep, section = 'Pickers' },
+  { name = 'Find files', action = telescope.find_files,     section = 'Pickers' },
+  { name = 'Live grep',  action = telescope.live_grep, section = 'Pickers' },
   { name = 'Explorer',   action = fyler.toggle,      section = 'Pickers' },
 }
 

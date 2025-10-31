@@ -11,12 +11,13 @@ function M.setup(bufnr)
   end
 
   -- Navigation
-  map("n", "gd", vim.lsp.buf.definition, "Go to Definition")
+  map("n", "gd", function() require("telescope.builtin").lsp_definitions() end, "Go to Definition")
   map("n", "gD", vim.lsp.buf.declaration, "Go to Declaration")
-  map("n", "grr", vim.lsp.buf.references, "List References")
-  map("n", "gri", vim.lsp.buf.implementation, "Go to Implementation")
+  map("n", "gvD", function() vim.lsp.buf.declaration({ jump_to_location_opts = { command = "vsplit" } }) end, "Go to Declaration (Vertical Split)")
+  map("n", "grr", function() require("telescope.builtin").lsp_references() end, "List References")
+  map("n", "gri", function() require("telescope.builtin").lsp_implementations() end, "Go to Implementation")
   map("n", "gra", vim.lsp.buf.code_action, "Code Actions")
-  map("n", "grt", vim.lsp.buf.type_definition, "Go to Type Definition")
+  map("n", "grt", function() require("telescope.builtin").lsp_type_definitions() end, "Go to Type Definition")
   map("n", "grn", vim.lsp.buf.rename, "Rename")
   map("n", "<leader>cf", function() vim.lsp.buf.format { async = true } end, "Format Document")
 
@@ -28,9 +29,9 @@ function M.setup(bufnr)
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
 
   -- Diagnostics
-  map("n", "gl", vim.diagnostic.open_float, "Line Diagnostics")
-  map("n", "[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
-  map("n", "]d", vim.diagnostic.goto_next, "Next Diagnostic")
+  map("n", "gl", function() require("telescope.builtin").diagnostics() end, "Line Diagnostics")
+  map("n", "[d", function() vim.diagnostic.goto(true) end, "Previous Diagnostic")
+  map("n", "]d", function() vim.diagnostic.goto(false) end, "Next Diagnostic")
 end
 
 return M

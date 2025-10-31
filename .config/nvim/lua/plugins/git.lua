@@ -13,14 +13,14 @@ function M.setup()
     { src = "https://github.com/sindrets/diffview.nvim" },
     { src = "https://github.com/kdheepak/lazygit.nvim" },
     -- picker backend
-    { src = "https://github.com/ibhagwan/fzf-lua" },
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
   })
 
   ---------------------------------------------------------------------------
   -- DRY helpers
   ---------------------------------------------------------------------------
 
-  -- fzf-lua driven ref picker (fallback to vim.ui.select)
+  -- telescope-driven ref picker (fallback to vim.ui.select)
   local function pick_ref(opts)
     opts = opts or {}
     local refs = vim.fn.systemlist(
@@ -31,19 +31,30 @@ function M.setup()
       return
     end
 
-    local ok_fzf, fzf = pcall(require, "fzf-lua")
-    if ok_fzf then
-      fzf.fzf_exec(refs, {
-        prompt = opts.prompt or "Git refs> ",
-        fzf_opts = { ["--no-multi"] = "" },
-        winopts = opts.winopts or {},
-        actions = {
-          ["default"] = function(selected)
-            local choice = selected and selected[1]
-            if choice and opts.on_choice then opts.on_choice(choice) end
-          end,
-        },
-      })
+    local ok_telescope, telescope = pcall(require, "telescope")
+    if ok_telescope then
+      local actions = require("telescope.actions")
+      local pickers = require("telescope.pickers")
+      local finders = require("telescope.finders")
+      local conf = require("telescope.config").values
+
+      pickers.new({}, {
+        prompt_title = opts.prompt or "Git refs> ",
+        finder = finders.new_table({
+          results = refs,
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr, map)
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local selection = require("telescope.actions.state").get_selected_entry()
+            if selection and opts.on_choice then
+              opts.on_choice(selection[1])
+            end
+          end)
+          return true
+        end,
+      }):find()
     else
       vim.ui.select(refs, { prompt = opts.prompt or "Select git ref" }, function(choice)
         if choice and opts.on_choice then opts.on_choice(choice) end
@@ -85,9 +96,6 @@ function M.setup()
           on_choice = function(choice)
             gitsigns.change_base(choice)
           end,
-          winopts = {
-            row = 1.0, col = 0.0, height = 0.5, width = 0.5, border = "rounded",
-          },
         })
       end, "Change base (pick ref)")
     end,
@@ -105,7 +113,6 @@ function M.setup()
     pick_ref({
       prompt = only_current_file and "Diff file vs (→ ref)> " or "Diff repo vs (→ ref)> ",
       on_choice = function(choice) diff_local_vs(choice, only_current_file) end,
-      winopts = { row = 1.0, col = 0.0, height = 0.5, width = 0.5, border = "rounded" },
     })
   end
 
@@ -157,7 +164,7 @@ function M.setup()
     vim.cmd("normal! zt")
   end, "Prev change (zt align + preview if not diffview)")
 
-  map("n", "<leader>gs", function() require('fzf-lua').git_status() end, "Git status (fzf)")
+  map("n", "<leader>gs", function() require('telescope.builtin').git_status() end, "Git status (Telescope)")
 
   -- Diffview: repo-wide and file-only pickers (local ← vs picked →)
   map("n", "<leader>gO", function() pick_ref_and_open_diff(false) end, "Diffview local ← vs pick →")
