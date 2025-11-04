@@ -71,16 +71,10 @@ vec2 getRectangleCenter(vec4 rectangle) {
     return vec2(rectangle.x + (rectangle.z / 2.), rectangle.y - (rectangle.w / 2.));
 }
 
-const vec4 COLORS[8] = vec4[8](
-    vec4(0.984, 0.945, 0.780, 1.0), // gruvbox-fg
-    vec4(1.0, 0.2, 0.2, 1.0), // red
-    vec4(1.0, 0.5, 0.2, 1.0), // orange
-    vec4(1.0, 1.0, 0.2, 1.0), // yellow
-    vec4(0.2, 1.0, 0.2, 1.0), // green
-    vec4(0.2, 1.0, 1.0, 1.0), // cyan
-    vec4(0.2, 0.2, 1.0, 1.0), // blue
-    vec4(1.0, 0.2, 1.0, 1.0)  // magenta
-);
+const vec4 TRAIL_COLOR = vec4(1.0, 0.725, 0.161, 1.0); // yellow
+const vec4 CURRENT_CURSOR_COLOR = TRAIL_COLOR;
+const vec4 PREVIOUS_CURSOR_COLOR = TRAIL_COLOR;
+const vec4 TRAIL_COLOR_ACCENT = vec4(1.0, 0., 0., 1.0); // red-orange
 const float DURATION = .5;
 const float OPACITY = .2;
 // Don't draw trail within that distance * cursor size.
@@ -137,17 +131,12 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
             alphaModifier = 1.0;
         }
 
-        float colorIndex = alphaModifier * 7.0;
-        int index1 = int(floor(colorIndex));
-        int index2 = min(int(ceil(colorIndex)), 7);
-        float t = fract(colorIndex);
-        vec4 trailColor = mix(COLORS[index1], COLORS[index2], t);
-
         float sdfCursor = getSdfRectangle(vu, currentCursor.xy - (currentCursor.zw * offsetFactor), currentCursor.zw * 0.5);
         float sdfTrail = getSdfParallelogram(vu, v0, v1, v2, v3);
 
-        newColor = mix(newColor, trailColor, antialising(sdfTrail));
-        newColor = mix(fragColor, newColor, pow(1.0 - alphaModifier, 2.0));
+        newColor = mix(newColor, TRAIL_COLOR_ACCENT, 1.0 - smoothstep(sdfTrail, -0.01, 0.001));
+        newColor = mix(newColor, TRAIL_COLOR, antialising(sdfTrail));
+        newColor = mix(fragColor, newColor, 1.0 - alphaModifier);
         fragColor = mix(newColor, fragColor, step(sdfCursor, 0));
     }
 }

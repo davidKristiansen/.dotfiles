@@ -16,7 +16,7 @@ jeffreytse/zsh-vi-mode
 
 # Oh My Zsh: lightweight libs first, then specific plugins
 # ohmyzsh/ohmyzsh path:lib
-ohmyzsh/ohmyzsh path:plugins/command-not-found
+# ohmyzsh/ohmyzsh path:plugins/command-not-found
 ohmyzsh/ohmyzsh path:plugins/magic-enter
 # ohmyzsh/ohmyzsh path:plugins/tmux
 

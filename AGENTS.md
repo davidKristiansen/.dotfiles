@@ -7,9 +7,10 @@ This repository contains personal dotfiles.
 When asked to "commit", perform the following steps:
 
 1.  Check the git status.
-2.  Create a new branch. 
+2.  Create a new branch.
 3.  Stage the changes.
 4.  Create a commit with a descriptive message.
+5.  And push
 
 ## Conventional Commits
 

@@ -33,6 +33,8 @@ function M.setup()
     { src = "https://github.com/stevearc/oil.nvim" },
     { src = "https://github.com/nvim-mini/mini.nvim" },
     { src = "https://github.com/A7Lavinraj/fyler.nvim" },
+    { src = "https://github.com/mikavilpas/yazi.nvim" },
+    { src = "https://github.com/nvim-tree/nvim-tree.lua" },
 
     -- Editing Enhancements / Text Objects / Increment helpers
     { src = "https://github.com/monaqa/dial.nvim" },
@@ -82,7 +84,14 @@ function M.setup()
     { src = "https://github.com/rcasia/neotest-bash" },
     { src = "https://github.com/nvim-neotest/neotest-python" },
 
+    { src = "https://github.com/nosduco/remote-sshfs.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
+
   }, { load = true })
+
+  require("remote-sshfs").setup {}
+  require("nvim-tree").setup {}
+  require('telescope').load_extension 'remote-sshfs'
 
   require("plugins.gruvbox").setup()
 
