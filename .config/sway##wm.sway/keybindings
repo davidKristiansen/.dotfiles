@@ -6,6 +6,9 @@ bindsym $mod+Shift+n exec swaync-client -t -sw
 
 bindsym $mod+Delete exec $lock
 
+# Suspend session
+bindsym $mod+z exec systemctl suspend
+
 # Start a terminal
 bindsym $mod+Return exec $term
 
