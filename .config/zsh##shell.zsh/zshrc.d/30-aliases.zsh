@@ -45,8 +45,8 @@ fi
 # --- ls / eza ----------------------------------------------------------------
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza --color=auto --icons=auto'
-  alias ll='ls --total-size --long --changed --sort modified --reverse --all --header --group-directories-first'
-  alias tree='ls --tree'
+  alias ll='eza --total-size --long --changed --sort modified --reverse --all --header --group-directories-first'
+  alias tree='eza --tree'
 else
   alias ls='ls --color=auto'
   alias ll='ls -lahb'

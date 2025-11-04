@@ -12,6 +12,8 @@ foreground  = ebdbb2
 ##############################
 # Quick Terminal
 ##############################
+#text.semantic-highlighting = false
+#window-padding-color = extend-always
 quick-terminal-position = center
 gtk-quick-terminal-layer = top
 gtk-quick-terminal-namespace = term.quick
@@ -26,6 +28,7 @@ gtk-titlebar            = false
 confirm-close-surface   = false
 app-notifications       = no-clipboard-copy
 resize-overlay          = never
+# alpha-blending          = "srgb"
 
 working-directory = home
 
@@ -69,6 +72,10 @@ keybind = alt+6=unbind
 keybind = alt+7=unbind
 keybind = alt+8=unbind
 keybind = alt+9=unbind
+keybind = ctrl+i=unbind
+
 
 
 custom-shader = shaders/cursor_groovy.glsl
+# custom-shader = shaders/cursor_blaze.glsl
+custom-shader-animation  = true
