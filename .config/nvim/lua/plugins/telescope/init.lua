@@ -54,6 +54,9 @@ function M.setup()
         -- You can configure other frecency options here, for example:
         show_scores = true,
         -- ignore_patterns = {"*.git/*", "*/tmp/*"},
+      },
+      fyler_zoxide = {
+        -- Extension configuration
       }
     }
   })
@@ -61,6 +64,7 @@ function M.setup()
   -- 3. Load extensions
   pcall(telescope.load_extension, "fzf")
   pcall(telescope.load_extension, "frecency")
+  pcall(telescope.load_extension, "fyler_zoxide")
 
   -- 4. Set up keymaps
   vim.keymap.set("n", "<leader>sf", "<cmd>Telescope frecency workspace=CWD<cr>", { desc = "Telescope Frecency" })
@@ -81,6 +85,7 @@ function M.setup()
   vim.keymap.set("n", "/", function() builtin.current_buffer_fuzzy_find() end,
     { desc = "Telescope Live Grep (current buffer)" })
   vim.keymap.set("n", "<leader><leader>", builtin.resume, { desc = "Telescope Resume" })
+  vim.keymap.set("n", "<leader>sj", builtin.jumplist, { desc = "Telescope Jumplist" })
 end
 
 return M

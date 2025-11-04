@@ -2,6 +2,8 @@
 
 
 vim.g.format_on_save = true
+vim.g.inlay_hints_enabled = false
+vim.g.on_type_formatting_enabled = true
 
 local keymaps = require "core.lsp.keymaps"
 

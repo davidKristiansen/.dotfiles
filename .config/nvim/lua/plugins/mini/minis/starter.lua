@@ -7,8 +7,45 @@ if not ok then
   return
 end
 
-local telescope = require('telescope.builtin')
+local builtin = require('telescope.builtin')
+local telescope = require('telescope')
 local fyler = require('fyler')
+
+-- Custom recent files section that only shows files from the current working directory
+local function recent_files_current_dir(n_files, show_path)
+  local custom_action = function(item)
+    vim.cmd('bdelete')
+    vim.cmd(('edit %s'):format(vim.fn.fnameescape(item.path)))
+  end
+
+  local oldfiles = vim.v.oldfiles
+  if #oldfiles == 0 then
+    return {}
+  end
+
+  local items = {}
+  local n_added = 0
+  local cwd = vim.fn.getcwd()
+  local cwd_with_sep = cwd == '/' and cwd or (cwd .. '/')
+
+  for i = #oldfiles, 1, -1 do
+    local path = oldfiles[i]
+    if
+        vim.fn.filereadable(path) == 1
+        and vim.fn.isdirectory(path) == 0
+        and vim.startswith(path, cwd_with_sep)
+    then
+      local name = show_path and path or vim.fn.fnamemodify(path, ':.')
+      table.insert(items, { name = name, action = custom_action, section = 'Recent files (cwd)', path = path })
+      n_added = n_added + 1
+      if n_added == n_files then
+        break
+      end
+    end
+  end
+
+  return items
+end
 
 local logo = {
   "      _             _     _ _  __",
@@ -20,14 +57,16 @@ local logo = {
 }
 
 local items = {
-  starter.sections.recent_files(5, false),
+  recent_files_current_dir(5, false),
   starter.sections.builtin_actions(),
-  { name = 'Find files', action = telescope.find_files,     section = 'Pickers' },
-  { name = 'Live grep',  action = telescope.live_grep, section = 'Pickers' },
-  { name = 'Explorer',   action = fyler.toggle,      section = 'Pickers' },
+  { name = 'Find files', action = function() telescope.extensions.frecency.frecency({ cwd = vim.fn.getcwd() }) end, section = 'Pickers' },
+  { name = 'Live grep',  action = builtin.live_grep,                                                                section = 'Pickers' },
+  { name = 'Explorer',   action = fyler.toggle,                                                                     section = 'Pickers' },
 }
 
---- Applies a rainbow fade effect to the starter logo.
+---
+-- Applies a rainbow fade effect to the starter logo.
+--
 local function apply_rainbow_to_logo(buf, logo_lines)
   local ns = vim.api.nvim_create_namespace('starter_logo_rainbow')
   local rainbow = {

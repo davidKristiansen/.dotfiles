@@ -76,18 +76,18 @@ function M.setup()
   local ok, fyler = pcall(require, "fyler")
   if ok then
     fyler.setup(opts)
+
+    local map = vim.keymap.set
+    map('n', '<leader>e', function()
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "fyler" then
+          return vim.api.nvim_win_close(win, false)
+        end
+      end
+      require('fyler').toggle({ kind = "split_left_most" })
+      -- vim.cmd.Fyler kind="float"
+    end, { desc = 'Explorer' })
   end
 end
-
-local map = vim.keymap.set
-map('n', '<leader>e', function()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "fyler" then
-      return vim.api.nvim_win_close(win, false)
-    end
-  end
-  require('fyler').toggle({ kind = "split_left_most" })
-  -- vim.cmd.Fyler kind="float"
-end, { desc = 'Explorer' })
 
 return M
