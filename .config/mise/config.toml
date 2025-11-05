@@ -32,7 +32,7 @@ nodejs = "latest"
 # Python
 python = "3.12"
 pipx = "latest"
-uv = "latest"
+uv = "0.9.2"
 
 thefuck = { version = "latest", uvx_args = "--python 3.11" }
 
