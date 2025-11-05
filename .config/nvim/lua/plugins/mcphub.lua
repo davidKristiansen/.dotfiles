@@ -1,20 +1,15 @@
 -- SPDX-License-Identifier: MIT
-local M = {}
-
-function M.setup()
-  local ok, mcp = pcall(require, "mcp")
-
-
-  if ok then
-    mcp.setup()
-  end
+vim.pack.add({
+  { src = "https://github.com/ravitemer/mcphub.nvim" },
+  { src = "https://github.com/obsidian-nvim/obsidian-mcp.nvim" },
+}, { confirm = false })
 
 
-  local function map(mode, lhs, rhs, desc)
-    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
-  end
+require("mcphub").setup()
 
-  map("n", "<leader>m", "<cmd>MCPHub<CR>", "Mcphub")
+
+local function map(mode, lhs, rhs, desc)
+  vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
 end
 
-return M
+map("n", "<leader>m", "<cmd>MCPHub<CR>", "Mcphub")

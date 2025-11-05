@@ -1,7 +1,11 @@
 -- SPDX-License-Identifier: MIT
+vim.pack.add({
+  { src = "https://github.com/folke/sidekick.nvim" },
+}, { confirm = false })
+
 local map = vim.keymap.set
 
-local opts = {
+require("sidekick").setup({
   cli = {
     mux = {
       backend = "tmux",
@@ -15,7 +19,7 @@ local opts = {
       end,
     },
   },
-}
+})
 
 map(
   { "n", "x", "i", "t" },
@@ -93,14 +97,3 @@ map(
   function() require("sidekick.nes").clear() end,
   { desc = "Clear suggestion" }
 )
-
-local M = {}
-
-function M.setup()
-  local ok, sidekick = pcall(require, "sidekick")
-  if ok then
-    sidekick.setup(opts)
-  end
-end
-
-return M

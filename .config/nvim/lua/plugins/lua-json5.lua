@@ -1,6 +1,5 @@
 -- SPDX-License-Identifier: MIT
 -- lua/json5_build.lua
-local M = {}
 
 -- Find plugin dir anywhere under &packpath
 local function find_lua_json5_dir()
@@ -57,29 +56,25 @@ local function ensure_built(silent)
   end
 end
 
-function M.setup()
-  -- 1) On startup: if not built, build once
-  vim.api.nvim_create_autocmd("VimEnter", {
-    group = vim.api.nvim_create_augroup("json5_build_once", { clear = true }),
-    callback = function() ensure_built(true) end,
+-- 1) On startup: if not built, build once
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("json5_build_once", { clear = true }),
+  callback = function() ensure_built(true) end,
+})
+
+-- 2) Provide a manual command
+vim.api.nvim_create_user_command("Json5Build", function() ensure_built(false) end, {})
+
+-- 3) If vim.pack exposes a PackChanged/PackUpdated User event in your build,
+--    hook it (safe-guarded: if it doesn't exist, nothing breaks).
+pcall(function()
+  vim.api.nvim_create_autocmd("User", {
+    group = vim.api.nvim_create_augroup("json5_pack_changed", { clear = true }),
+    pattern = { "PackChanged", "PackUpdated" }, -- whichever your build emits
+    callback = function()
+      -- Only rebuild if lua-json5 is installed/updated
+      local dir = find_lua_json5_dir()
+      if dir then ensure_built(true) end
+    end,
   })
-
-  -- 2) Provide a manual command
-  vim.api.nvim_create_user_command("Json5Build", function() ensure_built(false) end, {})
-
-  -- 3) If vim.pack exposes a PackChanged/PackUpdated User event in your build,
-  --    hook it (safe-guarded: if it doesn't exist, nothing breaks).
-  pcall(function()
-    vim.api.nvim_create_autocmd("User", {
-      group = vim.api.nvim_create_augroup("json5_pack_changed", { clear = true }),
-      pattern = { "PackChanged", "PackUpdated" }, -- whichever your build emits
-      callback = function()
-        -- Only rebuild if lua-json5 is installed/updated
-        local dir = find_lua_json5_dir()
-        if dir then ensure_built(true) end
-      end,
-    })
-  end)
-end
-
-return M
+end)

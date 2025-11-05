@@ -1,33 +1,31 @@
 -- lua/plugins/which_key.lua
 -- SPDX-License-Identifier: MIT
-local M = {}
 
-function M.setup()
-  local ok, wk = pcall(require, "which-key")
-  if not ok then return end
+vim.pack.add({
+  { src = "https://github.com/folke/which-key.nvim" },
+}, { confirm = false })
 
-  vim.o.timeout = true
-  vim.o.timeoutlen = 400
+vim.o.timeout = true
+vim.o.timeoutlen = 400
 
-  wk.setup({
-    preset = "helix"
-  })
+local wk = require("which-key")
 
-  wk.add({
-    { "<leader>a", group = "ai" },
-    { "<leader>c", group = "code" },
-    { "<leader>g", group = "git" },
-    { "<leader>s", group = "search" },
-    { "<leader>t", group = "toggles" },
-    { "<leader>n", group = "notes" },
-    { "]", group = "next →" },
-    { "[", group = "prev ←" },
-    { "g", group = "goto" },
-    { "z", group = "folds/scroll" },
-  }, { mode = { "n", "v", "o" } })
-  require("which-key").add({
-    { "gd", group = "goto" },
-  }, { mode = { "n" } })
-end
+wk.setup({
+  preset = "helix"
+})
 
-return M
+wk.add({
+  { "<leader>a", group = "ai" },
+  { "<leader>c", group = "code" },
+  { "<leader>g", group = "git" },
+  { "<leader>s", group = "search" },
+  { "<leader>t", group = "toggles" },
+  { "<leader>n", group = "notes" },
+  { "]", group = "next →" },
+  { "[", group = "prev ←" },
+  { "g", group = "goto" },
+  { "z", group = "folds/scroll" },
+}, { mode = { "n", "v", "o" } })
+require("which-key").add({
+  { "gd", group = "goto" },
+}, { mode = { "n" } })

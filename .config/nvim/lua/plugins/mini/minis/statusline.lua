@@ -35,7 +35,7 @@ return {
         { hl = mode_hl,                 strings = { mode, macro } },
         { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics, lsp } },
         '%<',
-        { hl = 'MiniStatuslineFilename', strings = { filename } },
+        { hl = 'MiniStatuslineFilename', strings = {} },
         '%=',
         { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
         { hl = mode_hl,                  strings = { location } },

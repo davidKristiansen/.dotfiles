@@ -1,6 +1,27 @@
 -- SPDX-License-Identifier: MIT
 
-local opts = {
+vim.pack.add({
+  { src = "https://github.com/L3MON4D3/LuaSnip" },
+  { src = "https://github.com/saghen/blink.cmp",      version = vim.version.range("1.7") },
+  { src = "https://github.com/fang2hou/blink-copilot" },
+  { src = "https://github.com/windwp/nvim-autopairs" },
+}, { confirm = false })
+
+-- LuaSnip
+local function build_jsregexp()
+  local ok, fn = pcall(vim.fn.system, { "make", "install_jsregexp" })
+  if not ok then
+    vim.notify("LuaSnip jsregexp build failed: " .. tostring(fn), vim.log.levels.WARN)
+  end
+end
+
+-- Try to build regex engine if not already present
+local lib = vim.fn.stdpath("data") .. "/site/pack/core/opt/LuaSnip/lib"
+if vim.fn.empty(vim.fn.glob(lib .. "/*jsregexp*")) > 0 then
+  vim.schedule(build_jsregexp)
+end
+
+require("blink.cmp").setup({
   -- integrate with LuaSnip
   -- enabled = function()
   --   local ft = vim.bo.filetype
@@ -89,36 +110,27 @@ local opts = {
   },
 
 
-}
+})
 
-local M = {}
 
-function M.setup()
-  local ok, blink = pcall(require, "blink.cmp")
-  if not ok then return end
 
-  blink.setup(opts)
-
-  -- Cmdline Enter behavior: if completion item is a directory, insert slash and keep completing;
-  -- if it's a file (or no menu), execute command as normal.
-  vim.keymap.set('c', '<CR>', function()
-    local ok_ci, ci = pcall(vim.fn.complete_info, { 'selected', 'items' })
-    if ok_ci and ci and ci.selected and ci.selected ~= -1 and ci.items then
-      local entry = ci.items[ci.selected + 1]
-      if entry then
-        local word = entry.word or entry.abbr
-        if word and vim.fn.isdirectory(word) == 1 then
-          -- ensure trailing slash and keep cmdline open
-          if not word:match('/$') then
-            vim.api.nvim_feedkeys('/', 'n', false)
-          end
-          return -- do not send <CR>
+-- Cmdline Enter behavior: if completion item is a directory, insert slash and keep completing;
+-- if it's a file (or no menu), execute command as normal.
+vim.keymap.set('c', '<CR>', function()
+  local ok_ci, ci = pcall(vim.fn.complete_info, { 'selected', 'items' })
+  if ok_ci and ci and ci.selected and ci.selected ~= -1 and ci.items then
+    local entry = ci.items[ci.selected + 1]
+    if entry then
+      local word = entry.word or entry.abbr
+      if word and vim.fn.isdirectory(word) == 1 then
+        -- ensure trailing slash and keep cmdline open
+        if not word:match('/$') then
+          vim.api.nvim_feedkeys('/', 'n', false)
         end
+        return -- do not send <CR>
       end
     end
-    -- fallback: execute like normal
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, false, true), 'n', false)
-  end, { noremap = true, silent = true, desc = 'Cmdline: <CR> open file or descend into dir' })
-end
-
-return M
+  end
+  -- fallback: execute like normal
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, false, true), 'n', false)
+end, { noremap = true, silent = true, desc = 'Cmdline: <CR> open file or descend into dir' })
