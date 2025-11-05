@@ -2,22 +2,8 @@
 -- lua/plugins/mini/minis/starter.lua
 -- Configuration for mini.starter with rainbow logo fade
 
-local ok, starter = pcall(require, 'mini.starter')
-if not ok then
-  return
-end
-
-local builtin = require('telescope.builtin')
-local telescope = require('telescope')
-local fyler = require('fyler')
-
 -- Custom recent files section that only shows files from the current working directory
 local function recent_files_current_dir(n_files, show_path)
-  local custom_action = function(item)
-    vim.cmd('bdelete')
-    vim.cmd(('edit %s'):format(vim.fn.fnameescape(item.path)))
-  end
-
   local oldfiles = vim.v.oldfiles
   if #oldfiles == 0 then
     return {}
@@ -36,7 +22,11 @@ local function recent_files_current_dir(n_files, show_path)
         and vim.startswith(path, cwd_with_sep)
     then
       local name = show_path and path or vim.fn.fnamemodify(path, ':.')
-      table.insert(items, { name = name, action = custom_action, section = 'Recent files (cwd)', path = path })
+      local action = function()
+        vim.cmd('bdelete')
+        vim.cmd(('edit %s'):format(vim.fn.fnameescape(path)))
+      end
+      table.insert(items, { name = name, action = action, section = 'Recent files (cwd)' })
       n_added = n_added + 1
       if n_added == n_files then
         break
@@ -54,14 +44,6 @@ local logo = {
   "  / _` |/ _` \\ \\ / / |/ _` |  <  ",
   " | (_| | (_| |\\ V /| | (_| | . \\ ",
   "  \\__,_|\\__,_| \\_/ |_|\\__,_|_|\\_\\",
-}
-
-local items = {
-  recent_files_current_dir(5, false),
-  starter.sections.builtin_actions(),
-  { name = 'Find files', action = function() telescope.extensions.frecency.frecency({ cwd = vim.fn.getcwd() }) end, section = 'Pickers' },
-  { name = 'Live grep',  action = builtin.live_grep,                                                                section = 'Pickers' },
-  { name = 'Explorer',   action = fyler.toggle,                                                                     section = 'Pickers' },
 }
 
 ---
@@ -116,12 +98,20 @@ vim.api.nvim_create_autocmd('User', {
 return {
   evaluate_single = true,
   header = table.concat(logo, '\n'),
-  items = items,
+  items = {
+    recent_files_current_dir(5, false),
+    require("mini.starter").sections.builtin_actions(),
+    { name = 'Find files', action = function() require('telescope').extensions.frecency.frecency({ cwd = vim.fn.getcwd() }) end, section = 'Pickers' },
+    { name = 'Live grep',  action = function() require('telescope.builtin').live_grep() end,                                     section = 'Pickers' },
+    { name = 'Explorer',   action = 'Neotree',                                                                                   section = 'Pickers' },
+  },
   footer = function()
     return ('Loaded %d modules'):format(#vim.tbl_keys(package.loaded))
   end,
   content_hooks = {
-    starter.gen_hook.adding_bullet(),
-    starter.gen_hook.aligning('center', 'center'),
+    -- require("mini.starter").gen_hook.adding_bullet(),
+    -- require("mini.starter").gen_hook.indexing('all', { 'Builtin actions' }),
+    require("mini.starter").gen_hook.aligning('center', 'center'),
+    require("mini.starter").gen_hook.padding(3, 2),
   },
 }
