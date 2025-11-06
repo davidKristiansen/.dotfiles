@@ -13,7 +13,8 @@ function M.setup(bufnr)
   -- Navigation
   map("n", "gd", function() require("telescope.builtin").lsp_definitions() end, "Go to Definition")
   map("n", "gD", vim.lsp.buf.declaration, "Go to Declaration")
-  map("n", "gvD", function() vim.lsp.buf.declaration({ jump_to_location_opts = { command = "vsplit" } }) end, "Go to Declaration (Vertical Split)")
+  map("n", "gvD", function() vim.lsp.buf.declaration({ jump_to_location_opts = { command = "vsplit" } }) end,
+    "Go to Declaration (Vertical Split)")
   map("n", "grr", function() require("telescope.builtin").lsp_references() end, "List References")
   map("n", "gri", function() require("telescope.builtin").lsp_implementations() end, "Go to Implementation")
   map("n", "gra", vim.lsp.buf.code_action, "Code Actions")
@@ -30,8 +31,18 @@ function M.setup(bufnr)
 
   -- Diagnostics
   map("n", "gl", function() require("telescope.builtin").diagnostics() end, "Line Diagnostics")
-  map("n", "[d", function() vim.diagnostic.goto(true) end, "Previous Diagnostic")
-  map("n", "]d", function() vim.diagnostic.goto(false) end, "Next Diagnostic")
+  map("n", "[d", function()
+    vim.diagnostic.jump({ count = -1 })
+    vim.defer_fn(function()
+      vim.diagnostic.open_float(nil, { focus = false })
+    end, 50)
+  end, "Previous Diagnostic")
+  map("n", "]d", function()
+    vim.diagnostic.jump({ count = 1 })
+    vim.defer_fn(function()
+      vim.diagnostic.open_float(nil, { focus = false })
+    end, 50)
+  end, "Next Diagnostic")
 end
 
 return M

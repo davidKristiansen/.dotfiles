@@ -3,11 +3,22 @@
 
 return {
   settings = {
-    args = {},
-  },
-
-  -- you already inject this globally; okay to omit here if you prefer
-  capabilities = { offsetEncoding = { "utf-16" } },
-
-  single_file_support = true,
+    configurationPreference = "filesystemFirst",
+    lineLength = 88,
+    fixAll = true,
+    organizeImports = true,
+    showSyntaxErrors = true,
+    codeAction = {
+      disableRuleComment = {
+        enable = true
+      },
+      fixViolation = {
+        enable = false
+      }
+    },
+    lint = {
+      enable = true,
+      preview = true
+    }
+  }
 }
