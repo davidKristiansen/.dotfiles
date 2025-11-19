@@ -88,6 +88,9 @@ vim.keymap.set("n", "/", function() builtin.current_buffer_fuzzy_find() end,
   { desc = "Telescope Live Grep (current buffer)" })
 vim.keymap.set("n", "<leader><leader>", builtin.resume, { desc = "Telescope Resume" })
 vim.keymap.set("n", "<leader>sj", builtin.jumplist, { desc = "Telescope Jumplist" })
-vim.keymap.set("n", "<leader>sq", builtin.jumplist, { desc = "Telescope Diagnostic" })
+vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Telescope Diagnostic" })
+vim.keymap.set("n", "<leader>sD", function()
+  builtin.diagnostics({ bufnr = nil })
+end, { desc = "Telescope Diagnostics (workspace)" })
 
 return M

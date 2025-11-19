@@ -12,5 +12,5 @@ require("core.lsp.fix_all").setup({
   create_commands = true,
   create_mappings = true,
   mapping_run = "<leader>fa",
-  mapping_toggle = "<leader>ta",
+  mapping_toggle = "<leader>Ta",
 })

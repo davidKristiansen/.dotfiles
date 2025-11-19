@@ -101,9 +101,9 @@ return {
   items = {
     recent_files_current_dir(5, false),
     require("mini.starter").sections.builtin_actions(),
-    { name = 'Find files', action = function() require('telescope').extensions.frecency.frecency({ cwd = vim.fn.getcwd() }) end, section = 'Pickers' },
-    { name = 'Live grep',  action = function() require('telescope.builtin').live_grep() end,                                     section = 'Pickers' },
-    { name = 'Explorer',   action = 'Neotree',                                                                                   section = 'Pickers' },
+    { name = 'Find files', action = "Telescope frecency workspace=CWD",                      section = 'Pickers' },
+    { name = 'Live grep',  action = function() require('telescope.builtin').live_grep() end, section = 'Pickers' },
+    { name = 'Explorer',   action = 'Neotree',                                               section = 'Pickers' },
   },
   footer = function()
     return ('Loaded %d modules'):format(#vim.tbl_keys(package.loaded))

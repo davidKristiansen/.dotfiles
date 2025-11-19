@@ -43,8 +43,8 @@ end
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "Fyler",
   callback = function()
-    vim.b.hybrid_numbers_disable = true  -- guard both autocmds below
-    vim.b.gitsigns_disable = true        -- prevent gitsigns attach
+    vim.b.hybrid_numbers_disable = true -- guard both autocmds below
+    vim.b.gitsigns_disable = true       -- prevent gitsigns attach
     vim.opt_local.signcolumn = "no"
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
@@ -75,9 +75,9 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave"
 })
 
 -- Yank flash
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-  callback = function()
-    vim.highlight.on_yank({ higroup = "IncSearch", timeout = 200, on_visual = true })
-  end,
-})
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+--   group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+--   callback = function()
+--     vim.highlight.on_yank({ higroup = "IncSearch", timeout = 200, on_visual = true })
+--   end,
+-- })

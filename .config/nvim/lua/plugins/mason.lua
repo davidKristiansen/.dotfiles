@@ -19,6 +19,8 @@ local servers = {
   "lua_ls",
   "ruff",
   "yamlls",
+  "jinja_lsp",
+  "groovyls",
 }
 
 mason.setup({

@@ -11,7 +11,12 @@ vim.pack.add({
 }, { confirm = false })
 
 
-require("neo-tree").setup({})
+require("neo-tree").setup({
+  window = {
+    mappings = {
+      ["<C-v>"] = "open_vsplit", }
+  }
+})
 
 local map = vim.keymap.set
 map('n', '<leader>e', "<cmd>Neotree toggle<CR>", { desc = 'Explorer' })
