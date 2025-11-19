@@ -58,6 +58,23 @@ local function pick_ref(opts)
   end
 end
 
+-- Branch management
+local function create_branch()
+  vim.ui.input({ prompt = "New branch name: " }, function(name)
+    if not name or name == "" then
+      vim.notify("Branch creation cancelled", vim.log.levels.INFO)
+      return
+    end
+    local out = vim.fn.system("git checkout -b " .. vim.fn.shellescape(name))
+    if vim.v.shell_error == 0 then
+      vim.notify("Switched to new branch '" .. name .. "'", vim.log.levels.INFO)
+      vim.cmd("redraw!")
+    else
+      vim.notify(out, vim.log.levels.ERROR, { title = "git checkout -b failed" })
+    end
+  end)
+end
+
 -- Gitsigns setup
 require("gitsigns").setup({
   signs = {
@@ -81,7 +98,7 @@ require("gitsigns").setup({
     map("n", "<leader>gp", gitsigns.preview_hunk_inline, "Preview hunk")
     map("n", "<leader>gR", gitsigns.reset_buffer, "Reset buffer")
     map("n", "<leader>gu", gitsigns.undo_stage_hunk, "Undo stage hunk")
-    map("n", "<leader>gb", gitsigns.toggle_current_line_blame, "Toggle blame")
+    map("n", "<leader>gbl", gitsigns.toggle_current_line_blame, "Toggle blame on line")
     map("n", "<leader>gd", gitsigns.diffthis, "Diff (buffer vs index)")
     map("n", "<leader>gD", function() gitsigns.diffthis("~") end, "Diff (vs HEAD)")
 
@@ -161,6 +178,8 @@ map("n", "[c", function()
 end, "Prev change (zt align + preview if not diffview)")
 
 map("n", "<leader>gs", function() require('telescope.builtin').git_status() end, "Git status (Telescope)")
+map("n", "<leader>gb", function() require('telescope.builtin').git_branches() end, "Git checkout branch (Telescope)")
+map("n", "<leader>gB", create_branch, "Create new branch")
 
 -- Diffview: repo-wide and file-only pickers (local ← vs picked →)
 map("n", "<leader>gO", function() pick_ref_and_open_diff(false) end, "Diffview local ← vs pick →")

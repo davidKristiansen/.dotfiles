@@ -41,21 +41,30 @@ map("n", "<C-o>", "<C-o>", { desc = "Jump backward in jumplist" })
 map("n", "<C-i>", "<C-i>", { desc = "Jump forward in jumplist" })
 
 -- Toggles
-map("n", "<leader>th", function()
+map("n", "<leader>Th", function()
   if vim.g.inlay_hints_enabled == nil then vim.g.inlay_hints_enabled = true end
   vim.g.inlay_hints_enabled = not vim.g.inlay_hints_enabled
   vim.lsp.inlay_hint.enable(vim.g.inlay_hints_enabled)
   vim.notify(vim.g.inlay_hints_enabled and "Enabled inlay hints" or "Disabled inlay hints")
 end, { desc = "Toggle Inlay Hints" })
 
-map("n", "<leader>ti", function()
+map("n", "<leader>Ti", function()
   vim.lsp.inline_completion.enable(not vim.lsp.inline_completion.is_enabled())
 end, { desc = "Toggle Inline Completion" })
 
-map("n", "<leader>tf", function()
+map("n", "<leader>Tf", function()
   vim.g.format_on_save = not vim.g.format_on_save
   vim.notify(vim.g.format_on_save and "Enabled format on save" or "Disabled format on save")
 end, { desc = "Toggle Format on Save" })
+
+map("n", "<leader>Tb", function()
+  local ok, gitsigns = pcall(require, "gitsigns")
+  if ok then
+    gitsigns.toggle_current_line_blame()
+  else
+    vim.notify("gitsigns not loaded", vim.log.levels.WARN)
+  end
+end, { desc = "Toggle Git Blame" })
 
 
 map("n", "<leader>fa", function()
