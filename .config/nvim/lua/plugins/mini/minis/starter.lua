@@ -38,12 +38,12 @@ local function recent_files_current_dir(n_files, show_path)
 end
 
 local logo = {
-  "      _             _     _ _  __",
-  "     | |           (_)   | | |/ /",
-  "   __| | __ ___   ___  __| | ' / ",
-  "  / _` |/ _` \\ \\ / / |/ _` |  <  ",
-  " | (_| | (_| |\\ V /| | (_| | . \\ ",
-  "  \\__,_|\\__,_| \\_/ |_|\\__,_|_|\\_\\",
+  "██████╗  █████╗ ██╗   ██╗██╗██████╗ ",
+  "██╔══██╗██╔══██╗██║   ██║██║██╔══██╗",
+  "██║  ██║███████║██║   ██║██║██║  ██║",
+  "██║  ██║██╔══██║╚██╗ ██╔╝██║██║  ██║",
+  "██████╔╝██║  ██║ ╚████╔╝ ██║██████╔╝",
+  "╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═════╝ ",
 }
 
 ---
@@ -52,12 +52,12 @@ local logo = {
 local function apply_rainbow_to_logo(buf, logo_lines)
   local ns = vim.api.nvim_create_namespace('starter_logo_rainbow')
   local rainbow = {
-    '#cc241d', -- red
-    '#d65d0e', -- orange
+    -- '#cc241d', -- red
+    -- '#d65d0e', -- orange
     '#d79921', -- yellow
-    '#98971a', -- green
-    '#689d6a', -- cyan/teal-ish
-    '#458588', -- blue
+    --   '#98971a', -- green
+    --   '#689d6a', -- cyan/teal-ish
+    --   '#458588', -- blue
   }
 
   if not vim.api.nvim_buf_is_valid(buf) then
