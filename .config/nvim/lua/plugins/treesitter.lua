@@ -64,6 +64,19 @@ require("nvim-treesitter.configs").setup({
   },
 })
 
+-- Add asciidoc parser
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.asciidoc = {
+  install_info = {
+    url = "https://github.com/cathaysia/tree-sitter-asciidoc",
+    files = { "tree-sitter-asciidoc/src/parser.c", "tree-sitter-asciidoc/src/scanner.c" },
+    branch = "master",
+    generate_requires_npm = false,
+    requires_generate_from_grammar = false,
+  },
+  filetype = "adoc",
+}
+
 -- Non-blocking first-run parser update (runs once)
 local once = require("utils.once")
 once.run("ts_update", function()
