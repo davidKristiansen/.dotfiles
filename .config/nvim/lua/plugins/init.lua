@@ -6,6 +6,8 @@ vim.pack.add({
   { src = "https://github.com/bullets-vim/bullets.vim" },
 }, { confirm = false })
 
+require "plugins.treesitter"
+require "plugins.bigfile"
 require "plugins.gruvbox"
 require "plugins.mini"
 require "plugins.telescope"
@@ -23,7 +25,6 @@ require "plugins.obsidian"
 require "plugins.render_markdown"
 require "plugins.sidekick"
 require "plugins.tmux"
-require "plugins.treesitter"
 require "plugins.which_key"
 require "plugins.tiny-glimmer"
 require "plugins.neoscroll"

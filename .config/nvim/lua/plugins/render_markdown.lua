@@ -14,10 +14,12 @@ require("render-markdown").setup({
   },
   code = {
     -- style "full" enables full block rendering (borders / padding semantics internal to plugin)
-    style = 'full',
+    -- style = 'full',
+    style = 'normal',
+    sign = true,
     disable_background = true, -- previously disable_background = true (overrides style segment background)
     width = 'block',
-    position = 'left',
+    position = 'none',
     border = 'none',
     highlight = 'RenderMarkdownCode',
   },
