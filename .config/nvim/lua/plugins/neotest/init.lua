@@ -6,6 +6,7 @@ vim.pack.add({
   { src = "https://github.com/nvim-neotest/nvim-nio" },
   { src = "https://github.com/nvim-neotest/neotest" },
   { src = "https://github.com/nvim-neotest/neotest-python" },
+  { src = "https://github.com/alfaix/neotest-gtest" },
   { src = "https://github.com/antoinemadec/FixCursorHold.nvim" },
 }, { confirm = false })
 
@@ -13,12 +14,18 @@ local test_base = "/Project/50.Testing/30.IntegrationTest"
 -- Only Python files go through neotest-python
 require("neotest").setup({
   adapters = {
+    require("neotest-gtest").setup({
+      is_test_file = function(p)
+        if p:find("/build/") then return false end
+      end
+    }),
     require("neotest-python")({
       python = "/Project/.venv.devcontainer/bin/python3",
       pytest_discover_instances = true,
       is_test_file = function(p)
         -- typical pytest patterns; exclude the IntegrationTest YAML area
         if p:find("/Project/50%.Testing/30%.IntegrationTest/") then return false end
+        if p:find("/build/") then return false end
         return p:match("/test_.*%.py$") or p:sub(-8) == "_test.py" or p:sub(-7) == "test_.py"
       end,
     }),

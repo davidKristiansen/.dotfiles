@@ -72,7 +72,7 @@ opt.sidescrolloff                = 8
 opt.wrap                         = false
 opt.splitright                   = true
 opt.splitbelow                   = true
-
+opt.conceallevel                 = 2
 -- Indentation
 opt.expandtab                    = true
 opt.tabstop                      = 2
@@ -80,6 +80,16 @@ opt.shiftwidth                   = 2
 opt.softtabstop                  = 2
 opt.shiftround                   = true
 opt.smartindent                  = true
+
+-- Filetype specific settings
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function()
+    vim.opt.tabstop = 4
+    vim.opt.shiftwidth = 4
+    vim.opt.softtabstop = 4
+  end,
+})
 
 -- Whitespace hints
 opt.list                         = true
@@ -117,4 +127,3 @@ end
 
 
 vim.g.bullets_delete_last_bullet_if_empty = 1
-

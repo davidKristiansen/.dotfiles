@@ -37,7 +37,13 @@ require("blink.cmp").setup({
 
   -- default sources: tweak order if you like
   sources = {
-    default = { "copilot", "lsp", "path", "snippets", "buffer" },
+    default = {
+      -- "copilot",
+      "lsp",
+      "path",
+      "snippets",
+      "buffer",
+    },
     providers = {
       copilot = {
         name         = "copilot",

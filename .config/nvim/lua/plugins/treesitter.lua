@@ -7,6 +7,19 @@ vim.pack.add({
 
 
 require("nvim-treesitter.configs").setup({
+  ensure_installed = {
+    "c",
+    "cpp",
+    "lua",
+    "vim",
+    "vimdoc",
+    "query",
+    "json",
+    "yaml",
+    "python",
+    "bash",
+    "toml",
+  },
   highlight = { enable = true },
   auto_install = true,
   additional_vim_regex_highlighting = false,
