@@ -1,18 +1,19 @@
 # ~/.config/zsh/zshrc.d/50-mise.zsh
 # SPDX-License-Identifier: MIT
 
-# Fast path: activate mise for zsh (manages PATH, tools, env per dir)
-if command -v mise >/dev/null 2>&1; then
-  eval "$(mise activate zsh --shims)"
+# Ensure local bin is in path (redundancy check)
+if [[ -d "$HOME/.local/bin" ]]; then
+  # Prepend to path if not present
+  path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
+  export PATH
 fi
 
-# Optional: also expose shims for non-interactive shells/cron (lighter, fewer features)
-# if command -v mise >/dev/null 2>&1; then
-#   eval "$(mise activate zsh --shims)"
-#   # Or add shims dir explicitly (usually under XDG data):
-#   # path=("${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims" ${path:#${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims})
-#   # export PATH="${(j.:.)path}"
-# fi
+# Activate mise
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+elif [[ -x "$HOME/.local/bin/mise" ]]; then
+  # Fallback if not in PATH
+  eval "$($HOME/.local/bin/mise activate zsh)"
+fi
 
 # vim: set ft=zsh ts=2 sw=2:
-
