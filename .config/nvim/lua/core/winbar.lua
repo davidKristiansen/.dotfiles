@@ -78,7 +78,7 @@ local function set_winbar()
   local filetype = vim.bo[buf].filetype
 
   -- Only show winbar for normal files
-  if buftype == '' and filetype ~= 'TelescopePrompt' then
+  if buftype == '' then
     vim.wo.winbar = "%!v:lua.get_winbar_str(" .. vim.api.nvim_get_current_win() .. ")"
   else
     vim.wo.winbar = nil

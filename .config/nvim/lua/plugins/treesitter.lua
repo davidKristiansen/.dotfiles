@@ -5,6 +5,18 @@ vim.pack.add({
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
 }, { confirm = false })
 
+-- Add asciidoc parser
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.asciidoc = {
+  install_info = {
+    url = "https://github.com/cathaysia/tree-sitter-asciidoc",
+    files = { "tree-sitter-asciidoc/src/parser.c", "tree-sitter-asciidoc/src/scanner.c" },
+    branch = "master",
+    generate_requires_npm = false,
+    requires_generate_from_grammar = false,
+  },
+  filetype = "adoc",
+}
 
 require("nvim-treesitter.configs").setup({
   ensure_installed = {
@@ -19,6 +31,9 @@ require("nvim-treesitter.configs").setup({
     "python",
     "bash",
     "toml",
+    "markdown",
+    "markdown_inline",
+    "asciidoc", -- Added asciidoc to ensure_installed
   },
   highlight = { enable = true },
   auto_install = true,
@@ -75,50 +90,5 @@ require("nvim-treesitter.configs").setup({
       },
     },
   },
-})
-
--- Add asciidoc parser
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.asciidoc = {
-  install_info = {
-    url = "https://github.com/cathaysia/tree-sitter-asciidoc",
-    files = { "tree-sitter-asciidoc/src/parser.c", "tree-sitter-asciidoc/src/scanner.c" },
-    branch = "master",
-    generate_requires_npm = false,
-    requires_generate_from_grammar = false,
-  },
-  filetype = "adoc",
-}
-
--- Non-blocking first-run parser update (runs once)
-local once = require("utils.once")
-once.run("ts_update", function()
-  vim.schedule(function()
-    pcall(vim.cmd, "silent! TSUpdate")
-  end)
-end)
-
--- Consolidated FileType autocmd for treesitter features
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "*",
-  callback = function()
-    local ft = vim.bo.filetype
-    local lang = vim.treesitter.language.get_lang(ft)
-
-    if not lang or not vim.treesitter.language.add(lang) then
-      return
-    end
-
-    vim.treesitter.start()
-
-    -- Set folding if available
-    if vim.treesitter.query.get(lang, "folds") then
-      vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-    end
-
-    -- Set indentation if available (overrides traditional indent)
-    if vim.treesitter.query.get(lang, "indents") then
-      vim.bo.indentexpr = "nvim_treesitter#indent()"
-    end
-  end,
+  indent = { enable = true },
 })

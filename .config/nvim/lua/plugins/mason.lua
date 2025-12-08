@@ -21,6 +21,7 @@ local servers = {
   "yamlls",
   "jinja_lsp",
   "groovyls",
+  "marksman",
 }
 
 mason.setup({
