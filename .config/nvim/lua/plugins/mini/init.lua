@@ -3,7 +3,7 @@
 
 vim.pack.add({
   { src = "https://github.com/nvim-neo-tree/neo-tree.nvim" },
-  { src = "https://github.com/nvim-telescope/telescope.nvim" },
+
 
   { src = "https://github.com/nvim-mini/mini.nvim" },
 }, { confirm = false })
@@ -23,8 +23,6 @@ local enabled_modules = {
   surround = true,
   trailspace = false,
   tabline = false,
-  git = true,
-  diff = false,
 }
 
 for name, enabled in pairs(enabled_modules) do

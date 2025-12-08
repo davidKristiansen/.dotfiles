@@ -11,7 +11,11 @@ function M.setup(bufnr)
   end
 
   -- Navigation
-  map("n", "gd", function() require("telescope.builtin").lsp_definitions() end, "Go to Definition")
+  map("n", "gd", function() require("utils.picker").lsp_definitions() end, "Go to Definition")
+  map("n", "grr", function() require("utils.picker").lsp_references() end, "List References")
+  map("n", "gri", function() require("utils.picker").lsp_implementations() end, "Go to Implementation")
+  map("n", "grt", function() require("utils.picker").lsp_type_definitions() end, "Go to Type Definition")
+  map("n", "gl", function() require("utils.picker").diagnostics() end, "Line Diagnostics")
   map("n", "gD", vim.lsp.buf.declaration, "Go to Declaration")
   map("n", "gvD", function() vim.lsp.buf.declaration({ jump_to_location_opts = { command = "vsplit" } }) end,
     "Go to Declaration (Vertical Split)")

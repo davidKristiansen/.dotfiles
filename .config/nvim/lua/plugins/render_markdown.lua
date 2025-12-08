@@ -5,7 +5,7 @@
 
 vim.pack.add({
   { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
-}, { confirm = falsel })
+}, { confirm = false })
 
 
 require("render-markdown").setup({
@@ -14,27 +14,37 @@ require("render-markdown").setup({
   },
   code = {
     -- style "full" enables full block rendering (borders / padding semantics internal to plugin)
-    -- style = 'full',
-    style = 'normal',
+    style = 'full',
+    -- style = 'normal',
     sign = true,
-    disable_background = true, -- previously disable_background = true (overrides style segment background)
+    -- disable_background = true,
     width = 'block',
     position = 'none',
     border = 'none',
     highlight = 'RenderMarkdownCode',
   },
   heading = {
-    position = 'inline',
-    icons = { '󰬺. ', '󰬻. ', '󰬼. ', '󰬽. ', '󰬾. ', '󰬿. ' },
+    enable = true,
+    left_pad = 1,
+    right_pad = 1,
     width = 'block',
-    backgrounds = { 'none' },
-    foregrounds = {
-      'RenderMarkdownH1',
-      'RenderMarkdownH2',
-      'RenderMarkdownH3',
-      'RenderMarkdownH4',
-      'RenderMarkdownH5',
-      'RenderMarkdownH6',
-    },
+    sign = true,
+    icons = function(ctx)
+      return table.concat(ctx.sections, '.') .. '. '
+    end,
   },
+  -- heading = {
+  --   position = 'inline',
+  --   icons = { '󰬺. ', '󰬻. ', '󰬼. ', '󰬽. ', '󰬾. ', '󰬿. ' },
+  --   width = 'block',
+  --   backgrounds = { 'none' },
+  --   foregrounds = {
+  --     'RenderMarkdownH1',
+  --     'RenderMarkdownH2',
+  --     'RenderMarkdownH3',
+  --     'RenderMarkdownH4',
+  --     'RenderMarkdownH5',
+  --     'RenderMarkdownH6',
+  --   },
+  -- },
 })

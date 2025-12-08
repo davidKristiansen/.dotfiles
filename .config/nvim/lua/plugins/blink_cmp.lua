@@ -4,7 +4,6 @@ vim.pack.add({
   { src = "https://github.com/L3MON4D3/LuaSnip" },
   { src = "https://github.com/saghen/blink.cmp",      version = vim.version.range("1.7") },
   { src = "https://github.com/fang2hou/blink-copilot" },
-  { src = "https://github.com/windwp/nvim-autopairs" },
 }, { confirm = false })
 
 -- LuaSnip

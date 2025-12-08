@@ -34,7 +34,37 @@ map("n", "<leader>ss", function()
 end, { desc = "Open start screen" })
 
 -- Quickfix list
-map("n", "<leader>qf", "<cmd>cwindow<CR>", { desc = "Toggle quickfix list" })
+local function toggle_qflist()
+  if vim.fn.empty(vim.fn.getqflist()) == 1 then
+    vim.notify("Quickfix list is empty", vim.log.levels.INFO)
+    return
+  end
+  local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+  if qf_winid > 0 then
+    vim.cmd("cclose")
+  else
+    vim.cmd("copen")
+  end
+end
+map("n", "<leader>q", toggle_qflist, { desc = "Toggle quickfix list" })
+
+local function qf_next_wrap()
+  local ok, _ = pcall(vim.cmd, "cnext")
+  if not ok then
+    vim.cmd("cfirst")
+  end
+end
+
+local function qf_prev_wrap()
+  local ok, _ = pcall(vim.cmd, "cprev")
+  if not ok then
+    vim.cmd("clast")
+  end
+end
+
+-- Quickfix list navigation
+map("n", "[q", qf_prev_wrap, { desc = "Previous quickfix item (wrap)" })
+map("n", "]q", qf_next_wrap, { desc = "Next quickfix item (wrap)" })
 
 -- Jumplist
 map("n", "<C-o>", "<C-o>", { desc = "Jump backward in jumplist" })
@@ -78,6 +108,31 @@ map("n", "<leader>fa", function()
   end
 end, { desc = "Run LSP FixAll (source.fixAll)" })
 
-map("n", "<leader>dd", function()
-  vim.diagnostic.open_float(nil, { focus = false })
-end, { desc = "Show diagnostics" })
+
+-- Search Keymaps (fzf-lua via utils.picker)
+vim.keymap.set("n", "<leader>sf", function() require("utils.picker").files() end, { desc = "Files" })
+vim.keymap.set("n", "<leader>sg", function() require("utils.picker").live_grep() end, { desc = "Live Grep" })
+vim.keymap.set("n", "<leader>sb", function() require("utils.picker").buffers() end, { desc = "Buffers" })
+vim.keymap.set("n", "<leader>sh", function() require("utils.picker").help_tags() end, { desc = "Help Tags" })
+vim.keymap.set("n", "<leader>so", function() require("utils.picker").oldfiles() end, { desc = "Old Files" })
+vim.keymap.set("n", "<leader>sw",
+  function() require("utils.picker").grep_string({ search = vim.fn.expand("<cWORD>") }) end,
+  { desc = "Grep CWORD" })
+vim.keymap.set("v", "<leader>sw", function()
+  vim.cmd('noau normal! "vy"')
+  local text = vim.fn.getreg('v')
+  vim.fn.setreg('v', {})
+  require("utils.picker").grep_string({ search = text })
+end, { desc = "Grep selection" })
+vim.keymap.set("n", "*",
+  function() require("utils.picker").current_buffer_lines({ default_text = vim.fn.expand("<cWORD>") }) end,
+  { desc = "Current buffer fuzzy find CWORD" })
+vim.keymap.set("n", "/", function() require("utils.picker").current_buffer_lines() end,
+  { desc = "Live Grep (current buffer)" })
+vim.keymap.set("n", "<leader><leader>", function() require("utils.picker").resume() end, { desc = "Resume" })
+vim.keymap.set("n", "<leader>sj", function() require("utils.picker").jumplist() end, { desc = "Jumplist" })
+vim.keymap.set("n", "<leader>sd", function() require("utils.picker").diagnostics() end, { desc = "Diagnostic" })
+vim.keymap.set("n", "<leader>sz", function() require("utils.picker").zoxide() end, { desc = "Zoxide" })
+vim.keymap.set("n", "<leader>sD", function()
+  require("utils.picker").diagnostics({ bufnr = nil })
+end, { desc = "Diagnostics (workspace)" })
