@@ -5,6 +5,8 @@ vim.pack.add({
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/MunifTanjim/nui.nvim" },
 
+  { src = "https://github.com/tpope/vim-fugitive" },
+
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
   { src = "https://github.com/NeogitOrg/neogit" },
   { src = "https://github.com/esmuellert/vscode-diff.nvim" },
