@@ -116,13 +116,10 @@ vim.keymap.set("n", "<leader>sb", function() require("utils.picker").buffers() e
 vim.keymap.set("n", "<leader>sh", function() require("utils.picker").help_tags() end, { desc = "Help Tags" })
 vim.keymap.set("n", "<leader>so", function() require("utils.picker").oldfiles() end, { desc = "Old Files" })
 vim.keymap.set("n", "<leader>sw",
-  function() require("utils.picker").grep_string({ search = vim.fn.expand("<cWORD>") }) end,
+  function() require("utils.picker").grep_cword() end,
   { desc = "Grep CWORD" })
 vim.keymap.set("v", "<leader>sw", function()
-  vim.cmd('noau normal! "vy"')
-  local text = vim.fn.getreg('v')
-  vim.fn.setreg('v', {})
-  require("utils.picker").grep_string({ search = text })
+  require("utils.picker").grep_visual()
 end, { desc = "Grep selection" })
 vim.keymap.set("n", "*",
   function() require("utils.picker").current_buffer_lines({ default_text = vim.fn.expand("<cWORD>") }) end,

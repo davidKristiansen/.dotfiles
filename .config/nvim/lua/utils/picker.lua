@@ -6,6 +6,19 @@ vim.pack.add({
   { src = 'https://github.com/ibhagwan/fzf-lua', version = vim.version.range("*") },
 }, { confirm = false })
 
+local default_ignores = {
+  "**/.pytest_cache/**",
+  "**/__pycache__/**",
+  "**/.mypy_cache/**",
+  "**/.venv/**",
+  "**/venv/**",
+  "**/.git/**",
+  "**/.idea/**",
+  "**/build/**",
+  "**/dist/**",
+  "**/*.egg-info/**",
+}
+
 require("fzf-lua").setup({
   fzf_opts = { ['--layout'] = 'default' },
   winopts = {
@@ -30,7 +43,7 @@ require("fzf-lua").setup({
     ["ctrl-s"] = FzfLua.actions.file_split,
     ["ctrl-v"] = FzfLua.actions.file_vsplit,
     ["ctrl-t"] = FzfLua.actions.file_tabedit,
-    -- ["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
+    ["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
     ["alt-Q"]  = FzfLua.actions.file_sel_to_ll,
     ["alt-i"]  = FzfLua.actions.toggle_ignore,
     ["alt-h"]  = FzfLua.actions.toggle_hidden,
@@ -40,6 +53,14 @@ require("fzf-lua").setup({
     rg_glob = true,            -- enable glob parsing
     glob_flag = "--iglob",     -- case insensitive globs
     glob_separator = "%s%-%-", -- query separator pattern (lua): ' --'
+    additional_args = function()
+      local args = {}
+      for _, g in ipairs(default_ignores) do
+        table.insert(args, "--iglob")
+        table.insert(args, "!" .. g)
+      end
+      return args
+    end
   },
 })
 require("fzf-lua").register_ui_select()
@@ -107,8 +128,68 @@ function M.help_tags(opts)
   require("fzf-lua").help_tags(opts)
 end
 
+function M.grep(opts)
+  require("fzf-lua").grep(opts)
+end
+
+function M.grep_last(opts)
+  require("fzf-lua").grep_last(opts)
+end
+
+function M.grep_cword(opts)
+  require("fzf-lua").grep_cword(opts)
+end
+
+function M.grep_cWORD(opts)
+  require("fzf-lua").grep_cWORD(opts)
+end
+
+function M.grep_visual(opts)
+  require("fzf-lua").grep_visual(opts)
+end
+
+function M.grep_project(opts)
+  require("fzf-lua").grep_project(opts)
+end
+
+function M.grep_curbuf(opts)
+  require("fzf-lua").grep_curbuf(opts)
+end
+
+function M.grep_quickfix(opts)
+  require("fzf-lua").grep_quickfix(opts)
+end
+
+function M.grep_loclist(opts)
+  require("fzf-lua").grep_loclist(opts)
+end
+
+function M.lgrep_curbuf(opts)
+  require("fzf-lua").lgrep_curbuf(opts)
+end
+
+function M.lgrep_quickfix(opts)
+  require("fzf-lua").lgrep_quickfix(opts)
+end
+
+function M.lgrep_loclist(opts)
+  require("fzf-lua").lgrep_loclist(opts)
+end
+
+function M.live_grep_resume(opts)
+  require("fzf-lua").live_grep_resume(opts)
+end
+
+function M.live_grep_glob(opts)
+  require("fzf-lua").live_grep_glob(opts)
+end
+
+function M.live_grep_native(opts)
+  require("fzf-lua").live_grep_native(opts)
+end
+
 function M.grep_string(opts)
-  require("fzf-lua").grep_string(opts)
+  require("fzf-lua").grep(opts)
 end
 
 function M.oldfiles(opts)
