@@ -7,7 +7,7 @@ experimental = true
 jobs = 32
 idiomatic_version_file_enable_tools = ["python"]
 
-[alias]
+[tool_alias]
 thefuck = "pipx:thefuck"
 
 [tools]
@@ -30,9 +30,9 @@ nodejs = "latest"
 "npm:prettier" = "latest"
 
 # Python
-python = "3.12"
+python = "3.14"
 pipx = "latest"
-uv = "0.9.2"
+uv = "0.9.21"
 
 thefuck = { version = "latest", uvx_args = "--python 3.11" }
 
@@ -55,10 +55,15 @@ cargo-binstall = "latest"
 "aqua:ruff" = "latest"
 "npm:tree-sitter-cli" = "latest"
 direnv = "latest"
-gemini-cli = "nightly"
+# gemini-cli = "latest"
 delta = "latest"
 gh = "latest"
 "npm:copilot" = "latest"
 "npm:mcp-hub" = "latest"
 "pipx:jiratui" = "latest"
-java = "21"
+java = "25"
+gemini-cli = "latest"
+gemini = "latest"
+"pipx:platformio" = "latest"
+lazygit = "latest"
+"go:github.com/r00tman/corrupter" = "latest"
