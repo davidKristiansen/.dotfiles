@@ -4,9 +4,32 @@
   "spacing": 5,
   "modules-left": [
     "sway/workspaces",
+    "custom/separator",
+    "custom/spotify-prev",
+    "custom/spotify-play-pause",
+    "custom/spotify-next",
+    "custom/separator",
     "custom/spotify",
     "sway/mode"
   ],
+  "custom/spotify-prev": {
+    "format": " ",
+    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/spotify-prev.sh",
+    "on-click": "playerctl --player=spotify previous",
+    "exec-if": "pgrep spotify"
+  },
+  "custom/spotify-play-pause": {
+    "format": "{}",
+    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/spotify-play-pause.sh",
+    "on-click": "playerctl --player=spotify play-pause",
+    "exec-if": "pgrep spotify"
+  },
+  "custom/spotify-next": {
+    "format": " ",
+    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/spotify-next.sh",
+    "on-click": "playerctl --player=spotify next",
+    "exec-if": "pgrep spotify"
+  },
   "modules-center": [
     "clock"
   ],
@@ -81,13 +104,11 @@
     "on-right-click": "$HOME/.local/bin/vpn ui"
   },
   "custom/spotify": {
-    "format": "|  {}",
+    "format": " {}",
     "return-type": "json",
     "max-length": 40,
-    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
-    "exec-if": "pgrep spotify",
-    "on-click-right": "playerctl play-pause",
-    "on-click": "playerctl next"
+    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/mediaplayer.sh",
+    "exec-if": "pgrep spotify"
   },
   "battery": {
     "states": {
