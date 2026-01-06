@@ -31,6 +31,7 @@ resize-overlay          = never
 # alpha-blending          = "srgb"
 
 working-directory = home
+mouse-scroll-multiplier = 1
 
 ##############################
 # Shell Integration
