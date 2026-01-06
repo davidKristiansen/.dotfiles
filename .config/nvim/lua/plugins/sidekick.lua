@@ -51,6 +51,15 @@ map(
   function() require("sidekick.cli").select_prompt() end,
   { desc = "Sidekick Ask Prompt" }
 )
+map(
+  { "n" },
+  "<leader>an",
+  function()
+    local nes = require("sidekick.nes")
+    nes.enable(not nes.enabled)
+  end,
+  { desc = "Sidekick Toggle NES" }
+)
 
 map(
   { "x", "n" },

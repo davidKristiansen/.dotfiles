@@ -1,0 +1,5 @@
+return {
+  diagnostics = {
+    enable = false,
+  }
+}
