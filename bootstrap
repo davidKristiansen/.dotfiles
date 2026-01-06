@@ -40,13 +40,14 @@ echo Hold on to your bootstraps !
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh
 else
-  mise self-update
+  mise self-update --silent --yes
 fi
 
 mise trust "${SCRIPT_DIR}/.config/mise/config.toml"
-mise plugin install neovim
+mise plugin install neovim -q
 
 mise install --yes
+mise upgrade --bump --quiet --yes
 
 # vim: set ft=sh ts=2 sw=2:
 
