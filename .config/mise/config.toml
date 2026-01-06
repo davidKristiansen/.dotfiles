@@ -26,7 +26,6 @@ pre-commit = "latest"
 
 # node
 nodejs = "latest"
-"npm:devcontainer" = "latest"
 "npm:prettier" = "latest"
 
 # Python
@@ -67,3 +66,4 @@ gemini = "latest"
 "pipx:platformio" = "latest"
 lazygit = "latest"
 "go:github.com/r00tman/corrupter" = "latest"
+"npm:@devcontainers/cli" = "latest"
