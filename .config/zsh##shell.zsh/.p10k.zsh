@@ -33,6 +33,8 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     # os_icon               # os identifier
+    my_docker_status        # docker container status
+    context                 # user@hostname
     dir                     # current directory
     vcs                     # git status
     # =========================[ Line #2 ]=========================
@@ -85,7 +87,7 @@
     gcloud                  # google cloud cli account and project (https://cloud.google.com/)
     google_app_cred         # google application credentials (https://cloud.google.com/docs/authentication/production)
     toolbox                 # toolbox name (https://github.com/containers/toolbox)
-    context                 # user@hostname
+    # context                 # user@hostname
     nordvpn                 # nordvpn connection status, linux only (https://nordvpn.com/)
     ranger                  # ranger shell (https://github.com/ranger/ranger)
     yazi                    # yazi shell (https://github.com/sxyazi/yazi)
@@ -728,7 +730,7 @@
   typeset -g POWERLEVEL9K_RANGER_FOREGROUND=178
   # Custom icon.
   # typeset -g POWERLEVEL9K_RANGER_VISUAL_IDENTIFIER_EXPANSION='⭐'
-  
+
   ####################[ yazi: yazi shell (https://github.com/sxyazi/yazi) ]#####################
   # Yazi shell color.
   typeset -g POWERLEVEL9K_YAZI_FOREGROUND=178
@@ -916,9 +918,9 @@
   # Default context format (no privileges, no SSH): user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n@%m'
 
-  # Don't show context unless running with privileges or in SSH.
-  # Tip: Remove the next line to always show context.
-  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
+  # Show context (username) in all cases: local, SSH, and root.
+  # Tip: To hide context for default users on local machine, uncomment the next line.
+  # typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
 
   # Custom icon.
   # typeset -g POWERLEVEL9K_CONTEXT_VISUAL_IDENTIFIER_EXPANSION='⭐'
@@ -1546,6 +1548,14 @@
   # Custom prefix.
   # typeset -g POWERLEVEL9K_TOOLBOX_PREFIX='%fin '
 
+  ##############################[ docker: Docker container indicator ]##############################
+  # Docker color.
+  typeset -g POWERLEVEL9K_DOCKER_FOREGROUND=32
+  # Custom icon.
+  typeset -g POWERLEVEL9K_DOCKER_VISUAL_IDENTIFIER_EXPANSION='🐳'
+  # Custom prefix.
+  # typeset -g POWERLEVEL9K_DOCKER_PREFIX='%fin '
+
   ###############################[ public_ip: public IP address ]###############################
   # Public IP color.
   typeset -g POWERLEVEL9K_PUBLIC_IP_FOREGROUND=94
@@ -1675,6 +1685,12 @@
     # instant_prompt_example. This will give us the same `example` prompt segment in the instant
     # and regular prompts.
     prompt_example
+  }
+
+  function prompt_my_docker_status() {
+    if [[ -f /.dockerenv ]] || grep -q '/docker/' /proc/1/cgroup 2>/dev/null; then
+      p10k segment -f 32 -i ''
+    fi
   }
 
   # User-defined prompt segments can be customized the same way as built-in segments.
