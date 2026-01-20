@@ -30,6 +30,7 @@ require "plugins.tmux"
 require "plugins.which_key"
 require "plugins.tiny-glimmer"
 require "plugins.neoscroll"
+require "plugins.worktree"
 
 require "plugins.sshfs"
 

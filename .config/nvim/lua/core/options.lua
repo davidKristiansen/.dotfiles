@@ -75,9 +75,9 @@ opt.splitbelow                   = true
 opt.conceallevel                 = 2
 -- Indentation
 opt.expandtab                    = true
-opt.tabstop                      = 2
-opt.shiftwidth                   = 2
-opt.softtabstop                  = 2
+opt.tabstop                      = 4
+opt.shiftwidth                   = 4
+opt.softtabstop                  = 4
 opt.shiftround                   = true
 opt.smartindent                  = true
 
@@ -92,17 +92,17 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Whitespace hints
-opt.list                         = true
-opt.listchars                    = { tab = "▸ ", trail = "·", nbsp = "␣" }
+opt.list        = true
+opt.listchars   = { tab = "▸ ", trail = "·", nbsp = "␣" }
 
 -- Searching
-opt.ignorecase                   = true
-opt.smartcase                    = true
-opt.grepprg                      = "rg --vimgrep"
-opt.grepformat                   = "%f:%l:%c:%m"
+opt.ignorecase  = true
+opt.smartcase   = true
+opt.grepprg     = "rg --vimgrep"
+opt.grepformat  = "%f:%l:%c:%m"
 
 -- Completion (append without clobbering)
-opt.completeopt                  = { "menu", "menuone", "noselect" } -- base
+opt.completeopt = { "menu", "menuone", "noselect" }                  -- base
 opt.completeopt:append({ "noinsert" })                               -- tweak if desired
 
 -- Short messages: extend instead of overwrite
