@@ -102,20 +102,42 @@ local function sync_tmux(path)
 end
 
 local function switch_to_worktree(path)
-    local modified = vim.tbl_filter(function(b) return vim.bo[b].modified and vim.api.nvim_buf_get_name(b) ~= "" end,
-        vim.api.nvim_list_bufs())
-    if #modified > 0 then
-        notify("Unsaved changes. Save or discard first.", vim.log.levels.WARN)
-        return false
+    local old_cwd = vim.fn.getcwd()
+    local current_file = vim.api.nvim_buf_get_name(0)
+    local current_rel = current_file ~= "" and current_file:sub(#old_cwd + 2) or nil
+
+    -- Auto-save all modified buffers
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].modified and vim.bo[buf].buftype == "" then
+            local name = vim.api.nvim_buf_get_name(buf)
+            if name ~= "" then
+                vim.api.nvim_buf_call(buf, function() vim.cmd("silent! write") end)
+            end
+        end
     end
+
     vim.cmd("cd " .. vim.fn.fnameescape(path))
+
+    -- Close all file buffers from old worktree
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
         if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" then
             local name = vim.api.nvim_buf_get_name(buf)
-            if name ~= "" and vim.fn.filereadable(name) == 0 then vim.api.nvim_buf_delete(buf, {}) end
+            if name ~= "" then vim.api.nvim_buf_delete(buf, { force = true }) end
         end
     end
-    vim.cmd("checktime | edit .")
+
+    -- Open corresponding file in new worktree, or directory if not exists
+    if current_rel then
+        local new_file = path .. "/" .. current_rel
+        if vim.fn.filereadable(new_file) == 1 then
+            vim.cmd("edit " .. vim.fn.fnameescape(new_file))
+        else
+            vim.cmd("edit .")
+        end
+    else
+        vim.cmd("edit .")
+    end
+
     sync_tmux(path)
     return true
 end
