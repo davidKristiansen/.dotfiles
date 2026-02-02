@@ -13,7 +13,7 @@
     path = ~/.config/git/work.conf
 
 [commit]
-    gpgSign = true
+    gpgsign = false
     template = ~/.config/git/template
 
 [core]
