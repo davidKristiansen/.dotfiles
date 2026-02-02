@@ -34,4 +34,4 @@ require "plugins.worktree"
 
 require "plugins.sshfs"
 
-require "plugins.diagram"
+-- require "plugins.diagram"
