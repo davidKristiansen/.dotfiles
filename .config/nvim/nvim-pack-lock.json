@@ -38,6 +38,14 @@
       "rev": "89294b8930e660936374fb763ac48a1ac51dd29c",
       "src": "https://github.com/bullets-vim/bullets.vim"
     },
+    "deltaview.nvim": {
+      "rev": "8a7bf251b420f1c75158a6c66a145ee26fbdccea",
+      "src": "https://github.com/kokusenz/deltaview.nvim"
+    },
+    "diagram.nvim": {
+      "rev": "99f0415ac157d69e7208bc93504fb70d180d6b44",
+      "src": "https://github.com/3rd/diagram.nvim"
+    },
     "dial.nvim": {
       "rev": "f97c0c7fa7d5111bc04a91d0f693900fb2d95861",
       "src": "https://github.com/monaqa/dial.nvim"
@@ -56,8 +64,7 @@
     },
     "fzf-lua": {
       "rev": "e9c8828f216e419d3b7fa1292d18378b14368492",
-      "src": "https://github.com/ibhagwan/fzf-lua",
-      "version": ">=0.0.0"
+      "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "fzf-lua-frecency.nvim": {
       "rev": "4c37d8d967a51f718af5d9556b72f16c5185c05b",
@@ -70,6 +77,10 @@
     "gruvbox-material": {
       "rev": "cc47341018320a2c82262958a1af889e5eeacd6e",
       "src": "https://github.com/sainnhe/gruvbox-material"
+    },
+    "image.nvim": {
+      "rev": "446a8a5cc7a3eae3185ee0c697732c32a5547a0b",
+      "src": "https://github.com/3rd/image.nvim"
     },
     "lazygit.nvim": {
       "rev": "2305deed25bc61b866d5d39189e9105a45cf1cfb",

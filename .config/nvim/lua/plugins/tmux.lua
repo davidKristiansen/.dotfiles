@@ -18,4 +18,4 @@ require("nvim-tmux-navigation").setup({
   disable_when_zoomed = true, -- Prevent navigation when tmux pane is zoomed
 })
 
-vim.g.tpipeline_autoembed = 1
+vim.g.tpipeline_autoembed = 0

@@ -125,5 +125,8 @@ for_window {
     [app_id="wlroots"] floating true
 
     [app_id="ReadySetDone"] floating enable
+
+    # CUSeqExplorer windows
+    [title="^CUSe"] floating enable
 }
 

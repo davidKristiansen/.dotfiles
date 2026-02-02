@@ -4,118 +4,121 @@
 
 # If inside ~/Work/ (case sensitive, trailing slash important), override with work.conf
 [includeIf "gitdir:~/Work/"]
-  path = ~/.config/git/work.conf
+    path = ~/.config/git/work.conf
 
 [includeIf "gitdir:~/ROOTDIR/"]
-  path = ~/.config/git/work.conf
+    path = ~/.config/git/work.conf
 
 [includeIf "gitdir:/Project/"]
     path = ~/.config/git/work.conf
 
 [commit]
-	gpgSign = true
-  template = ~/.config/git/template
+    gpgSign = true
+    template = ~/.config/git/template
 
 [core]
-  autocrlf = input  # keep newlines as in input
-  compression = 9  # trade cpu for network
-  fsync = none
-  whitespace = error  # threat incorrect whitespace as errors
+    autocrlf = input  # keep newlines as in input
+    compression = 9  # trade cpu for network
+    fsync = none
+    whitespace = error  # threat incorrect whitespace as errors
+    pager = delta
 
 [advice]  # disable advices
-  addEmptyPathspec = false
-  pushNonFastForward = false
-  statusHints = false
+    addEmptyPathspec = false
+    pushNonFastForward = false
+    statusHints = false
 
 [blame]
-  coloring = highlightRecent
-  date = relative
+    coloring = highlightRecent
+    date = relative
 
 [diff]
-  context = 3  # less context in diffs
-  renames = copies  # detect copies as renames in diffs
-  interHunkContext = 10  # merge near hunks in diffs
+    context = 3  # less context in diffs
+    renames = copies  # detect copies as renames in diffs
+    interHunkContext = 10  # merge near hunks in diffs
 
 [init]
-  defaultBranch = main
+    defaultBranch = main
 
 [log]
-  abbrevCommit = true  # short commits
-  graphColors = blue,yellow,cyan,magenta,green,red
+    abbrevCommit = true  # short commits
+    graphColors = blue,yellow,cyan,magenta,green,red
 
 [status]
-  branch = true
-  short = true
-  showStash = true
-  showUntrackedFiles = all  # show individual untracked files
+    branch = true
+    short = true
+    showStash = true
+    showUntrackedFiles = all  # show individual untracked files
 
 [pager]
-  branch = false  # no need to use pager for git branch
-  diff = diff-so-fancy | $PAGER  # diff-so-fancy as diff pager
+    branch = false  # no need to use pager for git branch
+    diff = diff-so-fancy | $PAGER  # diff-so-fancy as diff pager
 
 [push]
-  autoSetupRemote = true  # easier to push new branches
-  default = current  # push only current branch by default
-  followTags = true  # push also tags
-  gpgSign = false  # my remotes doesn't support sign pushes
+    autoSetupRemote = true  # easier to push new branches
+    default = current  # push only current branch by default
+    followTags = true  # push also tags
+    gpgSign = false  # my remotes doesn't support sign pushes
 
 [pull]
-  rebase = true
+    rebase = true
 
 [submodule]
-  fetchJobs = 16
+    fetchJobs = 16
 
 [rebase]
-  autoStash = true
+    autoStash = true
 
 # Colors
 [color "blame"]
-  highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
+    highlightRecent = black bold,1 year ago,white,1 month ago,default,7 days ago,blue
 
 [color "branch"]
-  current  = magenta
-  local    = default
-  remote   = yellow
-  upstream = green
-  plain    = blue
+    current  = magenta
+    local    = default
+    remote   = yellow
+    upstream = green
+    plain    = blue
 
 [color "diff"]
-  meta       = black bold
-  frag       = magenta
-  context    = white
-  whitespace = yellow reverse
+    meta       = black bold
+    frag       = magenta
+    context    = white
+    whitespace = yellow reverse
 
 [interactive]
-  diffFilter = diff-so-fancy --patch
-  singlekey = true
-
-# Third-party: diff-so-fancy
-[diff-so-fancy]
-  markEmptyLines = false
+    diffFilter = delta --color-only
 
 # URL shortcuts
 [url "git@github.com:"]
-  insteadOf = "gh:"
+    insteadOf = "gh:"
 
 [gpg]
-	program = gpg
+    program = gpg
 [credential]
-	helper = store
+    helper = store
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 
+[merge]
+    conflictStyle = zdiff3
+
+[delta]
+    syntax-theme = gruvbox-dark
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
 
 [mergetool "bc"]
 #  cmd = BComp.exe "$(wslpath -aw $LOCAL)" "$(wslpath -aw $REMOTE)" "$(wslpath -aw $BASE)" "$(wslpath -aw $MERGED)"
-  cmd = bcompare $LOCAL $REMOTE $BASE $MERGED
-  trustExitCode = true
+    cmd = bcompare $LOCAL $REMOTE $BASE $MERGED
+    trustExitCode = true
 
 
 [difftool "bc"]
 # cmd =BComp.exe "$(wslpath -aw $LOCAL)" "$(wslpath -aw $REMOTE)"
-  cmd = bcompare $LOCAL $REMOTE
-  trustExitCode = true
+    cmd = bcompare $LOCAL $REMOTE
+    trustExitCode = true
 

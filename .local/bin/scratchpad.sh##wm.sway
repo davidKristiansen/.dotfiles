@@ -6,7 +6,7 @@ TERMINAL=ghostty
 echo 1
 if [[ ! $(ps aux | \grep "term.scratchpad" | \grep -v grep) ]]; then
 echo 2
-  swaymsg 'exec --no-startup-id ghostty --class="term.scratchpad"'
+  swaymsg 'exec --no-startup-id ghostty --class="term.scratchpad" -e tmux new-session -A -s scratch'
   # swaymsg 'exec --no-startup-id /home/SONY/s7000026748/.local/bin/kitty --class="term.scratchpad"'
 echo 3
   sleep 1.5

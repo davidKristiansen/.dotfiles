@@ -4,6 +4,9 @@ local M = {}
 -- Helpers
 local function sanitize_branch(branch) return branch:gsub("[/:]", "-") end
 
+local function shell(cmd) return vim.fn.system(cmd), vim.v.shell_error == 0 end
+local function notify(msg, level) vim.notify(msg, level or vim.log.levels.INFO) end
+
 local function get_worktree_base()
     local bare_parent = vim.fn.fnamemodify(vim.fn.getcwd(), ":h") .. "/.bare"
     if vim.fn.isdirectory(bare_parent) == 1 then
@@ -17,15 +20,21 @@ local function get_worktree_base()
     end
 end
 
+local function unset_upstream(path, branch)
+    -- Ensure the new feature branch does NOT track origin/main (or anything else)
+    -- Run inside the worktree so HEAD/branch context is correct.
+    shell(("git -C %s branch --unset-upstream %s"):format(
+        vim.fn.shellescape(path),
+        vim.fn.shellescape(branch)
+    ))
+end
+
 local function normalize_path(path)
     if path:match("^[/.]") then return path end
     local base = get_worktree_base()
     if not base then return nil end
     return base .. "/" .. path
 end
-
-local function shell(cmd) return vim.fn.system(cmd), vim.v.shell_error == 0 end
-local function notify(msg, level) vim.notify(msg, level or vim.log.levels.INFO) end
 
 local function get_branches()
     local output = vim.fn.systemlist("git branch -a --format='%(refname:short)'")
@@ -141,12 +150,23 @@ function M.switch()
         local rel = wt.path:sub(1, #home) == home and ("~" .. wt.path:sub(#home + 1)) or wt.path
         local marker = wt.is_current and "[current] " or "          "
         local padded_branch = wt.branch .. string.rep(" ", max_w - #wt.branch)
-        items[#items + 1] = { branch = wt.branch, path = wt.path, exists = true, display = marker .. padded_branch .. "  " .. rel }
+        items[#items + 1] = {
+            branch = wt.branch,
+            path = wt.path,
+            exists = true,
+            display = marker ..
+                padded_branch .. "  " .. rel
+        }
     end
     for _, b in ipairs(branches) do
         if not wt_map[b] then
             local padded_branch = b .. string.rep(" ", max_w - #b)
-            items[#items + 1] = { branch = b, exists = false, display = "          " .. padded_branch .. "  (no worktree)" }
+            items[#items + 1] = {
+                branch = b,
+                exists = false,
+                display = "          " ..
+                    padded_branch .. "  (no worktree)"
+            }
         end
     end
 
@@ -166,13 +186,14 @@ function M.switch()
                             if not path then return notify("Failed to determine worktree base", vim.log.levels.ERROR) end
                             -- Prefer local branch if exists, otherwise use origin/branch
                             local target = item.branch
-                            local check_local = vim.fn.system("git rev-parse --verify " .. vim.fn.shellescape(target) .. " 2>/dev/null")
+                            local check_local = vim.fn.system("git rev-parse --verify " ..
+                                vim.fn.shellescape(target) .. " 2>/dev/null")
                             if vim.v.shell_error ~= 0 then
                                 -- Local doesn't exist, try origin/
                                 target = "origin/" .. item.branch
                             end
                             create_and_switch(
-                            ("git worktree add %s %s"):format(vim.fn.shellescape(path), vim.fn.shellescape(target)),
+                                ("git worktree add %s %s"):format(vim.fn.shellescape(path), vim.fn.shellescape(target)),
                                 path, "Created and switched: ")
                         end)
                 elseif item.path ~= cwd then
@@ -200,7 +221,7 @@ function M.create()
 
             -- Sort: origin/default first
             local default_br = vim.trim(vim.fn.system(
-            "git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'"))
+                "git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'"))
             if default_br == "" then default_br = "main" end
             table.sort(branches, function(a, b)
                 local rd = "origin/" .. default_br
@@ -227,10 +248,14 @@ function M.create()
                         if not sel or #sel == 0 then return end
                         -- Extract branch name from display (remove type label)
                         local base_branch = sel[1]:match("^(%S+)")
-                        local cmd = ("git worktree add -b %s %s %s"):format(vim.fn.shellescape(branch),
-                            vim.fn.shellescape(path), vim.fn.shellescape(base_branch))
+                        local cmd = ("git -c branch.autoSetupMerge=false worktree add -b %s %s %s"):format(
+                            vim.fn.shellescape(branch),
+                            vim.fn.shellescape(path),
+                            vim.fn.shellescape(base_branch)
+                        )
                         local output, ok = shell(cmd)
                         if ok then
+                            unset_upstream(path, branch)
                             notify("Created branch: " .. branch)
                             vim.defer_fn(function()
                                 vim.ui.select({ "Yes", "No" }, { prompt = "Switch to new worktree?" }, function(c)
@@ -258,7 +283,7 @@ function M.delete()
     -- Calculate max branch width for alignment
     local max_w = 0
     for _, wt in ipairs(worktrees) do max_w = math.max(max_w, #wt.branch) end
-    
+
     local home = vim.env.HOME
     local items = vim.tbl_map(function(wt)
         local rel = wt.path:sub(1, #home) == home and ("~" .. wt.path:sub(#home + 1)) or wt.path
@@ -305,8 +330,17 @@ function M.prune()
 end
 
 function M.setup()
-    local cmds = { switch = M.switch, s = M.switch, create = M.create, c = M.create, delete = M.delete, d = M.delete, prune =
-    M.prune, p = M.prune }
+    local cmds = {
+        switch = M.switch,
+        s = M.switch,
+        create = M.create,
+        c = M.create,
+        delete = M.delete,
+        d = M.delete,
+        prune =
+            M.prune,
+        p = M.prune
+    }
     vim.api.nvim_create_user_command("Worktree", function(opts)
         local fn = cmds[opts.fargs[1]]
         if fn then fn() else notify("Usage: :Worktree {switch|create|delete|prune}", vim.log.levels.WARN) end
@@ -314,8 +348,8 @@ function M.setup()
         nargs = "+",
         complete = function(_, line)
             local a = vim.split(line, "%s+"); return #a == 2 and
-            vim.tbl_filter(function(c) return vim.startswith(c, a[2]) end, { "switch", "create", "delete", "prune" }) or
-            {}
+                vim.tbl_filter(function(c) return vim.startswith(c, a[2]) end, { "switch", "create", "delete", "prune" }) or
+                {}
         end,
         desc = "Manage git worktrees"
     })
