@@ -12,6 +12,7 @@ unsetopt null_glob
 
 
 source <(uv run --project="${WORKSPACE}" macpyver generate-completion zsh 2>/dev/null) || true
+source <(uv run --project="${WORKSPACE}" gaffa generate-completion zsh 2>/dev/null) || true
 
 # vim: set ft=sh ts=2 sw=2:
 
