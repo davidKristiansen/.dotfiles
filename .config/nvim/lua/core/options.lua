@@ -10,25 +10,25 @@ vim.g.maplocalleader = "\\"
 -- Diagnostics (merge general + signs)
 -- ---------------------------------------------------------------------
 local diag_base = {
-  virtual_text     = true,
-  -- virtual_text   = { spacing = 2, source = "if_many", current_line = false },
-  virtual_lines    = false, -- { current_line = true },
-  signs            = true,
-  underline        = true,
-  update_in_insert = true,
-  severity_sort    = true,
+    virtual_text     = true,
+    -- virtual_text   = { spacing = 2, source = "if_many", current_line = false },
+    virtual_lines    = false, -- { current_line = true },
+    signs            = true,
+    underline        = true,
+    update_in_insert = true,
+    severity_sort    = true,
 }
 
 
 local diag_signs = {
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = "",
-      [vim.diagnostic.severity.WARN]  = "",
-      [vim.diagnostic.severity.INFO]  = "",
-      [vim.diagnostic.severity.HINT]  = "󰌵",
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = "",
+            [vim.diagnostic.severity.WARN]  = "",
+            [vim.diagnostic.severity.INFO]  = "",
+            [vim.diagnostic.severity.HINT]  = "󰌵",
+        },
     },
-  },
 }
 
 vim.diagnostic.config(vim.tbl_deep_extend("force", diag_base, diag_signs))
@@ -39,6 +39,9 @@ vim.diagnostic.config(vim.tbl_deep_extend("force", diag_base, diag_signs))
 local o                          = vim.o
 local opt                        = vim.opt
 local cmd                        = vim.cmd
+
+vim.opt.maxmempattern            = 5000
+vim.opt.redrawtime               = 10000
 
 -- General UX
 opt.autowrite                    = true  -- Auto-write on buffer switch
@@ -83,12 +86,12 @@ opt.smartindent                  = true
 
 -- Filetype specific settings
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "c", "cpp" },
-  callback = function()
-    vim.opt.tabstop = 4
-    vim.opt.shiftwidth = 4
-    vim.opt.softtabstop = 4
-  end,
+    pattern = { "c", "cpp" },
+    callback = function()
+        vim.opt.tabstop = 4
+        vim.opt.shiftwidth = 4
+        vim.opt.softtabstop = 4
+    end,
 })
 
 -- Whitespace hints
@@ -102,27 +105,27 @@ opt.grepprg     = "rg --vimgrep"
 opt.grepformat  = "%f:%l:%c:%m"
 
 -- Completion (append without clobbering)
-opt.completeopt = { "menu", "menuone", "noselect" }                  -- base
-opt.completeopt:append({ "noinsert" })                               -- tweak if desired
+opt.completeopt = { "menu", "menuone", "noselect" } -- base
+opt.completeopt:append({ "noinsert" })              -- tweak if desired
 
 -- Short messages: extend instead of overwrite
 opt.shortmess:append({
-  W = true, -- no [written]
-  I = true, -- no intro
-  c = true, -- no ins-completion messages
-  C = true, -- (nvim ≥0.9) reduce extra messages
-  F = true, -- skip "Press ENTER" after msgs like :y
+    W = true, -- no [written]
+    I = true, -- no intro
+    c = true, -- no ins-completion messages
+    C = true, -- (nvim ≥0.9) reduce extra messages
+    F = true, -- skip "Press ENTER" after msgs like :y
 })
 
 -- 0.9 niceties
 if vim.fn.has("nvim-0.9.0") == 1 then
-  opt.splitkeep = "screen"
+    opt.splitkeep = "screen"
 end
 
 -- Undercurl (if likely supported)
 if vim.fn.has("termguicolors") == 1 then
-  cmd([[let &t_Cs = "\e[4:3m"]])
-  cmd([[let &t_Ce = "\e[4:0m"]])
+    cmd([[let &t_Cs = "\e[4:3m"]])
+    cmd([[let &t_Ce = "\e[4:0m"]])
 end
 
 

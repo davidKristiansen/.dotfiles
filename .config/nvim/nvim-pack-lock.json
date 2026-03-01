@@ -64,7 +64,8 @@
     },
     "fzf-lua": {
       "rev": "e9c8828f216e419d3b7fa1292d18378b14368492",
-      "src": "https://github.com/ibhagwan/fzf-lua"
+      "src": "https://github.com/ibhagwan/fzf-lua",
+      "version": ">=0.0.0"
     },
     "fzf-lua-frecency.nvim": {
       "rev": "4c37d8d967a51f718af5d9556b72f16c5185c05b",
