@@ -31,7 +31,7 @@ nodejs = "latest"
 # Python
 python = "3.14"
 pipx = "latest"
-uv = "0.9.22"
+uv = "0.9.2"
 
 thefuck = { version = "latest", uvx_args = "--python 3.11" }
 
@@ -60,10 +60,11 @@ gh = "latest"
 "npm:copilot" = "latest"
 "npm:mcp-hub" = "latest"
 "pipx:jiratui" = "latest"
-java = "25"
+java = "26"
 gemini-cli = "latest"
 gemini = "latest"
 "pipx:platformio" = "latest"
 lazygit = "latest"
 "go:github.com/r00tman/corrupter" = "latest"
 "npm:@devcontainers/cli" = "latest"
+"cargo:fixit-cli" = "latest"
