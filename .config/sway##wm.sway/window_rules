@@ -29,6 +29,7 @@ for_window {
     [instance="origin.exe"] floating enable
     [title="Origin"] floating enable
     [title="Microsoft Teams Notification"] floating enable
+    [title="teams.microsoft.com is sharing your screen."] floating enable, move to output eDP-1, move position 1200 1096
     [title="Calculator"] floating enable
     [title="Color Picker"] floating enable
     [title="Reminders"] floating enable resize set 200px 400px

@@ -1,9 +1,14 @@
 {
-  "spellCheckerLanguages": [
-    "en",
-    "nb"
-  ],
-  "closeAppOnCross": true,
-  "watchConfigFile" :true,
-  "defaultURLHandler": "link_handler.sh"
+    "appTitle": "mIcRoSoFtTiiMs",
+    "spellCheckerLanguages": [
+        "en",
+        "nb"
+    ],
+    "closeAppOnCross": true,
+    "watchConfigFile": true,
+    "defaultURLHandler": "xdg-open",
+    "disableGpu": true,
+    "wayland": {
+        "xwaylandOptimizations": true
+    }
 }
