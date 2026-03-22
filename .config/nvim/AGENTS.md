@@ -46,7 +46,8 @@ lua/plugins/
 - mini_surround.lua – Surround mappings.
 - oil.lua – Oil file explorer.
 - render_markdown.lua – Markdown rendering enhancements.
-- sidekick.lua – sidekick.nvim setup.
+- noice.lua – noice.nvim UI replacement for messages, cmdline, popupmenu.
+- opencode.lua – opencode.nvim AI agent integration (keymaps use <leader>a prefix).
 - tmux_navigation.lua – nvim-tmux-navigation config.
 - tpipeline.lua – tmux pipeline + statusline embedding.
 - treesitter.lua – Treesitter languages & features.
@@ -88,7 +89,7 @@ Declared in plugins/init.lua then setup in this sequence:
 2. Editing (dial, mini_surround, autopairs, mini_align)
 3. Snippets (luasnip)
 4. Language tooling (plugins.lsp, treesitter)
-5. Completion & AI (blink, sidekick)
+5. Completion & AI (blink, opencode)
 6. Git (git)
 7. UI / Visual (which_key, mini_statusline, render_markdown, mini_starter, mini_files)
 8. Terminal integration (tmux_navigation, tpipeline)
