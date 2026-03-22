@@ -6,6 +6,30 @@ vim.pack.add({
     { src = 'https://github.com/ibhagwan/fzf-lua', version = vim.version.range("*") },
 }, { confirm = false })
 
+--- Send selected fzf-lua items to opencode as context files.
+--- Designed as an fzf-lua action: fn(selected, opts)
+local function opencode_send(selected, opts)
+    if not selected or #selected == 0 then return end
+    local ok, context = pcall(require, "opencode.context")
+    if not ok then
+        vim.notify("opencode.nvim not available", vim.log.levels.WARN)
+        return
+    end
+
+    local core_ok, core = pcall(require, "opencode.core")
+    if core_ok then
+        core.open({ new_session = false, focus = "input", start_insert = true })
+    end
+
+    for _, item in ipairs(selected) do
+        -- fzf-lua prepends ANSI + path info; strip to bare path
+        local path = require("fzf-lua.path").entry_to_file(item, opts).path
+        if path then
+            context.add_file(path)
+        end
+    end
+end
+
 local default_ignores = {
     "**/.pytest_cache/**",
     "**/__pycache__/**",
@@ -31,27 +55,27 @@ require("fzf-lua").setup({
             ["ctrl-c"] = "abort",
         },
     },
-    files = {
-        true, -- uncomment to inherit all the below in your custom config
-        -- Pickers inheriting these actions:
+    actions = {
+        -- Default actions inherited by all file-type pickers:
         --   files, git_files, git_status, grep, lsp, oldfiles, quickfix, loclist,
         --   tags, btags, args, buffers, tabs, lines, blines
-        -- `file_edit_or_qf` opens a single selection or sends multiple selection to quickfix
-        -- replace `enter` with `file_edit` to open all files/bufs whether single or multiple
-        -- replace `enter` with `file_switch_or_edit` to attempt a switch in current tab first
-        ["enter"]  = FzfLua.actions.file_edit_or_qf,
-        ["ctrl-s"] = FzfLua.actions.file_split,
-        ["ctrl-v"] = FzfLua.actions.file_vsplit,
-        ["ctrl-t"] = FzfLua.actions.file_tabedit,
-        ["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
-        ["alt-Q"]  = FzfLua.actions.file_sel_to_ll,
-        ["alt-i"]  = FzfLua.actions.toggle_ignore,
-        ["alt-h"]  = FzfLua.actions.toggle_hidden,
-        ["alt-f"]  = FzfLua.actions.toggle_follow,
+        files = {
+            true, -- inherit defaults
+            ["enter"]  = FzfLua.actions.file_edit_or_qf,
+            ["ctrl-s"] = FzfLua.actions.file_split,
+            ["ctrl-v"] = FzfLua.actions.file_vsplit,
+            ["ctrl-t"] = FzfLua.actions.file_tabedit,
+            ["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
+            ["alt-Q"]  = FzfLua.actions.file_sel_to_ll,
+            ["alt-i"]  = FzfLua.actions.toggle_ignore,
+            ["alt-h"]  = FzfLua.actions.toggle_hidden,
+            ["alt-f"]  = FzfLua.actions.toggle_follow,
+            ["ctrl-o"] = opencode_send,
+        },
     },
     grep = {
-        rg_glob = true,        -- enable glob parsing
-        glob_flag = "--iglob", -- case insensitive globs
+        rg_glob = true,            -- enable glob parsing
+        glob_flag = "--iglob",     -- case insensitive globs
         glob_separator = "%s%-%-", -- query separator pattern (lua): ' --'
         additional_args = function()
             local args = {}
@@ -289,5 +313,9 @@ function M.current_buffer_lines(opts)
         },
     })
 end
+
+--- Expose opencode_send as a reusable action for custom picker calls.
+--- Usage: require("utils.picker").opencode_send
+M.opencode_send = opencode_send
 
 return M
