@@ -1,3 +1,40 @@
 #!/usr/bin/env bash
 
-j4-dmenu-desktop --no-exec --dmenu='fzf --prompt="Run: "' | xargs -I{} swaymsg "exec {}"
+# fzf-launcher with frecency sorting
+HIST_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/fzf-launcher-history"
+
+if [[ "$1" == "--dmenu" ]]; then
+    # We are being called as the dmenu by j4-dmenu-desktop
+    shift
+    selection=$(awk -v hist="$HIST_FILE" '
+        BEGIN {
+            while ((getline < hist) > 0) {
+                count[$0]++
+                last[$0] = NR
+            }
+            close(hist)
+        }
+        {
+            # Score = frequency * 1000 + recency (last index in history)
+            # Tie-breaker = input order (descending)
+            score = (count[$0] ? count[$0] * 1000 : 0) + (last[$0] ? last[$0] : 0)
+            printf "%010d\t%010d\t%s\n", score, (1000000 - NR), $0
+        }
+    ' | sort -rn | cut -f3- | fzf --prompt="Run: " --tiebreak=index)
+
+    if [[ -n "$selection" ]]; then
+        echo "$selection" >> "$HIST_FILE"
+        # Prune history file to keep it manageable
+        if [[ $(( RANDOM % 10 )) -eq 0 ]]; then
+            [[ $(wc -l < "$HIST_FILE") -gt 1500 ]] && (tail -n 1000 "$HIST_FILE" > "$HIST_FILE.tmp" && mv "$HIST_FILE.tmp" "$HIST_FILE")
+        fi
+        echo "$selection"
+    fi
+    exit 0
+fi
+
+mkdir -p "$(dirname "$HIST_FILE")"
+touch "$HIST_FILE"
+
+# Run j4-dmenu-desktop with this script as its dmenu
+j4-dmenu-desktop --no-exec --dmenu="$(realpath "$0") --dmenu" | xargs -I{} swaymsg "exec {}"

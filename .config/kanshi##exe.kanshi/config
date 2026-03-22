@@ -18,7 +18,7 @@ profile thomas {
 
 profile home {
     output "HP Inc. HP Z38c 6CM04204LJ" position 0,0 mode 3840x1600
-    output eDP-1 position 3840,400 mode 1920x1200
+    output eDP-1 position 3840,1248 mode 1920x1200
 }
 
 profile office {
