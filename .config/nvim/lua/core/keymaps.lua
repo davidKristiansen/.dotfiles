@@ -121,11 +121,11 @@ vim.keymap.set("n", "<leader>sw",
 vim.keymap.set("v", "<leader>sw", function()
     require("utils.picker").grep_visual()
 end, { desc = "Grep selection" })
-vim.keymap.set("n", "*",
-    function() require("utils.picker").current_buffer_lines({ default_text = vim.fn.expand("<cWORD>") }) end,
-    { desc = "Current buffer fuzzy find CWORD" })
-vim.keymap.set("n", "/", function() require("utils.picker").current_buffer_lines() end,
-    { desc = "Live Grep (current buffer)" })
+-- vim.keymap.set("n", "*",
+--     function() require("utils.picker").current_buffer_lines({ default_text = vim.fn.expand("<cWORD>") }) end,
+--     { desc = "Current buffer fuzzy find CWORD" })
+-- vim.keymap.set("n", "/", function() require("utils.picker").current_buffer_lines() end,
+--     { desc = "Live Grep (current buffer)" })
 vim.keymap.set("n", "<leader><leader>", function() require("utils.picker").resume() end, { desc = "Resume" })
 vim.keymap.set("n", "<leader>sj", function() require("utils.picker").jumplist() end, { desc = "Jumplist" })
 vim.keymap.set("n", "<leader>sd", function() require("utils.picker").diagnostics() end, { desc = "Diagnostic" })
