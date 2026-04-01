@@ -1,0 +1,56 @@
+set window-title-basename "true"
+set selection-clipboard "clipboard"
+
+# Gruvbox Dark Hard color theme for Zathura
+# <C-r> toggles recolor: ON = dark mode, OFF = original (light) PDF colors
+
+#
+# Gruvbox Dark Hard
+#
+
+set notification-error-bg       rgba(251,73,52,1)     # bright red
+set notification-error-fg       rgba(235,219,178,1)   # fg
+set notification-warning-bg     rgba(254,128,25,1)    # bright orange
+set notification-warning-fg     rgba(29,32,33,1)      # bg hard
+set notification-bg             rgba(29,32,33,1)      # bg hard
+set notification-fg             rgba(235,219,178,1)   # fg
+
+set completion-bg               rgba(29,32,33,1)      # bg hard
+set completion-fg               rgba(168,153,132,1)   # fg4 (gray)
+set completion-group-bg         rgba(29,32,33,1)      # bg hard
+set completion-group-fg         rgba(168,153,132,1)   # fg4 (gray)
+set completion-highlight-bg     rgba(60,56,54,1)      # bg1
+set completion-highlight-fg     rgba(235,219,178,1)   # fg
+
+set index-bg                    rgba(29,32,33,1)      # bg hard
+set index-fg                    rgba(235,219,178,1)   # fg
+set index-active-bg             rgba(60,56,54,1)      # bg1
+set index-active-fg             rgba(235,219,178,1)   # fg
+
+set inputbar-bg                 rgba(29,32,33,1)      # bg hard
+set inputbar-fg                 rgba(235,219,178,1)   # fg
+set statusbar-bg                rgba(29,32,33,1)      # bg hard
+set statusbar-fg                rgba(235,219,178,1)   # fg
+
+set highlight-color             rgba(250,189,47,0.5)  # bright yellow
+set highlight-active-color      rgba(254,128,25,0.5)  # bright orange
+
+set default-bg                  rgba(29,32,33,1)      # bg hard
+set default-fg                  rgba(235,219,178,1)   # fg
+
+set render-loading              true
+set render-loading-fg           rgba(29,32,33,1)      # bg hard
+set render-loading-bg           rgba(235,219,178,1)   # fg
+
+#
+# Recolor mode settings (dark reading mode)
+#
+
+set recolor-lightcolor          rgba(29,32,33,1)      # bg hard
+set recolor-darkcolor           rgba(235,219,178,1)   # fg
+
+#
+# Startup options
+#
+set adjust-open width
+set recolor true

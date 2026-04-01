@@ -1,0 +1,6 @@
+[package]
+name = "letter"
+version = "0.1.0"
+entrypoint = "letter.typ"
+authors = ["Emma Nekstad"]
+description = "Reusable cover-letter template (scrlttr2 / DIN 5008 style)"

@@ -22,6 +22,7 @@ local servers = {
   "jinja_lsp",
   "groovyls",
   "marksman",
+  "tinymist",
 }
 
 mason.setup({

@@ -4,11 +4,8 @@
         "en",
         "nb"
     ],
-    "closeAppOnCross": true,
+    "closeAppOnCross": false,
     "watchConfigFile": true,
     "defaultURLHandler": "xdg-open",
-    "disableGpu": true,
-    "wayland": {
-        "xwaylandOptimizations": true
-    }
+    "disableGpu": true
 }

@@ -17,7 +17,8 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_STATE_HOME/zsh" \
          "$XDG_CACHE_HOME/zsh" \
          "$XDG_BIN_HOME" \
-         "$GNUPGHOME"
+         "$GNUPGHOME" \
+         "$XDG_CONFIG_HOME/teams-for-linux"
 chmod 700 "$GNUPGHOME"
 
 echo Hold on to your bootstraps !

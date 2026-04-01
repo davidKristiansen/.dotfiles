@@ -268,6 +268,10 @@
       "rev": "932e6c2cc4a43ce578f007db1f8f61ad6798f938",
       "src": "https://github.com/rachartier/tiny-glimmer.nvim"
     },
+    "typst.vim": {
+      "rev": "1d5436c0f55490893892441c0eca55e6cdf4916c",
+      "src": "https://github.com/kaarmu/typst.vim"
+    },
     "vim-eunuch": {
       "rev": "e86bb794a1c10a2edac130feb0ea590a00d03f1e",
       "src": "https://github.com/tpope/vim-eunuch"
@@ -279,6 +283,10 @@
     "vim-tpipeline": {
       "rev": "bc6dfc10e26a8dd1ec2f0512050a8a0afaa9d090",
       "src": "https://github.com/vimpostor/vim-tpipeline"
+    },
+    "vimtex": {
+      "rev": "82d2305ff71dfb3bd91602534cc9bb9a195bcb38",
+      "src": "https://github.com/lervag/vimtex"
     },
     "vscode-diff.nvim": {
       "rev": "93cd80c56f71af4671388c568a37d4c84c3ddefa",

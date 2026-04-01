@@ -42,4 +42,4 @@ zsh-users/zsh-autosuggestions kind:defer
 # External Utilities (bind as aliases separately)
 #############################################################
 soimort/translate-shell
-so-fancy/diff-so-fancy
+so-fancy/diff-so-fancy kind:path

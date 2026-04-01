@@ -4,6 +4,8 @@
 vim.pack.add({
     { src = "https://github.com/tpope/vim-eunuch" },
     { src = "https://github.com/bullets-vim/bullets.vim" },
+    { src = "https://github.com/lervag/vimtex" },
+    { src = "https://github.com/kaarmu/typst.vim" },
 }, { confirm = false })
 
 require "plugins.treesitter"
@@ -33,6 +35,8 @@ require "plugins.noice"
 require "plugins.tiny-glimmer"
 require "plugins.neoscroll"
 require "plugins.worktree"
+require "plugins.vimtex"
+require "plugins.typst"
 
 require "plugins.sshfs"
 

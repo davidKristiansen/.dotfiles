@@ -27,6 +27,7 @@ require 'nvim-treesitter'.install {
     'lua',
     'cpp',
     'c',
+    'typst',
 }
 
 -- Textobjects: select
