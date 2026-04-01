@@ -130,7 +130,7 @@ function M.lsp_type_definitions(opts)
 end
 
 function M.diagnostics(opts)
-    require("fzf-lua").diagnostics(opts)
+    require("fzf-lua").diagnostics_document(opts)
 end
 
 -- General search functions
