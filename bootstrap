@@ -27,7 +27,7 @@ echo Hold on to your bootstraps !
   cd "${SCRIPT_DIR}"
 
   # Ensure stow.sh submodule is available and install it to $PATH
-  git submodule update --init ".local/lib/stow.sh##no" >/dev/null
+  git submodule update --init --remote ".local/lib/stow.sh##no" >/dev/null
   make -C ".local/lib/stow.sh##no" install >/dev/null
 
   stow.sh \
