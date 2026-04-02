@@ -1,9 +1,11 @@
 -- SPDX-License-Identifier: MIT
 -- lua/plugins/mini/minis/starter.lua
--- Configuration for mini.starter with rainbow logo fade
+-- Configuration for mini.starter with logo and keybind-consistent actions
 
--- Custom recent files section that only shows files from the current working directory
-local function recent_files_current_dir(n_files, show_path)
+--- Build a list of recent file items from v:oldfiles.
+--- @param n_files integer  Maximum number of items to return.
+--- @param cwd_only boolean Only include files under the current working directory.
+local function recent_files(n_files, cwd_only)
     local oldfiles = vim.v.oldfiles
     if #oldfiles == 0 then
         return {}
@@ -13,20 +15,20 @@ local function recent_files_current_dir(n_files, show_path)
     local n_added = 0
     local cwd = vim.fn.getcwd()
     local cwd_with_sep = cwd == '/' and cwd or (cwd .. '/')
+    local section = cwd_only and 'Recent files (cwd)' or 'Recent files'
 
-    for i = #oldfiles, 1, -1 do
-        local path = oldfiles[i]
+    for _, path in ipairs(oldfiles) do
         if
             vim.fn.filereadable(path) == 1
             and vim.fn.isdirectory(path) == 0
-            and vim.startswith(path, cwd_with_sep)
+            and (not cwd_only or vim.startswith(path, cwd_with_sep))
         then
-            local name = show_path and path or vim.fn.fnamemodify(path, ':.')
+            local name = vim.fn.fnamemodify(path, cwd_only and ':.' or ':~')
             local action = function()
                 vim.cmd('bdelete')
                 vim.cmd(('edit %s'):format(vim.fn.fnameescape(path)))
             end
-            table.insert(items, { name = name, action = action, section = 'Recent files (cwd)' })
+            table.insert(items, { name = name, action = action, section = section })
             n_added = n_added + 1
             if n_added == n_files then
                 break
@@ -37,14 +39,11 @@ local function recent_files_current_dir(n_files, show_path)
     return items
 end
 
--- local logo = {
---   "██████╗  █████╗ ██╗   ██╗██╗██████╗ ",
---   "██╔══██╗██╔══██╗██║   ██║██║██╔══██╗",
---   "██║  ██║███████║██║   ██║██║██║  ██║",
---   "██║  ██║██╔══██║╚██╗ ██╔╝██║██║  ██║",
---   "██████╔╝██║  ██║ ╚████╔╝ ██║██████╔╝",
---   "╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═════╝ ",
--- }
+--- @return boolean
+local function in_git_repo()
+    return vim.fn.isdirectory('.git') == 1
+        or vim.fn.system('git rev-parse --is-inside-work-tree 2>/dev/null'):find('true') ~= nil
+end
 
 local logo = {
     "░░░░░░░░░░░░░░░░░",
@@ -53,29 +52,17 @@ local logo = {
     "░░░███▄███▄███░░░",
     "░░░▀█████████▀░░░",
     "░░░░▄▀░░░░░▀▄░░░░",
-    "░░░░░░░░░░░░░░░░░"
+    "░░░░░░░░░░░░░░░░░",
 }
 
----
--- Applies a rainbow fade effect to the starter logo.
---
-local function apply_rainbow_to_logo(buf, logo_lines)
-    local ns = vim.api.nvim_create_namespace('starter_logo_rainbow')
-    local rainbow = {
-        -- '#cc241d', -- red
-        -- '#d65d0e', -- orange
-        '#d79921', -- yellow
-        --   '#98971a', -- green
-        --   '#689d6a', -- cyan/teal-ish
-        --   '#458588', -- blue
-    }
-
+--- Highlight the logo in yellow (gruvbox accent).
+local function highlight_logo(buf, logo_lines)
+    local ns = vim.api.nvim_create_namespace('starter_logo_hl')
     if not vim.api.nvim_buf_is_valid(buf) then
         return
     end
-    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 
-    -- Robustly find the starting line of the logo
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     local first_logo_line = logo_lines[1]:gsub('^%s*', ''):gsub('%s*$', '')
     local start_idx
     for i, line in ipairs(lines) do
@@ -88,43 +75,79 @@ local function apply_rainbow_to_logo(buf, logo_lines)
         return
     end
 
-    local n_logo_lines = #logo_lines
-    for i = 1, n_logo_lines do
-        -- Map logo line index to the rainbow palette
-        local color_idx = math.floor((i - 1) * (#rainbow - 1) / (n_logo_lines - 1)) + 1
-        local group = ('StarterRainbowLine%d'):format(i)
-        vim.api.nvim_set_hl(0, group, { fg = rainbow[color_idx], default = false })
-        vim.api.nvim_buf_set_extmark(buf, ns, start_idx + i - 1, 0, {
-            end_row = start_idx + i - 1,
-            end_col = #lines[start_idx + i],
-            hl_group = group,
-        })
+    vim.api.nvim_set_hl(0, 'StarterLogo', { fg = '#d79921' })
+    for i = 1, #logo_lines do
+        local row = start_idx + i - 1
+        if lines[row + 1] then
+            vim.api.nvim_buf_set_extmark(buf, ns, row, 0, {
+                end_row = row,
+                end_col = #lines[row + 1],
+                hl_group = 'StarterLogo',
+            })
+        end
     end
 end
 
 vim.api.nvim_create_autocmd('User', {
     pattern = 'MiniStarterOpened',
     callback = function(args)
-        apply_rainbow_to_logo(args.buf or vim.api.nvim_get_current_buf(), logo)
+        highlight_logo(args.buf or vim.api.nvim_get_current_buf(), logo)
     end,
 })
+
+--- Create a picker item — launches a floating picker on top of the starter.
+--- The starter stays underneath; if the user cancels, they land back on it.
+local function picker_item(name, section, fn)
+    return { name = name, section = section, action = fn }
+end
+
+--- Create an item that navigates away from the starter (opens a file/buffer).
+--- Closes the starter first so we don't leave it lingering.
+local function nav_item(name, section, fn)
+    return {
+        name = name,
+        section = section,
+        action = function()
+            vim.cmd('bdelete')
+            fn()
+        end,
+    }
+end
+
+local function cmd_item(name, section, cmd)
+    return { name = name, section = section, action = cmd }
+end
 
 return {
     evaluate_single = true,
     header = table.concat(logo, '\n'),
-    items = {
-        recent_files_current_dir(5, false),
-        require("mini.starter").sections.builtin_actions(),
-        { name = 'Find files', action = function() require('utils.picker').files() end,     section = 'Pickers' },
-        { name = 'Live grep',  action = function() require('utils.picker').live_grep() end, section = 'Pickers' },
-        { name = 'Explorer',   action = 'Neotree',                                          section = 'Pickers' },
-    },
+    items = (function()
+        local items = {}
+
+        -- Recent file sections
+        vim.list_extend(items, recent_files(5, true))
+        vim.list_extend(items, recent_files(3, false))
+
+        -- Quick actions — shortcut key is the FIRST char so mini.starter
+        -- query-by-prefix works. Keys match the rightmost char of the real
+        -- keybinding (e.g. <leader>sf -> f).
+        -- Pickers float on top of the starter; cancel returns to it.
+        table.insert(items, picker_item('f  Find files',   'Actions', function() require('utils.picker').files() end))
+        table.insert(items, picker_item('g  Live grep',    'Actions', function() require('utils.picker').live_grep() end))
+        table.insert(items, picker_item('o  Recent files', 'Actions', function() require('utils.picker').oldfiles() end))
+        table.insert(items, picker_item('b  Buffers',      'Actions', function() require('utils.picker').buffers() end))
+        table.insert(items, nav_item('e  Explorer',        'Actions', function() vim.cmd('Neotree toggle') end))
+        if in_git_repo() then
+            table.insert(items, picker_item('t  Git status', 'Actions', function() require('fzf-lua').git_status() end))
+        end
+        table.insert(items, cmd_item('q  Quit', 'Actions', 'qa'))
+
+        return items
+    end)(),
     footer = function()
         return ('Loaded %d modules'):format(#vim.tbl_keys(package.loaded))
     end,
     content_hooks = {
-        -- require("mini.starter").gen_hook.adding_bullet(),
-        -- require("mini.starter").gen_hook.indexing('all', { 'Builtin actions' }),
         require("mini.starter").gen_hook.aligning('center', 'center'),
         require("mini.starter").gen_hook.padding(3, 2),
     },
