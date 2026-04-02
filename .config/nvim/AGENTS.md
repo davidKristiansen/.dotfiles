@@ -5,8 +5,8 @@ This document describes the CURRENT state of the Neovim configuration (no histor
 ## Commit Rules (for agents & contributors)
 
 Use semantic conventional commit prefixes focused on Neovim scope:
-- chore(nvim): for maintenance / refactors / non‑feature tweaks
-- feat(nvim): for new user‑visible functionality (new plugin, mapping, feature toggle)
+- chore(nvim): for maintenance / refactors / non-feature tweaks
+- feat(nvim): for new user-visible functionality (new plugin, mapping, feature toggle)
 - fix(nvim): for bug fixes or correcting broken behavior
 - docs(nvim): for documentation-only edits (including updating this file)
 - perf(nvim): for performance improvements
@@ -16,102 +16,167 @@ Use semantic conventional commit prefixes focused on Neovim scope:
 
 Only one logical change per commit. Keep scope minimal. Do NOT maintain a manual changelog; the git history provides traceability.
 
+## Architecture Overview
+
+This config uses the **`plugin/` directory auto-sourcing pattern** based on `vim.pack`. Each `plugin/*.lua` file is self-contained: it declares its own dependencies via `vim.pack.add()`, then configures the plugin immediately. Files are auto-sourced alphabetically by Neovim during startup — no central orchestrator or `require()` chain needed.
+
+Load order is controlled via numeric-prefix naming (e.g. `00-gruvbox.lua` loads before `bigfile.lua`). Duplicate `vim.pack.add()` calls across files are harmless (idempotent).
+
+Startup sequence:
+1. `init.lua` — `vim.loader.enable()`, leader key, core modules (options, winbar, autocmds, LSP).
+2. `plugin/*.lua` — auto-sourced alphabetically (each file registers its lazy-load trigger; most code runs deferred).
+3. `after/plugin/*.lua` — runs after all plugin/ files (global keymaps).
+
+### Lazy Loading Strategy
+
+Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plugin/*.lua` file is still self-contained, but the actual `vim.pack.add()` + `require(...).setup()` is wrapped in a deferred trigger:
+
+| Tier | Trigger | When it runs | Plugins |
+|------|---------|-------------|---------|
+| **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, noice, which-key |
+| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), opencode, sshfs, worktree, git (gitsigns + fugitive only) |
+| **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
+| **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
+| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), neo-tree (`<leader>e`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
+
+**Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
+
+**FileType-triggered pattern:** A `once = true` autocmd calls `vim.pack.add()` + setup, then `vim.cmd('doautocmd FileType')` to re-trigger for the current buffer.
+
+**Split-loaded plugins:**
+- `git.lua` — gitsigns + fugitive via `vim.schedule`; neogit/diffview/lazygit via keymap stubs.
+- `obsidian.lua` — loads on `<leader>n*` keymap OR `FileType markdown` inside vault.
+
 ## Directory Layout
 
 Top-level files:
-- init.lua – Entry point; bootstraps core + plugin setup.
-- AGENTS.md – This living document (no history section).
+- init.lua — Entry point: `vim.loader.enable()`, leader key, core requires.
+- AGENTS.md — This living document.
+- nvim-pack-lock.json — vim.pack lockfile.
+- .luarc.json — lua_ls workspace config.
 
-lua/core/
-- autocmds.lua – Global autocommands.
-- colorscheme.lua – Colorscheme & highlight tweaks.
-- keymaps.lua – Global keymaps (non-LSP).
-- options.lua – Vim options.
+### .opencode/ (OpenCode agent config)
+- skills/add-plugin/SKILL.md — Skill for installing a new plugin.
+- skills/remove-plugin/SKILL.md — Skill for removing a plugin.
 
-lua/plugins/
-- init.lua – Declares plugin specs (vim.pack) & ordered setup.
-- avante.lua – Avante AI assistant config.
-- blink.lua – Completion engine config.
-- copilot.lua – Copilot provider config.
-- dial.lua – Increment/decrement augends & keymaps.
-- fyler.lua – Project/file picker integration.
-- git.lua – Git integration helpers.
-- luasnip.lua – Snippet engine + loaders.
-- mini_align.lua – mini.align setup.
-- mini_files.lua – mini.files navigation.
-- mini_icons.lua – mini.icons setup.
-- mini_pick.lua – mini.pick fuzzy finding.
-- mini_starter.lua – Start screen.
-- mini_statusline.lua – Statusline config.
-- mini_surround.lua – Surround mappings.
-- oil.lua – Oil file explorer.
-- render_markdown.lua – Markdown rendering enhancements.
-- noice.lua – noice.nvim UI replacement for messages, cmdline, popupmenu.
-- opencode.lua – opencode.nvim AI agent integration (keymaps use <leader>a prefix).
-- tmux_navigation.lua – nvim-tmux-navigation config.
-- tpipeline.lua – tmux pipeline + statusline embedding.
-- treesitter.lua – Treesitter languages & features.
-- which_key.lua – which-key group definitions.
+### plugin/ (auto-sourced by Neovim, alphabetical order)
 
-lua/lsp/
-- init.lua – Server config merge + enable logic + attach autocmd setup.
-- keymaps.lua – Buffer-local LSP mappings.
-- on_attach.lua – LspAttach handler (inlay hints, formatting toggles, omnifunc).
-- servers/ (optional overrides) – Only this path is used (legacy fallback removed).
+Files with numeric prefixes load first:
+- 00-gruvbox.lua — Colorscheme (must be first, eager).
+- 01-mini.lua — mini.nvim modules: icons, statusline, starter, surround, align, bufremove (eager).
+- 02-treesitter.lua — Treesitter languages, features, textobjects, PackChanged hook (eager).
+- 03-fzf-lua.lua — fzf-lua fuzzy finder setup, actions, ui-select (vim.schedule).
 
-lua/utils/ (if present)
-- once.lua – One-time execution helper.
+Then alphabetically:
+- bigfile.lua — Large file handling (custom BufReadPre autocmd, no plugin).
+- blink-cmp.lua — Completion engine + LuaSnip + Copilot source (vim.schedule).
+- blink-pairs.lua — Auto pairs (InsertEnter).
+- dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
+- dial.lua — Increment/decrement augends & keymaps (vim.schedule).
+- git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
+- mason.lua — Mason tool installer (vim.schedule).
+- neo-tree.lua — File explorer (keymap: `<leader>e`).
+- neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
+- noice.lua — noice.nvim UI replacement (eager).
+- obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
+- opencode.lua — opencode.nvim AI agent integration, keymaps use `<leader>o` prefix (vim.schedule).
+- render-markdown.lua — Markdown rendering (FileType: markdown, opencode_output).
+- sshfs.lua — Remote file editing (vim.schedule).
+- tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).
+- typst.lua — Typst language support (FileType: typst).
+- vimtex.lua — LaTeX support (FileType: tex).
+- which-key.lua — Which-key group definitions (eager).
+- worktree.lua — Git worktree management (vim.schedule).
 
+### after/plugin/
+- keymaps.lua — Loads `core.keymaps` after all plugins are configured.
+
+### lua/core/
+- autocmds.lua — Global autocommands.
+- keymaps.lua — Global keymaps (non-LSP). Loaded via `after/plugin/keymaps.lua`.
+- options.lua — Vim options.
+- winbar.lua — Winbar configuration.
+- lsp/init.lua — Server config merge + enable logic + attach autocmd setup.
+- lsp/keymaps.lua — Buffer-local LSP mappings (fzf-lua pickers, no telescope).
+- lsp/on_attach.lua — LspAttach handler (inlay hints, formatting toggles, omnifunc).
+- lsp/fix_all.lua — Fix-all code action helper.
+
+### lsp/ (top-level, Neovim 0.11+ native LSP config)
+Server-specific overrides (one file per server):
+- bashls.lua, clangd.lua, copilot.lua, jsonls.lua, lua_ls.lua, ruff.lua, rust_analyzer.lua, tinymist.lua, ty.lua, yamlls.lua
+- basedpyright.lua_ (disabled, note trailing underscore).
+
+### lua/utils/
+- picker.lua — Library of fzf-lua picker functions (files, grep, LSP, zoxide, etc.). Pure module, no setup side-effects.
+- worktree.lua — Git worktree utilities (setup called from `plugin/worktree.lua`).
+
+### lua/plugins/ (legacy, mostly removed)
+Only config-returning modules remain (loaded by plugin/ files):
+- mini/minis/*.lua — Option tables for individual mini modules (loaded by `plugin/01-mini.lua`).
+- neotest/auto.lua — Auto-watch test file logic (loaded by `plugin/neotest.lua`).
 
 ## LSP Configuration Model
 
-- Per-server override path: lua/lsp/servers/<server>.lua returning a table merged (force) over default lspconfig definition.
-- No legacy fallback module paths (servers/ only).
-- M.enable_servers({list}) uses vim.lsp.config + vim.lsp.enable when available; otherwise falls back to lspconfig.setup()/vim.lsp.start().
-- Copilot LSP (if available in nvim-lspconfig) is treated like other servers; fallback plugin-only integration still works if the server is absent.
-- Only one TS server is enabled (prefers ts_ls if present, else tsserver) to avoid duplicate clients.
+- Native Neovim 0.11+ LSP config via `lsp/<server>.lua` at the config root.
+- `lua/core/lsp/init.lua` handles server enable logic and attach autocmd.
 - on_attach.lua sets:
-  - Buffer keymaps via lsp/keymaps.lua
+  - Buffer keymaps via `lua/core/lsp/keymaps.lua`
   - Inlay hints (if server supports)
   - Omnifunc
-  - :LspOnTypeFormatToggle and :LspFormatOnSaveToggle buffer commands
+  - `:LspOnTypeFormatToggle` and `:LspFormatOnSaveToggle` buffer commands
 
 ## Keymap Strategy
 
-- Global mappings: lua/core/keymaps.lua
-- LSP buffer-local: lua/lsp/keymaps.lua invoked from on_attach
-- AI / provider cycling: plugins/avante.lua
-- All keymaps include desc for discoverability (which-key).
+- Global mappings: `lua/core/keymaps.lua` (loaded after plugins via `after/plugin/keymaps.lua`)
+- LSP buffer-local: `lua/core/lsp/keymaps.lua` invoked from on_attach
+- Plugin-specific: defined inline in each `plugin/*.lua` file
+- Keymap-triggered plugins: stub keymaps defined eagerly, real keymaps set on load
+- All keymaps MUST include `desc` for discoverability (which-key).
 
-## Plugin Load Order (summary)
-Declared in plugins/init.lua then setup in this sequence:
-1. Navigation (mini_pick)
-2. Editing (dial, mini_surround, autopairs, mini_align)
-3. Snippets (luasnip)
-4. Language tooling (plugins.lsp, treesitter)
-5. Completion & AI (blink, opencode)
-6. Git (git)
-7. UI / Visual (which_key, mini_statusline, render_markdown, mini_starter, mini_files)
-8. Terminal integration (tmux_navigation, tpipeline)
+### Which-key groups (defined in `plugin/which-key.lua`)
+
+| Prefix       | Group    |
+|-------------|----------|
+| `<leader>c` | code     |
+| `<leader>d` | debug    |
+| `<leader>e` | explorer |
+| `<leader>g` | git      |
+| `<leader>n` | notes    |
+| `<leader>o` | opencode |
+| `<leader>s` | search   |
+| `<leader>t` | tests    |
+| `<leader>T` | toggles  |
+| `<leader>w` | worktree |
+| `]`         | next ->  |
+| `[`         | prev <-  |
+| `g`         | goto     |
+| `z`         | folds/scroll |
+
+When adding a plugin that introduces a new `<leader>` prefix, register the group in `plugin/which-key.lua`.
 
 ## Guidelines For Agents
 
-1. Minimize scope; touch only what request needs.
-2. Keep this file authoritative—rewrite outdated content instead of appending.
-3. Add plugin: spec in plugins/init.lua, create plugins/<name>.lua with M.setup(), require it at correct position.
-4. Use pcall(require, ...) for new plugin setup to avoid bootstrap failures.
-5. Provide desc for all user-facing keymaps.
-6. Use semantic commits (see Commit Rules); never append a manual changelog.
-7. LSP changes: create/modify lua/lsp/servers/<id>.lua; avoid editing upstream defaults.
-8. Removing a plugin: delete its module, spec, and require() call; then update this document.
-9. Ask for clarification before large structural refactors.
+1. Minimize scope; touch only what the request needs.
+2. Keep this file authoritative — rewrite outdated content instead of appending.
+3. **Add a plugin:** use the `add-plugin` skill (`.opencode/skills/add-plugin/SKILL.md`).
+4. **Remove a plugin:** use the `remove-plugin` skill (`.opencode/skills/remove-plugin/SKILL.md`).
+5. Use `pcall(require, ...)` for new plugin setup to avoid bootstrap failures.
+6. Provide `desc` for ALL user-facing keymaps.
+7. **LSP changes:** create/modify `lsp/<server>.lua` at the config root (Neovim 0.11+ native path).
+8. Ask for clarification before large structural refactors.
+9. Plugin file naming: use numeric prefix only when load order matters (e.g. `00-`, `01-`). Otherwise use plain `<name>.lua`.
+10. Each `plugin/*.lua` file is fully self-contained: deps (`vim.pack.add()`), PackChanged hooks, setup, and keymaps.
+11. Use semantic commits (see Commit Rules); never append a manual changelog.
+12. **Lazy loading:** new plugins MUST use an appropriate lazy-load tier (see table above). Choose the most aggressive trigger that still works correctly. Keymap-triggered plugins need eager stub keymaps with `desc` + a `loaded` guard + `nvim_feedkeys` replay.
+13. **After any change**, verify AGENTS.md still reflects reality. Update the lazy loading table, plugin list, and which-key groups if needed.
 
 ## Quick Reference
 
-Add server override: lua/lsp/servers/<id>.lua
-Toggle on-type formatting: :LspOnTypeFormatToggle
-Toggle format on save: :LspFormatOnSaveToggle
-Cycle Avante provider: mapping in plugins/avante.lua (e.g. <leader>ap)
+Add a new plugin: `plugin/<name>.lua` (see `add-plugin` skill)
+Remove a plugin: delete `plugin/<name>.lua` + cleanup (see `remove-plugin` skill)
+Add server override: `lsp/<server>.lua`
+Toggle on-type formatting: `:LspOnTypeFormatToggle`
+Toggle format on save: `:LspFormatOnSaveToggle`
 
 ## What This Document Is Not
 
@@ -122,6 +187,3 @@ Cycle Avante provider: mapping in plugins/avante.lua (e.g. <leader>ap)
 ## LLM Agent Behavior
 
 Operate surgically, keep state consistent, and ensure AGENTS.md always reflects reality post-change. Explain uncertainties before acting on ambiguous requests.
-
-(Previous activity log removed; rely on git history.)
-

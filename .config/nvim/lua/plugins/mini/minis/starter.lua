@@ -94,7 +94,11 @@ local function apply_rainbow_to_logo(buf, logo_lines)
         local color_idx = math.floor((i - 1) * (#rainbow - 1) / (n_logo_lines - 1)) + 1
         local group = ('StarterRainbowLine%d'):format(i)
         vim.api.nvim_set_hl(0, group, { fg = rainbow[color_idx], default = false })
-        vim.api.nvim_buf_add_highlight(buf, ns, group, start_idx + i - 1, 0, -1)
+        vim.api.nvim_buf_set_extmark(buf, ns, start_idx + i - 1, 0, {
+            end_row = start_idx + i - 1,
+            end_col = #lines[start_idx + i],
+            hl_group = group,
+        })
     end
 end
 

@@ -1,10 +1,6 @@
 -- lua/utils/picker.lua
-
-vim.pack.add({
-    'https://github.com/nvim-tree/nvim-web-devicons',
-    "https://github.com/elanmed/fzf-lua-frecency.nvim",
-    { src = 'https://github.com/ibhagwan/fzf-lua', version = vim.version.range("*") },
-}, { confirm = false })
+-- Pure library of picker functions backed by fzf-lua.
+-- Plugin installation and fzf-lua setup live in plugin/03-fzf-lua.lua.
 
 --- Send selected fzf-lua items to opencode as context files.
 --- Designed as an fzf-lua action: fn(selected, opts)
@@ -22,72 +18,12 @@ local function opencode_send(selected, opts)
     end
 
     for _, item in ipairs(selected) do
-        -- fzf-lua prepends ANSI + path info; strip to bare path
         local path = require("fzf-lua.path").entry_to_file(item, opts).path
         if path then
             context.add_file(path)
         end
     end
 end
-
-local default_ignores = {
-    "**/.pytest_cache/**",
-    "**/__pycache__/**",
-    "**/.mypy_cache/**",
-    "**/.venv/**",
-    "**/venv/**",
-    "**/.git/**",
-    "**/.idea/**",
-    "**/build/**",
-    "**/dist/**",
-    "**/*.egg-info/**",
-}
-
-require("fzf-lua").setup({
-    fzf_opts = { ['--layout'] = 'default' },
-    winopts = {
-        split = "belowright new",
-        -- row = 1.0, -- bottom
-        -- width = 1.0,
-    },
-    keymap = {
-        fzf = {
-            ["ctrl-c"] = "abort",
-        },
-    },
-    actions = {
-        -- Default actions inherited by all file-type pickers:
-        --   files, git_files, git_status, grep, lsp, oldfiles, quickfix, loclist,
-        --   tags, btags, args, buffers, tabs, lines, blines
-        files = {
-            true, -- inherit defaults
-            ["enter"]  = FzfLua.actions.file_edit_or_qf,
-            ["ctrl-s"] = FzfLua.actions.file_split,
-            ["ctrl-v"] = FzfLua.actions.file_vsplit,
-            ["ctrl-t"] = FzfLua.actions.file_tabedit,
-            ["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
-            ["alt-Q"]  = FzfLua.actions.file_sel_to_ll,
-            ["alt-i"]  = FzfLua.actions.toggle_ignore,
-            ["alt-h"]  = FzfLua.actions.toggle_hidden,
-            ["alt-f"]  = FzfLua.actions.toggle_follow,
-            ["ctrl-o"] = opencode_send,
-        },
-    },
-    grep = {
-        rg_glob = true,            -- enable glob parsing
-        glob_flag = "--iglob",     -- case insensitive globs
-        glob_separator = "%s%-%-", -- query separator pattern (lua): ' --'
-        additional_args = function()
-            local args = {}
-            for _, g in ipairs(default_ignores) do
-                table.insert(args, "--iglob")
-                table.insert(args, "!" .. g)
-            end
-            return args
-        end
-    },
-})
-require("fzf-lua").register_ui_select()
 
 local M = {}
 
@@ -108,7 +44,6 @@ end
 -- Generic pick function that can be configured to use different backends
 function M.pick(items, opts)
     opts = opts or {}
-    -- For now, we'll hardcode fzf-lua as the backend
     fzf_lua_picker(items, opts)
 end
 
@@ -235,14 +170,12 @@ function M.zoxide(opts)
     local cmd = "zoxide query -l"
     local fzf = require("fzf-lua")
 
-    -- We use fzf-lua's fzf_exec directly to run the command and handle output
     fzf.fzf_exec(cmd, {
         prompt = opts.prompt or "Zoxide> ",
         actions = {
             ["default"] = function(selected)
                 if selected and #selected > 0 then
                     local path = selected[1]
-                    -- Strip whitespace if any
                     path = path:match("^%s*(.-)%s*$")
                     vim.cmd("cd " .. vim.fn.fnameescape(path))
                     print("Changed directory to: " .. path)
@@ -252,12 +185,6 @@ function M.zoxide(opts)
     })
 end
 
--- For current_buffer_fuzzy_find, fzf-lua doesn't have a direct equivalent.
--- We can use `fzf-lua.lines` and pass the current buffer's lines.
--- Or, for a simpler approach, we can use `live_grep` with a specific buffer.
--- Let's try to replicate the behavior of `current_buffer_fuzzy_find` with `fzf-lua.lines`.
--- `current_buffer_fuzzy_find` is used with `default_text` (CWORD) or without.
--- For now, I'll create a generic `current_buffer_lines` function.
 function M.current_buffer_lines(opts)
     opts = opts or {}
     local current_buf = vim.api.nvim_get_current_buf()
@@ -265,7 +192,6 @@ function M.current_buffer_lines(opts)
     local lines = vim.api.nvim_buf_get_lines(current_buf, 0, -1, false)
     local formatted_lines = {}
 
-    -- Prepend line numbers to ensure uniqueness and allow direct jumping
     for i, line in ipairs(lines) do
         table.insert(formatted_lines, string.format("%d\t%s", i, line))
     end
@@ -282,7 +208,6 @@ function M.current_buffer_lines(opts)
         actions = {
             ["default"] = function(selected)
                 if selected and #selected > 0 then
-                    -- Parse the line number from the selected item "lnum\tcontent"
                     local lnum = tonumber(selected[1]:match("^(%d+)\t"))
                     if lnum then
                         vim.api.nvim_win_set_cursor(0, { lnum, 0 })

@@ -1,0 +1,89 @@
+-- SPDX-License-Identifier: MIT
+-- Treesitter: parsers, highlighting, textobjects.
+
+
+-- PackChanged hooks (must be defined before any vim.pack.add call)
+-- plugin/ files are auto-sourced alphabetically after init.lua
+vim.api.nvim_create_autocmd('PackChanged', {
+    callback = function(ev)
+        local name, kind = ev.data.spec.name, ev.data.kind
+
+        -- Rebuild treesitter parsers on update
+        if name == 'nvim-treesitter' and kind == 'update' then
+            if not ev.data.active then vim.cmd.packadd('nvim-treesitter') end
+            vim.cmd('TSUpdate')
+        end
+    end
+})
+
+vim.pack.add({
+    { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+    { src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
+}, { confirm = false })
+
+-- Enable treesitter highlighting and indent for all buffers with a parser
+vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('treesitter_start', { clear = true }),
+    callback = function(ev)
+        if pcall(vim.treesitter.start, ev.buf) then
+            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+    end,
+})
+
+require('nvim-treesitter').setup {
+    install_dir = vim.fn.stdpath('data') .. '/site'
+}
+
+require('nvim-treesitter').install {
+    'rust',
+    'javascript',
+    'zig',
+    'python',
+    'lua',
+    'cpp',
+    'c',
+    'typst',
+    'markdown',
+    'comment',
+    'json',
+    'yaml',
+    'groovy'
+}
+
+-- Textobjects: select
+require('nvim-treesitter-textobjects').setup({
+    select = { lookahead = true },
+    move   = { set_jumps = true },
+})
+
+local select_fn = function(capture)
+    return function()
+        require('nvim-treesitter-textobjects.select').select_textobject(capture, 'textobjects')
+    end
+end
+
+vim.keymap.set({ 'x', 'o' }, 'af', select_fn('@function.outer'),    { desc = 'Select outer function' })
+vim.keymap.set({ 'x', 'o' }, 'if', select_fn('@function.inner'),    { desc = 'Select inner function' })
+vim.keymap.set({ 'x', 'o' }, 'ac', select_fn('@class.outer'),       { desc = 'Select outer class' })
+vim.keymap.set({ 'x', 'o' }, 'ic', select_fn('@class.inner'),       { desc = 'Select inner class' })
+vim.keymap.set({ 'x', 'o' }, 'al', select_fn('@loop.outer'),        { desc = 'Select outer loop' })
+vim.keymap.set({ 'x', 'o' }, 'il', select_fn('@loop.inner'),        { desc = 'Select inner loop' })
+vim.keymap.set({ 'x', 'o' }, 'ib', select_fn('@block.inner'),       { desc = 'Select inner block' })
+vim.keymap.set({ 'x', 'o' }, 'ab', select_fn('@block.outer'),       { desc = 'Select outer block' })
+vim.keymap.set({ 'x', 'o' }, 'as', select_fn('@statement.outer'),   { desc = 'Select statement' })
+vim.keymap.set({ 'x', 'o' }, 'ad', select_fn('@conditional.outer'), { desc = 'Select outer conditional' })
+vim.keymap.set({ 'x', 'o' }, 'id', select_fn('@conditional.inner'), { desc = 'Select inner conditional' })
+vim.keymap.set({ 'x', 'o' }, 'a/', select_fn('@comment.outer'),     { desc = 'Select comment' })
+
+-- Textobjects: move
+local move = require('nvim-treesitter-textobjects.move')
+
+vim.keymap.set({ 'n', 'x', 'o' }, ']f', function() move.goto_next_start('@function.outer', 'textobjects') end, { desc = 'Next function start' })
+vim.keymap.set({ 'n', 'x', 'o' }, ']c', function() move.goto_next_start('@class.outer', 'textobjects') end,    { desc = 'Next class start' })
+vim.keymap.set({ 'n', 'x', 'o' }, ']F', function() move.goto_next_end('@function.outer', 'textobjects') end,   { desc = 'Next function end' })
+vim.keymap.set({ 'n', 'x', 'o' }, ']C', function() move.goto_next_end('@class.outer', 'textobjects') end,      { desc = 'Next class end' })
+vim.keymap.set({ 'n', 'x', 'o' }, '[f', function() move.goto_previous_start('@function.outer', 'textobjects') end, { desc = 'Prev function start' })
+vim.keymap.set({ 'n', 'x', 'o' }, '[c', function() move.goto_previous_start('@class.outer', 'textobjects') end,    { desc = 'Prev class start' })
+vim.keymap.set({ 'n', 'x', 'o' }, '[F', function() move.goto_previous_end('@function.outer', 'textobjects') end,   { desc = 'Prev function end' })
+vim.keymap.set({ 'n', 'x', 'o' }, '[C', function() move.goto_previous_end('@class.outer', 'textobjects') end,      { desc = 'Prev class end' })

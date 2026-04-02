@@ -19,10 +19,7 @@ function M.setup(bufnr)
     map("n", "gD", vim.lsp.buf.declaration, "Go to Declaration")
     map("n", "gvD", function() vim.lsp.buf.declaration({ jump_to_location_opts = { command = "vsplit" } }) end,
         "Go to Declaration (Vertical Split)")
-    map("n", "grr", function() require("telescope.builtin").lsp_references() end, "List References")
-    map("n", "gri", function() require("telescope.builtin").lsp_implementations() end, "Go to Implementation")
     map("n", "gra", vim.lsp.buf.code_action, "Code Actions")
-    map("n", "grt", function() require("telescope.builtin").lsp_type_definitions() end, "Go to Type Definition")
     map("n", "grn", vim.lsp.buf.rename, "Rename")
     map("n", "<leader>cf", function() vim.lsp.buf.format { async = true } end, "Format Document")
 
