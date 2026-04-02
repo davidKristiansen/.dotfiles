@@ -74,13 +74,13 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave"
     end,
 })
 
--- Yank flash
--- vim.api.nvim_create_autocmd("TextYankPost", {
---   group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
---   callback = function()
---     vim.highlight.on_yank({ higroup = "IncSearch", timeout = 200, on_visual = true })
---   end,
--- })
+-- Yank flash (built-in, replaces tiny-glimmer.nvim)
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+  callback = function()
+    vim.hl.on_yank({ higroup = "IncSearch", timeout = 200, on_visual = true })
+  end,
+})
 
 -- UV workspace setup
 vim.api.nvim_create_autocmd("DirChanged", {

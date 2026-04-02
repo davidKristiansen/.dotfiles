@@ -15,10 +15,10 @@ local function get_winbar_str(winid)
 
   local filename = vim.fn.fnamemodify(current_filename, ":t")
 
-  local ok, devicons = pcall(require, "nvim-web-devicons")
+  local ok, mini_icons = pcall(require, "mini.icons")
   local file_icon
   if ok then
-    file_icon, _ = devicons.get_icon(filename)
+    file_icon = mini_icons.get("file", filename)
   end
 
   local final_string = " " .. (file_icon or "") .. " " .. filename

@@ -128,5 +128,3 @@ if vim.fn.has("termguicolors") == 1 then
     cmd([[let &t_Ce = "\e[4:0m"]])
 end
 
-
-vim.g.bullets_delete_last_bullet_if_empty = 1
