@@ -13,7 +13,6 @@ _append_path()  { local d="$1"; [[ -d $d ]] || return; path=(${path:#$d} "$d"); 
 _prepend_path "${XDG_BIN_HOME:-$HOME/.local/bin}"
 
 # Optional dev tool bins (only if you really need them globally):
-_prepend_path "${PYENV_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/pyenv}/bin"
 _prepend_path "${XDG_DATA_HOME:-$HOME/.local/share}/npm/bin"
 _prepend_path "${XDG_DATA_HOME:-$HOME/.local/share}/flutter/bin"
 _prepend_path "${CARGO_HOME:-${XDG_DATA_HOME:-$HOME/.local/share}/cargo}/bin"

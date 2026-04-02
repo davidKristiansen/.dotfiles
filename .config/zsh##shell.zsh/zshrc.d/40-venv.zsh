@@ -98,7 +98,6 @@ _python_venv_smart() {
 # --------------------------- autoload hooks ---------------------------------
 
 autoload -Uz add-zsh-hook
-add-zsh-hook chpwd  _python_venv_smart
-add-zsh-hook precmd _python_venv_smart
+add-zsh-hook chpwd _python_venv_smart
 _python_venv_smart  # run once now
 
