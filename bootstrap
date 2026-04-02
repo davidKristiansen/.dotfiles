@@ -18,8 +18,7 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_CACHE_HOME/zsh" \
          "$XDG_BIN_HOME" \
          "$GNUPGHOME" \
-         "$XDG_CONFIG_HOME/teams-for-linux" \
-         "$XDG_CONFIG_HOME/mise/conf.d/"
+         "$XDG_CONFIG_HOME/teams-for-linux"
 chmod 700 "$GNUPGHOME"
 
 echo Hold on to your bootstraps !
@@ -27,12 +26,15 @@ echo Hold on to your bootstraps !
 (
   cd "${SCRIPT_DIR}"
 
-  "${SCRIPT_DIR}"/.local/bin/stow.sh \
+  # Ensure stow.sh submodule is available and install it to $PATH
+  git submodule update --init ".local/lib/stow.sh##no"
+  make -C ".local/lib/stow.sh##no" install
+
+  stow.sh \
     -i "^\.git" \
-    -i "^\.github" \
     -i "^\.pre-commit-config.yaml" \
-    -i "^\.secrets.baseline" \
-    -i "$(basename "${0}")" \
+    -i "^\.secrets\.baseline" \
+    -i "^bootstrap$" \
     -f
 )
 
