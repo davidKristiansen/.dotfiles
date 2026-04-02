@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# Core settings and essential CLI tools
+
+[settings]
+pipx_uvx = true
+experimental = true
+jobs = 32
+idiomatic_version_file_enable_tools = ["python"]
+
+[tools]
+bat = "latest"
+bat-extras = "latest"
+fd = "latest"
+ripgrep = "latest"
+fzf = "latest"
+delta = "latest"
+direnv = "latest"
+neovim = "nightly"
+lazygit = "latest"
+yazi = "latest"
+opencode = "latest"
+"cargo:eza" = "latest"
+"cargo:zoxide" = "latest"
+"cargo:television" = "latest"

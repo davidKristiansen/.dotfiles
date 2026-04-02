@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# Desktop / non-container tools
+# These are tools that typically don't belong inside devcontainers or CI.
+
+[tool_alias]
+thefuck = "pipx:thefuck"
+
+[tools]
+thefuck = { version = "latest", uvx_args = "--python 3.11" }
+"cargo:binsider" = "latest"
+"go:github.com/r00tman/corrupter" = "latest"
+gemini-cli = "latest"
+gemini = "latest"
+"npm:copilot" = "latest"
+"npm:mcp-hub" = "latest"
+"pipx:jiratui" = "latest"
+"pipx:platformio" = "latest"

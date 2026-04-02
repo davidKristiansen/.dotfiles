@@ -18,7 +18,8 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_CACHE_HOME/zsh" \
          "$XDG_BIN_HOME" \
          "$GNUPGHOME" \
-         "$XDG_CONFIG_HOME/teams-for-linux"
+         "$XDG_CONFIG_HOME/teams-for-linux" \
+         "$XDG_CONFIG_HOME/mise/conf.d/"
 chmod 700 "$GNUPGHOME"
 
 echo Hold on to your bootstraps !
@@ -44,7 +45,9 @@ else
   mise self-update --silent --yes
 fi
 
-mise trust "${SCRIPT_DIR}/.config/mise/config.toml"
+for f in "$XDG_CONFIG_HOME"/mise/conf.d/*.toml; do
+  mise trust "$f"
+done
 mise plugin install neovim -q
 
 mise install --yes

@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# Languages, toolchains, and development tools
+
+[tools]
+# Node
+nodejs = "latest"
+"npm:prettier" = "latest"
+"npm:tree-sitter-cli" = "latest"
+"npm:markdown-toc" = "latest"
+"npm:@devcontainers/cli" = "latest"
+
+# Python
+python = "3.14"
+pipx = "latest"
+uv = "0.11.3"
+"pipx:isort" = "latest"
+"aqua:ruff" = "latest"
+ty = "latest"
+
+# Go
+go = "latest"
+"go:github.com/jesseduffield/lazydocker" = "latest"
+
+# Rust
+rust = "latest"
+cargo-binstall = "latest"
+"cargo:yazi-build" = "latest"
+
+# Java
+java = "21"
+
+# Zig
+zig = "latest"
+
+# Build tools
+cmake = "latest"
+stylua = "latest"
+pre-commit = "latest"
+typst = "latest"
+
+# Git / CI
+github-cli = "latest"
+gh = "latest"
+sqlite = "latest"
+allure = "latest"
+"cargo:fixit-cli" = "latest"
