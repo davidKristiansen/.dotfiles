@@ -136,7 +136,10 @@ return {
         table.insert(items, picker_item('g  Live grep',    'Actions', function() require('utils.picker').live_grep() end))
         table.insert(items, picker_item('o  Recent files', 'Actions', function() require('utils.picker').oldfiles() end))
         table.insert(items, picker_item('b  Buffers',      'Actions', function() require('utils.picker').buffers() end))
-        table.insert(items, nav_item('e  Explorer',        'Actions', function() vim.cmd('Neotree toggle') end))
+        table.insert(items, picker_item('e  Explorer',       'Actions', function()
+            -- Trigger the <leader>e stub which handles lazy-loading neo-tree
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<leader>e', true, false, true), 'm', false)
+        end))
         if in_git_repo() then
             table.insert(items, picker_item('t  Git status', 'Actions', function() require('fzf-lua').git_status() end))
         end
