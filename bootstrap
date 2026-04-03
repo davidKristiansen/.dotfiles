@@ -18,6 +18,7 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_CACHE_HOME/zsh" \
          "$XDG_BIN_HOME" \
          "$GNUPGHOME" \
+         "$XDG_CONFIG_HOME/systemd/user" \
          "$XDG_CONFIG_HOME/teams-for-linux"
 chmod 700 "$GNUPGHOME"
 
