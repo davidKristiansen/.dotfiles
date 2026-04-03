@@ -140,6 +140,7 @@ return {
             -- Trigger the <leader>e stub which handles lazy-loading neo-tree
             vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<leader>e', true, false, true), 'm', false)
         end))
+        table.insert(items, picker_item('s  Sessions', 'Actions', function() require('mini.sessions').select() end))
         if in_git_repo() then
             table.insert(items, picker_item('t  Git status', 'Actions', function() require('fzf-lua').git_status() end))
         end

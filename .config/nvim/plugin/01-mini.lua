@@ -12,6 +12,7 @@ local enabled_modules = {
   files       = false,
   icons       = true,
   pick        = false,
+  sessions    = true,
   starter     = true,
   statusline  = true,
   jump        = false,
