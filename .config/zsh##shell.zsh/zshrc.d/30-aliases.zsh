@@ -109,11 +109,8 @@ dce() {
   ws_folder="${positional[1]:-$PWD}"
   session="${positional[2]:-${ws_folder:t}}"   # :t = basename in zsh
 
-  # ── ensure container is running ──────────────────────────────────────
-  if ! devcontainer exec --workspace-folder="$ws_folder" true 2>/dev/null; then
-    echo "Container not running – starting with devcontainer up …"
-    devcontainer up --workspace-folder="$ws_folder" || { echo "devcontainer up failed"; return 1; }
-  fi
+  # ── ensure container is running (up is idempotent) ───────────────────
+  devcontainer up --workspace-folder="$ws_folder" || { echo "devcontainer up failed"; return 1; }
 
   # ── exec into container ──────────────────────────────────────────────
   local -a base=(devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder")
