@@ -18,7 +18,7 @@ local defaults = {
   filetypes = nil,         -- e.g. { "python" } to limit FixAll; nil = all
   create_commands = true,  -- :LspFixAll / :LspFixAllToggle
   create_mappings = false, -- set true to add default keymaps
-  mapping_run = "<leader>fa",
+  mapping_run = "<leader>ca",
   mapping_toggle = "<leader>ta",
   notify = true, -- vim.notify feedback
 }

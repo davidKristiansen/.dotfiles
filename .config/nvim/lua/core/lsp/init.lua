@@ -11,6 +11,6 @@ require("core.lsp.fix_all").setup({
   filetypes = { "python" },
   create_commands = true,
   create_mappings = true,
-  mapping_run = "<leader>fa",
+  mapping_run = "<leader>ca",
   mapping_toggle = "<leader>Ta",
 })

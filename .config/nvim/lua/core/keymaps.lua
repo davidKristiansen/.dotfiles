@@ -28,7 +28,7 @@ map('n', '<C-\\>', '<cmd>NvimTmuxNavigateLastActive<CR>', { desc = 'Navigate las
 map("n", "<C-Space>", "<cmd>NvimTmuxNavigateNext<CR>", { desc = "Navigate next pane" })
 
 -- Mini Starter
-map("n", "<leader>ss", function()
+map("n", "<leader>h", function()
     local ok, starter = pcall(require, 'mini.starter')
     if ok then starter.open() end
 end, { desc = "Open start screen" })
@@ -97,7 +97,7 @@ map("n", "<leader>Tb", function()
 end, { desc = "Toggle Git Blame" })
 
 
-map("n", "<leader>fa", function()
+map("n", "<leader>ca", function()
     -- Check if LspFixAll command exists for current buffer
     local bufnr = vim.api.nvim_get_current_buf()
     local commands = vim.api.nvim_buf_get_commands(bufnr, {})
@@ -109,16 +109,16 @@ map("n", "<leader>fa", function()
 end, { desc = "Run LSP FixAll (source.fixAll)" })
 
 
--- Search Keymaps (fzf-lua via utils.picker)
-vim.keymap.set("n", "<leader>sf", function() require("utils.picker").files() end, { desc = "Files" })
-vim.keymap.set("n", "<leader>sg", function() require("utils.picker").live_grep() end, { desc = "Live Grep" })
-vim.keymap.set("n", "<leader>sb", function() require("utils.picker").buffers() end, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>sh", function() require("utils.picker").help_tags() end, { desc = "Help Tags" })
-vim.keymap.set("n", "<leader>so", function() require("utils.picker").oldfiles() end, { desc = "Old Files" })
-vim.keymap.set("n", "<leader>sw",
+-- Find Keymaps (fzf-lua via utils.picker)
+vim.keymap.set("n", "<leader>ff", function() require("utils.picker").files() end, { desc = "Files" })
+vim.keymap.set("n", "<leader>fg", function() require("utils.picker").live_grep() end, { desc = "Live Grep" })
+vim.keymap.set("n", "<leader>fb", function() require("utils.picker").buffers() end, { desc = "Buffers" })
+vim.keymap.set("n", "<leader>fh", function() require("utils.picker").help_tags() end, { desc = "Help Tags" })
+vim.keymap.set("n", "<leader>fo", function() require("utils.picker").oldfiles() end, { desc = "Old Files" })
+vim.keymap.set("n", "<leader>fw",
     function() require("utils.picker").grep_cword() end,
     { desc = "Grep CWORD" })
-vim.keymap.set("v", "<leader>sw", function()
+vim.keymap.set("v", "<leader>fw", function()
     require("utils.picker").grep_visual()
 end, { desc = "Grep selection" })
 -- vim.keymap.set("n", "*",
@@ -127,9 +127,56 @@ end, { desc = "Grep selection" })
 -- vim.keymap.set("n", "/", function() require("utils.picker").current_buffer_lines() end,
 --     { desc = "Live Grep (current buffer)" })
 vim.keymap.set("n", "<leader><leader>", function() require("utils.picker").resume() end, { desc = "Resume" })
-vim.keymap.set("n", "<leader>sj", function() require("utils.picker").jumplist() end, { desc = "Jumplist" })
-vim.keymap.set("n", "<leader>sd", function() require("utils.picker").diagnostics() end, { desc = "Diagnostic" })
-vim.keymap.set("n", "<leader>sz", function() require("utils.picker").zoxide() end, { desc = "Zoxide" })
-vim.keymap.set("n", "<leader>sD", function()
+vim.keymap.set("n", "<leader>fj", function() require("utils.picker").jumplist() end, { desc = "Jumplist" })
+vim.keymap.set("n", "<leader>fd", function() require("utils.picker").diagnostics() end, { desc = "Diagnostic" })
+vim.keymap.set("n", "<leader>fz", function() require("utils.picker").zoxide() end, { desc = "Zoxide" })
+vim.keymap.set("n", "<leader>fD", function()
     require("utils.picker").diagnostics({ bufnr = nil })
 end, { desc = "Diagnostics (workspace)" })
+
+-- Session Keymaps (mini.sessions)
+vim.keymap.set("n", "<leader>ss", function()
+    local detected = require('mini.sessions').detected
+    local names = vim.tbl_keys(detected)
+    if #names == 0 then
+        vim.notify('No sessions detected', vim.log.levels.INFO)
+        return
+    end
+    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
+    require('fzf-lua').fzf_exec(names, {
+        prompt = 'Sessions> ',
+        actions = {
+            ['default'] = function(selected)
+                if selected and selected[1] then
+                    require('mini.sessions').read(selected[1])
+                end
+            end,
+        },
+    })
+end, { desc = "Select session" })
+vim.keymap.set("n", "<leader>sw", function()
+    vim.ui.input({ prompt = "Session name: " }, function(name)
+        if name and name ~= "" then
+            require("mini.sessions").write(name)
+        end
+    end)
+end, { desc = "Write session" })
+vim.keymap.set("n", "<leader>sd", function()
+    local detected = require('mini.sessions').detected
+    local names = vim.tbl_keys(detected)
+    if #names == 0 then
+        vim.notify('No sessions detected', vim.log.levels.INFO)
+        return
+    end
+    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
+    require('fzf-lua').fzf_exec(names, {
+        prompt = 'Delete session> ',
+        actions = {
+            ['default'] = function(selected)
+                if selected and selected[1] then
+                    require('mini.sessions').delete(selected[1], { force = true })
+                end
+            end,
+        },
+    })
+end, { desc = "Delete session" })
