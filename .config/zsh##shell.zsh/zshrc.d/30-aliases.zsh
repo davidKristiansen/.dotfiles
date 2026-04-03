@@ -80,8 +80,50 @@ alias svn='svn --config-dir "$XDG_CONFIG_HOME/subversion"'
 alias dotfiles='/usr/bin/git -C "$DOT_DIR"'
 
 # --- devcontainer helpers ----------------------------------------------------
-alias dcu='devcontainer up'
-alias dce='devcontainer exec --remote-env TERM="$TERM"'
+# dce [workspace-folder] [session-name] [-- custom command...]
+#   workspace-folder : path to project (default: $PWD)
+#   session-name     : tmux session name (default: basename of workspace-folder)
+#   -- command...    : override the default tmux attach-or-new behaviour
+#
+# Ensures the container is running (devcontainer up) before exec-ing into it.
+dce() {
+  local ws_folder session
+  local -a cmd
+
+  # ── parse arguments ──────────────────────────────────────────────────
+  # Everything after a bare "--" becomes the custom command.
+  local parsing_opts=true
+  local positional=()
+  for arg in "$@"; do
+    if $parsing_opts && [[ "$arg" == "--" ]]; then
+      parsing_opts=false
+      continue
+    fi
+    if $parsing_opts; then
+      positional+=("$arg")
+    else
+      cmd+=("$arg")
+    fi
+  done
+
+  ws_folder="${positional[1]:-$PWD}"
+  session="${positional[2]:-${ws_folder:t}}"   # :t = basename in zsh
+
+  # ── ensure container is running ──────────────────────────────────────
+  if ! devcontainer exec --workspace-folder="$ws_folder" true 2>/dev/null; then
+    echo "Container not running – starting with devcontainer up …"
+    devcontainer up --workspace-folder="$ws_folder" || { echo "devcontainer up failed"; return 1; }
+  fi
+
+  # ── exec into container ──────────────────────────────────────────────
+  local -a base=(devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder")
+  if (( ${#cmd} )); then
+    "${base[@]}" "${cmd[@]}"
+  else
+    "${base[@]}" tmux attach-session -t "$session" 2>/dev/null \
+      || "${base[@]}" tmux new-session -s "$session"
+  fi
+}
 
 # --- lazy helpers for git/docker --------------------------------------------
 git() {
