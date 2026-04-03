@@ -135,25 +135,7 @@ vim.keymap.set("n", "<leader>fD", function()
 end, { desc = "Diagnostics (workspace)" })
 
 -- Session Keymaps (mini.sessions)
-vim.keymap.set("n", "<leader>ss", function()
-    local detected = require('mini.sessions').detected
-    local names = vim.tbl_keys(detected)
-    if #names == 0 then
-        vim.notify('No sessions detected', vim.log.levels.INFO)
-        return
-    end
-    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
-    require('fzf-lua').fzf_exec(names, {
-        prompt = 'Sessions> ',
-        actions = {
-            ['default'] = function(selected)
-                if selected and selected[1] then
-                    require('mini.sessions').read(selected[1])
-                end
-            end,
-        },
-    })
-end, { desc = "Select session" })
+vim.keymap.set("n", "<leader>ss", function() require("utils.picker").session_select() end, { desc = "Select session" })
 vim.keymap.set("n", "<leader>sw", function()
     vim.ui.input({ prompt = "Session name: " }, function(name)
         if name and name ~= "" then
@@ -161,22 +143,4 @@ vim.keymap.set("n", "<leader>sw", function()
         end
     end)
 end, { desc = "Write session" })
-vim.keymap.set("n", "<leader>sd", function()
-    local detected = require('mini.sessions').detected
-    local names = vim.tbl_keys(detected)
-    if #names == 0 then
-        vim.notify('No sessions detected', vim.log.levels.INFO)
-        return
-    end
-    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
-    require('fzf-lua').fzf_exec(names, {
-        prompt = 'Delete session> ',
-        actions = {
-            ['default'] = function(selected)
-                if selected and selected[1] then
-                    require('mini.sessions').delete(selected[1], { force = true })
-                end
-            end,
-        },
-    })
-end, { desc = "Delete session" })
+vim.keymap.set("n", "<leader>sd", function() require("utils.picker").session_delete() end, { desc = "Delete session" })

@@ -140,26 +140,7 @@ return {
             -- Trigger the <leader>e stub which handles lazy-loading neo-tree
             vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<leader>e', true, false, true), 'm', false)
         end))
-        table.insert(items, picker_item('s  Sessions', 'Actions', function()
-            local detected = require('mini.sessions').detected
-            local names = vim.tbl_keys(detected)
-            if #names == 0 then
-                vim.notify('No sessions detected', vim.log.levels.INFO)
-                return
-            end
-            -- Sort by most recently modified
-            table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
-            require('fzf-lua').fzf_exec(names, {
-                prompt = 'Sessions> ',
-                actions = {
-                    ['default'] = function(selected)
-                        if selected and selected[1] then
-                            require('mini.sessions').read(selected[1])
-                        end
-                    end,
-                },
-            })
-        end))
+        table.insert(items, picker_item('s  Sessions', 'Actions', function() require('utils.picker').session_select() end))
         if in_git_repo() then
             table.insert(items, picker_item('t  Git status', 'Actions', function() require('fzf-lua').git_status() end))
         end

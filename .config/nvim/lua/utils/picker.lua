@@ -243,4 +243,46 @@ end
 --- Usage: require("utils.picker").opencode_send
 M.opencode_send = opencode_send
 
+--- Pick a session via fzf-lua and read it.
+function M.session_select()
+    local detected = require('mini.sessions').detected
+    local names = vim.tbl_keys(detected)
+    if #names == 0 then
+        vim.notify('No sessions detected', vim.log.levels.INFO)
+        return
+    end
+    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
+    require('fzf-lua').fzf_exec(names, {
+        prompt = 'Sessions> ',
+        actions = {
+            ['default'] = function(selected)
+                if selected and selected[1] then
+                    require('mini.sessions').read(selected[1])
+                end
+            end,
+        },
+    })
+end
+
+--- Pick a session via fzf-lua and delete it.
+function M.session_delete()
+    local detected = require('mini.sessions').detected
+    local names = vim.tbl_keys(detected)
+    if #names == 0 then
+        vim.notify('No sessions detected', vim.log.levels.INFO)
+        return
+    end
+    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
+    require('fzf-lua').fzf_exec(names, {
+        prompt = 'Delete session> ',
+        actions = {
+            ['default'] = function(selected)
+                if selected and selected[1] then
+                    require('mini.sessions').delete(selected[1], { force = true })
+                end
+            end,
+        },
+    })
+end
+
 return M
