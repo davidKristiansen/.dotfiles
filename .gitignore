@@ -6,4 +6,4 @@ zsh_plugins.zsh
 .zcompcache
 
 *.egg-info/  # Ignore Python egg-info directories
-sway-session.target.wants
+*.target.wants
