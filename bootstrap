@@ -26,6 +26,9 @@ echo Hold on to your bootstraps !
 (
   cd "${SCRIPT_DIR}"
 
+  # Pull latest dotfiles before stowing
+  git pull --rebase --quiet || true
+
   # Ensure stow.sh submodule is available and install it to $PATH
   git submodule update --init --remote ".local/lib/stow.sh##no" >/dev/null
   make -C ".local/lib/stow.sh##no" install >/dev/null
