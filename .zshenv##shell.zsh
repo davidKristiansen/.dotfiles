@@ -14,12 +14,6 @@ fi
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export TERM=xterm-256color
 
-# Force sourcing of .zshrc in all interactive shells (including non-login shells like VS Code splits)
-if [[ -o interactive && -z "$ZSH_RC_SOURCED" ]]; then
-  source "$ZDOTDIR/.zshrc"
-  export ZSH_RC_SOURCED=1
-fi
-
 # ----- Devcontainer goodies -----
 : "${DEVCONTAINER_ENV_FILE:=$XDG_CONFIG_HOME/devcontainer_environment/environment_variables}"
 

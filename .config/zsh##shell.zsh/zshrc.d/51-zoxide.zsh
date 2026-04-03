@@ -1,4 +1,4 @@
-# ~/.config/zsh/zshrc.d/85-zoxide.zsh
+# ~/.config/zsh/zshrc.d/51-zoxide.zsh
 # SPDX-License-Identifier: MIT
 # Cache zoxide init output to avoid eval on every shell startup.
 
