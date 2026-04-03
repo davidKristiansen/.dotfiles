@@ -46,13 +46,13 @@ local function in_git_repo()
 end
 
 local logo = {
-    "░░░░░░░░░░░░░░░░░",
-    "░░░▄░▀▄░░░▄▀░▄░░░",
-    "░░░█▄███████▄█░░░",
-    "░░░███▄███▄███░░░",
-    "░░░▀█████████▀░░░",
-    "░░░░▄▀░░░░░▀▄░░░░",
-    "░░░░░░░░░░░░░░░░░",
+    "                 ",
+    "   ▄ ▀▄   ▄▀ ▄   ",
+    "   █▄███████▄█   ",
+    "   ███▄███▄███   ",
+    "   ▀█████████▀   ",
+    "    ▄▀     ▀▄    ",
+    "                 ",
 }
 
 --- Highlight the logo in yellow (gruvbox accent).
@@ -132,11 +132,11 @@ return {
         -- query-by-prefix works. Keys match the rightmost char of the real
         -- keybinding (e.g. <leader>sf -> f).
         -- Pickers float on top of the starter; cancel returns to it.
-        table.insert(items, picker_item('f  Find files',   'Actions', function() require('utils.picker').files() end))
-        table.insert(items, picker_item('g  Live grep',    'Actions', function() require('utils.picker').live_grep() end))
+        table.insert(items, picker_item('f  Find files', 'Actions', function() require('utils.picker').files() end))
+        table.insert(items, picker_item('g  Live grep', 'Actions', function() require('utils.picker').live_grep() end))
         table.insert(items, picker_item('o  Recent files', 'Actions', function() require('utils.picker').oldfiles() end))
-        table.insert(items, picker_item('b  Buffers',      'Actions', function() require('utils.picker').buffers() end))
-        table.insert(items, picker_item('e  Explorer',       'Actions', function()
+        table.insert(items, picker_item('b  Buffers', 'Actions', function() require('utils.picker').buffers() end))
+        table.insert(items, picker_item('e  Explorer', 'Actions', function()
             -- Trigger the <leader>e stub which handles lazy-loading neo-tree
             vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<leader>e', true, false, true), 'm', false)
         end))
