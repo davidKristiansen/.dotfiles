@@ -9,6 +9,20 @@ if command -v zoxide >/dev/null 2>&1; then
   fi
   source "$_zoxide_cache"
   unset _zoxide_cache
+  
+  # Wrap the original hook to handle cases where zoxide becomes unavailable later
+  if declare -F __zoxide_hook >/dev/null 2>&1; then
+    # Save the original hook
+    function __zoxide_hook_original() {
+      \command zoxide add -- "$(__zoxide_pwd)"
+    }
+    # Replace the hook with a safe version
+    function __zoxide_hook() {
+      if \command -v zoxide >/dev/null 2>&1; then
+        __zoxide_hook_original "$@"
+      fi
+    }
+  fi
 
   # Custom widget: bare "cd<tab>" (no trailing space) triggers zoxide interactive.
   # With a space ("cd <tab>"), normal fzf-tab directory completion fires instead.

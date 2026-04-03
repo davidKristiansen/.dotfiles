@@ -3,8 +3,8 @@
 
 motd="${XDG_BIN_HOME:-$HOME/.local/bin}/tildranfetch.sh"
 
-# Run exactly once per TTY per shell startup
-if [[ -o interactive && -t 1 && -x "$motd" ]]; then
+# Run exactly once per shell startup in interactive mode
+if [[ -o interactive && -x "$motd" ]]; then
   "$motd"
 fi
 
