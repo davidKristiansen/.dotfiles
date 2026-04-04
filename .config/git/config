@@ -125,5 +125,4 @@
     cmd = bcompare $LOCAL $REMOTE
     trustExitCode = true
 
-[user]
-	signingkey = /home/fw/.ssh/git-sign_david.kristiansen@sony.com
+

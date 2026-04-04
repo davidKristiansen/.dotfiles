@@ -23,7 +23,7 @@ This config uses the **`plugin/` directory auto-sourcing pattern** based on `vim
 Load order is controlled via numeric-prefix naming (e.g. `00-gruvbox.lua` loads before `bigfile.lua`). Duplicate `vim.pack.add()` calls across files are harmless (idempotent).
 
 Startup sequence:
-1. `init.lua` — `vim.loader.enable()`, leader key, core modules (options, winbar, autocmds, LSP).
+1. `init.lua` — `vim.loader.enable()`, leader key, core modules (options, winbar, autocmds, LSP), built-in ui2.
 2. `plugin/*.lua` — auto-sourced alphabetically (each file registers its lazy-load trigger; most code runs deferred).
 3. `after/plugin/*.lua` — runs after all plugin/ files (global keymaps).
 
@@ -33,7 +33,7 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 
 | Tier | Trigger | When it runs | Plugins |
 |------|---------|-------------|---------|
-| **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, noice, which-key |
+| **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
 | **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), opencode, sshfs, worktree, git (gitsigns + fugitive only) |
 | **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
 | **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
@@ -50,7 +50,7 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 ## Directory Layout
 
 Top-level files:
-- init.lua — Entry point: `vim.loader.enable()`, leader key, core requires.
+- init.lua — Entry point: `vim.loader.enable()`, leader key, core requires, built-in ui2.
 - AGENTS.md — This living document.
 - nvim-pack-lock.json — vim.pack lockfile.
 - .luarc.json — lua_ls workspace config.
@@ -77,7 +77,7 @@ Then alphabetically:
 - mason.lua — Mason tool installer (vim.schedule).
 - neo-tree.lua — File explorer (keymap: `<leader>e`).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
-- noice.lua — noice.nvim UI replacement (eager).
+- noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
 - opencode.lua — opencode.nvim AI agent integration, keymaps use `<leader>o` prefix (vim.schedule).
 - render-markdown.lua — Markdown rendering (FileType: markdown, opencode_output).
