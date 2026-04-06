@@ -1,0 +1,12 @@
+[Unit]
+Description=Mutagen Daemon (Mise)
+After=network.target
+
+[Service]
+# Use the full path from your 'which mutagen' output
+ExecStart=%h/.local/share/mise/shims/mutagen daemon run
+Restart=always
+
+[Install]
+WantedBy=default.target
+
