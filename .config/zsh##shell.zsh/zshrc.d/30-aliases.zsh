@@ -172,6 +172,30 @@ docker() {
   fi
 }
 
+# --- quick todo --------------------------------------------------------------
+# to        : open todo in tmux float (or nvim if not in tmux)
+# ta <task> : add item to inbox
+to() {
+  if [[ -n "$TMUX" ]]; then
+    tmux display-popup -E -b rounded \
+      -S "fg=colour142" -s "bg=colour235" \
+      -T " 󰄬 Todo " -w 60% -h 70% \
+      "$HOME/.local/bin/tmux-todo"
+  else
+    "$HOME/.local/bin/tmux-todo"
+  fi
+}
+
+ta() {
+  local todo_file="${XDG_DATA_HOME:-$HOME/.local/share}/vault/32 Tasks/todo.md"
+  if [[ -z "$*" ]]; then
+    echo "usage: ta <task description>"
+    return 1
+  fi
+  sed -i "/^## Inbox$/a - [ ] $*" "$todo_file"
+  echo "added: $*"
+}
+
 return 0
 # vim: set ft=zsh ts=2 sw=2:
 
