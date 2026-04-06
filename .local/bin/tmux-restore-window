@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # tmux-restore-window: Manage saved tmux window layouts via fzf
-#   enter - switch to window if live, otherwise restore from save
-#   s     - overwrite save for current window (must match a saved name)
-#   n     - save current window as new entry (prompts for name)
-#   k     - kill the live tmux window matching selection
-#   d     - delete the saved layout file
+#   enter   - switch to window if live, otherwise restore from save
+#   ctrl-s  - save current window (prompt for name if new, silent if existing)
+#   ctrl-k  - kill the live tmux window matching selection
+#   ctrl-x  - delete the saved layout file
 #
 # Save files are keyed by window name (unique). The saved window_index
 # is a placement hint used when restoring.
@@ -16,7 +15,7 @@ export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims:$PATH"
 SAVE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/windows"
 mkdir -p "$SAVE_DIR"
 
-# Build the list of saved windows (may be empty for 'n')
+# Build the list of saved windows (may be empty)
 entries=""
 if [[ -d "$SAVE_DIR" ]] && [[ -n "$(ls -A "$SAVE_DIR" 2>/dev/null)" ]]; then
     entries=$(printf '%s\n' "$SAVE_DIR"/* | xargs -n1 basename)
@@ -28,8 +27,8 @@ result=$(fzf \
     --layout=reverse \
     --no-info \
     --prompt="window> " \
-    --header="enter:open  C-s:save  C-n:new  C-k:kill  C-d:delete" \
-    --expect="ctrl-s,ctrl-n,ctrl-k,ctrl-d" \
+    --header="enter:open  C-s:save  C-k:kill  C-x:delete" \
+    --expect="ctrl-s,ctrl-k,ctrl-x" \
     --print-query \
     --preview="cat ${SAVE_DIR}/{}" \
     <<< "$entries") || true
@@ -149,20 +148,21 @@ restore_window() {
 }
 
 case "$key" in
-    ctrl-n)
-        # New: prompt for name, save current window
-        default="${query:-$(tmux display-message -p '#W')}"
-        printf "Save as [%s]: " "$default"
-        read -r name
-        name="${name:-$default}"
-        name="${name//\//-}"
-        [[ -z "$name" ]] && exit 0
-        save_current_window "$name"
-        ;;
     ctrl-s)
-        # Save: overwrite the selected entry with current window state
-        [[ -z "$name" ]] && exit 0
-        save_current_window "$name"
+        # Save current window: if it already has a save file, overwrite silently;
+        # otherwise prompt for a name.
+        cur_name=$(tmux display-message -p '#W')
+        if [[ -f "$SAVE_DIR/$cur_name" ]]; then
+            save_current_window "$cur_name"
+        else
+            default="${query:-$cur_name}"
+            printf "Save as [%s]: " "$default"
+            read -r name
+            name="${name:-$default}"
+            name="${name//\//-}"
+            [[ -z "$name" ]] && exit 0
+            save_current_window "$name"
+        fi
         ;;
     ctrl-k)
         # Kill: kill the live window matching the selection
@@ -175,7 +175,7 @@ case "$key" in
             tmux display-message "No live window named: $name"
         fi
         ;;
-    ctrl-d)
+    ctrl-x)
         # Delete: remove the saved layout file
         [[ -z "$name" ]] && exit 0
         rm -f "$SAVE_DIR/$name"
