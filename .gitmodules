@@ -1,5 +1,0 @@
-[submodule ".local/lib/stow.sh##no"]
-	path = ".local/lib/stow.sh##no"
-	url = https://github.com/davidKristiansen/stow.sh.git
-	branch = main
-	ignore = all

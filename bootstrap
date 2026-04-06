@@ -30,9 +30,14 @@ echo Hold on to your bootstraps !
   # Pull latest dotfiles before stowing
   git pull --rebase --quiet || true
 
-  # Ensure stow.sh submodule is available and install it to $PATH
-  git submodule update --init --remote ".local/lib/stow.sh##no" >/dev/null
-  make -C ".local/lib/stow.sh##no" install >/dev/null
+  # Ensure stow.sh is available and install it to $PATH
+  STOW_SH_DIR="$HOME/.local/lib/stow.sh"
+  if [[ -d "$STOW_SH_DIR/.git" ]]; then
+    git -C "$STOW_SH_DIR" pull --rebase --quiet || true
+  else
+    git clone --quiet https://github.com/davidKristiansen/stow.sh.git "$STOW_SH_DIR"
+  fi
+  make -C "$STOW_SH_DIR" install >/dev/null
 
   stow.sh \
     -i "^\.git" \
