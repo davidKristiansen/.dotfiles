@@ -40,11 +40,7 @@ echo Hold on to your bootstraps !
   make -C "$STOW_SH_DIR" install >/dev/null
 
   stow.sh \
-    -i "^\.git" \
-    -i "^\.pre-commit-config.yaml" \
-    -i "^\.secrets\.baseline" \
-    -i "^bootstrap$" \
-    -f
+    -i "^\.git" -f
 )
 
 . "${HOME}"/.zshenv

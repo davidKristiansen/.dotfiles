@@ -1,0 +1,10 @@
+# Project management — not dotfiles
+AGENTS.md
+bootstrap
+.pre-commit-config.yaml
+.secrets.baseline
+
+# GitHub repo config
+.github
+.gitignore
+.gitmodules
