@@ -39,8 +39,7 @@ echo Hold on to your bootstraps !
   fi
   make -C "$STOW_SH_DIR" install >/dev/null
 
-  stow.sh \
-    -i "^\.git" -f
+  stow.sh -f
 )
 
 . "${HOME}"/.zshenv
