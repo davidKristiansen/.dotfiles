@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# tmux-save-window: Save current window's pane layout, cwds, and commands
+set -euo pipefail
+
+SAVE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/windows"
+mkdir -p "$SAVE_DIR"
+
+# Capture current window info
+window_index=$(tmux display-message -p '#{window_index}')
+current_name=$(tmux display-message -p '#W')
+
+# Prompt for a name (default: current window name)
+printf "Save as [%s]: " "$current_name"
+read -r name
+name="${name:-$current_name}"
+
+# Sanitize: strip path separators
+name="${name//\//-}"
+
+# Rename the tmux window to match
+tmux rename-window "$name"
+
+# Save file keyed as "index:name" to handle duplicate names
+savefile="$SAVE_DIR/${window_index}:${name}"
+
+# Capture window layout string (encodes full pane geometry)
+layout=$(tmux display-message -p '#{window_layout}')
+
+# Capture per-pane state: index, cwd, command
+panes=()
+while IFS=$'\t' read -r idx cwd cmd; do
+    panes+=("${idx}	${cwd}	${cmd}")
+done < <(tmux list-panes -F "#{pane_index}	#{pane_current_path}	#{pane_current_command}")
+
+# Write save file (simple line-based format)
+{
+    echo "window_index=$window_index"
+    echo "layout=$layout"
+    echo "panes=${#panes[@]}"
+    for p in "${panes[@]}"; do
+        echo "pane=$p"
+    done
+} > "$savefile"
+
+tmux display-message "Window saved: ${window_index}:${name}"

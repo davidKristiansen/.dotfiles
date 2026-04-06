@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+# tmux-restore-window: Manage saved tmux window layouts via fzf
+#   enter - restore selected window
+#   s     - overwrite selected save with current window state
+#   n     - save current window as new entry (prompts for name)
+#   k     - kill the live tmux window matching selection
+#   d     - delete the saved layout file
+#
+# Save files are named "index:name" (e.g. "2:MacPyver") to handle
+# duplicate window names at different positions.
+set -euo pipefail
+
+# Ensure mise-managed tools (nvim, fzf) are on PATH
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims:$PATH"
+
+SAVE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/windows"
+mkdir -p "$SAVE_DIR"
+
+# Build the list of saved windows (may be empty for 'n')
+entries=""
+if [[ -d "$SAVE_DIR" ]] && [[ -n "$(ls -A "$SAVE_DIR" 2>/dev/null)" ]]; then
+    entries=$(printf '%s\n' "$SAVE_DIR"/* | xargs -n1 basename)
+fi
+
+# fzf picker: --expect captures which key was pressed
+# --print-query outputs the typed query as the first line
+result=$(fzf \
+    --layout=reverse \
+    --no-info \
+    --prompt="window> " \
+    --header="enter:open  s:save  n:new  k:kill  d:delete" \
+    --expect="s,n,k,d" \
+    --print-query \
+    --preview="cat ${SAVE_DIR}/{}" \
+    <<< "$entries") || true
+
+# --print-query + --expect outputs three lines: query, key, selection
+query=$(sed -n '1p' <<< "$result")
+key=$(sed -n '2p' <<< "$result")
+selection=$(sed -n '3p' <<< "$result")
+
+# For 'n', prompt for a name and save current window
+if [[ "$key" == "n" ]]; then
+    window_index=$(tmux display-message -p '#{window_index}')
+    default="${query:-$(tmux display-message -p '#W')}"
+    printf "Save as [%s]: " "$default"
+    read -r name
+    name="${name:-$default}"
+    name="${name//\//-}"
+    selection="${window_index}:${name}"
+fi
+
+[[ -z "$selection" ]] && exit 0
+
+savefile="$SAVE_DIR/$selection"
+
+# Parse "index:name" from the selection
+saved_index="${selection%%:*}"
+name="${selection#*:}"
+
+case "$key" in
+    s|n)
+        # Save current window state (s = overwrite selected, n = new entry)
+        window_index=$(tmux display-message -p '#{window_index}')
+        layout=$(tmux display-message -p '#{window_layout}')
+
+        # For 's', update the filename if the window index changed
+        if [[ "$key" == "s" ]]; then
+            new_selection="${window_index}:${name}"
+            if [[ "$new_selection" != "$selection" ]]; then
+                rm -f "$savefile"
+                selection="$new_selection"
+                savefile="$SAVE_DIR/$selection"
+            fi
+        fi
+
+        {
+            echo "window_index=$window_index"
+            echo "layout=$layout"
+            panes=()
+            while IFS=$'\t' read -r idx cwd cmd; do
+                panes+=("${idx}	${cwd}	${cmd}")
+            done < <(tmux list-panes -F "#{pane_index}	#{pane_current_path}	#{pane_current_command}")
+            echo "panes=${#panes[@]}"
+            for p in "${panes[@]}"; do
+                echo "pane=$p"
+            done
+        } > "$savefile"
+        tmux rename-window "$name"
+        tmux display-message "Saved: $selection"
+        ;;
+    k)
+        # Kill the live tmux window by index
+        if tmux list-windows -F '#{window_index}' | grep -qx "$saved_index"; then
+            tmux kill-window -t ":$saved_index"
+            tmux display-message "Killed window: $selection"
+        else
+            tmux display-message "No live window at index $saved_index"
+        fi
+        ;;
+    d)
+        # Delete the saved layout file
+        rm -f "$savefile"
+        tmux display-message "Deleted: $selection"
+        ;;
+    *)
+        # Default (enter): switch to window if already live, otherwise restore
+        if tmux list-windows -F '#{window_index}' | grep -qx "$saved_index"; then
+            tmux select-window -t ":$saved_index"
+        else
+            layout=$(grep '^layout=' "$savefile" | cut -d= -f2-)
+            mapfile -t pane_lines < <(grep '^pane=' "$savefile" | sed 's/^pane=//')
+
+            IFS=$'\t' read -r _ first_cwd first_cmd <<< "${pane_lines[0]}"
+
+            # Create window at the saved index if free, otherwise next available
+            new_window_args=(-n "$name" -c "$first_cwd" -P -F '#{window_id}')
+            new_window_args+=(-t ":$saved_index")
+            window_id=$(tmux new-window "${new_window_args[@]}")
+
+            for ((i = 1; i < ${#pane_lines[@]}; i++)); do
+                IFS=$'\t' read -r _ cwd cmd <<< "${pane_lines[$i]}"
+                tmux split-window -t "$window_id" -c "$cwd"
+            done
+
+            tmux select-layout -t "$window_id" "$layout"
+
+            pane_base=$(tmux show-option -gv pane-base-index 2>/dev/null || echo 1)
+
+            for ((i = 0; i < ${#pane_lines[@]}; i++)); do
+                IFS=$'\t' read -r _ cwd cmd <<< "${pane_lines[$i]}"
+                pane_target="$window_id.$((i + pane_base))"
+
+                case "$cmd" in
+                    nvim)
+                        # nvim auto-restores session by cwd basename match
+                        tmux send-keys -t "$pane_target" "nvim" Enter
+                        ;;
+                    zsh|bash|fish)
+                        ;;
+                    *)
+                        tmux send-keys -t "$pane_target" "$cmd" Enter
+                        ;;
+                esac
+            done
+
+            tmux select-pane -t "$window_id.$pane_base"
+        fi
+        ;;
+esac
