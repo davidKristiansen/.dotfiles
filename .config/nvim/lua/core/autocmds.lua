@@ -6,6 +6,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     command = [[%s/\s\+$//e]],
 })
 
+-- Prevent Neovim from adding a trailing newline to the pack lockfile.
+-- vim.pack writes the file without one; fixeol adds it back, causing a
+-- perpetual one-line diff.
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "nvim-pack-lock.json",
+    callback = function()
+        vim.bo.fixeol = false
+    end,
+})
+
 -- Auto-create directories on save + stable backupext
 vim.api.nvim_create_autocmd("BufWritePre", {
     group = vim.api.nvim_create_augroup("auto_create_dir", { clear = true }),
