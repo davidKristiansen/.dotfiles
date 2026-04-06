@@ -34,6 +34,8 @@ local function load_obsidian()
   require('obsidian').setup({
     legacy_commands = false,
     workspaces = { { name = 'vault', path = vault_path } },
+    -- Disable obsidian.nvim's UI -- render-markdown.nvim handles checkbox rendering
+    ui = { enable = false },
   })
 
   local function bmap(buf, mode, lhs, rhs, desc)
@@ -66,13 +68,22 @@ local function load_obsidian()
       bmap(ev.buf, 'n', '<leader>nl', '<cmd>Obsidian links<cr>',            'Obsidian: List links in note')
       bmap(ev.buf, 'n', '<leader>nh', '<cmd>Obsidian toc<cr>',              'Obsidian: Table of contents')
       bmap(ev.buf, 'n', '<leader>nr', '<cmd>Obsidian rename<cr>',           'Obsidian: Rename + fix backlinks')
-      bmap(ev.buf, 'n', '<leader>nc', '<cmd>Obsidian toggle_checkbox<cr>',  'Obsidian: Toggle checkbox')
       bmap(ev.buf, 'n', '<leader>nf', '<cmd>Obsidian follow_link<cr>',      'Obsidian: Follow link')
       bmap(ev.buf, 'n', '<leader>nm', '<cmd>Obsidian template<cr>',         'Obsidian: Insert template')
       bmap(ev.buf, 'n', '<leader>np', '<cmd>Obsidian paste_img<cr>',        'Obsidian: Paste image')
       bmap(ev.buf, 'x', '<leader>nL', ':Obsidian link<cr>',                 'Obsidian: Link selection -> note')
       bmap(ev.buf, 'x', '<leader>nn', ':Obsidian link_new<cr>',             'Obsidian: New note from selection')
       bmap(ev.buf, 'x', '<leader>ne', ':Obsidian extract_note<cr>',         'Obsidian: Extract selection -> note')
+
+      -- Smart checkbox toggle + auto-move for todo files
+      local bufname = vim.api.nvim_buf_get_name(ev.buf)
+      if bufname:match('todo%.md$') then
+        bmap(ev.buf, 'n', '<leader>nc', function() require('utils.todo').cycle(1) end,  'Todo: Cycle checkbox forward')
+        bmap(ev.buf, 'n', '<C-a>',      function() require('utils.todo').cycle(1) end,  'Todo: Cycle checkbox forward')
+        bmap(ev.buf, 'n', '<C-x>',      function() require('utils.todo').cycle(-1) end, 'Todo: Cycle checkbox backward')
+      else
+        bmap(ev.buf, 'n', '<leader>nc', '<cmd>Obsidian toggle_checkbox<cr>',  'Obsidian: Toggle checkbox')
+      end
     end,
   })
 
