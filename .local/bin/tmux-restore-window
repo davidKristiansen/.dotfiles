@@ -68,6 +68,8 @@ save_current_window() {
 }
 
 # Helper: restore a saved window from file
+# If the current window is unmanaged (no save file), reuse it;
+# otherwise create a new window.
 restore_window() {
     local save_name="$1"
     local savefile="$SAVE_DIR/$save_name"
@@ -81,14 +83,40 @@ restore_window() {
     local first_cwd
     IFS=$'\t' read -r _ first_cwd _ <<< "${pane_lines[0]}"
 
-    # Create window at saved index if free, otherwise next available
-    local -a new_window_args=(-n "$save_name" -c "$first_cwd" -P -F '#{window_id}')
-    if [[ -n "$saved_index" ]] && ! tmux list-windows -F '#{window_index}' | grep -qx "$saved_index"; then
-        new_window_args+=(-t ":$saved_index")
-    fi
-    local window_id
-    window_id=$(tmux new-window "${new_window_args[@]}")
+    # Check if the current window is unmanaged (reusable)
+    local cur_window_name cur_window_id
+    cur_window_name=$(tmux display-message -p '#{window_name}')
+    cur_window_id=$(tmux display-message -p '#{window_id}')
 
+    local window_id
+    if [[ ! -f "$SAVE_DIR/$cur_window_name" ]]; then
+        # Current window is unmanaged -- kill its panes and reuse it
+        # Kill all panes except the first, then repurpose the first
+        local pane_ids
+        mapfile -t pane_ids < <(tmux list-panes -t "$cur_window_id" -F '#{pane_id}')
+        for ((i = ${#pane_ids[@]} - 1; i >= 1; i--)); do
+            tmux kill-pane -t "${pane_ids[$i]}"
+        done
+        # Send cd + clear to the remaining pane, rename the window
+        tmux send-keys -t "$cur_window_id" "cd $(printf '%q' "$first_cwd")" Enter
+        tmux send-keys -t "$cur_window_id" "clear" Enter
+        tmux rename-window -t "$cur_window_id" "$save_name"
+        window_id="$cur_window_id"
+    else
+        # Current window is managed -- create a new one
+        window_id=$(tmux new-window -n "$save_name" -c "$first_cwd" -P -F '#{window_id}')
+    fi
+
+    # Swap to saved index if it differs
+    if [[ -n "$saved_index" ]]; then
+        local current_index
+        current_index=$(tmux display-message -t "$window_id" -p '#{window_index}')
+        if [[ "$current_index" != "$saved_index" ]]; then
+            tmux swap-window -s "$window_id" -t ":$saved_index"
+        fi
+    fi
+
+    # Create remaining panes
     local i cwd cmd
     for ((i = 1; i < ${#pane_lines[@]}; i++)); do
         IFS=$'\t' read -r _ cwd cmd <<< "${pane_lines[$i]}"
