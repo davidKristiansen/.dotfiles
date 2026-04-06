@@ -4,7 +4,6 @@
 # Core settings and essential CLI tools
 
 [settings]
-pipx_uvx = true
 experimental = true
 jobs = 32
 idiomatic_version_file_enable_tools = ["python"]
