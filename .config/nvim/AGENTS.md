@@ -34,10 +34,10 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 | Tier | Trigger | When it runs | Plugins |
 |------|---------|-------------|---------|
 | **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
-| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), opencode, sshfs, worktree, git (gitsigns + fugitive only) |
+| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only) |
 | **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
 | **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
-| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), neo-tree (`<leader>e`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
+| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), neo-tree (`<leader>e`), undotree (`<leader>u`), obsidian (`<leader>n*`), opencode (`<leader>o*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
 
 **Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
 
@@ -79,7 +79,7 @@ Then alphabetically:
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
-- opencode.lua — opencode.nvim AI agent integration, keymaps use `<leader>o` prefix (vim.schedule).
+- opencode.lua — opencode.nvim AI agent integration (nickjvandyke fork), keymaps use `<leader>o` prefix (keymap: `<leader>o*`).
 - render-markdown.lua — Markdown rendering (FileType: markdown, opencode_output).
 - sshfs.lua — Remote file editing (vim.schedule).
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).

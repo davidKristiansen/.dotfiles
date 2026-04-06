@@ -31,8 +31,7 @@
     },
     "blink.pairs": {
       "rev": "5a34bf6ea72340a70083548e186d745ac4882899",
-      "src": "https://github.com/saghen/blink.pairs",
-      "version": ">=0.0.0"
+      "src": "https://github.com/saghen/blink.pairs"
     },
     "bullets.vim": {
       "rev": "89294b8930e660936374fb763ac48a1ac51dd29c",
@@ -219,8 +218,8 @@
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "opencode.nvim": {
-      "rev": "945328e557ebcd838eeda5b2dc2f776725b83944",
-      "src": "https://github.com/sudo-tee/opencode.nvim"
+      "rev": "fa0a495fa2c229115404cb3c1970578f9c6d2f76",
+      "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "overseer.nvim": {
       "rev": "a2194447f4c5a1baf95139c5c7b539fa7b0d012f",
