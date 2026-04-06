@@ -20,7 +20,6 @@ wk.add({
   { '<leader>g', group = 'git' },
   { '<leader>n', group = 'notes' },
   { '<leader>o', group = 'opencode' },
-  { '<leader>s', group = 'session' },
   { '<leader>t', group = 'tests' },
   { '<leader>T', group = 'toggles' },
   { '<leader>w', group = 'worktree' },

@@ -63,7 +63,7 @@ Top-level files:
 
 Files with numeric prefixes load first:
 - 00-gruvbox.lua — Colorscheme (must be first, eager).
-- 01-mini.lua — mini.nvim modules: icons, statusline, starter, surround, align, bufremove (eager).
+- 01-mini.lua — mini.nvim modules: icons, statusline, starter, sessions, surround, align, bufremove (eager).
 - 02-treesitter.lua — Treesitter languages, features, textobjects, PackChanged hook (eager).
 - 03-fzf-lua.lua — fzf-lua fuzzy finder setup, actions, ui-select (vim.schedule).
 
@@ -94,7 +94,7 @@ Then alphabetically:
 
 ### lua/core/
 - autocmds.lua — Global autocommands.
-- keymaps.lua — Global keymaps (non-LSP). Loaded via `after/plugin/keymaps.lua`.
+- keymaps.lua — Global keymaps (non-LSP). Includes session keymaps (`<leader>ss` select, `<leader>sw` write, `<leader>sd` delete). Loaded via `after/plugin/keymaps.lua`.
 - options.lua — Vim options.
 - winbar.lua — Winbar configuration.
 - lsp/init.lua — Server config merge + enable logic + attach autocmd setup.
@@ -108,12 +108,13 @@ Server-specific overrides (one file per server):
 - basedpyright.lua_ (disabled, note trailing underscore).
 
 ### lua/utils/
-- picker.lua — Library of fzf-lua picker functions (files, grep, LSP, zoxide, etc.). Pure module, no setup side-effects.
+- picker.lua — Library of fzf-lua picker functions (files, grep, LSP, zoxide, sessions). Session pickers show `display_name  /decoded/path` format. Pure module, no setup side-effects.
 - worktree.lua — Git worktree utilities (setup called from `plugin/worktree.lua`).
 
 ### lua/plugins/ (legacy, mostly removed)
 Only config-returning modules remain (loaded by plugin/ files):
 - mini/minis/*.lua — Option tables for individual mini modules (loaded by `plugin/01-mini.lua`).
+  - **sessions.lua** — mini.sessions config with path-encoded session naming (`/` → `%`), display name metadata via `~/.local/share/nvim/session_meta.json`, VimEnter auto-restore (`nested = true`), `post_read` hook for plugin re-attachment, and `_G._session_helpers` global for cross-module access.
 - neotest/auto.lua — Auto-watch test file logic (loaded by `plugin/neotest.lua`).
 
 ## LSP Configuration Model
@@ -144,7 +145,7 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>g` | git      |
 | `<leader>n` | notes    |
 | `<leader>o` | opencode |
-| `<leader>s` | search   |
+| `<leader>s` | session  |
 | `<leader>t` | tests    |
 | `<leader>T` | toggles  |
 | `<leader>w` | worktree |

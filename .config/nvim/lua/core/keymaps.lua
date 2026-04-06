@@ -134,13 +134,5 @@ vim.keymap.set("n", "<leader>fD", function()
     require("utils.picker").diagnostics({ bufnr = nil })
 end, { desc = "Diagnostics (workspace)" })
 
--- Session Keymaps (mini.sessions)
-vim.keymap.set("n", "<leader>ss", function() require("utils.picker").session_select() end, { desc = "Select session" })
-vim.keymap.set("n", "<leader>sw", function()
-    vim.ui.input({ prompt = "Session name: " }, function(name)
-        if name and name ~= "" then
-            require("mini.sessions").write(name)
-        end
-    end)
-end, { desc = "Write session" })
-vim.keymap.set("n", "<leader>sd", function() require("utils.picker").session_delete() end, { desc = "Delete session" })
+-- Session picker (mini.sessions)
+vim.keymap.set("n", "<leader>s", function() require("utils.picker").sessions() end, { desc = "Sessions" })

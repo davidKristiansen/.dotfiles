@@ -243,42 +243,64 @@ end
 --- Usage: require("utils.picker").opencode_send
 M.opencode_send = opencode_send
 
---- Pick a session via fzf-lua and read it.
-function M.session_select()
-    local detected = require('mini.sessions').detected
-    local names = vim.tbl_keys(detected)
-    if #names == 0 then
-        vim.notify('No sessions detected', vim.log.levels.INFO)
-        return
-    end
+--- Build display labels for sessions: "display_name  /decoded/path"
+local function session_display_list(names, detected)
+    local h = _G._session_helpers
     table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
-    require('fzf-lua').fzf_exec(names, {
-        prompt = 'Sessions> ',
-        actions = {
-            ['default'] = function(selected)
-                if selected and selected[1] then
-                    require('mini.sessions').read(selected[1])
-                end
-            end,
-        },
-    })
+    local display = {}
+    local lookup = {}
+    for _, name in ipairs(names) do
+        local display_name = h.get_display_name(name)
+        local path = h.session_name_to_path(name)
+        local label = display_name .. '  ' .. path
+        table.insert(display, label)
+        lookup[label] = name
+    end
+    return display, lookup
 end
 
---- Pick a session via fzf-lua and delete it.
-function M.session_delete()
-    local detected = require('mini.sessions').detected
+--- Unified session picker: enter=open, ctrl-s=save, ctrl-x=delete.
+--- "Open" writes the current session, changes cwd, and restarts nvim
+--- so VimEnter auto-restores the target session cleanly.
+function M.sessions()
+    local sessions = require('mini.sessions')
+    local h = _G._session_helpers
+    local detected = sessions.detected
     local names = vim.tbl_keys(detected)
-    if #names == 0 then
-        vim.notify('No sessions detected', vim.log.levels.INFO)
-        return
-    end
-    table.sort(names, function(a, b) return detected[a].modify_time > detected[b].modify_time end)
-    require('fzf-lua').fzf_exec(names, {
-        prompt = 'Delete session> ',
+    local display, lookup = session_display_list(names, detected)
+
+    require('fzf-lua').fzf_exec(display, {
+        prompt = 'Sessions> ',
+        fzf_opts = {
+            ['--header'] = 'enter=open │ ctrl-s=save │ ctrl-x=delete',
+        },
         actions = {
             ['default'] = function(selected)
-                if selected and selected[1] then
-                    require('mini.sessions').delete(selected[1], { force = true })
+                if not (selected and selected[1] and lookup[selected[1]]) then return end
+                sessions.read(lookup[selected[1]])
+            end,
+            ['ctrl-s'] = {
+                fn = function()
+                    local session_name = h.path_to_session_name(vim.fn.getcwd())
+                    if h.has_display_name(session_name) then
+                        sessions.write(session_name)
+                        return
+                    end
+                    local default = h.default_display_name()
+                    vim.ui.input({ prompt = 'Session name: ', default = default }, function(name)
+                        if not name or name == '' then return end
+                        h.set_display_name(session_name, name)
+                        sessions.write(session_name)
+                    end)
+                end,
+            },
+            ['ctrl-x'] = function(selected)
+                if selected and selected[1] and lookup[selected[1]] then
+                    local session_name = lookup[selected[1]]
+                    sessions.delete(session_name, { force = true })
+                    if h.remove_display_name then
+                        h.remove_display_name(session_name)
+                    end
                 end
             end,
         },
