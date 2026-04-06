@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# tmux-todo: Open obsidian vault todo in a tmux floating popup
+set -euo pipefail
+
+# Ensure mise-managed tools (nvim) are on PATH
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims:$PATH"
+
+TODO_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/vault/32 Tasks/todo.md"
+
+if [[ ! -f "$TODO_FILE" ]]; then
+    mkdir -p "$(dirname "$TODO_FILE")"
+    cat > "$TODO_FILE" << 'MD'
+# Todo
+
+## Inbox
+- [ ] 
+
+## In Progress
+
+## Waiting
+
+## Done
+MD
+fi
+
+# Launch nvim with minimal UI -- disable line numbers, statusline,
+# signcolumn, and cursor line. Full config still loads (gruvbox,
+# render-markdown, obsidian, treesitter).
+nvim \
+    --cmd 'lua vim.g.todo_float = true' \
+    -c 'setlocal nonumber norelativenumber signcolumn=no' \
+    -c 'setlocal laststatus=0 showtabline=0' \
+    -c 'setlocal nocursorline nofoldenable' \
+    -c 'setlocal scrolloff=4 wrap linebreak' \
+    "$TODO_FILE"
