@@ -5,11 +5,11 @@ return {
     settings = {
         ty = {
             diagnosticMode = "workspace",
-            configuration = {
-                environment = {
-                    extra_paths = { "./src" },
-                },
-            },
+            -- configuration = {
+            --     environment = {
+            --         extra_paths = { "./src" },
+            --     },
+            -- },
             completions = {
                 autoImport = true,
             },
