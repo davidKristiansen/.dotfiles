@@ -57,7 +57,7 @@ done
 mise plugin install neovim -q
 
 mise install --yes
-mise upgrade --bump --quiet --yes --exclude java
+mise upgrade --bump --quiet --yes --exclude java --exclude uv
 
 # vim: set ft=sh ts=2 sw=2:
 
