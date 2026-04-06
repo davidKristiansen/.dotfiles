@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# tmux-autosave-window: Silently save current window if it has an existing save file.
+# Called by tmux hooks on layout changes. Does nothing if the window
+# hasn't been explicitly saved before.
+set -euo pipefail
+
+SAVE_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/windows"
+
+# Only auto-save if a save file already exists for this window name
+window_name=$(tmux display-message -p '#{window_name}')
+savefile="$SAVE_DIR/$window_name"
+[[ -f "$savefile" ]] || exit 0
+
+window_index=$(tmux display-message -p '#{window_index}')
+layout=$(tmux display-message -p '#{window_layout}')
+
+{
+    echo "window_index=$window_index"
+    echo "layout=$layout"
+    panes=()
+    while IFS=$'\t' read -r idx cwd cmd; do
+        panes+=("${idx}	${cwd}	${cmd}")
+    done < <(tmux list-panes -F "#{pane_index}	#{pane_current_path}	#{pane_current_command}")
+    echo "panes=${#panes[@]}"
+    for p in "${panes[@]}"; do
+        echo "pane=$p"
+    done
+} > "$savefile"
