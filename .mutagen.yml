@@ -1,0 +1,20 @@
+sync:
+  defaults:
+    mode: "two-way-safe"
+    symlink:
+      mode: "portable"
+    watch:
+      mode: "portable"
+    ignore:
+      paths:
+        # OS metadata
+        - ".DS_Store"
+        - "Thumbs.db"
+        - "desktop.ini"
+        # Obsidian workspace state (per-device)
+        - ".obsidian/workspace.json"
+        - ".obsidian/workspace-mobile.json"
+      vcs: true
+    permissions:
+      defaultFileMode: "0644"
+      defaultDirectoryMode: "0755"
