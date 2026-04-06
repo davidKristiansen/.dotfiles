@@ -1,10 +1,13 @@
 # ~/.config/zsh/zshrc.d/01-secrets.zsh
 # SPDX-License-Identifier: MIT
 
-# Load private env with exported vars (same semantics as your old emulate trick)
-if [[ -r "${HOME}/.secrets" ]]; then
+# Source all *.env files from ~/.secrets/ with exported vars
+if [[ -d "${HOME}/.secrets" ]]; then
   emulate -L zsh -o all_export
-  source "${HOME}/.secrets"
+  for _secret in "${HOME}"/.secrets/*.env(N); do
+    source "$_secret"
+  done
+  unset _secret
 fi
 
 return 0

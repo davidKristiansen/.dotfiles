@@ -1,3 +1,17 @@
+# Mutagen global configuration
+# https://mutagen.io/documentation/introduction/configuration
+#
+# Star topology — this config ships to all machines via dotfiles.
+# Each spoke connects to the hub via an SSH host alias in ~/.ssh/config:
+#
+#   Host vault-hub
+#     HostName <server-fqdn>
+#     User <username>
+#
+# Then create the sync session:
+#   mutagen sync create --name=vault \
+#     ~/.local/share/vault vault-hub:~/.local/share/vault
+
 sync:
   defaults:
     mode: "two-way-safe"
