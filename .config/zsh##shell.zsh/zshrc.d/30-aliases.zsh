@@ -109,16 +109,49 @@ dce() {
   ws_folder="${positional[1]:-$PWD}"
   session="${positional[2]:-${ws_folder:t}}"   # :t = basename in zsh
 
-  # ── ensure container is running (up is idempotent) ───────────────────
-  devcontainer up --workspace-folder="$ws_folder" || { echo "devcontainer up failed"; return 1; }
+  # ── dotfiles provisioning (only used when creating a new container) ───
+  local -a dotfiles_args=(
+    --dotfiles-repository "https://github.com/davidKristiansen/.dotfiles.git"
+    --dotfiles-install-command "bootstrap"
+    --dotfiles-target-path '$HOME/.dotfiles'
+  )
+
+  # ── ensure container is running ───────────────────────────────────────
+  # Try to reuse an already-running container (e.g. one started by VS Code)
+  # before falling back to creating a new one.
+  # NOTE: devcontainer up may exit non-zero even when the container starts
+  # successfully (e.g. a failing postStartCommand), so we always capture
+  # the output and check for a container id rather than relying on the
+  # exit code alone.
+  local up_output
+  up_output="$(devcontainer up --expect-existing-container --workspace-folder="$ws_folder" 2>/dev/null)"
+  if [[ $? -ne 0 ]] || ! printf '%s' "$up_output" | command grep -q '"containerId"'; then
+    up_output="$(devcontainer up "${dotfiles_args[@]}" --workspace-folder="$ws_folder" 2>&1)"
+  fi
+
+  # ── extract container id and remote user from JSON output ────────────
+  local container_id remote_user
+  container_id="$(printf '%s' "$up_output" | command grep -o '"containerId":"[^"]*"' | head -1 | cut -d'"' -f4)"
+  remote_user="$(printf '%s' "$up_output" | command grep -o '"remoteUser":"[^"]*"' | head -1 | cut -d'"' -f4)"
+
+  if [[ -z "$container_id" ]]; then
+    echo "dce: devcontainer up failed — no container id in output"
+    printf '%s\n' "$up_output"
+    return 1
+  fi
 
   # ── exec into container ──────────────────────────────────────────────
-  local -a base=(devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder")
   if (( ${#cmd} )); then
-    "${base[@]}" "${cmd[@]}"
+    # Non-interactive: use devcontainer exec (handles env probing, etc.)
+    devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder" "${cmd[@]}"
   else
-    "${base[@]}" tmux attach-session -t "$session" 2>/dev/null \
-      || "${base[@]}" tmux new-session -s "$session"
+    # Interactive tmux: use docker exec -it for proper TTY allocation
+    local -a docker_exec=(docker exec -it -e TERM="$TERM")
+    [[ -n "$remote_user" ]] && docker_exec+=(-u "$remote_user")
+    "${docker_exec[@]}" "$container_id" \
+      tmux attach-session -t "$session" 2>/dev/null \
+      || "${docker_exec[@]}" "$container_id" \
+        tmux new-session -s "$session"
   fi
 }
 
