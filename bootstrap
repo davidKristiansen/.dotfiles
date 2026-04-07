@@ -52,9 +52,9 @@ else
 fi
 
 for f in "$XDG_CONFIG_HOME"/mise/conf.d/*.toml; do
-  mise trust "$f"
+  mise trust "$f" &> /dev/null
 done
-mise plugin install neovim -q
+mise plugin install neovim -q &> /dev/null
 
 mise install --yes
 mise upgrade --bump --quiet --yes --exclude java --exclude uv
