@@ -92,6 +92,75 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+-- Dynamic colorcolumn — only shown when a line exceeds the limit
+--
+-- The column width is read from the attached LSP server (e.g. ruff
+-- lineLength) and falls back to vim.b.colorcolumn_limit or 88.
+local cc_group = vim.api.nvim_create_augroup("dynamic_colorcolumn", { clear = true })
+
+--- Resolve the line-length limit for the current buffer.
+--- Priority: buffer-local override > LSP server setting > 88.
+local function get_line_limit(bufnr)
+    bufnr = bufnr or 0
+    -- Buffer-local override (user can `:let b:colorcolumn_limit = 120`)
+    local override = vim.b[bufnr].colorcolumn_limit
+    if override then return override end
+
+    -- Query attached LSP clients for a line-length setting
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+    for _, client in ipairs(clients) do
+        local s = client.settings or {}
+        -- ruff: settings.lineLength
+        if s.lineLength then return s.lineLength end
+        -- ruff (nested): settings.ruff.lineLength
+        if s.ruff and s.ruff.lineLength then return s.ruff.lineLength end
+        -- pylsp / pycodestyle: settings.pylsp.plugins.pycodestyle.maxLineLength
+        local pylsp = s.pylsp
+        if pylsp and pylsp.plugins and pylsp.plugins.pycodestyle then
+            local ml = pylsp.plugins.pycodestyle.maxLineLength
+            if ml then return ml end
+        end
+        -- rust_analyzer doesn't expose a line width, but rustfmt uses
+        -- max_width; not typically available via LSP settings.
+    end
+
+    return 88
+end
+
+--- Check visible lines and toggle colorcolumn accordingly.
+local function update_colorcolumn()
+    if vim.bo.buftype ~= "" then return end -- skip special buffers
+    local limit = get_line_limit(0)
+    local top = vim.fn.line("w0")
+    local bot = vim.fn.line("w$")
+    local exceeded = false
+    for lnum = top, bot do
+        local line = vim.fn.getline(lnum)
+        if vim.fn.strdisplaywidth(line) > limit then
+            exceeded = true
+            break
+        end
+    end
+    local want = exceeded and tostring(limit) or ""
+    if vim.wo.colorcolumn ~= want then
+        vim.wo.colorcolumn = want
+    end
+end
+
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "TextChanged", "TextChangedI", "WinScrolled" }, {
+    group = cc_group,
+    callback = update_colorcolumn,
+})
+
+-- Re-evaluate when an LSP server attaches (line limit may change)
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = cc_group,
+    callback = function()
+        -- Small delay so the server's settings are fully populated
+        vim.defer_fn(update_colorcolumn, 100)
+    end,
+})
+
 -- UV workspace setup
 vim.api.nvim_create_autocmd("DirChanged", {
     group = vim.api.nvim_create_augroup("uv_workspace", { clear = true }),
