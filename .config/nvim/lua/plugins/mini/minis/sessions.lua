@@ -78,14 +78,6 @@ local function default_display_name()
     return vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
 end
 
---- Rename the current tmux window to the session's display name.
-local function tmux_rename_window(session_data)
-    if vim.env.TMUX and session_data and session_data.name then
-        local display = get_display_name(session_data.name)
-        vim.fn.system({ 'tmux', 'rename-window', display })
-    end
-end
-
 --- Close neo-tree before writing a session so the special buffer
 --- doesn't end up in the session file.
 local function close_neotree()
@@ -103,12 +95,10 @@ local function pre_read()
     end)
 end
 
---- After reading a session: rename tmux window, re-trigger filetype
---- detection so plugins (treesitter, LSP, etc.) attach to restored
---- buffers, and show the starter if there are no real buffers.
-local function post_read(session_data)
-    tmux_rename_window(session_data)
-
+--- After reading a session: re-trigger filetype detection so plugins
+--- (treesitter, LSP, etc.) attach to restored buffers, and show the
+--- starter if there are no real buffers.
+local function post_read(_session_data)
     -- Defer autocmd re-triggering: mini.sessions fires post_read right after
     -- sourcing the session and wiping old buffers.  Running doautocmd
     -- synchronously here causes diagnostic resets / redraws that collide with
