@@ -1,0 +1,69 @@
+-- SPDX-License-Identifier: MIT
+-- codecompanion.nvim: AI chat via Copilot (default) + opencode ACP.
+-- Loaded on first keymap press (<leader>a*).
+
+local loaded = false
+
+local function load_codecompanion()
+  if loaded then return end
+  loaded = true
+
+  vim.pack.add({
+    { src = 'https://github.com/nvim-lua/plenary.nvim' },
+    { src = 'https://github.com/olimorris/codecompanion.nvim' },
+  }, { confirm = false })
+
+  local ok, cc = pcall(require, 'codecompanion')
+  if not ok then return end
+
+  cc.setup({
+    interactions = {
+      chat = {
+        adapter = 'copilot',
+      },
+    },
+    display = {
+      action_palette = {
+        provider = 'default',
+      },
+      chat = {
+        window = {
+          layout = 'vertical',
+          width = 0.4,
+        },
+      },
+    },
+  })
+
+  -- Real keymaps (override stubs)
+  vim.keymap.set({ 'n', 'v' }, '<leader>aa', '<cmd>CodeCompanionChat Toggle<cr>',
+    { desc = 'Toggle chat' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ap', '<cmd>CodeCompanionActions<cr>',
+    { desc = 'Action palette' })
+  vim.keymap.set('v', '<leader>as', '<cmd>CodeCompanionChat Add<cr>',
+    { desc = 'Send selection to chat' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ai', '<cmd>CodeCompanion<cr>',
+    { desc = 'Inline prompt' })
+end
+
+-- Stub keymaps: load on first press, then replay the key
+local stubs = {
+  { { 'n', 'v' }, '<leader>aa', 'Toggle chat' },
+  { { 'n', 'v' }, '<leader>ap', 'Action palette' },
+  { 'v',          '<leader>as', 'Send selection to chat' },
+  { { 'n', 'v' }, '<leader>ai', 'Inline prompt' },
+}
+
+for _, stub in ipairs(stubs) do
+  local modes, lhs, desc
+  if type(stub[1]) == 'table' then
+    modes, lhs, desc = stub[1], stub[2], stub[3]
+  else
+    modes, lhs, desc = stub[1], stub[2], stub[3]
+  end
+  vim.keymap.set(modes, lhs, function()
+    load_codecompanion()
+    local keys = vim.api.nvim_replace_termcodes(lhs, true, false, true)
+    vim.api.nvim_feedkeys(keys, 'm', false)
+  end, { desc = desc })
+end

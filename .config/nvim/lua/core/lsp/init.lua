@@ -8,9 +8,5 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 require("core.lsp.fix_all").setup({
   enable_on_save = true,
-  filetypes = { "python" },
   create_commands = true,
-  create_mappings = true,
-  mapping_run = "<leader>ca",
-  mapping_toggle = "<leader>Ta",
 })

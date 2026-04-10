@@ -2,29 +2,6 @@
 -- Pure library of picker functions backed by fzf-lua.
 -- Plugin installation and fzf-lua setup live in plugin/03-fzf-lua.lua.
 
---- Send selected fzf-lua items to opencode as context files.
---- Designed as an fzf-lua action: fn(selected, opts)
-local function opencode_send(selected, opts)
-    if not selected or #selected == 0 then return end
-    local ok, context = pcall(require, "opencode.context")
-    if not ok then
-        vim.notify("opencode.nvim not available", vim.log.levels.WARN)
-        return
-    end
-
-    local core_ok, core = pcall(require, "opencode.core")
-    if core_ok then
-        core.open({ new_session = false, focus = "input", start_insert = true })
-    end
-
-    for _, item in ipairs(selected) do
-        local path = require("fzf-lua.path").entry_to_file(item, opts).path
-        if path then
-            context.add_file(path)
-        end
-    end
-end
-
 local M = {}
 
 local function fzf_lua_picker(items, opts)
@@ -238,10 +215,6 @@ function M.current_buffer_lines(opts)
         },
     })
 end
-
---- Expose opencode_send as a reusable action for custom picker calls.
---- Usage: require("utils.picker").opencode_send
-M.opencode_send = opencode_send
 
 --- Build display labels for sessions: "display_name  /decoded/path"
 local function session_display_list(names, detected)

@@ -33,7 +33,12 @@ vim.schedule(function()
 
   require('fzf-lua').setup({
     fzf_opts = { ['--layout'] = 'default' },
-    winopts  = { split = 'belowright new' },
+    winopts  = {
+      height = 0.40,
+      width  = 1.00,
+      row    = 1.00,
+      col    = 0.50,
+    },
     keymap   = { fzf = { ['ctrl-c'] = 'abort' } },
     actions  = {
       files = {
@@ -47,7 +52,7 @@ vim.schedule(function()
         ['alt-i']  = FzfLua.actions.toggle_ignore,
         ['alt-h']  = FzfLua.actions.toggle_hidden,
         ['alt-f']  = FzfLua.actions.toggle_follow,
-        ['ctrl-o'] = opencode_send,
+        ['ctrl-a'] = opencode_send,
       },
     },
     grep = {

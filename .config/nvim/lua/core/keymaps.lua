@@ -97,18 +97,6 @@ map("n", "<leader>Tb", function()
 end, { desc = "Toggle Git Blame" })
 
 
-map("n", "<leader>ca", function()
-    -- Check if LspFixAll command exists for current buffer
-    local bufnr = vim.api.nvim_get_current_buf()
-    local commands = vim.api.nvim_buf_get_commands(bufnr, {})
-    if commands.LspFixAll then
-        vim.cmd("LspFixAll")
-    else
-        vim.notify("LspFixAll not available (no LSP client with code action support)", vim.log.levels.WARN)
-    end
-end, { desc = "Run LSP FixAll (source.fixAll)" })
-
-
 -- Find Keymaps (fzf-lua via utils.picker)
 vim.keymap.set("n", "<leader>ff", function() require("utils.picker").files() end, { desc = "Files" })
 vim.keymap.set("n", "<leader>fg", function() require("utils.picker").live_grep() end, { desc = "Live Grep" })

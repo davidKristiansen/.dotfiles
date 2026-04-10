@@ -1,6 +1,6 @@
 -- SPDX-License-Identifier: MIT
 -- File: lua/core/lsp/fix_all.lua
--- Deterministic LSP FixAll (Ruff/ESLint/etc.) + Format-on-save pipeline.
+-- Deterministic LSP FixAll + QuickFix-all (Ruff/ESLint/typos-lsp/etc.) + Format-on-save pipeline.
 
 local M = {}
 
@@ -10,31 +10,19 @@ local FIXALL_KINDS = {
   "source.fixAll",
   "source.organizeImports.ruff",
   "source.organizeImports",
+  "quickfix",
 }
 
 local defaults = {
   enable_on_save = false,  -- buffer default; can toggle per buffer
   save_timeout_ms = 800,   -- sync wait per client (ms)
-  filetypes = nil,         -- e.g. { "python" } to limit FixAll; nil = all
   create_commands = true,  -- :LspFixAll / :LspFixAllToggle
-  create_mappings = false, -- set true to add default keymaps
-  mapping_run = "<leader>ca",
-  mapping_toggle = "<leader>ta",
-  notify = true, -- vim.notify feedback
+  notify = true,           -- vim.notify feedback
 }
 
 -- ── helpers ────────────────────────────────────────────────────────────────────
 local function notify(msg, level)
   if defaults.notify then vim.notify(msg, level or vim.log.levels.INFO) end
-end
-
-local function filetype_allowed(bufnr)
-  if not defaults.filetypes or #defaults.filetypes == 0 then return true end
-  local ft = vim.bo[bufnr].filetype
-  for _, x in ipairs(defaults.filetypes) do
-    if x == ft then return true end
-  end
-  return false
 end
 
 local function pick_window_for_buf(bufnr)
@@ -50,7 +38,13 @@ local function pick_window_for_buf(bufnr)
   return vim.api.nvim_get_current_win()
 end
 
-local function score_action(kind, title)
+--- Is this a source-level (bulk) action?
+local function is_source_action(kind)
+  return kind and kind:match("^source%.") ~= nil
+end
+
+--- Score source actions to pick the best one per client.
+local function score_source_action(kind, title)
   title = (title or ""):lower()
   if kind == "source.fixAll.ruff" or title:find("ruff", 1, true) then return 100 end
   if kind and kind:match("^source%.fixAll") then return 90 end
@@ -59,32 +53,50 @@ local function score_action(kind, title)
   return 0
 end
 
-local function pick_best(actions)
-  local best, best_s = nil, -1
-  for _, a in ipairs(actions or {}) do
-    local s = score_action(a.kind or "", a.title)
-    if s > best_s then best, best_s = a, s end
+--- Resolve an action that lacks edit/command.
+local function resolve_action(bufnr, action, timeout)
+  if action.edit or action.command then return action end
+  local resolved_tbl = vim.lsp.buf_request_sync(bufnr, "codeAction/resolve", action, timeout)
+  if resolved_tbl then
+    for _, r in pairs(resolved_tbl) do
+      if r and r.result then return r.result end
+    end
   end
-  return best
+  return action
 end
 
--- ── core: FixAll (sync; per-client; deterministic) ─────────────────────────────
+--- Apply a single resolved action via the originating client.
+local function apply_action(bufnr, action, client)
+  local applied = false
+  if action.edit and client then
+    vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+    applied = true
+  end
+  if action.command and client then
+    client:exec_cmd(action.command, { bufnr = bufnr })
+    applied = true
+  end
+  return applied
+end
+
+-- ── core ───────────────────────────────────────────────────────────────────────
+--- Run FixAll: applies the best source action + all quickfix actions per client.
 function M.run(bufnr, opts)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-  if not filetype_allowed(bufnr) then return false end
 
   local timeout = (opts and opts.timeout_ms) or defaults.save_timeout_ms
   local any_applied = false
 
-  -- choose a valid window + a baseline position encoding
   local win = pick_window_for_buf(bufnr)
   local first = (vim.lsp.get_clients({ bufnr = bufnr }) or {})[1]
   local pos_enc = (first and first.offset_encoding) or "utf-16"
 
   local params = vim.lsp.util.make_range_params(win, pos_enc)
-  params.context = { only = FIXALL_KINDS, diagnostics = {} }
+  -- Include real diagnostics so servers like typos-lsp (which derive
+  -- code actions from their own diagnostics) can find them.
+  local lsp_diags = vim.lsp.diagnostic.from(vim.diagnostic.get(bufnr))
+  params.context = { only = FIXALL_KINDS, diagnostics = lsp_diags }
 
-  -- ask ALL clients synchronously (non-deprecated)
   local responses = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeout)
   if not responses then return false end
 
@@ -92,29 +104,35 @@ function M.run(bufnr, opts)
     local actions = resp and resp.result
     if actions and #actions > 0 then
       local client = vim.lsp.get_client_by_id(client_id)
-      local action = pick_best(actions)
-      if action then
-        -- if action lacks edit/command, try resolving via buf_request_sync (non-deprecated)
-        if not action.edit and not action.command then
-          local resolved_tbl = vim.lsp.buf_request_sync(bufnr, "codeAction/resolve", action, timeout)
-          if resolved_tbl then
-            for _, r in pairs(resolved_tbl) do
-              if r and r.result then
-                action = r.result
-                break
-              end
-            end
-          end
-        end
 
-        -- apply edit (with the *originating* client's offset encoding), then command
-        if action.edit and client then
-          vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
-          any_applied = true
+      -- Partition into source actions and quickfix actions
+      local best_source, best_score = nil, -1
+      local quickfixes = {}
+
+      for _, a in ipairs(actions) do
+        local kind = a.kind or ""
+        if is_source_action(kind) then
+          local s = score_source_action(kind, a.title)
+          if s > best_score then best_source, best_score = a, s end
+        else
+          -- quickfix or other non-source actions
+          quickfixes[#quickfixes + 1] = a
         end
-        if action.command then
-          vim.lsp.buf.execute_command(action.command)
-          any_applied = true
+      end
+
+      -- Apply best source action (e.g. Ruff fixAll)
+      if best_source then
+        best_source = resolve_action(bufnr, best_source, timeout)
+        if apply_action(bufnr, best_source, client) then any_applied = true end
+      end
+
+      -- Apply all quickfix actions that carry edits (e.g. typos-lsp corrections).
+      -- Skip command-only actions (e.g. "Ignore in project") to avoid
+      -- broadcasting unknown commands to unrelated LSP clients.
+      for _, qf in ipairs(quickfixes) do
+        if qf.edit or (not qf.command) then
+          qf = resolve_action(bufnr, qf, timeout)
+          if apply_action(bufnr, qf, client) then any_applied = true end
         end
       end
     end
@@ -144,8 +162,8 @@ end
 function M.pipeline(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  -- FixAll first (only if enabled & allowed)
-  if (vim.b[bufnr].fix_all_on_save or vim.g.fix_all_on_save) and filetype_allowed(bufnr) then
+  -- FixAll first (only if enabled)
+  if vim.b[bufnr].fix_all_on_save or vim.g.fix_all_on_save then
     M.run(bufnr)
   end
 
@@ -155,7 +173,7 @@ function M.pipeline(bufnr)
   end
 end
 
--- attach per buffer: commands, mappings, and the single BufWritePre hook
+-- attach per buffer: commands and the single BufWritePre hook
 function M.attach(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
@@ -167,18 +185,11 @@ function M.attach(bufnr)
     vim.api.nvim_buf_create_user_command(bufnr, "LspFixAll", function()
       local ok = M.run(bufnr)
       if ok then notify("FixAll applied") else notify("No FixAll actions", vim.log.levels.DEBUG) end
-    end, { desc = "LSP: Fix all (Ruff/ESLint/etc.)" })
+    end, { desc = "LSP: Fix all (Ruff/ESLint/typos-lsp/etc.)" })
 
     vim.api.nvim_buf_create_user_command(bufnr, "LspFixAllToggle", function()
       M.toggle_on_save(bufnr)
     end, { desc = "Toggle FixAll on save (buffer)" })
-  end
-
-  if defaults.create_mappings then
-    vim.keymap.set("n", defaults.mapping_run, function() M.run(bufnr) end,
-      { buffer = bufnr, desc = "LSP FixAll now" })
-    vim.keymap.set("n", defaults.mapping_toggle, function() M.toggle_on_save(bufnr) end,
-      { buffer = bufnr, desc = "Toggle LSP FixAll on save" })
   end
 
   local grp = vim.api.nvim_create_augroup(("LspSavePipeline_%d"):format(bufnr), { clear = true })
@@ -190,7 +201,7 @@ function M.attach(bufnr)
   })
 end
 
--- public setup (optional convenience): installs attach on LspAttach
+-- public setup: installs attach on LspAttach
 function M.setup(opts)
   defaults = vim.tbl_deep_extend("force", defaults, opts or {})
   vim.api.nvim_create_autocmd("LspAttach", {

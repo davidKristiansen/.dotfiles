@@ -7,7 +7,6 @@ vim.g.on_type_formatting_enabled = false
 vim.g.fix_all_on_save            = false
 
 local keymaps                    = require "core.lsp.keymaps"
-local fixall                     = require "core.lsp.fix_all"
 
 return function(args)
   local bufnr  = args.buf
@@ -25,8 +24,6 @@ return function(args)
       and vim.g.on_type_formatting_enabled then
     vim.lsp.on_type_formatting.enable(true, { bufnr = bufnr })
   end
-
-  fixall.attach(bufnr)
 
   ---------------------------------------------------------------------------
   -- Inline completion: ONLY enable for specific AI-ish LSPs, not clangd.

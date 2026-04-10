@@ -46,6 +46,10 @@
       "rev": "89294b8930e660936374fb763ac48a1ac51dd29c",
       "src": "https://github.com/bullets-vim/bullets.vim"
     },
+    "codecompanion.nvim": {
+      "rev": "7d7957c26d33a97085d3a0c82eeb0147a0f51314",
+      "src": "https://github.com/olimorris/codecompanion.nvim"
+    },
     "codediff.nvim": {
       "rev": "93cd80c56f71af4671388c568a37d4c84c3ddefa",
       "src": "https://github.com/esmuellert/codediff.nvim"
@@ -97,6 +101,10 @@
     "gruvbox-material": {
       "rev": "afb275d8e6dc379762d122bd24e1773fc057abf3",
       "src": "https://github.com/sainnhe/gruvbox-material"
+    },
+    "hex.nvim": {
+      "rev": "b46e63356a69e8d6f046c38a9708d55d17f15038",
+      "src": "https://github.com/RaafatTurki/hex.nvim"
     },
     "image.nvim": {
       "rev": "da2be65c153ba15a14a342b05591652a6df70d58",

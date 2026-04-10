@@ -34,10 +34,10 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 | Tier | Trigger | When it runs | Plugins |
 |------|---------|-------------|---------|
 | **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
-| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only) |
+| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, opencode |
 | **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
 | **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
-| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), neo-tree (`<leader>e`), undotree (`<leader>u`), obsidian (`<leader>n*`), opencode (`<leader>o*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
+| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), neo-tree (`<leader>e`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
 
 **Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
 
@@ -74,12 +74,15 @@ Then alphabetically:
 - dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
 - dial.lua — Increment/decrement augends & keymaps (vim.schedule).
 - git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
+- hex.lua — Hex editing via xxd (vim.schedule, `<leader>h` toggle).
 - mason.lua — Mason tool installer (vim.schedule).
 - neo-tree.lua — File explorer (keymap: `<leader>e`).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
-- opencode.lua — opencode.nvim AI agent integration (nickjvandyke fork), keymaps use `<leader>o` prefix (keymap: `<leader>o*`).
+- codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
+- opencode-nickjvandyke.lua_ — opencode.nvim nickjvandyke fork (disabled).
+- opencode.lua — opencode.nvim (sudo-tee) Neovim frontend for opencode AI agent, keymaps use `<leader>a` prefix (vim.schedule).
 - render-markdown.lua — Markdown rendering (FileType: markdown, opencode_output).
 - sshfs.lua — Remote file editing (vim.schedule).
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).
@@ -98,9 +101,9 @@ Then alphabetically:
 - options.lua — Vim options.
 - winbar.lua — Winbar configuration.
 - lsp/init.lua — Server config merge + enable logic + attach autocmd setup.
-- lsp/keymaps.lua — Buffer-local LSP mappings (fzf-lua pickers, no telescope).
-- lsp/on_attach.lua — LspAttach handler (inlay hints, formatting toggles, omnifunc).
-- lsp/fix_all.lua — Fix-all code action helper.
+- lsp/keymaps.lua — Buffer-local LSP mappings: declarative keymap table (navigation, code actions, fix_all, formatting, diagnostics). Single source of truth for all LSP keymaps.
+- lsp/on_attach.lua — LspAttach handler (inlay hints, formatting toggles, inline completion).
+- lsp/fix_all.lua — Deterministic FixAll + QuickFix-all pipeline (Ruff source.fixAll + typos-lsp quickfix + format-on-save). No keymaps (those live in lsp/keymaps.lua). Attaches via its own LspAttach autocmd from `fix_all.setup()`.
 
 ### lsp/ (top-level, Neovim 0.11+ native LSP config)
 Server-specific overrides (one file per server):
@@ -142,9 +145,10 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>c` | code     |
 | `<leader>d` | debug    |
 | `<leader>e` | explorer |
+| `<leader>f` | find     |
 | `<leader>g` | git      |
 | `<leader>n` | notes    |
-| `<leader>o` | opencode |
+| `<leader>a` | ai       |
 | `<leader>s` | session  |
 | `<leader>t` | tests    |
 | `<leader>T` | toggles  |
