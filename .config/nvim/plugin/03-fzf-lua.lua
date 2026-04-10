@@ -71,4 +71,5 @@ vim.schedule(function()
   })
 
   require('fzf-lua').register_ui_select()
+  require('fzf-lua-frecency').setup()
 end)
