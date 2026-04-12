@@ -9,6 +9,7 @@ vim.schedule(function()
     }, { confirm = false })
 
     local servers = {
+        'basedpyright',
         'ty',
         'bashls',
         'clangd',
