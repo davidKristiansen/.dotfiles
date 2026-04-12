@@ -53,17 +53,17 @@ opt.undolevels                   = 10000
 opt.clipboard                    = "unnamedplus"
 
 -- OSC 52 clipboard (works through tmux + Ghostty on Wayland)
-vim.g.clipboard = {
-    name = "OSC 52",
-    copy = {
-        ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-        ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-    },
-    paste = {
-        ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-        ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
-    },
-}
+-- vim.g.clipboard = {
+--     name = "OSC 52",
+--     copy = {
+--         ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+--         ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+--     },
+--     paste = {
+--         ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+--         ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+--     },
+-- }
 opt.updatetime                   = 200       -- CursorHold delay
 opt.inccommand                   = "nosplit" -- Live :substitute preview
 opt.timeoutlen                   = 300
@@ -140,4 +140,3 @@ if vim.fn.has("termguicolors") == 1 then
     cmd([[let &t_Cs = "\e[4:3m"]])
     cmd([[let &t_Ce = "\e[4:0m"]])
 end
-
