@@ -1,30 +1,31 @@
 -- SPDX-License-Identifier: MIT
--- neo-tree.nvim: file explorer.
--- Loaded on first keymap press (<leader>e).
+-- neo-tree.nvim: file explorer + lsp-file-operations (vim.schedule).
+-- lsp-file-operations must load AFTER neo-tree.
 
-local loaded = false
+vim.schedule(function()
+    vim.pack.add({
+        { src = 'https://github.com/nvim-lua/plenary.nvim' },
+        { src = 'https://github.com/MunifTanjim/nui.nvim' },
+        { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim' },
+        { src = 'https://github.com/antosha417/nvim-lsp-file-operations' },
+    }, { confirm = false })
 
-local function load_neotree()
-  if loaded then return end
-  loaded = true
+    require('neo-tree').setup({
+        use_popups_for_input = false,
+        enable_git_status    = true,
+        filesystem           = { use_libuv_file_watcher = true },
+        window               = { mappings = { ['<C-v>'] = 'open_vsplit' } },
+    })
 
-  vim.pack.add({
-    { src = 'https://github.com/nvim-lua/plenary.nvim' },
-    { src = 'https://github.com/MunifTanjim/nui.nvim' },
-    { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim' },
+    -- lsp-file-operations: must be set up after neo-tree
+    local ok, lsp_file_ops = pcall(require, 'lsp-file-operations')
+    if ok then
+        lsp_file_ops.setup()
+        -- Advertise file-operation capabilities to all LSP servers
+        vim.lsp.config('*', {
+            capabilities = lsp_file_ops.default_capabilities(),
+        })
+    end
 
-  }, { confirm = false })
-
-  require('neo-tree').setup({
-    use_popups_for_input = false,
-    enable_git_status    = true,
-    filesystem           = { use_libuv_file_watcher = true },
-    window               = { mappings = { ['<C-v>'] = 'open_vsplit' } },
-  })
-end
-
--- Stub keymap: load neo-tree on first press, then execute the command
-vim.keymap.set('n', '<leader>e', function()
-  load_neotree()
-  vim.cmd('Neotree toggle')
-end, { desc = 'Explorer' })
+    vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle<CR>', { desc = 'Explorer' })
+end)
