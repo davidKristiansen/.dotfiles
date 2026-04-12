@@ -29,6 +29,11 @@ vim.schedule(function()
         elements = { '######', '#####', '####', '###', '##', '#' },
         word = false, cyclic = false,
       }),
+      -- Markdown checkbox states: [ ] -> [-] -> [/] -> [>] -> [x] -> [ ]
+      augend.constant.new({
+        elements = { '[ ]', '[-]', '[/]', '[>]', '[x]' },
+        word = false, cyclic = true,
+      }),
     },
     mygroup = {
       augend.integer.alias.decimal,
