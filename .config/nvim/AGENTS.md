@@ -34,10 +34,10 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 | Tier | Trigger | When it runs | Plugins |
 |------|---------|-------------|---------|
 | **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
-| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, opencode |
+| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, opencode, neo-tree + lsp-file-operations |
 | **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
 | **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
-| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), neo-tree (`<leader>e`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
+| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
 
 **Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
 
@@ -76,7 +76,7 @@ Then alphabetically:
 - git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
 - hex.lua — Hex editing via xxd (vim.schedule, `<leader>h` toggle).
 - mason.lua — Mason tool installer (vim.schedule).
-- neo-tree.lua — File explorer (keymap: `<leader>e`).
+- neo-tree.lua — File explorer + lsp-file-operations for LSP workspace file ops (keymap: `<leader>e`).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
@@ -108,7 +108,7 @@ Then alphabetically:
 ### lsp/ (top-level, Neovim 0.11+ native LSP config)
 Server-specific overrides (one file per server):
 - bashls.lua, clangd.lua, copilot.lua, jsonls.lua, lua_ls.lua, ruff.lua, rust_analyzer.lua, tinymist.lua, ty.lua, yamlls.lua
-- basedpyright.lua_ (disabled, note trailing underscore).
+- basedpyright.lua — Python refactoring only (typeCheckingMode=off, diagnostics disabled; ruff+ty handle linting/types).
 
 ### lua/utils/
 - picker.lua — Library of fzf-lua picker functions (files, grep, LSP, zoxide, sessions). Session pickers show `display_name  /decoded/path` format. Pure module, no setup side-effects.
