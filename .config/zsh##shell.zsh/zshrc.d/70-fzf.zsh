@@ -53,5 +53,12 @@ _fzf_bind_all
 zvm_after_init_commands+=('_fzf_bind_all')
 zvm_after_lazy_keybindings_commands+=('_fzf_bind_all')
 
+# Re-enable fzf-tab: `fzf --zsh` above binds ^I to fzf-completion,
+# overriding fzf-tab's fzf-tab-complete. Restore it now, and again
+# after zsh-vi-mode's deferred init resets keybindings.
+enable-fzf-tab 2>/dev/null
+zvm_after_init_commands+=('enable-fzf-tab')
+zvm_after_lazy_keybindings_commands+=('enable-fzf-tab')
+
 return 0
 # vim: set ft=zsh ts=2 sw=2:

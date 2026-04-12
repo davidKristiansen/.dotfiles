@@ -12,3 +12,13 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:descriptions' format '%F{yellow}%d%f'
 zstyle ':completion:*' menu select=2
 setopt AUTO_MENU COMPLETE_IN_WORD NO_CASE_GLOB
+
+# SSH hosts: extract Host aliases from ~/.ssh/config (excluding wildcards).
+# Feeds both the completion system and fast-syntax-highlighting's ssh chroma.
+if [[ -r "$HOME/.ssh/config" ]]; then
+  local -a _ssh_config_hosts
+  _ssh_config_hosts=(${(s: :)${${(M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }})
+  # Remove wildcard entries (e.g. Host *)
+  _ssh_config_hosts=(${_ssh_config_hosts:#*[*?]*})
+  zstyle ':completion:*:hosts' hosts $_ssh_config_hosts
+fi
