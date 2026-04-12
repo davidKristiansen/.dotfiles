@@ -47,9 +47,7 @@ end
 
 -- General search functions
 function M.files(opts)
-    require('fzf-lua-frecency').frecency({
-        cwd_only = true,
-    })
+    require("fzf-lua-enchanted-files").files(opts)
 end
 
 function M.live_grep(opts)
