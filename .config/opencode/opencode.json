@@ -3,6 +3,15 @@
     "enabled_providers": [
         "github-copilot"
     ],
+    "mcp": {
+        "mempalace": {
+            "type": "local",
+            "command": [
+                "bash", "{env:HOME}/.config/opencode/mempalace-mcp.sh"
+            ],
+            "enabled": true
+        }
+    },
     "permission": {
         "bash": {
             "git *": "allow",
