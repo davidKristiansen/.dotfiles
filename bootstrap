@@ -31,26 +31,20 @@ echo Hold on to your bootstraps !
   # Pull latest dotfiles before stowing
   git pull --rebase --quiet || true
 
-  # Ensure stow.sh is available and install it to $PATH
-  STOW_SH_DIR="$HOME/.local/lib/stow.sh"
-  if [[ -d "$STOW_SH_DIR/.git" ]]; then
-    git -C "$STOW_SH_DIR" pull --rebase --quiet || true
+  # Ensure mise is available
+  if ! type mise &>/dev/null; then
+    \curl https://mise.run | sh
   else
-    git clone --quiet https://github.com/davidKristiansen/stow.sh.git "$STOW_SH_DIR"
+    mise self-update --silent --yes
   fi
-  make -C "$STOW_SH_DIR" install >/dev/null
+
+  # Install stow.sh via mise
+  mise use -g "github:davidKristiansen/stow.sh" -q
 
   stow.sh -f
 )
 
 . "${HOME}"/.zshenv
-
-
-if ! type mise &>/dev/null; then
-  \curl https://mise.run | sh
-else
-  mise self-update --silent --yes
-fi
 
 for f in "$XDG_CONFIG_HOME"/mise/conf.d/*.toml; do
   mise trust "$f" &> /dev/null
