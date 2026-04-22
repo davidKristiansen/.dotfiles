@@ -39,7 +39,7 @@ echo Hold on to your bootstraps !
   fi
 
   # Install stow.sh via mise
-  mise use -g "github:davidKristiansen/stow.sh" -q
+  mise use -g "github:davetothek/stow.sh" -q
 
   stow.sh -f
 )
