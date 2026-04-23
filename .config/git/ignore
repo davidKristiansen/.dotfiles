@@ -12,3 +12,7 @@ __pycache__/
 # Zig specific
 .zig-cache/
 zig-out/
+
+# MemPalace
+mempalace.yaml
+entities.json
