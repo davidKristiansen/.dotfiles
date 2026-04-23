@@ -69,7 +69,7 @@ local function load_git_heavy()
         { src = 'https://github.com/MunifTanjim/nui.nvim' },
         { src = 'https://github.com/NeogitOrg/neogit' },
         { src = 'https://github.com/kdheepak/lazygit.nvim' },
-        { src = 'https://github.com/sindrets/diffview.nvim' },
+        { src = 'https://github.com/dlyongemallo/diffview.nvim' },
     }, { confirm = false })
 
     local actions = require('diffview.actions')
