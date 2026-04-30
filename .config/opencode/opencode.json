@@ -7,7 +7,7 @@
         "mempalace": {
             "type": "local",
             "command": [
-                "bash", "{env:HOME}/.config/opencode/mempalace-mcp.sh"
+                "bash", "{env:HOME}/.pi/agent/mempalace-mcp.sh"
             ],
             "enabled": true
         }

@@ -5,7 +5,8 @@
 
 [tools]
 # Node
-nodejs = "latest"
+node = "lts"
+npm = "latest"
 "npm:prettier" = "latest"
 "npm:tree-sitter-cli" = "latest"
 "npm:markdown-toc" = "latest"
