@@ -84,6 +84,7 @@ Then alphabetically:
 - codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
 - opencode-nickjvandyke.lua_ — opencode.nvim nickjvandyke fork (disabled).
 - opencode.lua — opencode.nvim (sudo-tee) Neovim frontend for opencode AI agent, keymaps use `<leader>a` prefix (vim.schedule).
+- pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (vim.schedule, `<leader>p`).
 - render-markdown.lua — Markdown rendering (FileType: markdown, opencode_output).
 - sshfs.lua — Remote file editing (vim.schedule).
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).
@@ -150,6 +151,7 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>g` | git      |
 | `<leader>n` | notes    |
 | `<leader>a` | ai       |
+| `<leader>p` | pi       |
 | `<leader>s` | session  |
 | `<leader>t` | tests    |
 | `<leader>T` | toggles  |
