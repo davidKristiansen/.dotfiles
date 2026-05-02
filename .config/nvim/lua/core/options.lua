@@ -43,6 +43,12 @@ local cmd                        = vim.cmd
 vim.opt.maxmempattern            = 5000
 vim.opt.redrawtime               = 10000
 
+-- Filetypes where the dynamic colorcolumn is never shown (prose / UI panels).
+vim.g.colorcolumn_skip_filetypes = {
+    "markdown", "asciidoc", "asciidoctor",
+    "opencode_input", "opencode_output",
+}
+
 -- General UX
 opt.autowrite                    = true  -- Auto-write on buffer switch
 opt.confirm                      = true  -- Confirm save on exit

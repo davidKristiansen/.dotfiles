@@ -127,9 +127,22 @@ local function get_line_limit(bufnr)
     return 88
 end
 
+--- Build skip-set from user config (vim.g.colorcolumn_skip_filetypes).
+local function cc_skip_ft()
+    local set = {}
+    for _, ft in ipairs(vim.g.colorcolumn_skip_filetypes or {}) do
+        set[ft] = true
+    end
+    return set
+end
+
 --- Check visible lines and toggle colorcolumn accordingly.
 local function update_colorcolumn()
     if vim.bo.buftype ~= "" then return end -- skip special buffers
+    if cc_skip_ft()[vim.bo.filetype] then
+        if vim.wo.colorcolumn ~= "" then vim.wo.colorcolumn = "" end
+        return
+    end
     local limit = get_line_limit(0)
     local top = vim.fn.line("w0")
     local bot = vim.fn.line("w$")
