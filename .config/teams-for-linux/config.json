@@ -8,5 +8,14 @@
     "closeAppOnCross": false,
     "watchConfigFile": true,
     "defaultURLHandler": "xdg-open",
-    "disableGpu": true
+    "disableGpu": true,
+    "mqtt": {
+        "enabled": true,
+        "brokerUrl": "mqtt://localhost:1883",
+        "clientId": "teams-for-linux-mylaptop",
+        "topicPrefix": "teams",
+        "statusTopic": "status",
+        "commandTopic": "command",
+        "statusCheckInterval": 10000
+    }
 }
