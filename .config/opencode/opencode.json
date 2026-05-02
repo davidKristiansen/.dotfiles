@@ -7,7 +7,8 @@
         "mempalace": {
             "type": "local",
             "command": [
-                "bash", "{env:HOME}/.pi/agent/mempalace-mcp.sh"
+                "bash",
+                "{env:HOME}/.pi/agent/mempalace-mcp.sh"
             ],
             "enabled": true
         }
@@ -43,13 +44,13 @@
             "rm -rf *": "ask",
             "chmod *": "ask",
             "chown *": "deny",
-            "sudo *": "deny",
+            "sudo *": "ask",
             "curl *": "ask",
             "wget *": "ask",
             "ssh *": "deny",
             "scp *": "ask",
             "docker *": "ask",
-            "systemctl *": "deny",
+            "systemctl *": "ask",
             "kill *": "deny",
             "pkill *": "deny",
             "dd *": "deny",
