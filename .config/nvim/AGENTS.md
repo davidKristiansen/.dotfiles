@@ -78,6 +78,7 @@ Then alphabetically:
 - mason.lua — Mason tool installer (vim.schedule).
 - neo-tree.lua — File explorer + lsp-file-operations for LSP workspace file ops (keymap: `<leader>e`).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
+- nvim-mcp.lua — MCP server for AI assistant integration with Neovim (vim.schedule).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
 - codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
