@@ -16,6 +16,11 @@
         "topicPrefix": "teams",
         "statusTopic": "status",
         "commandTopic": "command",
-        "statusCheckInterval": 10000
+        "statusCheckInterval": 10000,
+        "homeAssistant": {
+            "enabled": true,
+            "discoveryPrefix": "homeassistant",
+            "deviceName": "Teams (mylaptop)"
+        }
     }
 }
