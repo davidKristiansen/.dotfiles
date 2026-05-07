@@ -37,7 +37,7 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 | **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, opencode, neo-tree + lsp-file-operations |
 | **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
 | **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
-| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
+| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>o*`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
 
 **Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
 
@@ -81,6 +81,7 @@ Then alphabetically:
 - nvim-mcp.lua — MCP server for AI assistant integration with Neovim (vim.schedule).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
+- overseer.lua — Task runner and job management (keymap: `<leader>o*`).
 - codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
 - opencode-nickjvandyke.lua_ — opencode.nvim nickjvandyke fork (disabled).
 - opencode.lua — opencode.nvim (sudo-tee) Neovim frontend for opencode AI agent, keymaps use `<leader>a` prefix (vim.schedule).
@@ -150,6 +151,7 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>f` | find     |
 | `<leader>g` | git      |
 | `<leader>n` | notes    |
+| `<leader>o` | overseer |
 | `<leader>a` | ai       |
 | `<leader>p` | pi       |
 | `<leader>s` | session  |

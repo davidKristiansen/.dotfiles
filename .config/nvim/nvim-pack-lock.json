@@ -117,6 +117,14 @@
       "rev": "51e0d514a253219ccc3dae5a4531c59d931a4297",
       "src": "https://github.com/sudo-tee/opencode.nvim"
     },
+    "overseer.nvim": {
+      "rev": "f818eefff81f4b12fb7cf236f1b6c16768a2fcbc",
+      "src": "https://github.com/stevearc/overseer.nvim"
+    },
+    "pi-nvim": {
+      "rev": "9ede82d2e477f993037dfd80c240050176cd53f6",
+      "src": "https://github.com/carderne/pi-nvim"
+    },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"

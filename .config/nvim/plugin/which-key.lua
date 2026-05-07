@@ -19,6 +19,7 @@ wk.add({
   { '<leader>f', group = 'find' },
   { '<leader>g', group = 'git' },
   { '<leader>n', group = 'notes' },
+  { '<leader>o', group = 'overseer' },
   { '<leader>a', group = 'ai' },
   { '<leader>p', group = 'pi' },
   { '<leader>t', group = 'tests' },
