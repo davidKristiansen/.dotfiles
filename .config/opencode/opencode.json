@@ -7,7 +7,7 @@
         "nvim-mcp": {
             "type": "local",
             "command": [
-                "nvim-mcp",
+                "{env:HOME}/.local/share/mise/shims/nvim-mcp",
                 "--connect",
                 "auto"
             ],
@@ -17,9 +17,23 @@
             "type": "local",
             "command": [
                 "bash",
-                "{env:HOME}/.pi/agent/mempalace-mcp.sh"
+                "{env:HOME}/.config/opencode/mempalace-mcp.sh"
             ],
             "enabled": true
+        },
+        "mcp-atlassian": {
+            "type": "local",
+            "command": [
+                "uvx",
+                "mcp-atlassian"
+            ],
+            "enabled": true,
+            "environment": {
+                "JIRA_URL": "{env:JIRA_URL}",
+                "JIRA_PERSONAL_TOKEN": "{env:JIRA_PERSONAL_TOKEN}",
+                "CONFLUENCE_URL": "{env:CONFLUENCE_URL}",
+                "CONFLUENCE_PERSONAL_TOKEN": "{env:CONFLUENCE_PERSONAL_TOKEN}"
+            }
         }
     },
     "permission": {
