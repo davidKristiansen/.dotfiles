@@ -17,4 +17,5 @@ zsh_plugins.zsh
 .pi/agent/sessions/
 .pi/context-mode/
 # CocoIndex Code (ccc)
-/.cocoindex_code/
+/.cocoindex_code/*
+!/.cocoindex_code/global_settings.yml
