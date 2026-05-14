@@ -117,6 +117,10 @@
       "rev": "da2be65c153ba15a14a342b05591652a6df70d58",
       "src": "https://github.com/3rd/image.nvim"
     },
+    "img-clip.nvim": {
+      "rev": "b6ddfb97b5600d99afe3452d707444afda658aca",
+      "src": "https://github.com/HakonHarnes/img-clip.nvim"
+    },
     "lazygit.nvim": {
       "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
       "src": "https://github.com/kdheepak/lazygit.nvim"
@@ -264,6 +268,10 @@
     "pi-nvim": {
       "rev": "9ede82d2e477f993037dfd80c240050176cd53f6",
       "src": "https://github.com/carderne/pi-nvim"
+    },
+    "pi.nvim": {
+      "rev": "f2219f0ce79e512b81175d3940e306a49555bca3",
+      "src": "https://github.com/alex35mil/pi.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",

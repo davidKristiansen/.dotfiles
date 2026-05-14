@@ -81,6 +81,10 @@ local function load_obsidian()
         bmap(ev.buf, 'n', '<leader>nc', function() require('utils.todo').cycle(1) end,  'Todo: Cycle checkbox forward')
         bmap(ev.buf, 'n', '<C-a>',      function() require('utils.todo').cycle(1) end,  'Todo: Cycle checkbox forward')
         bmap(ev.buf, 'n', '<C-x>',      function() require('utils.todo').cycle(-1) end, 'Todo: Cycle checkbox backward')
+        bmap(ev.buf, 'n', '<leader>n1', function() require('utils.todo').set('[ ]') end, 'Todo: Set [ ] Inbox')
+        bmap(ev.buf, 'n', '<leader>n2', function() require('utils.todo').set('[/]') end, 'Todo: Set [/] In Progress')
+        bmap(ev.buf, 'n', '<leader>n3', function() require('utils.todo').set('[>]') end, 'Todo: Set [>] Waiting')
+        bmap(ev.buf, 'n', '<leader>n4', function() require('utils.todo').set('[x]') end, 'Todo: Set [x] Done')
       else
         bmap(ev.buf, 'n', '<leader>nc', '<cmd>Obsidian toggle_checkbox<cr>',  'Obsidian: Toggle checkbox')
       end

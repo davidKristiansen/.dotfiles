@@ -11,6 +11,7 @@ npm = "latest"
 "npm:tree-sitter-cli" = "latest"
 "npm:markdown-toc" = "latest"
 "npm:@devcontainers/cli" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
 
 # Python
 python = "3.14"
@@ -19,6 +20,8 @@ uv = "0.9.2"
 "pipx:isort" = "latest"
 ty = "latest"
 ruff = "latest"
+
+"pipx:cocoindex-code" = { version = "latest", extras = "full" }
 
 # Go
 go = "latest"

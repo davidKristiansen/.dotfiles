@@ -21,6 +21,44 @@
             ],
             "enabled": true
         },
+        "drawio": {
+            "type": "local",
+            "command": [
+                "npx",
+                "-y",
+                "@drawio/mcp"
+            ],
+            "enabled": true
+        },
+        "obsidian": {
+            "type": "local",
+            "command": [
+                "npx",
+                "@bitbonsai/mcpvault@latest",
+                "{env:HOME}/.local/share/vault"
+            ],
+            "enabled": true
+        },
+        "obsidian-tasks": {
+            "type": "local",
+            "command": [
+                "npx",
+                "@jfim/obsidian-tasks-mcp",
+                "{env:HOME}/.local/share/vault"
+            ],
+            "enabled": true
+        },
+        "cocoindex-code": {
+            "type": "local",
+            "command": [
+                "bash",
+                "{env:HOME}/.config/opencode/cocoindex-mcp.sh"
+            ],
+            "enabled": true,
+            "environment": {
+                "COCOINDEX_DISABLE_USAGE_TRACKING": "1"
+            }
+        },
         "mcp-atlassian": {
             "type": "local",
             "command": [

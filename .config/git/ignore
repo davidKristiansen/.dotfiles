@@ -13,6 +13,9 @@ __pycache__/
 .zig-cache/
 zig-out/
 
+# CocoIndex Code
+.cocoindex_code/
+
 # MemPalace
 mempalace.yaml
 entities.json

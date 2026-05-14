@@ -77,6 +77,8 @@ keybind = alt+9=unbind
 keybind = ctrl+i=unbind
 keybind = ctrl+o=unbind
 
+# opencode needs this for newline
+keybind = shift+enter=text:\x1b[13;2u
 
 
 custom-shader = shaders/cursor_groovy.glsl

@@ -1,5 +1,5 @@
 # Project management — not dotfiles
-AGENTS.md
+/AGENTS.md
 bootstrap
 .pre-commit-config.yaml
 .secrets.baseline

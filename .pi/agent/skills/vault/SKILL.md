@@ -1,6 +1,6 @@
 ---
 name: vault
-description: Read, write, and manage notes in the Obsidian knowledge vault at ~/.local/share/vault. Uses Johnny Decimal organization with wikilink cross-references.
+description: Read, write, and manage notes in the Obsidian knowledge vault at ~/.local/share/vault. Uses Johnny Decimal organization with wikilink cross-references. Use when the user mentions vault, notes, or knowledge base.
 ---
 
 ## What this skill does
@@ -28,17 +28,10 @@ The vault uses the Johnny Decimal system:
 
 Categories are directories (e.g., `14 Concepts/`). Notes are markdown files named `<JD#> <Title>.md`.
 
-## MCP tools available
-
-Two Obsidian MCP servers are configured and should be preferred over raw file tools:
-
-- **`obsidian_*`** (mcpvault) — `read_note`, `write_note`, `patch_note`, `search_notes`, `list_directory`, `manage_tags`, `update_frontmatter`, `get_vault_stats`, etc. Use these for all vault read/write operations.
-- **`obsidian-tasks`** — `list_all_tasks`, `query_tasks`. Use for TODO/task management in `32 Tasks/todo.md`. Supports Obsidian Tasks syntax: `- [ ]` checkboxes, due dates, priorities, tags.
-
 ## Reading notes
 
-- Prefer `obsidian_read_note` and `obsidian_search_notes` MCP tools over raw Glob/Grep
-- Use Glob/Grep as fallback: `~/.local/share/vault/**/*.md`
+- Use bash with `find` or `ls` to discover notes: `find ~/.local/share/vault -name '*.md'`
+- Use bash with `grep -r` to search content across the vault
 - Read `index.md` or `Vault Map.md` for a full directory listing
 - Read `14 Concepts/14.00 Knowledge Base Hub.md` for the concept index
 
@@ -60,9 +53,13 @@ When creating or editing notes, follow these rules strictly:
 3. If creating new: assign next ID, write with full front-matter and cross-links
 4. If updating: preserve existing structure, add new sections or extend existing ones
 
+## Searching with mempalace
+
+If mempalace tools are available (via MCP bridge), use `mempalace_search` for semantic search across the vault. Fall back to `grep -r` for exact string matches.
+
 ## Do not
 
 - Do not create notes without front-matter
 - Do not use plain text where a wikilink should be
 - Do not guess the vault path — it is always `~/.local/share/vault`
-- Do not put sensitive project paths or credentials in notes (the vault is version-controlled)
+- Do not put sensitive project paths or credentials in notes
