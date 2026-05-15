@@ -1,5 +1,3 @@
 embedding:
   provider: sentence-transformers
-  model: nomic-ai/CodeRankEmbed
-  query_params:
-    prompt_name: query
+  model: Snowflake/snowflake-arctic-embed-xs
