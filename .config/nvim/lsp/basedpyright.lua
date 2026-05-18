@@ -8,7 +8,14 @@ return {
     basedpyright = {
       analysis = {
         autoSearchPaths = true,
-        diagnosticMode = "workspace",
+        diagnosticMode = "openFilesOnly",
+        diagnosticSeverityOverrides = {
+          reportAny = false,
+          reportUnusedImport = false,
+          reportMissingTypeStubs = false,
+          reportGeneralTypeIssues = false,
+          reportPrivateUsage = false,
+        },
         useLibraryCodeForTypes = true,
         typeCheckingMode = "off",
       },

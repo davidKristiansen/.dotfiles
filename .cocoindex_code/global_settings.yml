@@ -1,3 +1,0 @@
-embedding:
-  provider: sentence-transformers
-  model: Snowflake/snowflake-arctic-embed-xs

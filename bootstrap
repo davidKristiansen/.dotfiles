@@ -22,8 +22,7 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_CONFIG_HOME/teams-for-linux" \
          "$XDG_CONFIG_HOME/opencode" \
          "$HOME/.pi/agent/sessions" \
-         "$HOME/.pi/context-mode/sessions" \
-         "$HOME/.cocoindex_code"
+         "$HOME/.pi/context-mode/sessions"
 chmod 700 "$GNUPGHOME"
 
 echo Hold on to your bootstraps !

@@ -21,8 +21,6 @@ uv = "0.9.2"
 ty = "latest"
 ruff = "latest"
 
-"pipx:cocoindex-code" = { version = "latest", extras = "full" }
-
 # Go
 go = "latest"
 "go:github.com/jesseduffield/lazydocker" = "latest"

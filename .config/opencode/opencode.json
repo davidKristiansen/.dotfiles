@@ -1,7 +1,8 @@
 {
     "$schema": "https://opencode.ai/config.json",
     "enabled_providers": [
-        "github-copilot"
+        "github-copilot",
+        "google"
     ],
     "mcp": {
         "nvim-mcp": {
@@ -48,16 +49,13 @@
             ],
             "enabled": true
         },
-        "cocoindex-code": {
+        "mcpipe": {
             "type": "local",
             "command": [
-                "bash",
-                "{env:HOME}/.config/opencode/cocoindex-mcp.sh"
+                "{env:HOME}/Projects/mcp_toolbox/mcpipe/.venv/bin/mcpipe",
+                "server"
             ],
-            "enabled": true,
-            "environment": {
-                "COCOINDEX_DISABLE_USAGE_TRACKING": "1"
-            }
+            "enabled": true
         },
         "mcp-atlassian": {
             "type": "local",
