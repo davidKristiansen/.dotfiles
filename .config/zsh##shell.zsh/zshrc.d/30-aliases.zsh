@@ -146,7 +146,12 @@ dce() {
     devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder" "${cmd[@]}"
   else
     # Interactive tmux: use docker exec -it for proper TTY allocation
-    local -a docker_exec=(docker exec -it -e TERM="$TERM")
+    local -a docker_exec=(
+      docker exec -it
+      -e TERM="$TERM"
+      -e LANG="${LANG}"
+      -e LC_ALL="${LC_ALL}"
+    )
     [[ -n "$remote_user" ]] && docker_exec+=(-u "$remote_user")
     "${docker_exec[@]}" "$container_id" \
       tmux attach-session -t "$session" 2>/dev/null \
