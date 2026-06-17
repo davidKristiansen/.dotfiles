@@ -1,3 +1,5 @@
+---@diagnostic disable: duplicate-index
+---@diagnostic disable: duplicate-index
 -- SPDX-License-Identifier: MIT
 -- neo-tree.nvim: file explorer + lsp-file-operations (vim.schedule).
 -- lsp-file-operations must load AFTER neo-tree.
@@ -15,6 +17,12 @@ vim.schedule(function()
         enable_git_status    = true,
         filesystem           = { use_libuv_file_watcher = true },
         window               = { mappings = { ['<C-v>'] = 'open_vsplit' } },
+        filesystem           = {
+            follow_current_file = {
+                enabled = true,
+                leave_dirs_open = false,
+            },
+        },
     })
 
     -- lsp-file-operations: must be set up after neo-tree

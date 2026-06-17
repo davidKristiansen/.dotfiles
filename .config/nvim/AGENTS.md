@@ -34,10 +34,10 @@ Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plu
 | Tier | Trigger | When it runs | Plugins |
 |------|---------|-------------|---------|
 | **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
-| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, opencode, neo-tree + lsp-file-operations |
+| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, neo-tree + lsp-file-operations |
 | **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
-| **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`, `opencode_output`), obsidian (`markdown` inside vault) |
-| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>o*`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys) |
+| **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` inside vault) |
+| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>o*`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys), claudecode (`<leader>a*`) |
 
 **Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
 
@@ -69,6 +69,7 @@ Files with numeric prefixes load first:
 
 Then alphabetically:
 - bigfile.lua — Large file handling (custom BufReadPre autocmd, no plugin).
+- claudecode.lua — claudecode.nvim Claude Code IDE integration via WebSocket MCP protocol, keymaps use `<leader>a*` prefix (keymap-triggered: `<leader>ac`/`<leader>af` etc.; neo-tree add via `<leader>as`).
 - blink-cmp.lua — Completion engine + LuaSnip + Copilot source (vim.schedule).
 - blink-pairs.lua — Auto pairs (InsertEnter).
 - dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
@@ -84,9 +85,8 @@ Then alphabetically:
 - overseer.lua — Task runner and job management (keymap: `<leader>o*`).
 - codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
 - opencode-nickjvandyke.lua_ — opencode.nvim nickjvandyke fork (disabled).
-- opencode.lua — opencode.nvim (sudo-tee) Neovim frontend for opencode AI agent, keymaps use `<leader>a` prefix (vim.schedule).
 - pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (vim.schedule, `<leader>p`).
-- render-markdown.lua — Markdown rendering (FileType: markdown, opencode_output).
+- render-markdown.lua — Markdown rendering (FileType: markdown).
 - sshfs.lua — Remote file editing (vim.schedule).
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).
 - typst.lua — Typst language support (FileType: typst).

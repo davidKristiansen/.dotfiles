@@ -1,9 +1,9 @@
 -- SPDX-License-Identifier: MIT
 -- render-markdown.nvim: enhanced markdown rendering.
--- Loaded on FileType markdown or opencode_output.
+-- Loaded on FileType markdown.
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'markdown', 'opencode_output' },
+    pattern = { 'markdown' },
     once = true,
     callback = function()
         vim.pack.add({
@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
         require('render-markdown').setup({
             anti_conceal = { enabled = false },
-            file_types   = { 'markdown', 'opencode_output' },
+            file_types   = { 'markdown' },
             html         = { comment = { conceal = true } },
             code         = {
                 style     = 'full',

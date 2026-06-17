@@ -9,24 +9,6 @@ vim.schedule(function()
         { src = 'https://github.com/otavioschwanck/fzf-lua-enchanted-files' },
     }, { confirm = false })
 
-    --- Send selected fzf-lua items to opencode as context files.
-    local function opencode_send(selected, opts)
-        if not selected or #selected == 0 then return end
-        local ok, context = pcall(require, 'opencode.context')
-        if not ok then
-            vim.notify('opencode.nvim not available', vim.log.levels.WARN)
-            return
-        end
-        local core_ok, core = pcall(require, 'opencode.core')
-        if core_ok then
-            core.open({ new_session = false, focus = 'input', start_insert = true })
-        end
-        for _, item in ipairs(selected) do
-            local path = require('fzf-lua.path').entry_to_file(item, opts).path
-            if path then context.add_file(path) end
-        end
-    end
-
     local default_ignores = {
         '**/.pytest_cache/**', '**/__pycache__/**', '**/.mypy_cache/**',
         '**/.venv/**', '**/venv/**', '**/.git/**', '**/.idea/**',
@@ -54,7 +36,6 @@ vim.schedule(function()
                 ['alt-i']  = FzfLua.actions.toggle_ignore,
                 ['alt-h']  = FzfLua.actions.toggle_hidden,
                 ['alt-f']  = FzfLua.actions.toggle_follow,
-                ['ctrl-a'] = opencode_send,
             },
         },
         grep     = {

@@ -46,7 +46,6 @@ vim.opt.redrawtime               = 10000
 -- Filetypes where the dynamic colorcolumn is never shown (prose / UI panels).
 vim.g.colorcolumn_skip_filetypes = {
     "markdown", "asciidoc", "asciidoctor",
-    "opencode_input", "opencode_output",
 }
 
 -- General UX

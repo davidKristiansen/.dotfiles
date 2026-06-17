@@ -167,8 +167,9 @@ function M.pipeline(bufnr)
     M.run(bufnr)
   end
 
-  -- Then format (global toggle + client support)
-  if vim.g.format_on_save and supports_format(bufnr) then
+  -- Then format (global toggle + client support + disable for C files)
+  local is_c_file = vim.bo[bufnr].filetype == "c"
+  if not is_c_file and vim.g.format_on_save and supports_format(bufnr) then
     vim.lsp.buf.format({ async = false, bufnr = bufnr })
   end
 end
@@ -178,7 +179,12 @@ function M.attach(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
   if vim.b[bufnr].fix_all_on_save == nil then
-    vim.b[bufnr].fix_all_on_save = defaults.enable_on_save
+    -- Disable fix-all for C files by default
+    if vim.bo[bufnr].filetype == "c" then
+      vim.b[bufnr].fix_all_on_save = false
+    else
+      vim.b[bufnr].fix_all_on_save = defaults.enable_on_save
+    end
   end
 
   if defaults.create_commands then
