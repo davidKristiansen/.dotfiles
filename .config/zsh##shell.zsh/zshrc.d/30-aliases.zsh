@@ -201,6 +201,30 @@ ta() {
   echo "added: $*"
 }
 
+
+extract() {
+ # Extract files from mime types
+  local file="$1"
+  [[ -f "$file" ]] || { echo "extract: '$file' is not a valid file"; return 1; }
+
+  local mime
+  mime=$(\file --brief --mime-type -- "$file")
+
+  case "$mime" in
+    application/zip) unzip "$file" ;;
+    application/x-7z-compressed) 7z x "$file" ;;
+    application/x-rar|application/vnd.rar) unrar x "$file" ;;
+    application/x-tar) tar -xf "$file" ;;
+    application/gzip) tar -xzf "$file" ;;
+    application/x-bzip2) tar -xjf "$file" ;;
+    application/x-xz) tar -xJf "$file" ;;
+    appication/zstd) tar --use-compress-program=unzstd -xf "$file" ;;
+    application/x-compress) uncompress "$file" ;;
+    application/vnd.debian.binary-package) ar x "$file" ;;
+    *) echo "extract: unsupported file type '$mime'" ;;
+  esac
+}
+
 return 0
 # vim: set ft=zsh ts=2 sw=2:
 

@@ -19,3 +19,5 @@ zig-out/
 # MemPalace
 mempalace.yaml
 entities.json
+
+**/.claude/settings.local.json

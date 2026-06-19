@@ -49,9 +49,13 @@ vim.g.colorcolumn_skip_filetypes = {
 }
 
 -- General UX
-opt.autowrite                    = true  -- Auto-write on buffer switch
-opt.confirm                      = true  -- Confirm save on exit
-opt.mouse                        = "a"   -- Mouse everywhere
+opt.autowrite                    = true -- Auto-write on buffer switch
+opt.confirm                      = true -- Confirm save on exit
+opt.mouse                        = "a"  -- Mouse everywhere
+vim.opt.mouse                    = "a"
+vim.opt.wrap                     = false
+vim.opt.sidescroll               = 1
+vim.opt.mousescroll              = "ver:3,hor:6"
 opt.swapfile                     = false -- No swap
 opt.undofile                     = true  -- Persistent undo
 opt.undolevels                   = 10000
