@@ -1,0 +1,110 @@
+#!/bin/sh
+# Interactive part of the screen-share picker. Runs inside ghostty.
+#   $1 = work dir
+# Builds a list of monitors + windows and lets the user pick one in fzf, with
+# thumbnails rendered in the preview pane. Writes the chosen value (possibly
+# empty) to $work/result and touches $work/done on ANY exit path — normal, Esc,
+# or being signalled when the window is closed — so the chooser never hangs.
+
+set -u
+work="$1"
+
+# Defensive env bootstrap (normally inherited from screenshare-chooser): ensure
+# swaymsg/fzf/lswt/grim/chafa are findable and SWAYSOCK is set.
+: "${HOME:=$(getent passwd "$(id -u)" | cut -d: -f6)}"
+export HOME
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/opt/sway/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
+if [ -z "${SWAYSOCK:-}" ]; then
+	for s in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/sway-ipc.*.sock; do
+		[ -S "$s" ] && { SWAYSOCK="$s"; export SWAYSOCK; break; }
+	done
+fi
+
+DEBUG="${SCREENSHARE_DEBUG:-/tmp/screenshare-debug.log}"
+log() { printf '%s [fzf %s] %s\n' "$(date '+%H:%M:%S')" "$$" "$*" >>"$DEBUG" 2>/dev/null || true; }
+
+result=""
+_done=""
+finish() {
+	[ -n "$_done" ] && return
+	_done=1
+	printf '%s' "$result" > "$work/result" 2>/dev/null || true
+	: > "$work/done" 2>/dev/null || true
+	log "finish result=[$result]"
+}
+trap finish EXIT
+trap 'finish; exit 0' INT TERM HUP
+log "started, work=$work"
+
+TAB=$(printf '\t')
+list="$work/list"
+: > "$list"
+
+# Cache dir for on-demand thumbnails, shared with the preview helper via env.
+SCREENSHARE_CACHE="$work/thumbs"
+export SCREENSHARE_CACHE
+mkdir -p "$SCREENSHARE_CACHE"
+
+# Line format (TAB separated):  LABEL <TAB> CHOICE <TAB> CAPTURESPEC
+#   CHOICE       -> what we hand back to xdpw
+#   CAPTURESPEC  -> how the preview helper grabs a thumbnail:
+#                     o:<output>            monitor   grim -o <output>
+#                     w:<x,y wxh>|<app-id>  window    grim -g <geo>, else app icon
+
+# --- Monitors -------------------------------------------------------------
+swaymsg -t get_outputs -r 2>/dev/null | jq -r --arg t "$TAB" '
+	.[] | select(.active) |
+	"🖥  \(.name)  —  \(.rect.width)x\(.rect.height)  (\(.make) \(.model))" + $t +
+	"Monitor: \(.name)" + $t +
+	"o:\(.name)"
+' >> "$list"
+
+# --- Windows --------------------------------------------------------------
+# Identifiers come from lswt (ext-foreign-toplevel-list-v1, the IDs xdpw
+# matches). Geometry for the thumbnail is matched best-effort from the sway
+# tree by app_id + title; off-screen windows fall back to their app icon.
+if command -v lswt >/dev/null 2>&1; then
+	tree=$(swaymsg -t get_tree -r 2>/dev/null)
+	lswt -j 2>/dev/null \
+	| jq -c 'if type=="array" then .[] else (.toplevels // .)[]? end' \
+	| while IFS= read -r tl; do
+		id=$(printf '%s' "$tl"    | jq -r '.identifier // .id // empty')
+		app=$(printf '%s' "$tl"   | jq -r '."app-id" // .app_id // .app // "window"')
+		title=$(printf '%s' "$tl" | jq -r '.title // ""')
+		[ -n "$id" ] || continue
+		[ "$title" = "${SCREENSHARE_TITLE:-}" ] && continue
+
+		geo=$(printf '%s' "$tree" | jq -r --arg app "$app" --arg title "$title" '
+			[ recurse(.nodes[]?, .floating_nodes[]?)
+			  | select((.app_id==$app or .window_properties.class==$app)
+			           and .name==$title and (.visible==true)) ][0]
+			| if . then "\(.rect.x),\(.rect.y) \(.rect.width)x\(.rect.height)" else empty end')
+
+		icon_app="$app"
+		[ "$icon_app" = "window" ] && icon_app=""
+		spec="w:${geo}|${icon_app}"
+		short=$(printf '%s' "$title" | cut -c1-60)
+		printf '🪟 %s  —  %s%s%s%s%s\n' "$app" "$short" "$TAB" "Window: $id" "$TAB" "$spec" >> "$list"
+	done
+fi
+
+if [ ! -s "$list" ]; then
+	log "no sources found"
+	printf 'No capturable sources found.\nPress any key to close.' >&2
+	read -r _ </dev/tty 2>/dev/null || true
+	exit 0
+fi
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+sel=$(fzf \
+	--delimiter="$TAB" --with-nth=1 \
+	--no-multi --reverse --border=rounded --margin=1 --padding=1 \
+	--prompt='Share ❯ ' \
+	--header='↑↓ choose · Enter share · Esc cancel' \
+	--preview="$here/screenshare-preview {3}" \
+	--preview-window='right:62%:border-left' \
+	< "$list") || sel=""
+
+[ -n "$sel" ] && result=$(printf '%s' "$sel" | awk -F"$TAB" '{print $2}')
+log "selected=[$result]"

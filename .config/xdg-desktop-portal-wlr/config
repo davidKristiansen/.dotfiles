@@ -1,6 +1,6 @@
 [screencast]
 max_fps=60
-chooser_type=dmenu
-chooser_cmd=wofi --dmenu
+chooser_type=simple
+chooser_cmd=/home/david/.local/bin/screenshare-chooser
 exec_before=swaync-client --inhibitor-add "xdg-desktop-portal-wlr"
 exec_after=swaync-client --inhibitor-remove "xdg-desktop-portal-wlr"

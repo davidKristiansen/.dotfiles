@@ -22,6 +22,8 @@ for_window [app_id="__btop"] floating enable, sticky enable, resize set 650 400,
 
 for_window [app_id="term.launcher"] floating enable, sticky enable, resize set 1200 800, opacity 0.9
 
+for_window [app_id="term.screenshare"] floating enable, sticky enable, resize set 60 ppt 65 ppt, move position center, border pixel 10, opacity 0.95
+
 for_window {
     # Floating
     [window_role="PictureInPicture"] sticky enable

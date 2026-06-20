@@ -1,0 +1,70 @@
+#!/bin/sh
+# xdg-desktop-portal-wlr "simple" output chooser.
+#
+# Spawns a floating ghostty window running an fzf picker with live thumbnails,
+# and prints the chosen source to stdout in the format xdpw expects:
+#   Monitor: <output-name>      (e.g. "Monitor: DP-1")
+#   Window:  <toplevel-id>      (ext-foreign-toplevel-list-v1 identifier)
+# Printing nothing == user declined (we still exit 0 so xdpw doesn't log it as a
+# chooser failure).
+#
+# Result handoff is file-based and signal-independent: the picker writes its
+# choice to $work/result and touches $work/done. We wait until that marker
+# appears OR ghostty exits (covers the picker being hard-killed), then read the
+# file. No FIFO, no blocking read, no zombie choosers.
+
+set -u
+
+# --- env bootstrap --------------------------------------------------------
+# xdg-desktop-portal-wlr runs this from a systemd user service whose PATH lacks
+# ~/.local/bin (lswt), /opt/sway/bin (swaymsg) and the mise shims (fzf), and
+# which does not export SWAYSOCK. Fix that up; this env propagates to ghostty,
+# screenshare-fzf and screenshare-preview.
+: "${HOME:=$(getent passwd "$(id -u)" | cut -d: -f6)}"
+export HOME
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/opt/sway/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
+if [ -z "${SWAYSOCK:-}" ]; then
+	for s in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/sway-ipc.*.sock; do
+		[ -S "$s" ] && { SWAYSOCK="$s"; export SWAYSOCK; break; }
+	done
+fi
+# --------------------------------------------------------------------------
+
+DEBUG="${SCREENSHARE_DEBUG:-/tmp/screenshare-debug.log}"
+log() { printf '%s [chooser %s] %s\n' "$(date '+%H:%M:%S')" "$$" "$*" >>"$DEBUG" 2>/dev/null || true; }
+log "invoked; PATH=$PATH SWAYSOCK=${SWAYSOCK:-UNSET} WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-UNSET}"
+
+here=$(cd "$(dirname "$0")" && pwd)
+picker="$here/screenshare-fzf"
+
+title="⧉ Select a screen or window to share"
+export SCREENSHARE_TITLE="$title"
+export SCREENSHARE_DEBUG="$DEBUG"
+
+# Only ever one picker at a time: clear any leftover from an abandoned request.
+swaymsg '[app_id="term.screenshare"] kill' >/dev/null 2>&1 || true
+
+work=$(mktemp -d "${XDG_RUNTIME_DIR:-/tmp}/screenshare.XXXXXX")
+trap 'rm -rf "$work" 2>/dev/null' EXIT
+
+log "launching ghostty picker, work=$work"
+ghostty \
+	--gtk-single-instance=false \
+	--title="$title" \
+	--class="term.screenshare" \
+	-e "$picker" "$work" >>"$DEBUG" 2>&1 &
+gpid=$!
+log "ghostty pid=$gpid"
+
+# Wait until the picker reports done, or ghostty is gone (covers hard-kill).
+while kill -0 "$gpid" 2>/dev/null && [ ! -e "$work/done" ]; do
+	sleep 0.2
+done
+sleep 0.1   # small margin so result is fully flushed
+
+choice=$(cat "$work/result" 2>/dev/null || true)
+log "choice=[$choice]"
+
+[ -n "$choice" ] && printf '%s\n' "$choice"
+log "exiting 0"
+exit 0
