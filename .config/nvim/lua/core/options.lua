@@ -15,7 +15,7 @@ local diag_base = {
     virtual_lines    = false, -- { current_line = true },
     signs            = true,
     underline        = true,
-    update_in_insert = true,
+    update_in_insert = false, -- don't re-render diagnostics on every keystroke
     severity_sort    = true,
 }
 
@@ -36,7 +36,6 @@ vim.diagnostic.config(vim.tbl_deep_extend("force", diag_base, diag_signs))
 -- ---------------------------------------------------------------------
 -- Options (unified)
 -- ---------------------------------------------------------------------
-local o                          = vim.o
 local opt                        = vim.opt
 local cmd                        = vim.cmd
 
@@ -51,8 +50,7 @@ vim.g.colorcolumn_skip_filetypes = {
 -- General UX
 opt.autowrite                    = true -- Auto-write on buffer switch
 opt.confirm                      = true -- Confirm save on exit
-opt.mouse                        = "a"  -- Mouse everywhere
-vim.opt.mouse                    = "a"
+opt.mouse                        = "a" -- Mouse everywhere
 vim.opt.wrap                     = false
 vim.opt.sidescroll               = 1
 vim.opt.mousescroll              = "ver:3,hor:6"
@@ -94,7 +92,6 @@ opt.cmdheight                    = 0 -- Minimal cmdline (0 on 0.9+)
 opt.winminwidth                  = 5
 opt.scrolloff                    = 4
 opt.sidescrolloff                = 8
-opt.wrap                         = false
 opt.splitright                   = true
 opt.splitbelow                   = true
 opt.conceallevel                 = 2
