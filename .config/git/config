@@ -21,7 +21,7 @@
     compression = 9  # trade cpu for network
     fsync = none
     whitespace = error  # threat incorrect whitespace as errors
-    pager = delta
+    pager = hunk pager  # hunk as the pager for diff/show/log
 
 [advice]  # disable advices
     addEmptyPathspec = false
@@ -52,7 +52,7 @@
 
 [pager]
     branch = false  # no need to use pager for git branch
-    diff = diff-so-fancy | $PAGER  # diff-so-fancy as diff pager
+    # diff falls through to core.pager (hunk pager)
 
 [push]
     autoSetupRemote = true  # easier to push new branches
@@ -86,9 +86,6 @@
     context    = white
     whitespace = yellow reverse
 
-[interactive]
-    diffFilter = delta --color-only
-
 # URL shortcuts
 [url "git@github.com:"]
     insteadOf = "gh:"
@@ -108,11 +105,6 @@
 
 [merge]
     conflictStyle = zdiff3
-
-[delta]
-    syntax-theme = gruvbox-dark
-    navigate = true  # use n and N to move between diff sections
-    dark = true      # or light = true, or omit for auto-detection
 
 [mergetool "bc"]
 #  cmd = BComp.exe "$(wslpath -aw $LOCAL)" "$(wslpath -aw $REMOTE)" "$(wslpath -aw $BASE)" "$(wslpath -aw $MERGED)"

@@ -3,7 +3,7 @@ name: review
 description: Review code for bugs, security issues, and best practices. Use when the user asks to review code, check for issues, or audit changes.
 ---
 
-Review code for potential issues. If specific files are mentioned, focus on those. Otherwise, review staged changes (`git diff --cached`) or recent unstaged changes (`git diff`).
+Review code for potential issues. If specific files are mentioned, focus on those. Otherwise, review staged changes (`git --no-pager diff --cached`) or recent unstaged changes (`git --no-pager diff`). Use `--no-pager` so diffs come back as text instead of opening the interactive `hunk` pager.
 
 ## Automated Checks First
 

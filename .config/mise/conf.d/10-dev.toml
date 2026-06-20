@@ -12,6 +12,7 @@ npm = "latest"
 "npm:markdown-toc" = "latest"
 "npm:@devcontainers/cli" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:hunkdiff" = "latest"  # interactive diff viewer / git pager (`hunk`)
 
 # Python
 python = "3.14"

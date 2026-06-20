@@ -18,7 +18,7 @@ If on a protected branch (`main`, `develop`, or `master`):
 - Create and switch to the new branch with `git checkout -b <branch-name>`
 
 ### 2. Review Changes
-Run `git status`, `git diff`, and `git diff --cached` to understand all changes.
+Run `git status`, `git --no-pager diff`, and `git --no-pager diff --cached` to understand all changes (`--no-pager` avoids opening the interactive `hunk` pager).
 
 ### 3. Suggest Logical Chunking
 If staged changes touch multiple unrelated areas (different directories/concerns, independent features or fixes, different subsystems):

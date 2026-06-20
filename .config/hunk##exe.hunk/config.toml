@@ -1,0 +1,11 @@
+# hunk — interactive diff viewer / git pager (https://github.com/modem-dev/hunk)
+# Set as git core.pager via ~/.config/git/config: `pager = hunk pager`
+
+theme = "github-dark-default"  # built-in id, "auto", or a custom theme; press `t` in-app to browse
+mode = "auto"                  # auto, split, stack
+vcs = "git"                    # git, jj, sl
+line_numbers = true
+wrap_lines = false
+exclude_untracked = false
+watch = false
+transparent_background = true
