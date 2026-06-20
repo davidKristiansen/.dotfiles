@@ -31,7 +31,7 @@ _nearest_venv_dir() {
         return 0
       fi
     done
-    d=$(dirname "$d")   # portable parent-dir step
+    d=${d:h}            # zsh native parent-dir step (no subprocess)
   done
   return 1
 }
@@ -80,8 +80,11 @@ __venv_switch_to() {
 # ----------------------------- main hook ------------------------------------
 
 _python_venv_smart() {
-  # If direnv is managing things here, let it dance alone
-  # typeset -f _direnv_hook >/dev/null 2>&1 && return 0
+  # If direnv is active and manages this directory, let it own the env so we
+  # don't fight over $VIRTUAL_ENV / PATH.
+  if [[ -n "$DIRENV_DIR" ]] && typeset -f _direnv_hook >/dev/null 2>&1; then
+    return 0
+  fi
 
   local target
   if _in_container; then

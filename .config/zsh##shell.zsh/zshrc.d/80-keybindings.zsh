@@ -1,4 +1,4 @@
-# ~/.config/zsh/zshrc.d/80-keymap-vi.zsh
+# ~/.config/zsh/zshrc.d/80-keybindings.zsh
 # SPDX-License-Identifier: MIT
 
 export KEYTIMEOUT=1

@@ -12,7 +12,10 @@ if [ -d "$XDG_CONFIG_HOME/environment.d" ]; then
 fi
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
-export TERM=xterm-256color
+# NOTE: do not set TERM here. The terminal emulator (and tmux) set the correct
+# TERM; forcing xterm-256color clobbers truecolor/italics-capable values such as
+# xterm-kitty / alacritty / tmux-256color, and .zshenv runs for non-interactive
+# shells too.
 
 # ----- Devcontainer goodies -----
 : "${DEVCONTAINER_ENV_FILE:=$XDG_CONFIG_HOME/devcontainer_environment/environment_variables}"

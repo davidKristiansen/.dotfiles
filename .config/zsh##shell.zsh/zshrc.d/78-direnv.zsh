@@ -1,4 +1,4 @@
-# ~/.config/zsh/zshrc.d/80-direnv.zsh
+# ~/.config/zsh/zshrc.d/78-direnv.zsh
 # SPDX-License-Identifier: MIT
 # Cache direnv hook output to avoid eval on every shell startup.
 
