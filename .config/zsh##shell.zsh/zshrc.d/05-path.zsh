@@ -1,9 +1,11 @@
 # ~/.config/zsh/zshrc.d/05-path.zsh
 # SPDX-License-Identifier: MIT
 
-# Split existing PATH into zsh's $path array and make entries unique
-typeset -U path
-path=(${=PATH})
+# Keep $path/$PATH unique and in sync. zsh ties `path` to `PATH` and keeps it
+# pre-split on ':', so do NOT reassign it from $PATH (e.g. `path=(${=PATH})`
+# splits on whitespace, not ':', collapsing PATH into one element and defeating
+# both the dedup and the prepend/append helpers below).
+typeset -U path PATH
 
 # Helpers
 _prepend_path() { local d="$1"; [[ -d $d ]] || return; path=("$d" ${path:#$d}); }
