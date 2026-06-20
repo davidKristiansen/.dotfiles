@@ -27,17 +27,15 @@ fi
 if command -v bat >/dev/null 2>&1; then
   alias cat='bat --theme gruvbox-dark --color auto --decorations auto'
 
-  if command -v batgrep >/dev/null 2>&1; then
-    # kill any existing grep alias first, then alias to batgrep
-    unalias grep 2>/dev/null || true
-    alias grep='batgrep --terminal-width="${COLUMNS:-80}"'
-  else
-    alias grep='grep --color=auto'
-  fi
+  # Keep real grep (incompatible flags/regex with batgrep); expose batgrep as bgrep.
+  alias grep='grep --color=auto'
+  command -v batgrep >/dev/null 2>&1 && \
+    alias bgrep='batgrep --terminal-width="${COLUMNS:-80}"'
 
   command -v batman   >/dev/null 2>&1 && alias man='batman'
   command -v batpipe  >/dev/null 2>&1 && alias less='batpipe'
-  command -v batwatch >/dev/null 2>&1 && alias watch='batwatch'
+  # Keep real watch (different flag surface); expose batwatch as bwatch.
+  command -v batwatch >/dev/null 2>&1 && alias bwatch='batwatch'
 else
   alias grep='grep --color=auto'
 fi
@@ -58,17 +56,13 @@ alias l='ls'
 command -v clip.exe >/dev/null 2>&1 && alias clip='clip.exe'
 
 # --- sudo with env -----------------------------------------------------------
-alias sudo='sudo -E'
+# alias sudo='sudo -E'
 
 # --- ssh wrapper: cleanup terminal after exit -------------------------------
 ssh() {
-  command \ssh "$@"
-  # Try to restore terminal; prefer "reset" if "rest" isn't supported
-  if setterm -default -clear rest 2>/dev/null; then
-    :
-  else
-    setterm -default -clear reset 2>/dev/null || true
-  fi
+  command ssh "$@"
+  # Restore terminal defaults after exiting a remote session.
+  setterm -default -clear reset 2>/dev/null || true
 }
 
 # --- wget, tmux, svn with XDG paths -----------------------------------------
@@ -218,7 +212,7 @@ extract() {
     application/gzip) tar -xzf "$file" ;;
     application/x-bzip2) tar -xjf "$file" ;;
     application/x-xz) tar -xJf "$file" ;;
-    appication/zstd) tar --use-compress-program=unzstd -xf "$file" ;;
+    application/zstd|application/x-zstd) tar --use-compress-program=unzstd -xf "$file" ;;
     application/x-compress) uncompress "$file" ;;
     application/vnd.debian.binary-package) ar x "$file" ;;
     *) echo "extract: unsupported file type '$mime'" ;;
