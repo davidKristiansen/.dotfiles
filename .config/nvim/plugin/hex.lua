@@ -8,5 +8,6 @@ vim.schedule(function()
 
   hex.setup()
 
-  vim.keymap.set('n', '<leader>h', function() hex.toggle() end, { desc = 'Toggle hex view' })
+  -- Under the <leader>T toggles group (<leader>h is the start screen).
+  vim.keymap.set('n', '<leader>Tx', function() hex.toggle() end, { desc = 'Toggle hex view' })
 end)

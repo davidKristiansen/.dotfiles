@@ -8,7 +8,10 @@ local map = vim.keymap.set
 -- Clipboard
 -- map({ "n", "v", "x" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
 -- map({ "n", "v", "x" }, "<leader>d", '"+d', { desc = "Delete to system clipboard" })
-map("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" })
+-- Paste from system clipboard. Uses <leader>P to avoid colliding with the
+-- <leader>p* "pi" prefix (a bare <leader>p map would delay every paste by
+-- timeoutlen and pollute the which-key pi group).
+map({ "n", "x" }, "<leader>P", '"+p', { desc = "Paste from system clipboard" })
 
 -- Move lines
 local define_move_desc = { down = "Move line down", up = "Move line up" }
