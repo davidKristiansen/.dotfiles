@@ -1,0 +1,4 @@
+# SSH allowed signers for git commit/tag verification.
+# Copy to `allowed_signers` (gitignored) and add your public signing keys.
+# Format: <email> <key-type> <public-key>
+# you@example.com ssh-ed25519 AAAA...your-public-key...

@@ -1,0 +1,6 @@
+# Personal git identity — copy to `priv.conf` (gitignored) and fill in.
+# Included as the base identity by ~/.config/git/config.
+[user]
+  name = Your Name
+  email = you@example.com
+  signingkey = ~/.ssh/your-signing-key.pub

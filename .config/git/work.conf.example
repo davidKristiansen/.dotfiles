@@ -1,0 +1,6 @@
+# Work git identity — copy to `work.conf` (gitignored) and fill in.
+# Applied via includeIf for work directories (see ~/.config/git/config).
+[user]
+  name = Your Name
+  email = you@work.example.com
+  signingkey = ~/.ssh/your-work-signing-key.pub
