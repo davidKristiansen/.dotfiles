@@ -1,11 +1,9 @@
----@diagnostic disable: trailing-space
----@diagnostic disable: trailing-space
 -- SPDX-License-Identifier: MIT
 -- fzf-lua: fuzzy finder (used by many downstream plugins).
 
 vim.schedule(function()
     vim.pack.add({
-        { src = 'https://github.com/ibhagwan/fzf-lua',                      version = vim.version.range('*') },
+        { src = 'https://github.com/ibhagwan/fzf-lua' },
         { src = 'https://github.com/otavioschwanck/fzf-lua-enchanted-files' },
     }, { confirm = false })
 

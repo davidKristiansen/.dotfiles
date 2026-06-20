@@ -17,6 +17,7 @@ vim.schedule(function()
         'jsonls',
         'lua_ls',
         'ruff',
+        'rust_analyzer',
         'yamlls',
         'jinja_lsp',
         'groovyls',
