@@ -33,11 +33,13 @@ echo Hold on to your bootstraps !
   # Pull latest dotfiles before stowing
   git pull --rebase --quiet || true
 
+  export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
   # Ensure mise is available
   if ! type mise &>/dev/null; then
     \curl https://mise.run | sh
-  else
-    mise self-update --silent --yes
+ else
+   mise self-update --silent --yes
   fi
 
   # Install stow.sh via mise
@@ -46,7 +48,9 @@ echo Hold on to your bootstraps !
   stow.sh -f
 )
 
-. "${HOME}"/.zshenv
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
+[[ -f "${HOME}/.zshenv" ]] && . "${HOME}/.zshenv" || true
 
 for f in "$XDG_CONFIG_HOME"/mise/conf.d/*.toml; do
   mise trust "$f" &> /dev/null

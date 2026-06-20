@@ -9,6 +9,8 @@
     "watchConfigFile": true,
     "defaultURLHandler": "xdg-open",
     "disableGpu": true,
+    "screenSharingEnabled": true,
+    "pipewireEnabled": true,
     "mqtt": {
         "enabled": true,
         "brokerUrl": "mqtt://localhost:1883",

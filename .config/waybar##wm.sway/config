@@ -14,19 +14,19 @@
   ],
   "custom/spotify-prev": {
     "format": " ",
-    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/spotify-prev.sh",
+    "exec": "$HOME/.config/waybar/spotify-prev.sh",
     "on-click": "playerctl --player=spotify previous",
     "exec-if": "pgrep spotify"
   },
   "custom/spotify-play-pause": {
     "format": "{}",
-    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/spotify-play-pause.sh",
+    "exec": "$HOME/.config/waybar/spotify-play-pause.sh",
     "on-click": "playerctl --player=spotify play-pause",
     "exec-if": "pgrep spotify"
   },
   "custom/spotify-next": {
     "format": " ",
-    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/spotify-next.sh",
+    "exec": "$HOME/.config/waybar/spotify-next.sh",
     "on-click": "playerctl --player=spotify next",
     "exec-if": "pgrep spotify"
   },
@@ -37,7 +37,6 @@
     "sway/language",
     "custom/separator",
     "network",
-    "custom/vpn",
     "custom/separator",
     "pulseaudio",
     "custom/separator",
@@ -97,17 +96,11 @@
     "exec": "sleep 0.05; $HOME/.local/bin/gammastep.sh",
     "on-click": "$HOME/.local/bin/gammastep.sh toggle"
   },
-  "custom/vpn": {
-    "exec": "$HOME/.local/bin/vpn",
-    "restart-interval": 60,
-    "on-click": "$HOME/.local/bin/vpn toggle",
-    "on-right-click": "$HOME/.local/bin/vpn ui"
-  },
   "custom/spotify": {
     "format": " {}",
     "return-type": "json",
     "max-length": 40,
-    "exec": "/home/SONY/s7000026748/.dotfiles/.config/waybar##wm.sway/mediaplayer.sh",
+    "exec": "$HOME/.config/waybar/mediaplayer.sh",
     "exec-if": "pgrep spotify"
   },
   "battery": {
