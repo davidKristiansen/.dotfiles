@@ -1,15 +1,27 @@
 -- SPDX-License-Identifier: MIT
 
--- Trim trailing whitespace
+-- Trim trailing whitespace on save.
+-- Skips prose filetypes where trailing spaces are meaningful (markdown hard
+-- line breaks). Preserves cursor position, view, and the last search pattern.
+local trim_skip_ft = {
+    markdown = true, asciidoc = true, asciidoctor = true,
+    text = true, gitcommit = true, diff = true, patch = true,
+}
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    command = [[%s/\s\+$//e]],
+    group = vim.api.nvim_create_augroup("trim_trailing_ws", { clear = true }),
+    callback = function()
+        if vim.bo.filetype ~= "" and trim_skip_ft[vim.bo.filetype] then return end
+        local view = vim.fn.winsaveview()
+        vim.cmd([[keeppatterns %s/\s\+$//e]])
+        vim.fn.winrestview(view)
+    end,
 })
 
 -- Prevent Neovim from adding a trailing newline to the pack lockfile.
 -- vim.pack writes the file without one; fixeol adds it back, causing a
 -- perpetual one-line diff.
 vim.api.nvim_create_autocmd("BufReadPost", {
+    group = vim.api.nvim_create_augroup("packlock_no_fixeol", { clear = true }),
     pattern = "nvim-pack-lock.json",
     callback = function()
         vim.bo.fixeol = false
@@ -29,6 +41,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 -- Restore last position
 vim.api.nvim_create_autocmd("BufReadPost", {
+    group = vim.api.nvim_create_augroup("restore_cursor", { clear = true }),
     callback = function()
         local ok, mark = pcall(vim.api.nvim_buf_get_mark, 0, '"')
         if ok and mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(0) then
@@ -160,7 +173,10 @@ local function update_colorcolumn()
     end
 end
 
-vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "TextChanged", "TextChangedI", "WinScrolled" }, {
+-- Note: deliberately NOT wired to CursorMovedI/TextChangedI — scanning every
+-- visible line on each insert-mode keystroke is needlessly expensive. The
+-- colorcolumn refreshes on leaving insert via TextChanged/CursorMoved.
+vim.api.nvim_create_autocmd({ "CursorMoved", "TextChanged", "WinScrolled", "InsertLeave" }, {
     group = cc_group,
     callback = update_colorcolumn,
 })
@@ -174,36 +190,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
--- UV workspace setup
-vim.api.nvim_create_autocmd("DirChanged", {
-    group = vim.api.nvim_create_augroup("uv_workspace", { clear = true }),
-    callback = function()
-        local cwd = vim.fn.getcwd()
-        local pyproject = cwd .. "/pyproject.toml"
-        local venv = cwd .. "/.venv"
-
-        -- Check if pyproject.toml exists (uv workspace indicator)
-        if vim.fn.filereadable(pyproject) == 1 then
-            -- Run uv sync in background if .venv doesn't exist
-            if vim.fn.isdirectory(venv) == 0 then
-                vim.notify("UV workspace detected, running uv sync...", vim.log.levels.INFO)
-                vim.fn.jobstart({ "uv", "sync" }, {
-                    cwd = cwd,
-                    on_exit = function(_, exit_code)
-                        if exit_code == 0 then
-                            vim.notify("uv sync completed successfully", vim.log.levels.INFO)
-                            vim.env.VIRTUAL_ENV = venv
-                            vim.env.PATH = venv .. "/bin:" .. vim.env.PATH
-                        else
-                            vim.notify("uv sync failed with exit code: " .. exit_code, vim.log.levels.ERROR)
-                        end
-                    end,
-                })
-            else
-                -- .venv exists, just activate it
-                vim.env.VIRTUAL_ENV = venv
-                vim.env.PATH = venv .. "/bin:" .. vim.env.PATH
-            end
-        end
-    end,
-})
+-- NOTE: venv/PATH management is handled at the shell level (mise/direnv).
+-- The previous DirChanged autocmd auto-ran `uv sync` on cd (unattended install)
+-- and prepended venv/bin to PATH on every DirChanged without dedup, stacking
+-- duplicate PATH entries for the whole nvim process. Removed intentionally.
