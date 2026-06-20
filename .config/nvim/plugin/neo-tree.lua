@@ -1,5 +1,3 @@
----@diagnostic disable: duplicate-index
----@diagnostic disable: duplicate-index
 -- SPDX-License-Identifier: MIT
 -- neo-tree.nvim: file explorer + lsp-file-operations (vim.schedule).
 -- lsp-file-operations must load AFTER neo-tree.
@@ -15,11 +13,11 @@ vim.schedule(function()
     require('neo-tree').setup({
         use_popups_for_input = false,
         enable_git_status    = true,
-        filesystem           = { use_libuv_file_watcher = true },
         window               = { mappings = { ['<C-v>'] = 'open_vsplit' } },
         filesystem           = {
+            use_libuv_file_watcher = true,
             follow_current_file = {
-                enabled = true,
+                enabled = false,
                 leave_dirs_open = false,
             },
         },
@@ -35,5 +33,24 @@ vim.schedule(function()
         })
     end
 
-    vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle<CR>', { desc = 'Explorer' })
+    -- Only reveal when the current buffer is a real file on disk; otherwise
+    -- (starter, terminal, [No Name], help, quickfix, …) reveal has no valid
+    -- target, so fall back to a plain open/toggle.
+    local function on_real_file()
+        local buf = vim.api.nvim_get_current_buf()
+        local name = vim.api.nvim_buf_get_name(buf)
+        return vim.bo[buf].buftype == '' and name ~= '' and vim.fn.filereadable(name) == 1
+    end
+
+    -- Toggle the explorer; on open, reveal (jump to) the current file.
+    -- follow_current_file is disabled, so it only jumps on open, not on every
+    -- buffer switch.
+    vim.keymap.set('n', '<leader>e', function()
+        vim.cmd(on_real_file() and 'Neotree toggle reveal' or 'Neotree toggle')
+    end, { desc = 'Explorer (reveal current file)' })
+
+    -- Reveal current file without toggling closed (focus tree if already open).
+    vim.keymap.set('n', '<leader>E', function()
+        vim.cmd(on_real_file() and 'Neotree reveal' or 'Neotree focus')
+    end, { desc = 'Explorer: reveal current file' })
 end)
