@@ -75,7 +75,7 @@ Then alphabetically:
 - dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
 - dial.lua — Increment/decrement augends & keymaps (vim.schedule).
 - git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
-- hex.lua — Hex editing via xxd (vim.schedule, `<leader>h` toggle).
+- hex.lua — Hex editing via xxd (vim.schedule, `<leader>Tx` toggle).
 - mason.lua — Mason tool installer (vim.schedule).
 - neo-tree.lua — File explorer + lsp-file-operations for LSP workspace file ops (keymap: `<leader>e`).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
@@ -100,7 +100,7 @@ Then alphabetically:
 
 ### lua/core/
 - autocmds.lua — Global autocommands.
-- keymaps.lua — Global keymaps (non-LSP). Includes session keymaps (`<leader>ss` select, `<leader>sw` write, `<leader>sd` delete). Loaded via `after/plugin/keymaps.lua`.
+- keymaps.lua — Global keymaps (non-LSP). Includes the session picker (`<leader>s`), system-clipboard paste (`<leader>P`), and the start screen (`<leader>h`). Loaded via `after/plugin/keymaps.lua`.
 - options.lua — Vim options.
 - winbar.lua — Winbar configuration.
 - lsp/init.lua — Server config merge + enable logic + attach autocmd setup.
@@ -154,7 +154,6 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>o` | overseer |
 | `<leader>a` | ai       |
 | `<leader>p` | pi       |
-| `<leader>s` | session  |
 | `<leader>t` | tests    |
 | `<leader>T` | toggles  |
 | `<leader>w` | worktree |
