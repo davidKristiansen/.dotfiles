@@ -11,6 +11,11 @@
     "disableGpu": true,
     "screenSharingEnabled": true,
     "pipewireEnabled": true,
+    "screenSharing": {
+        "thumbnail": {
+            "enabled": false
+        }
+    },
     "mqtt": {
         "enabled": true,
         "brokerUrl": "mqtt://localhost:1883",
