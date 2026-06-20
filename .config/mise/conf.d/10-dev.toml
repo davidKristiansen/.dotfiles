@@ -28,7 +28,6 @@ go = "latest"
 # Rust
 rust = "latest"
 cargo-binstall = "latest"
-"cargo:yazi-build" = "latest"
 
 # Java
 java = "21"
@@ -44,7 +43,4 @@ typst = "latest"
 
 # Git / CI
 github-cli = "latest"
-gh = "latest"
 sqlite = "latest"
-allure = "latest"
-"cargo:fixit-cli" = "latest"
