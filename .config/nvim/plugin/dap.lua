@@ -19,10 +19,12 @@ local function load_dap()
 
   local dap = require('dap')
 
-  -- Python host detection
+  -- Python host: rely on the active environment (sourced venv / mise / direnv).
+  -- Fall back to a project-local .venv only if nothing is on PATH.
   local cwd = vim.fn.getcwd()
-  local venv_python = cwd .. '/.venv/bin/python'
-  local python_host = vim.fn.executable(venv_python) == 1 and venv_python or vim.fn.exepath('python')
+  local python_host = vim.fn.exepath('python3')
+  if python_host == '' then python_host = vim.fn.exepath('python') end
+  if python_host == '' then python_host = cwd .. '/.venv/bin/python' end
 
   require('dap-python').setup(python_host)
 

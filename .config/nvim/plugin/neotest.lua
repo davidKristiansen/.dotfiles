@@ -39,7 +39,9 @@ local function load_neotest()
         end
       end)(),
       require('neotest-python')({
-        python                   = '/Project/.venv.devcontainer/bin/python3',
+        -- Interpreter: rely on the active environment (sourced venv / mise /
+        -- direnv). neotest-python auto-detects the interpreter when `python`
+        -- is omitted, so we don't hardcode a path here.
         pytest_discover_instances = true,
         args = { '-s', '-v', '-p', 'no:macpyver', '-p', 'no:macpyver_native' },
         is_test_file = function(p)
