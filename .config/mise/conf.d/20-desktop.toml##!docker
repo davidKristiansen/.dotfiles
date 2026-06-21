@@ -4,11 +4,8 @@
 # Desktop / non-container tools
 # These are tools that typically don't belong inside devcontainers or CI.
 
-[tool_alias]
-thefuck = "pipx:thefuck"
-
 [tools]
-thefuck = { version = "latest", uvx_args = "--python 3.11" }
+"cargo:pay-respects" = "latest"
 "cargo:binsider" = "latest"
 "go:github.com/r00tman/corrupter" = "latest"
 "pipx:jiratui" = "latest"
