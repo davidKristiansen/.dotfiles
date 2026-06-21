@@ -1,20 +1,15 @@
 -- SPDX-License-Identifier: MIT
--- typst.vim configuration: filetype detection, concealment, PDF viewer.
--- Loaded on FileType typst.
+-- typst.vim: filetype detection, concealment, PDF viewer (loaded on FileType typst).
 
--- Globals must be set before the plugin loads
-vim.g.typst_conceal       = 1
-vim.g.typst_conceal_math  = 1
-vim.g.typst_conceal_emoji = 1
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'typst',
-  once = true,
-  callback = function()
-    vim.pack.add({
-      { src = 'https://github.com/kaarmu/typst.vim' },
-    }, { confirm = false })
-
+require('utils.lazy').add({
+  src = 'https://github.com/kaarmu/typst.vim',
+  ft = 'typst',
+  init = function()
+    vim.g.typst_conceal       = 1
+    vim.g.typst_conceal_math  = 1
+    vim.g.typst_conceal_emoji = 1
+  end,
+  config = function()
     local opened_pdfs = {}
 
     local function open_typst_pdf()
