@@ -27,30 +27,36 @@ chmod 700 "$GNUPGHOME"
 
 echo Hold on to your bootstraps !
 
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
 (
   cd "${SCRIPT_DIR}"
 
   # Pull latest dotfiles before stowing
   git pull --rebase --quiet || true
 
-  export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-
-  # Ensure mise is available
-  if ! type mise &>/dev/null; then
-    \curl https://mise.run | sh
- else
-   mise self-update --silent --yes
-  fi
-
-  # Install stow.sh via mise
-  mise use -g "github:davetothek/stow.sh" -q
+  # Install stow.sh as a single self-contained file from the latest release.
+  # This breaks the chicken-and-egg with mise: stowing no longer needs the
+  # toolchain, so the mise setup can run afterwards (below). A download
+  # failure aborts the bootstrap (set -e) — there's no stowing without it.
+  # Drop any older hand-made symlink first — the release file is the source now.
+  rm -f "$XDG_BIN_HOME/stow.sh"
+  stow_tmp=$(mktemp)
+  curl -fsSL "https://github.com/davetothek/stow.sh/releases/latest/download/stow.sh" -o "$stow_tmp"
+  install -m 755 "$stow_tmp" "$XDG_BIN_HOME/stow.sh"
+  rm -f "$stow_tmp"
 
   stow.sh -f
 )
 
-export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-
 [[ -f "${HOME}/.zshenv" ]] && . "${HOME}/.zshenv" || true
+
+# ----- mise: dotfiles (incl. mise conf.d) are stowed now -----
+if ! type mise &>/dev/null; then
+  \curl https://mise.run | sh
+else
+  mise self-update --silent --yes
+fi
 
 for f in "$XDG_CONFIG_HOME"/mise/conf.d/*.toml; do
   mise trust "$f" &> /dev/null
