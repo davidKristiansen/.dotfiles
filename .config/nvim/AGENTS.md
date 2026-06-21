@@ -106,7 +106,7 @@ Then alphabetically:
 - lsp/init.lua — Server config merge + enable logic + attach autocmd setup.
 - lsp/keymaps.lua — Buffer-local LSP mappings: declarative keymap table (navigation, code actions, fix_all, formatting, diagnostics). Single source of truth for all LSP keymaps.
 - lsp/on_attach.lua — LspAttach handler (inlay hints, formatting toggles, inline completion).
-- lsp/fix_all.lua — Deterministic FixAll + QuickFix-all pipeline (Ruff source.fixAll + typos-lsp quickfix + format-on-save). No keymaps (those live in lsp/keymaps.lua). Attaches via its own LspAttach autocmd from `fix_all.setup()`.
+- lsp/fix_all.lua — Deterministic FixAll + QuickFix-all pipeline (Ruff source.fixAll + typos-lsp quickfix + format). No keymaps (those live in lsp/keymaps.lua). Attaches via its own LspAttach autocmd from `fix_all.setup()`. **On-save defaults: both FixAll and format are OFF.** FixAll can be destructive (removes "unused" imports/vars; risky for C), so it is manual only (`<leader>cA` / `:LspFixAll`); format is manual (`<leader>cf`). Per-buffer on-save opt-in via `<leader>Ta` / `:LspFixAllToggle`; format-on-save toggled per session via `<leader>Tf`.
 
 ### lsp/ (top-level, Neovim 0.11+ native LSP config)
 Server-specific overrides (one file per server):
