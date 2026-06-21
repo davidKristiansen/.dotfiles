@@ -1,11 +1,79 @@
 # hunk — interactive diff viewer / git pager (https://github.com/modem-dev/hunk)
 # Set as git core.pager via ~/.config/git/config: `pager = hunk pager`
 
-theme = "github-dark-default"  # built-in id, "auto", or a custom theme; press `t` in-app to browse
+theme = "custom"
 mode = "auto"                  # auto, split, stack
 vcs = "git"                    # git, jj, sl
 line_numbers = true
 wrap_lines = false
 exclude_untracked = false
 watch = false
-transparent_background = true
+transparent_background = false # false so the gruvbox hard background shows
+
+# Gruvbox Dark Hard — overrides every UI + syntax color key the config exposes.
+# Palette: bg0_h #1d2021 · bg0 #282828 · bg1 #3c3836 · bg2 #504945 · bg3 #665c54
+#          fg1 #ebdbb2 · gray #928374 · red #fb4934 · green #b8bb26 · yellow #fabd2d
+#          blue #83a598 · purple #d3869b · aqua #8ec07c · orange #fe8019
+[custom_theme]
+base    = "github-dark-default"  # required; nearly everything below is overridden
+label   = "Gruvbox Dark Hard"
+
+# Surfaces
+background = "#1d2021"
+panel      = "#282828"
+panelAlt   = "#32302f"
+border     = "#504945"
+accent     = "#fabd2d"
+accentMuted = "#d79921"
+text       = "#ebdbb2"
+muted      = "#928374"
+
+# Diff row backgrounds (subtle) and inline content backgrounds (stronger)
+addedBg          = "#1e2718"
+removedBg        = "#2d1e1c"
+contextBg        = "#1d2021"
+addedContentBg   = "#3d4a1f"
+removedContentBg = "#4a241f"
+contextContentBg = "#1d2021"
+movedAddedBg     = "#16302b"
+movedRemovedBg   = "#2b1d2b"
+
+# +/- glyphs
+addedSignColor   = "#b8bb26"
+removedSignColor = "#fb4934"
+
+# Gutter
+lineNumberBg = "#1d2021"
+lineNumberFg = "#665c54"
+selectedHunk = "#3c3836"
+
+# Badges
+badgeAdded   = "#b8bb26"
+badgeRemoved = "#fb4934"
+badgeNeutral = "#928374"
+
+# File-status colors
+fileNew       = "#b8bb26"
+fileDeleted   = "#fb4934"
+fileRenamed   = "#83a598"
+fileModified  = "#fabd2d"
+fileUntracked = "#a89984"
+
+# Note panel (agent notes)
+noteBorder          = "#665c54"
+noteBackground      = "#32302f"
+noteTitleBackground = "#3c3836"
+noteTitleText       = "#fbf1c7"
+
+[custom_theme.syntax]
+default     = "#ebdbb2"
+keyword     = "#fb4934"  # red
+string      = "#b8bb26"  # green
+comment     = "#928374"  # gray
+number      = "#d3869b"  # purple
+function    = "#b8bb26"  # green
+property    = "#83a598"  # blue
+type        = "#fabd2d"  # yellow
+variable    = "#83a598"  # blue
+operator    = "#8ec07c"  # aqua
+punctuation = "#ebdbb2"
