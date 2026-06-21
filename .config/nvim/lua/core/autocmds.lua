@@ -171,10 +171,11 @@ local function update_colorcolumn()
     end
 end
 
--- Note: deliberately NOT wired to CursorMovedI/TextChangedI — scanning every
--- visible line on each insert-mode keystroke is needlessly expensive. The
--- colorcolumn refreshes on leaving insert via TextChanged/CursorMoved.
-vim.api.nvim_create_autocmd({ "CursorMoved", "TextChanged", "WinScrolled", "InsertLeave" }, {
+-- Refresh only on events that change which lines are visible or their content
+-- — deliberately NOT CursorMoved/CursorMovedI, which would re-scan every
+-- visible line on each cursor motion (needless cost for a cosmetic hint).
+-- BufWinEnter covers the initial evaluation when a buffer is first displayed.
+vim.api.nvim_create_autocmd({ "TextChanged", "WinScrolled", "InsertLeave", "BufWinEnter" }, {
     group = cc_group,
     callback = update_colorcolumn,
 })
