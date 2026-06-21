@@ -29,23 +29,41 @@ Startup sequence:
 
 ### Lazy Loading Strategy
 
-Plugins use **aggressive lazy loading** to minimize blocking startup. Every `plugin/*.lua` file is still self-contained, but the actual `vim.pack.add()` + `require(...).setup()` is wrapped in a deferred trigger:
+All plugins load through one declarative helper, **`lua/utils/lazy.lua`**. A plugin file is a single `require('utils.lazy').add({ ... })` call; the helper owns the load guard, the `vim.pack.add()`, the trigger wiring, the stub→real keymap swap, and error handling (`config` runs under `pcall`). This is the single way to add a plugin — never hand-roll a `loaded` flag, stub table, or `nvim_feedkeys` replay.
 
-| Tier | Trigger | When it runs | Plugins |
-|------|---------|-------------|---------|
-| **Eager** | none | During `plugin/` sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
-| **vim.schedule** | Next event loop tick | After first draw, before interaction | 03-fzf-lua, blink-cmp, mason, dial, tmux (guarded by `$TMUX`), sshfs, worktree, git (gitsigns + fugitive only), hex, neo-tree + lsp-file-operations |
-| **InsertEnter** | First insert mode | When user starts typing | blink-pairs |
-| **FileType** | Specific filetype opened | When relevant file is opened | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` inside vault) |
-| **Keymap** | First keypress of mapped key | On demand | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>o*`), undotree (`<leader>u`), obsidian (`<leader>n*`), git heavy plugins (`<leader>g*` except gitsigns keys), claudecode (`<leader>a*`) |
+**Spec fields:**
+- `src` / `deps` — plugin source(s); `deps` load before `src` (string URLs or `{ src=, version=, branch= }` tables).
+- **Load tier** (pick one; omit all triggers *and* `lazy` ⇒ `vim.schedule`, "later"):
+  - `lazy = false` — eager, during `plugin/` sourcing.
+  - `event` — autocmd event(s), e.g. `'InsertEnter'`.
+  - `ft` — FileType; table form `{ pattern=, cond=fn(ev) }` adds a per-buffer predicate. On load the helper re-fires FileType so the plugin attaches to the already-open buffer.
+  - `cmd` — stub user-command(s) that load then re-run with the original args.
+  - `keys` — list of `{ lhs, rhs, desc=, mode=, silent= }`. A stub (with `desc`, for which-key) is registered now; the real keymap is installed from the same entry on load. `rhs` may be a function or a `<cmd>…<cr>` string.
+- `cond` — environment gate; if it returns false the plugin never loads (and `init` never runs).
+- `init` — runs eagerly at `add()` time (globals/options needed before the plugin loads).
+- `config` — runs after `vim.pack.add()` (setup, signs, autocmds, user commands).
+- `on_pack_changed` — PackChanged handler, registered before `vim.pack.add()` (e.g. treesitter `TSUpdate`).
 
-**Keymap-triggered pattern:** Stub keymaps are defined eagerly (with `desc` for which-key). On first press, the stub loads the plugin, sets real keymaps, and replays the key via `nvim_feedkeys`. A `loaded` guard prevents double-loading.
+Combine triggers in one spec to share a single load guard (e.g. obsidian loads on `ft` markdown-in-vault **or** `<leader>n*` keys). `add()` returns `{ load }` so external triggers (e.g. a buffer-local map) can drive the same guard.
 
-**FileType-triggered pattern:** A `once = true` autocmd calls `vim.pack.add()` + setup, then `vim.cmd('doautocmd FileType')` to re-trigger for the current buffer.
+| Tier | Trigger | Plugins |
+|------|---------|---------|
+| **Eager** (`lazy=false`) | during sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
+| **Later** (`vim.schedule`) | next tick | 03-fzf-lua, blink-cmp, dial, gitsigns (git.lua), nvim-mcp, neo-tree lsp-file-operations capabilities |
+| **event** | autocmd | blink-pairs (`InsertEnter`), mason (`BufReadPre`/`FileType`) |
+| **ft** | FileType | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` in vault) |
+| **cmd** | user command | sshfs (`:SSHConnect`/`:SSHConfig`) |
+| **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>o*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e`/`<leader>E`), obsidian (`<leader>n*`), git heavy (`<leader>g*`) |
+| **cond** | env gate | tmux (`$TMUX`) |
 
 **Split-loaded plugins:**
-- `git.lua` — gitsigns + fugitive via `vim.schedule`; neogit/diffview/lazygit via keymap stubs.
-- `obsidian.lua` — loads on `<leader>n*` keymap OR `FileType markdown` inside vault.
+- `git.lua` — gitsigns + fugitive on the *later* tier; neogit/diffview/lazygit on `<leader>g*` keys (two `add()` calls).
+- `neo-tree.lua` — lsp-file-operations capability advertisement on the *later* tier (must precede LSP attach); the neo-tree UI on `<leader>e`/`<leader>E` keys.
+- `obsidian.lua` — one spec, dual trigger: `ft` markdown-in-vault **or** `<leader>n*` keys.
+
+**Exceptions (not routed through the helper):**
+- `undotree.lua` — a bundled plugin loaded via `packadd` on `<leader>u` (no `vim.pack` source).
+- `worktree.lua` — a self-contained module (no external plugin); `require('utils.worktree').setup()` runs eagerly (cheap: registers `:Worktree` + `<leader>w*`).
 
 ## Directory Layout
 
@@ -75,9 +93,9 @@ Then alphabetically:
 - dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
 - dial.lua — Increment/decrement augends & keymaps (vim.schedule).
 - git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
-- hex.lua — Hex editing via xxd (vim.schedule, `<leader>Tx` toggle).
-- mason.lua — Mason tool installer (vim.schedule).
-- neo-tree.lua — File explorer + lsp-file-operations for LSP workspace file ops (keymap: `<leader>e`).
+- hex.lua — Hex editing via xxd (keymap: `<leader>Tx`).
+- mason.lua — Mason tool installer (event: first `BufReadPre`/`FileType`).
+- neo-tree.lua — File explorer (keymap: `<leader>e`/`<leader>E`) + lsp-file-operations capabilities (later tier; split-loaded, see Lazy Loading Strategy).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
 - nvim-mcp.lua — MCP server for AI assistant integration with Neovim (vim.schedule).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
@@ -85,15 +103,15 @@ Then alphabetically:
 - overseer.lua — Task runner and job management (keymap: `<leader>o*`).
 - codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
 - opencode-nickjvandyke.lua_ — opencode.nvim nickjvandyke fork (disabled).
-- pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (vim.schedule, `<leader>p`).
+- pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (keymap: `<leader>p*`).
 - render-markdown.lua — Markdown rendering (FileType: markdown).
-- sshfs.lua — Remote file editing (vim.schedule).
+- sshfs.lua — Remote file editing (cmd: `:SSHConnect`/`:SSHConfig`; loads the full `SSH*` command set on first use).
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).
 - typst.lua — Typst language support (FileType: typst).
 - undotree.lua — Visual undo history, built-in Neovim 0.12+ (keymap: `<leader>u`).
 - vimtex.lua — LaTeX support (FileType: tex).
 - which-key.lua — Which-key group definitions (eager).
-- worktree.lua — Git worktree management (vim.schedule).
+- worktree.lua — Git worktree management; self-contained module, `setup()` runs eagerly (keymap: `<leader>w*`).
 
 ### after/plugin/
 - keymaps.lua — Loads `core.keymaps` after all plugins are configured.
@@ -114,6 +132,7 @@ Server-specific overrides (one file per server):
 - basedpyright.lua — Python refactoring only (typeCheckingMode=off, diagnostics disabled; ruff+ty handle linting/types).
 
 ### lua/utils/
+- lazy.lua — Declarative lazy-loading helper over `vim.pack`. Single entry point `require('utils.lazy').add(spec)`; see Lazy Loading Strategy. Every `plugin/*.lua` routes through it (except the `undotree`/`worktree` exceptions noted there).
 - picker.lua — Library of fzf-lua picker functions (files, grep, LSP, zoxide, sessions). Session pickers show `display_name  /decoded/path` format. Pure module, no setup side-effects.
 - worktree.lua — Git worktree utilities (setup called from `plugin/worktree.lua`).
 
@@ -175,9 +194,9 @@ When adding a plugin that introduces a new `<leader>` prefix, register the group
 7. **LSP changes:** create/modify `lsp/<server>.lua` at the config root (Neovim 0.11+ native path).
 8. Ask for clarification before large structural refactors.
 9. Plugin file naming: use numeric prefix only when load order matters (e.g. `00-`, `01-`). Otherwise use plain `<name>.lua`.
-10. Each `plugin/*.lua` file is fully self-contained: deps (`vim.pack.add()`), PackChanged hooks, setup, and keymaps.
+10. Each `plugin/*.lua` file is a single `require('utils.lazy').add({ ... })` call that declares its own deps, trigger, setup (`config`), and keymaps (`keys`). The helper owns `vim.pack.add`, the load guard, PackChanged hooks (`on_pack_changed`), and the stub→real keymap swap.
 11. Use semantic commits (see Commit Rules); never append a manual changelog.
-12. **Lazy loading:** new plugins MUST use an appropriate lazy-load tier (see table above). Choose the most aggressive trigger that still works correctly. Keymap-triggered plugins need eager stub keymaps with `desc` + a `loaded` guard + `nvim_feedkeys` replay.
+12. **Lazy loading:** new plugins MUST pick an appropriate `utils.lazy` tier (see Lazy Loading Strategy). Choose the most aggressive trigger that still works correctly. Never hand-roll a `loaded` guard, stub table, or `nvim_feedkeys` replay — the helper provides all of it.
 13. **After any change**, verify AGENTS.md still reflects reality. Update the lazy loading table, plugin list, and which-key groups if needed.
 
 ## Quick Reference
