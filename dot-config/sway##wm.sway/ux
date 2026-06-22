@@ -4,7 +4,8 @@ default_floating_border none
 hide_edge_borders none
 
 smart_gaps on
-gaps inner 1
+gaps inner $default_gaps_inner
+gaps outer $default_gaps_outer
 
 mouse_warping output
 

@@ -1,66 +1,22 @@
-# exec mako
-# exec dunst
-
-# exec gammastep-indicator
-
-# exec_always 'systemctl --user restart kanshi.service'
-# exec_always 'systemctl --user restart swayidle.service'
-# exec swaync
-# exec_always swaync-client -R
-# exec_always swaync-client -rs
-# exec_always 'systemctl --user restart wireplumber.service'
-#
-# exec libinput-gestures-setup start
-
-# exec pulseaudio --start
-
-# exec ydotoold
-
-# exec kdeconnect-indicator
-
-# exec $term --class=scratchpad -e tmux new -s scratchpad
-
+# Bars / output management
 exec_always pkill kanshi || true && kanshi
 exec_always pkill waybar || true && waybar
 
-# exec --no-startup-id speedcrunch0
-
-# exec_always fcitx5 -d --replace
-
-# exec foot --server
-
-# exec caffein-indicator
-
-# exec teams-for-linux --minimized
-
-# exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+# Authentication agent + screencast portal
+exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
 
-# exec swayidle -w \
-#     timeout 120 '$lock' \
-#     timeout 240 'systemctl suspend' \
-#     resume 'swaymsg "output * dpms on"' \
-#     before-sleep '$lock'
-
-# exec swayidle -w \
-#     timeout 120 '$lock' \
-#     timeout 240 'swaymsg "output * dpms off"' \
-#        resume 'swaymsg "output * dpms on"' \
-#     before-sleep '$lock'
-
-# exec sworkstyle &> /tmp/sworkstyle.log
-
-# exec_always 'systemctl --user restart wireplumber.service'
-
+# Launcher daemon and idle/lock manager
 exec_always 'vicinae server'
-
 exec '${XDG_BIN_HOME}/idle.sh'
 
-
+# Export the session environment to D-Bus/systemd so portals and user
+# services see WAYLAND_DISPLAY and XDG_CURRENT_DESKTOP.
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+
+# Desktop preferences
 exec_always 'gsettings set org.gnome.desktop.interface color-scheme '"prefer-dark"'
 exec_always 'xdg-settings set default-web-browser firefox.desktop'
-
 exec_always 'gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"'
 
 # vim: filetype=i3config

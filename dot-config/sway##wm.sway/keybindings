@@ -130,21 +130,39 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 # bindsym $mod+s [class="SpeedCrunch"] scratchpad show
 
-bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+ && ${XDG_BIN_HOME}/wp-vol
-bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && ${XDG_BIN_HOME}/wp-vol
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
-bindsym $mod+Space exec playerctl play-pause
-bindsym $mod+n exec playerctl next
-bindsym $mod+p exec playerctl previous
+# Audio/brightness/media — --locked so they work over the lockscreen too.
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+ && ${XDG_BIN_HOME}/wp-vol
+bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && ${XDG_BIN_HOME}/wp-vol
+bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && ${XDG_BIN_HOME}/wp-vol
+bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym --locked $mod+Space exec playerctl play-pause
+bindsym --locked $mod+n exec playerctl next
+bindsym --locked $mod+p exec playerctl previous
 
 bindsym $mod+Shift+s exec $screengrab
 
 bindsym $mod+r mode "resize"
 bindsym $mod+g mode "gaps"
+
+# Jump back to the previously focused workspace
+bindsym $mod+Tab workspace back_and_forth
+
 #
-bindsym button2 kill
+# Touchpad gestures (native libinput — no external daemon needed)
+#
+# Three fingers: switch workspaces (natural scrolling — swipe right goes to
+# the previous workspace, swipe left to the next).
+bindgesture swipe:3:left  workspace prev
+bindgesture swipe:3:right workspace next
+
+# Four fingers: move the focused container between workspaces.
+bindgesture swipe:4:left  move container to workspace prev, workspace prev
+bindgesture swipe:4:right move container to workspace next, workspace next
+
+# Pinch in/out toggles floating on the focused window.
+bindgesture pinch:inward  floating toggle
+bindgesture pinch:outward floating toggle
 
 # vim: filetype=i3config

@@ -4,7 +4,10 @@ set $down j
 set $up k
 set $right l
 set $term ghostty
-# set $term "${XDG_BIN_HOME}/kitty"
+
+# Default gap sizes (consumed by ux and the "gaps" mode in functions)
+set $default_gaps_inner 1
+set $default_gaps_outer 0
 
 set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'
 # set $menu swaymsg 'exec vicinae toggle'
@@ -25,22 +28,6 @@ set $menu_fallback 'bemenu-run \
   --line-height 24'
 
 set $lock '~/.local/bin/lock.sh'
-# set $lock swaylock \
-#         --screenshots \
-#         --clock \
-#         --indicator \
-#         --indicator-radius 100 \
-#         --indicator-thickness 7 \
-#         --effect-blur 7x5 \
-#         --effect-pixelate 10 \
-#         --effect-vignette 0.5:0.5 \
-#         --ring-color b8bb26 \
-#         --key-hl-color 458588 \
-#         --line-color 00000000 \
-#         --inside-color 1d2021ef \
-#         --separator-color 00000000 \
-#         --grace 15 \
-#         --fade-in 10
 
 set $screengrab slurp \
         | grim -g - - \
@@ -52,12 +39,11 @@ include input
 include output
 include functions
 include keybindings
-include bar
 include ux
 include scratchpad
 include window_rules
 
-
+# Distro drop-ins (e.g. systemd session activation). No-op if the dir is empty.
 include /etc/sway/config.d/*
 
 # vim: filetype=i3config
