@@ -148,6 +148,12 @@
   # Add an empty line before each prompt.
   typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=false
 
+  # Emit OSC 133 prompt marks so the terminal (Ghostty) can redraw the prompt
+  # at the correct position after it reflows text on resize, instead of letting
+  # zsh guess and stack duplicate prompt lines. This is p10k's recommended fix
+  # for the "horrific mess when resizing" issue on terminals that reflow text.
+  typeset -g POWERLEVEL9K_TERM_SHELL_INTEGRATION=true
+
   # Connect left prompt lines with these symbols.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
   typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX=
