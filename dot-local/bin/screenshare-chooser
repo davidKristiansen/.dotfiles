@@ -1,25 +1,21 @@
 #!/bin/sh
-# xdg-desktop-portal-wlr "simple" output chooser.
+# xdg-desktop-portal-wlr dmenu chooser: a floating ghostty + fzf picker, no
+# preview. With chooser_type=dmenu, xdpw (>=0.8) does the enumeration itself and
+# pipes a newline-separated source list on stdin, e.g.
+#   Monitor: DP-1
+#   Window: <ext-foreign-toplevel-id> (firefox)
+# We show that list in fzf and echo the chosen line back verbatim; xdpw matches
+# it against what it sent. Printing nothing == user declined.
 #
-# Spawns a floating ghostty window running an fzf picker with live thumbnails,
-# and prints the chosen source to stdout in the format xdpw expects:
-#   Monitor: <output-name>      (e.g. "Monitor: DP-1")
-#   Window:  <toplevel-id>      (ext-foreign-toplevel-list-v1 identifier)
-# Printing nothing == user declined (we still exit 0 so xdpw doesn't log it as a
-# chooser failure).
-#
-# Result handoff is file-based and signal-independent: the picker writes its
-# choice to $work/result and touches $work/done. We wait until that marker
-# appears OR ghostty exits (covers the picker being hard-killed), then read the
-# file. No FIFO, no blocking read, no zombie choosers.
+# Result handoff is file-based: fzf (running inside the ghostty PTY) writes the
+# choice to $work/result and touches $work/done. We wait for that marker OR for
+# ghostty to exit (covers a hard-kill), so the chooser never hangs.
 
 set -u
 
 # --- env bootstrap --------------------------------------------------------
-# xdg-desktop-portal-wlr runs this from a systemd user service whose PATH lacks
-# ~/.local/bin (lswt), /opt/sway/bin (swaymsg) and the mise shims (fzf), and
-# which does not export SWAYSOCK. Fix that up; this env propagates to ghostty,
-# screenshare-fzf and screenshare-preview.
+# The portal runs us from a systemd user service whose PATH lacks the mise shims
+# (fzf) and /opt/sway/bin (swaymsg), and which doesn't export SWAYSOCK.
 : "${HOME:=$(getent passwd "$(id -u)" | cut -d: -f6)}"
 export HOME
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/opt/sway/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
@@ -30,41 +26,42 @@ if [ -z "${SWAYSOCK:-}" ]; then
 fi
 # --------------------------------------------------------------------------
 
-DEBUG="${SCREENSHARE_DEBUG:-/tmp/screenshare-debug.log}"
-log() { printf '%s [chooser %s] %s\n' "$(date '+%H:%M:%S')" "$$" "$*" >>"$DEBUG" 2>/dev/null || true; }
-log "invoked; PATH=$PATH SWAYSOCK=${SWAYSOCK:-UNSET} WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-UNSET}"
+work=$(mktemp -d "${XDG_RUNTIME_DIR:-/tmp}/screenshare.XXXXXX")
+trap 'rm -rf "$work" 2>/dev/null' EXIT
 
-here=$(cd "$(dirname "$0")" && pwd)
-picker="$here/screenshare-fzf"
+# Capture the source list xdpw pipes to us; empty list == nothing to share.
+cat > "$work/list"
+[ -s "$work/list" ] || exit 0
 
-title="⧉ Select a screen or window to share"
-export SCREENSHARE_TITLE="$title"
-export SCREENSHARE_DEBUG="$DEBUG"
+# Paths handed to the inner fzf via env, so we avoid quoting them into -e.
+export SCREENSHARE_LIST="$work/list"
+export SCREENSHARE_RESULT="$work/result"
+export SCREENSHARE_DONE="$work/done"
 
 # Only ever one picker at a time: clear any leftover from an abandoned request.
 swaymsg '[app_id="term.screenshare"] kill' >/dev/null 2>&1 || true
 
-work=$(mktemp -d "${XDG_RUNTIME_DIR:-/tmp}/screenshare.XXXXXX")
-trap 'rm -rf "$work" 2>/dev/null' EXIT
-
-log "launching ghostty picker, work=$work"
+# fzf runs inside the new ghostty PTY: reads the list, writes the chosen line to
+# $SCREENSHARE_RESULT, then touches $SCREENSHARE_DONE on any exit (Enter, Esc, or
+# the window being killed) so we never block.
 ghostty \
 	--gtk-single-instance=false \
-	--title="$title" \
+	--title="Select a screen or window to share" \
 	--class="term.screenshare" \
-	-e "$picker" "$work" >>"$DEBUG" 2>&1 &
+	-e sh -c '
+		fzf --reverse --border=rounded --margin=1 --padding=1 \
+		    --prompt="Share ❯ " \
+		    --header="↑↓ choose · Enter share · Esc cancel" \
+		    < "$SCREENSHARE_LIST" > "$SCREENSHARE_RESULT"
+		: > "$SCREENSHARE_DONE"
+	' >/dev/null 2>&1 &
 gpid=$!
-log "ghostty pid=$gpid"
 
-# Wait until the picker reports done, or ghostty is gone (covers hard-kill).
+# Wait for fzf to finish, or ghostty to vanish (hard-kill safety net).
 while kill -0 "$gpid" 2>/dev/null && [ ! -e "$work/done" ]; do
-	sleep 0.2
+	sleep 0.1
 done
-sleep 0.1   # small margin so result is fully flushed
 
 choice=$(cat "$work/result" 2>/dev/null || true)
-log "choice=[$choice]"
-
 [ -n "$choice" ] && printf '%s\n' "$choice"
-log "exiting 0"
 exit 0

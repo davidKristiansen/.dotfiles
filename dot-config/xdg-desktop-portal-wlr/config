@@ -1,6 +1,9 @@
 [screencast]
 max_fps=60
-chooser_type=simple
-chooser_cmd=/home/david/.local/bin/screenshare-chooser
+# Canonical wlroots path: xdpw (>=0.8) enumerates monitors AND windows itself
+# (ext_foreign_toplevel_list_v1) and pipes the list to a dmenu-style program,
+# which just echoes back the chosen line. No custom enumeration needed.
+chooser_type=dmenu
+chooser_cmd=$HOME/.local/bin/screenshare-chooser
 exec_before=swaync-client --inhibitor-add "xdg-desktop-portal-wlr"
 exec_after=swaync-client --inhibitor-remove "xdg-desktop-portal-wlr"
