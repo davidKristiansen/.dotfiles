@@ -12,10 +12,10 @@ zsh_plugins.zsh
 .secrets/
 
 # Pi — secrets & ephemeral
-.pi/agent/auth.json
-.pi/agent/mcp-cache.json
-.pi/agent/sessions/
-.pi/context-mode/
+dot-pi/agent/auth.json
+dot-pi/agent/mcp-cache.json
+dot-pi/agent/sessions/
+dot-pi/context-mode/
 # CocoIndex Code (ccc)
 /.cocoindex_code/*
 !/.cocoindex_code/global_settings.yml
@@ -23,16 +23,16 @@ zsh_plugins.zsh
 # Claude Code — allowlist: ignore everything under .claude/, re-include only
 # known-safe durable config. Keeps secrets (.credentials.json, session-env/,
 # shell-snapshots/) and ephemeral state (projects/, sessions/, history) out.
-.claude/*
-!.claude/settings.json
-!.claude/skills/
-!.claude/agents/
-!.claude/commands/
-!.claude/hooks/
-!.claude/output-styles/
-!.claude/CLAUDE.md
+dot-claude/*
+!dot-claude/settings.json
+!dot-claude/skills/
+!dot-claude/agents/
+!dot-claude/commands/
+!dot-claude/hooks/
+!dot-claude/output-styles/
+!dot-claude/CLAUDE.md
 # settings.local.json stays machine-local (also ignored via ~/.config/git/ignore)
-.claude/settings.local.json
+dot-claude/settings.local.json
 # Account/MCP/history blob at $HOME — never commit
 /.claude.json
 /.claude.json.backup*
@@ -40,6 +40,6 @@ zsh_plugins.zsh
 # Git identity — user/machine-specific, kept out of the public repo.
 # Copy the *.example templates and fill in locally; git silently skips
 # missing include paths, so absence is harmless.
-.config/git/priv.conf
-.config/git/work.conf
-.config/git/allowed_signers
+dot-config/git/priv.conf
+dot-config/git/work.conf
+dot-config/git/allowed_signers

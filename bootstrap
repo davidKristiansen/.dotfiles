@@ -42,7 +42,7 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   install -m 755 "$stow_tmp" "$XDG_BIN_HOME/stow.sh"
   rm -f "$stow_tmp"
 
-  stow.sh -f
+  stow.sh --dotfiles -f
 )
 
 [[ -f "${HOME}/.zshenv" ]] && . "${HOME}/.zshenv" || true

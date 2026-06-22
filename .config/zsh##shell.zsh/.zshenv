@@ -1,1 +1,0 @@
-../../.zshenv##shell.zsh
