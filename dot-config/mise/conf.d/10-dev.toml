@@ -8,7 +8,6 @@
 node = "lts"
 npm = "latest"
 "npm:prettier" = "latest"
-"npm:tree-sitter-cli" = "latest"
 "npm:markdown-toc" = "latest"
 "npm:@devcontainers/cli" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
