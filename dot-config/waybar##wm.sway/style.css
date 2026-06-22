@@ -1,252 +1,230 @@
-
 /*
-*
-* Base16 oomox-gruvbox-dark-hard
-* Author: oomox-gruvbox-dark-hard
-*
-*/
-
-
-@define-color dark0_hard #1d2021;
-@define-color dark0 #282828;
-@define-color dark0_soft #32302f;
-@define-color dark1 #3c3836;
-@define-color dark2 #504945;
-@define-color dark3 #665c54;
-@define-color dark4 #7c6f64;
-@define-color dark4_256 #7c6f64;
-
-@define-color gray_245 #928374;
-@define-color gray_244 #928374;
-
-@define-color light0_hard #f9f5d7;
-@define-color light0 #fbf1c7;
-@define-color light0_soft #f2e5bc;
-@define-color light1 #ebdbb2;
-@define-color light2 #d5c4a1;
-@define-color light3 #bdae93;
-@define-color light4 #a89984;
-@define-color light4_256 #a89984;
-
-@define-color bright_red #fb4934;
-@define-color bright_green #b8bb26;
-@define-color bright_yellow #fabd2f;
-@define-color bright_blue #83a598;
-@define-color bright_purple #d3869b;
-@define-color bright_aqua #8ec07c;
-@define-color bright_orange #fe8019;
-
-@define-color neutral_red #cc241d;
-@define-color neutral_green #98971a;
-@define-color neutral_yellow #d79921;
-@define-color neutral_blue #458588;
-@define-color neutral_purple #b16286;
-@define-color neutral_aqua #689d6a;
-@define-color neutral_orange #d65d0e;
-
-@define-color faded_red #9d0006;
-@define-color faded_green #79740e;
-@define-color faded_yellow #b57614;
-@define-color faded_blue #076678;
-@define-color faded_purple #8f3f71;
-@define-color faded_aqua #427b58;
-@define-color faded_orange #af3a03;
-
-
-/*
- * Kanagawa
+ * Waybar — gruvbox dark hard · "refined flat"
+ * Flat bar with hairline dividers. Accent-colored module glyphs, hover
+ * underline, and warning/critical states that actually mean something.
  */
 
-@define-color dragonBlack0 #0d0c0c;
-@define-color dragonBlack1 #12120f;
-@define-color dragonBlack2 #1D1C19;
-@define-color dragonBlack3 #181616;
-@define-color dragonBlack4 #282727;
-@define-color dragonBlack5 #393836;
-@define-color dragonBlack6 #625e5a;
+/* ── gruvbox dark hard palette ──────────────────────────────────────────── */
+@define-color bg          #1d2021;  /* dark0_hard  */
+@define-color bg_alt      #282828;  /* dark0       */
+@define-color bg_hl       #3c3836;  /* dark1       */
+@define-color sep         #282828;  /* dark0 — hairline divider, just above bg */
+@define-color fg          #ebdbb2;  /* light1      */
+@define-color fg_dim      #a89984;  /* light4      */
+@define-color gray        #928374;
 
-@define-color dragonWhite #c5c9c5;
-@define-color dragonGreen #87a987;
-@define-color dragonGreen2 #8a9a7b;
-@define-color dragonPink #a292a3;
-@define-color dragonOrange #b6927b;
-@define-color dragonOrange2 #b98d7b;
-@define-color dragonGray #a6a69c;
-@define-color dragonGray2 #9e9b93;
-@define-color dragonGray3 #7a8382;
-@define-color dragonBlue2 #8ba4b0;
-@define-color dragonViolet #8992a7;
-@define-color dragonRed #c4746e;
-@define-color dragonAqua #8ea4a2;
-@define-color dragonAsh #737c73;
-@define-color dragonTeal #949fb5;
-@define-color dragonYellow #c4b28a;
-
-
-@define-color base00 @dark0_hard;
-@define-color base01 #cc241d;
-@define-color base02 #98971a;
-@define-color base03 #d79921;
-@define-color base04 #458588;
-@define-color base05 #b16286;
-@define-color base06 #689d6a;
-@define-color base07 #a89984;
-@define-color base08 #928374;
-@define-color base09 #fb4934;
-@define-color base0A #b8bb26;
-@define-color base0B #fabd2f;
-@define-color base0C #83a598;
-@define-color base0D #d3869b;
-@define-color base0E #8ec07c;
-@define-color base0F @light0_hard;
+@define-color red         #fb4934;
+@define-color green       #b8bb26;
+@define-color yellow      #fabd2f;
+@define-color blue        #83a598;
+@define-color purple      #d3869b;
+@define-color aqua        #8ec07c;
+@define-color orange      #fe8019;
 
 * {
-    border: none;
-    border-radius: 0;
-    font-size: 13px;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: "CaskaydiaCove Nerd Font Propo", "CaskaydiaCove Nerd Font";
+  font-size: 13px;
 }
 
 window#waybar {
-    font-family: "CaskaydiaCove Nerd Font Propo";
-    font-size: 12px;
-    color: @base0F;
-    background:  @base00;
+  background: @bg;
+  color: @fg;
 }
 
+/* Generic module spacing + a transparent underline we light up on hover. */
+#custom-power,
+#workspaces button,
+#mode,
+#custom-media-prev,
+#custom-media-playpause,
+#custom-media-next,
+#custom-media,
+#clock,
+#language,
+#bluetooth,
+#network,
+#pulseaudio,
+#backlight,
+#idle_inhibitor,
+#temperature,
+#disk,
+#cpu,
+#memory,
+#battery {
+  padding: 0 9px;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+/* Discrete hairline divider between top-level modules. The media transport
+ * buttons (prev/play/next) are intentionally left undivided so the cluster
+ * reads as a single unit, and the centered clock + edge tray get none. */
+#custom-power,
+#workspaces,
+#mode,
+#custom-media,
+#language,
+#bluetooth,
+#network,
+#pulseaudio,
+#backlight,
+#idle_inhibitor,
+#temperature,
+#disk,
+#cpu,
+#memory,
+#battery {
+  border-right: 1px solid @sep;
+}
+
+/* Subtle hover affordance for everything interactive. */
+#custom-power:hover,
+#mode:hover,
+#custom-media:hover,
+#custom-media-prev:hover,
+#custom-media-playpause:hover,
+#custom-media-next:hover,
+#clock:hover,
+#language:hover,
+#bluetooth:hover,
+#network:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#idle_inhibitor:hover,
+#temperature:hover,
+#disk:hover,
+#cpu:hover,
+#memory:hover,
+#battery:hover {
+  background: @bg_hl;
+}
+
+/* ── Power button ───────────────────────────────────────────────────────── */
+#custom-power {
+  color: @red;
+  font-size: 15px;
+  padding: 0 12px 0 11px;
+}
+#custom-power:hover {
+  background: @red;
+  color: @bg;
+}
+
+/* ── Workspaces ─────────────────────────────────────────────────────────── */
 #workspaces button {
-    color: @base0F;
-    padding: 0 3px;
-    min-width: 0;
-    background: @base00;
-    /* border-bottom: 3px solid transparent; */
+  color: @fg_dim;
+  padding: 0 8px;
 }
-
+/* Hairline between workspaces; last one omitted (group divider handles it). */
+#workspaces button:not(:last-child) {
+  border-right: 1px solid @sep;
+}
+#workspaces button:hover {
+  background: @bg_hl;
+  color: @fg;
+  border-bottom: 2px solid @gray;
+}
 #workspaces button.visible {
-    color: @neutral_orange;
-    background: @base00;
-    /* border-bottom: 3px solid transparent; */
+  color: @fg;
 }
-
 #workspaces button.focused {
-    color: @bright_orange;
-    background: @base00;
-    /* border-bottom: 3px solid @base02; */
+  color: @orange;
+  border-bottom: 2px solid @orange;
 }
-
-#clock {
-    font-family: "CaskaydiaCove Nerd Font";
-    padding-right: 5px;
-    font-size: 13px;
-}
-
-#custom-spotify {
-    padding-left: 10px;
-    padding-right: 10px;
-    color: @base0F;
-    background: @base00;
-}
-
-
-#pulseaudio, #backlight, #battery, #cpu {
-    padding-right: 5px;
-    padding-left: 5px;
-    margin: 0;
-}
-
-#clock {
-    border-right: none;
-}
-
-#tray {
-    background: @base00;
-}
-
-#cpu {
-    background: @base00;
-}
-
-#memory {
-    background: @base00;
-    padding-right: 5px;
-}
-
-#idle_inhibitor {
-    padding-right: 5px;
+#workspaces button.urgent {
+  color: @bg;
+  background: @red;
 }
 
 #mode {
-    padding: 0 10px 0 10px;
-    background: @transparent;
+  color: @orange;
+  font-weight: bold;
 }
 
-#backlight {
-    background: @base00;
+/* ── Media ──────────────────────────────────────────────────────────────── */
+#custom-media-prev,
+#custom-media-playpause,
+#custom-media-next {
+  color: @fg_dim;
+  padding: 0 4px;
+}
+#custom-media-prev:hover,
+#custom-media-playpause:hover,
+#custom-media-next:hover {
+  color: @green;
+  background: transparent;
+}
+#custom-media {
+  color: @green;
+  padding-left: 4px;
+  padding-right: 12px;
+}
+#custom-media.paused {
+  color: @fg_dim;
 }
 
-#battery {
-    background: @base00;
-    padding-right: 8px;
-    padding-left: 0px;
-}
-/* @keyframes blink { */
-/*     to { */
-/*         background-color: $base01; */
-/*         color: $base00; */
-/*     } */
-/* } */
-
-/* #battery.warning:not(.charging) { */
-/*     background: $base01; */
-/*     color: $base0F; */
-/*     animation-name: blink; */
-/*     animation-duration: 0.5s; */
-/*     animation-timing-function: linear; */
-/*     animation-iteration-count: infinite; */
-/*     animation-direction: alternate; */
-/* } */
-
-#custom-arrow1 {
-	font-size: 18px;
-	color: @dark1;
-	background: @dark2;
-}
-#custom-arrow2 {
-	font-size: 18px;
-	color: @dark2;
-	background: @dark3;
-}
-#custom-arrow3 {
-	font-size: 18px;
-	background: #4e4e4e;
-	color: #949494
-}
-#custom-arrow4 {
-	font-size: 18px;
-	color: #4e4e4e;
-	background: #3a3a3a
-}
-#custom-arrow5 {
-	font-size: 18px;
-	color: #3a3a3a;
-	background: transparent;
-}
-#custom-arrow6 {
-	font-size: 18px;
-	color: @dark1;
-	background: @dark4;
-}
-#custom-arrow7 {
-	font-size: 18px;
-	color: @dark4;
-	background: transparent;
-}
-#custom-arrow8 {
-	font-size: 18px;
-	color: @bright_orange;
-	background: transparent;
+/* ── Clock (center) ─────────────────────────────────────────────────────── */
+#clock {
+  color: @fg;
+  font-weight: bold;
 }
 
-#custom-separator {
-  color: @light0;
-  margin: 0 5px;
+/* ── Right-side modules: accent glyphs ──────────────────────────────────── */
+#language        { color: @purple; }
+#bluetooth       { color: @blue; }
+#bluetooth.connected { color: @aqua; }
+#bluetooth.disabled,
+#bluetooth.off   { color: @gray; }
+#network         { color: @aqua; }
+#network.disconnected { color: @gray; }
+#pulseaudio      { color: @yellow; }
+#pulseaudio.muted { color: @gray; }
+#backlight       { color: @yellow; }
+#idle_inhibitor  { color: @fg_dim; }
+#idle_inhibitor.activated { color: @orange; }
+#temperature     { color: @orange; }
+#disk            { color: @blue; }
+#cpu             { color: @aqua; }
+#memory          { color: @purple; }
+#battery         { color: @green; }
+
+/* ── State colors (the "functional" part) ───────────────────────────────── */
+#temperature.critical,
+#disk.critical,
+#cpu.critical,
+#memory.critical {
+  color: @bg;
+  background: @red;
 }
+#disk.warning,
+#cpu.warning,
+#memory.warning {
+  color: @yellow;
+}
+
+#battery.warning   { color: @yellow; }
+#battery.charging  { color: @green; }
+#battery.full      { color: @aqua; }
+#battery.critical:not(.charging) {
+  color: @bg;
+  background: @red;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    background: transparent;
+    color: @red;
+  }
+}
+
+/* ── Tray ───────────────────────────────────────────────────────────────── */
+#tray {
+  padding: 0 8px;
+}
+#tray > .passive { -gtk-icon-effect: dim; }
+#tray > .needs-attention { -gtk-icon-effect: highlight; }

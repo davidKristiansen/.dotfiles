@@ -1,221 +1,247 @@
 {
-  "layer": "bottom",
-  "height": 20,
-  "spacing": 5,
+  // ─────────────────────────────────────────────────────────────────────────
+  //  Waybar — Sway · gruvbox dark hard · "refined flat"
+  // ─────────────────────────────────────────────────────────────────────────
+  "layer": "top",
+  "position": "top",
+  "height": 28,
+  "spacing": 0,
+  "fixed-center": true,
+  "reload_style_on_change": true,
+
   "modules-left": [
+    "custom/power",
     "sway/workspaces",
-    "custom/separator",
-    "custom/spotify-prev",
-    "custom/spotify-play-pause",
-    "custom/spotify-next",
-    "custom/separator",
-    "custom/spotify",
-    "sway/mode"
+    "sway/mode",
+    "custom/media-prev",
+    "custom/media-playpause",
+    "custom/media-next",
+    "custom/media"
   ],
-  "custom/spotify-prev": {
-    "format": " ",
-    "exec": "$HOME/.config/waybar/spotify-prev.sh",
-    "on-click": "playerctl --player=spotify previous",
-    "exec-if": "pgrep spotify"
-  },
-  "custom/spotify-play-pause": {
-    "format": "{}",
-    "exec": "$HOME/.config/waybar/spotify-play-pause.sh",
-    "on-click": "playerctl --player=spotify play-pause",
-    "exec-if": "pgrep spotify"
-  },
-  "custom/spotify-next": {
-    "format": " ",
-    "exec": "$HOME/.config/waybar/spotify-next.sh",
-    "on-click": "playerctl --player=spotify next",
-    "exec-if": "pgrep spotify"
-  },
   "modules-center": [
     "clock"
   ],
   "modules-right": [
     "sway/language",
-    "custom/separator",
+    "bluetooth",
     "network",
-    "custom/separator",
     "pulseaudio",
-    "custom/separator",
     "backlight",
     "idle_inhibitor",
-    // "custom/gammastep",
-    "custom/separator",
-    "battery",
-    "custom/separator",
+    "temperature",
+    "disk",
     "cpu",
-    "custom/separator",
     "memory",
-    "custom/separator",
+    "battery",
     "tray"
   ],
-  "tray": {
-    "icon-size": 13,
-    "spacing": 5
+
+  // ── Launcher / power ──────────────────────────────────────────────────────
+  "custom/power": {
+    "format": "",
+    "tooltip-format": "Power menu",
+    "on-click": "$HOME/.config/waybar/power-menu.sh"
   },
+
+  // ── Workspaces & mode ─────────────────────────────────────────────────────
   "sway/workspaces": {
-    "persitant_workspaces": {
-      "9": [
-        "DP-5"
-      ]
+    "disable-scroll": false,
+    "persistent_workspaces": {
+      "9": ["DP-5"]
     }
   },
   "sway/mode": {
-    "format": "|  {}",
+    "format": "  {}",
     "max-length": 50
-  },
-  "cpu": {
-    "interval": 10,
-    "format": "{load:3.1f}% ",
-    "max-length": 10,
-    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
-  },
-  "memory": {
-    "format": "{}% ",
-    "on-click": "swaymsg 'exec $term --class __btop -e btop'"
   },
   "sway/window": {
-    "max-length": 50
+    "max-length": 60,
+    "tooltip": true
   },
-  "sway/language": {
-    "format": "{short} {variant}",
-    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
-  },
-  "custom/separator": {
-    "format": "|",
-    "interval": "once",
+
+  // ── Media (generic MPRIS — Spotify, mpv, browsers, …) ─────────────────────
+  "custom/media-prev": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/media-button.sh prev",
+    "on-click": "playerctl previous",
     "tooltip": false
   },
-  "custom/gammastep": {
+  "custom/media-playpause": {
     "format": "{}",
-    "interval": 5,
-    "on-update": "",
-    "exec": "sleep 0.05; $HOME/.local/bin/gammastep.sh",
-    "on-click": "$HOME/.local/bin/gammastep.sh toggle"
+    "exec": "$HOME/.config/waybar/media-button.sh play",
+    "on-click": "playerctl play-pause",
+    "tooltip": false
   },
-  "custom/spotify": {
-    "format": " {}",
+  "custom/media-next": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/media-button.sh next",
+    "on-click": "playerctl next",
+    "tooltip": false
+  },
+  "custom/media": {
+    "format": "  {}",
     "return-type": "json",
-    "max-length": 40,
+    "max-length": 45,
+    "escape": true,
     "exec": "$HOME/.config/waybar/mediaplayer.sh",
-    "exec-if": "pgrep spotify"
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
   },
-  "battery": {
-    "states": {
-      "warning": 30,
-      "critical": 15
-    },
-    "format": "{capacity}% {icon}",
-    "format-charging": "{capacity}% {icon} 󱐋",
-    "format-plugged": "{capacity}% {icon} ",
-    "format-alt": "{time} {icon}",
-    //"format-full": " {capacity}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
-  },
+
+  // ── Clock (with calendar tooltip) ─────────────────────────────────────────
   "clock": {
-    "format": "{:%H:%M}",
-    "format-alt": "{:%a, %d. %b  %H:%M}"
+    "interval": 30,
+    "format": "  {:%H:%M}",
+    "format-alt": "  {:%a %d %b %Y}",
+    "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "right",
+      "format": {
+        "months":  "<span color='#fabd2f'><b>{}</b></span>",
+        "days":    "<span color='#ebdbb2'>{}</span>",
+        "weeks":   "<span color='#8ec07c'><b>W{}</b></span>",
+        "weekdays":"<span color='#fe8019'><b>{}</b></span>",
+        "today":   "<span color='#fb4934'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
   },
-  "wireplumber": {
-    "format": "{volume}% {icon}",
-    "format-muted": "",
-    "on-click": "pavucontrol",
-    "format-icons": [
-      "",
-      "",
-      ""
-    ]
+
+  // ── Keyboard layout ───────────────────────────────────────────────────────
+  "sway/language": {
+    "format": "  {short}",
+    "tooltip-format": "{long}",
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
   },
+
+  // ── Bluetooth ─────────────────────────────────────────────────────────────
+  "bluetooth": {
+    "format": "󰂯",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "format-connected": "󰂱  {num_connections}",
+    "tooltip-format": "{controller_alias}\n{status}",
+    "tooltip-format-connected": "{controller_alias}\n{status}\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias} · {device_address}",
+    "on-click": "swaymsg exec '$term --class=termfloat -e bluetoothctl'"
+  },
+
+  // ── Network ───────────────────────────────────────────────────────────────
+  "network": {
+    "interface": "wlp0s20f3",
+    "format-wifi": "󰖩  {signalStrength}%",
+    "format-ethernet": "󰈀  {ifname}",
+    "format-disconnected": "󰖪  off",
+    "tooltip-format": "{ifname} · {ipaddr}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} · {ipaddr}\n {bandwidthDownBits}    {bandwidthUpBits}",
+    "tooltip-format-ethernet": "{ifname} · {ipaddr}\n {bandwidthDownBits}    {bandwidthUpBits}",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 50,
+    "on-click": "swaymsg exec '$term --class=termfloat -e nmtui'"
+  },
+
+  // ── Audio ─────────────────────────────────────────────────────────────────
   "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-bluetooth": "{volume}% {icon}",
-    "format-muted": "",
+    "format": "{icon}  {volume}%",
+    "format-bluetooth": "{icon}  {volume}%",
+    "format-muted": "  muted",
     "format-icons": {
       "headphone": "",
       "hands-free": "",
       "headset": "",
       "phone": "",
-      "portable": "",
+      "portable": "",
       "car": "",
-      "default": [
-        "",
-        "",
-        ""
-      ]
+      "default": ["", "", ""]
     },
-    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+ && ${XDG_BIN_HOME}/wp-vol",
-    "on-scroll-down": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%- && ${XDG_BIN_HOME}/wp-vol",
-    //"scroll-step": 1,
-    "on-click-right": "pavucontrol",
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+",
+    "on-scroll-down": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%-",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click-right": "pavucontrol"
   },
+
+  // ── Backlight ─────────────────────────────────────────────────────────────
   "backlight": {
     "device": "intel_backlight",
-    "format": "{percent}% {icon}",
-    "format-icons": [
-      "",
-      ""
-    ],
+    "format": "{icon}  {percent}%",
+    "format-icons": ["󰃞", "󰃟", "󰃠"],
     "on-scroll-up": "brightnessctl set 1%+",
     "on-scroll-down": "brightnessctl set 1%-"
   },
+
+  // ── Idle inhibitor ────────────────────────────────────────────────────────
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
       "activated": "",
       "deactivated": ""
-    }
+    },
+    "tooltip-format-activated": "Idle inhibitor: on",
+    "tooltip-format-deactivated": "Idle inhibitor: off"
   },
-  "network": {
-    "interface": "wlp0s20f3",
-    "format": "{ifname}",
-    "format-wifi": "{essid} ({signalStrength}%) ",
-    "format-ethernet": "{ifname} ",
-    "format-disconnected": "",
-    "tooltip-format": "{ifname}",
-    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-    "tooltip-format-ethernet": "{ifname} ",
-    "tooltip-format-disconnected": "Disconnected",
-    "max-length": 50,
-    // "on-click": "$HOME/.local/bin/wifi-menu.sh 2>/dev/null"
-    "on-click": "$term --class='termfloat' -e nmtui"
+
+  // ── Temperature (CPU package, stable coretemp path) ───────────────────────
+  "temperature": {
+    "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+    "input-filename": "temp1_input",
+    "critical-threshold": 85,
+    "interval": 5,
+    "format": "{icon}  {temperatureC}°",
+    "format-critical": "{icon}  {temperatureC}°",
+    "format-icons": ["", "", "", "", ""],
+    "tooltip-format": "CPU package: {temperatureC}°C",
+    "on-click": "swaymsg exec '$term --class __btop -e btop'"
   },
-  "custom/arrow1": {
-    "format": ""
+
+  // ── Disk ──────────────────────────────────────────────────────────────────
+  "disk": {
+    "interval": 60,
+    "path": "/",
+    "format": "  {percentage_used}%",
+    "states": { "warning": 80, "critical": 95 },
+    "tooltip-format": "{used} used of {total} on {path}  ({free} free)"
   },
-  "custom/arrow3": {
-    "format": ""
+
+  // ── CPU ───────────────────────────────────────────────────────────────────
+  "cpu": {
+    "interval": 5,
+    "format": "  {usage}%",
+    "states": { "warning": 70, "critical": 90 },
+    "tooltip": true,
+    "on-click": "swaymsg exec '$term --class __btop -e btop'"
   },
-  "custom/arrow0": {
-    "format": ""
+
+  // ── Memory ────────────────────────────────────────────────────────────────
+  "memory": {
+    "interval": 5,
+    "format": "󰍛  {percentage}%",
+    "states": { "warning": 75, "critical": 90 },
+    "tooltip-format": "{used:0.1f} GiB / {total:0.1f} GiB  ({percentage}%)\nswap: {swapUsed:0.1f} / {swapTotal:0.1f} GiB",
+    "on-click": "swaymsg exec '$term --class __btop -e btop'"
   },
-  "custom/arrow4": {
-    "format": ""
+
+  // ── Battery ───────────────────────────────────────────────────────────────
+  "battery": {
+    "states": { "good": 80, "warning": 30, "critical": 15 },
+    "format": "{icon}  {capacity}%",
+    "format-charging": "󰂄  {capacity}%",
+    "format-plugged": "  {capacity}%",
+    "format-full": "  {capacity}%",
+    "format-alt": "{icon}  {time}",
+    "format-icons": ["", "", "", "", ""],
+    "tooltip-format": "{capacity}%  ·  {timeTo}\n{power:0.1f} W"
   },
-  "custom/arrow5": {
-    "format": ""
-  },
-  "custom/arrow6": {
-    "format": ""
-  },
-  "custom/arrow7": {
-    "format": ""
-  },
-  "custom/arrow8": {
-    "format": "",
-    "exec-if": "pgrep spotify"
-  },
-  "custom/arrow2": {
-    "format": ""
+
+  // ── Tray ──────────────────────────────────────────────────────────────────
+  "tray": {
+    "icon-size": 15,
+    "spacing": 8
   }
 }
 // vim: filetype=jsonc
