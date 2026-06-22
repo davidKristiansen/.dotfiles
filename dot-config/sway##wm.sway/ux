@@ -3,7 +3,8 @@ default_border pixel 1
 default_floating_border none
 hide_edge_borders none
 
-smart_gaps on
+# Keep gaps even for a lone window so the inset frame matches the floating bar.
+smart_gaps off
 gaps inner $default_gaps_inner
 gaps outer $default_gaps_outer
 

@@ -1,5 +1,5 @@
-# Wallpaper / background. Solid color; swap for `bg <path> fill` for an image.
-output * bg #1d2021 solid_color
+# Wallpaper / background. Generated gruvbox-blue moonlit ridges (wallpaper.png).
+output * bg ~/.config/sway/wallpaper.png fill
 
 # Per-output geometry is managed by kanshi (see startup_applications).
 

@@ -6,7 +6,7 @@ set $right l
 set $term ghostty
 
 # Default gap sizes (consumed by ux and the "gaps" mode in functions)
-set $default_gaps_inner 1
+set $default_gaps_inner 7
 set $default_gaps_outer 0
 
 set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'

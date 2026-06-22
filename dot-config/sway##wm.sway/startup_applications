@@ -10,6 +10,9 @@ exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
 exec_always 'vicinae server'
 exec '${XDG_BIN_HOME}/idle.sh'
 
+# Night light (toggle from waybar's gammastep module)
+exec gammastep
+
 # Export the session environment to D-Bus/systemd so portals and user
 # services see WAYLAND_DISPLAY and XDG_CURRENT_DESKTOP.
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway

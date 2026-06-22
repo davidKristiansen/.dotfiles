@@ -1,14 +1,14 @@
 /*
- * Waybar — gruvbox dark hard · "refined flat"
- * Flat bar with hairline dividers. Accent-colored module glyphs, hover
- * underline, and warning/critical states that actually mean something.
+ * Waybar — gruvbox dark hard · "islands"
+ * Transparent bar; each cluster (left group, centered clock, right group, tray)
+ * floats as its own rounded island. Accent-colored glyphs, soft hover fills,
+ * and warning/critical states that still mean something.
  */
 
 /* ── gruvbox dark hard palette ──────────────────────────────────────────── */
 @define-color bg          #1d2021;  /* dark0_hard  */
 @define-color bg_alt      #282828;  /* dark0       */
 @define-color bg_hl       #3c3836;  /* dark1       */
-@define-color sep         #282828;  /* dark0 — hairline divider, just above bg */
 @define-color fg          #ebdbb2;  /* light1      */
 @define-color fg_dim      #a89984;  /* light4      */
 @define-color gray        #928374;
@@ -29,20 +29,39 @@
   font-size: 13px;
 }
 
+/* Transparent bar — the islands provide all the surface. */
 window#waybar {
-  background: @bg;
+  background: transparent;
   color: @fg;
 }
 
-/* Generic module spacing + a transparent underline we light up on hover. */
+/* ── The islands ─────────────────────────────────────────────────────────
+ * #left / #right are the group modules; #clock and #tray ride solo. A soft
+ * shadow lifts each island off the wallpaper. */
 #custom-power,
+#left,
+#right,
+#clock,
+#tray {
+  background: @bg;
+  border-radius: 15px;
+  padding: 0 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+#clock {
+  padding: 0 16px;
+  color: @fg;
+  font-weight: bold;
+}
+
+/* Generic per-module box: transparent inside its island, soft rounded hover. */
 #workspaces button,
 #mode,
 #custom-media-prev,
 #custom-media-playpause,
 #custom-media-next,
 #custom-media,
-#clock,
 #language,
 #bluetooth,
 #network,
@@ -55,40 +74,18 @@ window#waybar {
 #memory,
 #battery {
   padding: 0 9px;
+  margin: 4px 1px;
   background: transparent;
-  border-bottom: 2px solid transparent;
-  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
-}
-
-/* Discrete hairline divider between top-level modules. The media transport
- * buttons (prev/play/next) are intentionally left undivided so the cluster
- * reads as a single unit, and the centered clock + edge tray get none. */
-#custom-power,
-#workspaces,
-#mode,
-#custom-media,
-#language,
-#bluetooth,
-#network,
-#pulseaudio,
-#backlight,
-#idle_inhibitor,
-#temperature,
-#disk,
-#cpu,
-#memory,
-#battery {
-  border-right: 1px solid @sep;
+  border-radius: 11px;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 /* Subtle hover affordance for everything interactive. */
-#custom-power:hover,
 #mode:hover,
 #custom-media:hover,
 #custom-media-prev:hover,
 #custom-media-playpause:hover,
 #custom-media-next:hover,
-#clock:hover,
 #language:hover,
 #bluetooth:hover,
 #network:hover,
@@ -103,11 +100,12 @@ window#waybar {
   background: @bg_hl;
 }
 
-/* ── Power button ───────────────────────────────────────────────────────── */
+/* ── Power button (its own island, like the tray) ───────────────────────── */
 #custom-power {
   color: @red;
   font-size: 15px;
-  padding: 0 12px 0 11px;
+  padding: 0 13px;
+  transition: background 150ms ease, color 150ms ease;
 }
 #custom-power:hover {
   background: @red;
@@ -119,21 +117,16 @@ window#waybar {
   color: @fg_dim;
   padding: 0 8px;
 }
-/* Hairline between workspaces; last one omitted (group divider handles it). */
-#workspaces button:not(:last-child) {
-  border-right: 1px solid @sep;
-}
 #workspaces button:hover {
   background: @bg_hl;
   color: @fg;
-  border-bottom: 2px solid @gray;
 }
 #workspaces button.visible {
   color: @fg;
 }
 #workspaces button.focused {
-  color: @orange;
-  border-bottom: 2px solid @orange;
+  color: @bg;
+  background: @orange;
 }
 #workspaces button.urgent {
   color: @bg;
@@ -161,16 +154,10 @@ window#waybar {
 #custom-media {
   color: @green;
   padding-left: 4px;
-  padding-right: 12px;
+  padding-right: 10px;
 }
 #custom-media.paused {
   color: @fg_dim;
-}
-
-/* ── Clock (center) ─────────────────────────────────────────────────────── */
-#clock {
-  color: @fg;
-  font-weight: bold;
 }
 
 /* ── Right-side modules: accent glyphs ──────────────────────────────────── */
@@ -222,9 +209,9 @@ window#waybar {
   }
 }
 
-/* ── Tray ───────────────────────────────────────────────────────────────── */
+/* ── Tray (its own small island) ────────────────────────────────────────── */
 #tray {
-  padding: 0 8px;
+  padding: 0 10px;
 }
 #tray > .passive { -gtk-icon-effect: dim; }
 #tray > .needs-attention { -gtk-icon-effect: highlight; }

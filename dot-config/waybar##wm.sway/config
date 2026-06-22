@@ -1,40 +1,59 @@
 {
   // ─────────────────────────────────────────────────────────────────────────
-  //  Waybar — Sway · gruvbox dark hard · "refined flat"
+  //  Waybar — Sway · gruvbox dark hard · "islands"
   // ─────────────────────────────────────────────────────────────────────────
   "layer": "top",
   "position": "top",
-  "height": 28,
-  "spacing": 0,
+  "height": 30,
+  "spacing": 8,
+  "margin-top": 7,
+  "margin-left": 7,
+  "margin-right": 7,
   "fixed-center": true,
   "reload_style_on_change": true,
 
+  // Each top-level entry below renders as its own rounded "island" (see CSS).
   "modules-left": [
     "custom/power",
-    "sway/workspaces",
-    "sway/mode",
-    "custom/media-prev",
-    "custom/media-playpause",
-    "custom/media-next",
-    "custom/media"
+    "group/left"
   ],
   "modules-center": [
     "clock"
   ],
   "modules-right": [
-    "sway/language",
-    "bluetooth",
-    "network",
-    "pulseaudio",
-    "backlight",
-    "idle_inhibitor",
-    "temperature",
-    "disk",
-    "cpu",
-    "memory",
-    "battery",
+    "group/right",
     "tray"
   ],
+
+  // ── Island groups ─────────────────────────────────────────────────────────
+  "group/left": {
+    "orientation": "horizontal",
+    "modules": [
+      "sway/workspaces",
+      "sway/mode",
+      "custom/media-prev",
+      "custom/media-playpause",
+      "custom/media-next",
+      "custom/media"
+    ]
+  },
+  "group/right": {
+    "orientation": "horizontal",
+    "modules": [
+      "sway/language",
+      "bluetooth",
+      "network",
+      "pulseaudio",
+      "backlight",
+      "custom/gammastep",
+      "idle_inhibitor",
+      "temperature",
+      "disk",
+      "cpu",
+      "memory",
+      "battery"
+    ]
+  },
 
   // ── Launcher / power ──────────────────────────────────────────────────────
   "custom/power": {
@@ -162,7 +181,7 @@
     },
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+",
     "on-scroll-down": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%-",
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "on-click-right": "pavucontrol"
   },
 
@@ -173,6 +192,16 @@
     "format-icons": ["󰃞", "󰃟", "󰃠"],
     "on-scroll-up": "brightnessctl set 1%+",
     "on-scroll-down": "brightnessctl set 1%-"
+  },
+
+  // ── Night light (gammastep — toggle on click) ─────────────────────────────
+  "custom/gammastep": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 30,
+    "signal": 8,
+    "exec": "$HOME/.config/waybar/gammastep.sh",
+    "on-click": "$HOME/.config/waybar/gammastep.sh toggle && pkill -RTMIN+8 waybar"
   },
 
   // ── Idle inhibitor ────────────────────────────────────────────────────────
@@ -205,7 +234,8 @@
     "path": "/",
     "format": "  {percentage_used}%",
     "states": { "warning": 80, "critical": 95 },
-    "tooltip-format": "{used} used of {total} on {path}  ({free} free)"
+    "tooltip-format": "{used} used of {total} on {path}  ({free} free)",
+    "on-click": "nautilus"
   },
 
   // ── CPU ───────────────────────────────────────────────────────────────────
@@ -235,7 +265,8 @@
     "format-full": "  {capacity}%",
     "format-alt": "{icon}  {time}",
     "format-icons": ["", "", "", "", ""],
-    "tooltip-format": "{capacity}%  ·  {timeTo}\n{power:0.1f} W"
+    "tooltip-format": "{capacity}%  ·  {timeTo}\n{power:0.1f} W",
+    "on-click": "swaymsg exec '$term --class=termfloat -e sudo powertop'"
   },
 
   // ── Tray ──────────────────────────────────────────────────────────────────
