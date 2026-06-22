@@ -36,10 +36,6 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   git pull --rebase --quiet || true
 
   # Install stow.sh as a single self-contained file from the latest release.
-  # This breaks the chicken-and-egg with mise: stowing no longer needs the
-  # toolchain, so the mise setup can run afterwards (below). A download
-  # failure aborts the bootstrap (set -e) — there's no stowing without it.
-  # Drop any older hand-made symlink first — the release file is the source now.
   rm -f "$XDG_BIN_HOME/stow.sh"
   stow_tmp=$(mktemp)
   curl -fsSL "https://github.com/davetothek/stow.sh/releases/latest/download/stow.sh" -o "$stow_tmp"
