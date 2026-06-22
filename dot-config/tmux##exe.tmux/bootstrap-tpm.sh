@@ -42,4 +42,14 @@ if [ ! -f "$TPM_DIR/tpm" ]; then
   exit 1
 fi
 
+# Install any declared-but-missing plugins (idempotent; prints "Already
+# installed" for present ones). TPM's init script only *loads* installed
+# plugins, it never clones missing ones - that is normally done via `prefix
+# + I`. install_plugins reads the `@plugin` options from the running tmux
+# server, so plugins.conf must invoke this script *after* the `set -g
+# @plugin` lines.
+if [ -x "$TPM_DIR/bin/install_plugins" ]; then
+  "$TPM_DIR/bin/install_plugins" > /dev/null 2>&1 || true
+fi
+
 exit 0
