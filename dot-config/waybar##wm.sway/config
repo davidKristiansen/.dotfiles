@@ -225,7 +225,7 @@
     "format-critical": "{icon}  {temperatureC}°",
     "format-icons": ["", "", "", "", ""],
     "tooltip-format": "CPU package: {temperatureC}°C",
-    "on-click": "swaymsg exec '$term --class __btop -e btop'"
+    "on-click": "swaymsg exec '$term --class=__btop -e btop'"
   },
 
   // ── Disk ──────────────────────────────────────────────────────────────────
@@ -244,7 +244,7 @@
     "format": "  {usage}%",
     "states": { "warning": 70, "critical": 90 },
     "tooltip": true,
-    "on-click": "swaymsg exec '$term --class __btop -e btop'"
+    "on-click": "swaymsg exec '$term --class=__btop -e btop'"
   },
 
   // ── Memory ────────────────────────────────────────────────────────────────
@@ -253,7 +253,7 @@
     "format": "󰍛  {percentage}%",
     "states": { "warning": 75, "critical": 90 },
     "tooltip-format": "{used:0.1f} GiB / {total:0.1f} GiB  ({percentage}%)\nswap: {swapUsed:0.1f} / {swapTotal:0.1f} GiB",
-    "on-click": "swaymsg exec '$term --class __btop -e btop'"
+    "on-click": "swaymsg exec '$term --class=__btop -e btop'"
   },
 
   // ── Battery ───────────────────────────────────────────────────────────────
