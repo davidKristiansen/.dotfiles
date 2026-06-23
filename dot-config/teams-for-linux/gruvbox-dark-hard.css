@@ -1,0 +1,700 @@
+/*
+ * Gruvbox Dark Hard Theme for Teams for Linux
+ *
+ * Based on the Gruvbox color scheme by morhetz
+ * https://github.com/morhetz/gruvbox
+ *
+ * Palette (Dark Hard):
+ *   bg0_h:  #1d2021    bg0:    #282828    bg1:    #3c3836
+ *   bg2:    #504945    bg3:    #665c54    bg4:    #7c6f64
+ *   fg0:    #fbf1c7    fg1:    #ebdbb2    fg2:    #d5c4a1
+ *   fg3:    #bdae93    fg4:    #a89984    gray:   #928374
+ *   red:    #cc241d    green:  #98971a    yellow: #d79921
+ *   blue:   #458588    purple: #b16286    aqua:   #689d6a
+ *   orange: #d65d0e
+ *   bright red:    #fb4934    bright green:  #b8bb26
+ *   bright yellow: #fabd2f    bright blue:   #83a598
+ *   bright purple: #d3869b    bright aqua:   #8ec07c
+ *   bright orange: #fe8019
+ */
+
+/* ============================================================
+   1. Fluent UI v9 CSS Custom Property Overrides
+   Teams V2 uses Fluent UI tokens extensively.
+   ============================================================ */
+
+body,
+:root,
+.fui-FluentProvider,
+[data-fui-focus-visible] {
+  /* --- Neutral Backgrounds --- */
+  --colorNeutralBackground1: #1d2021 !important;
+  --colorNeutralBackground1Hover: #282828 !important;
+  --colorNeutralBackground1Pressed: #3c3836 !important;
+  --colorNeutralBackground1Selected: #3c3836 !important;
+  --colorNeutralBackground2: #282828 !important;
+  --colorNeutralBackground2Hover: #3c3836 !important;
+  --colorNeutralBackground2Pressed: #504945 !important;
+  --colorNeutralBackground2Selected: #504945 !important;
+  --colorNeutralBackground3: #3c3836 !important;
+  --colorNeutralBackground3Hover: #504945 !important;
+  --colorNeutralBackground3Pressed: #665c54 !important;
+  --colorNeutralBackground3Selected: #665c54 !important;
+  --colorNeutralBackground4: #504945 !important;
+  --colorNeutralBackground4Hover: #665c54 !important;
+  --colorNeutralBackground4Pressed: #7c6f64 !important;
+  --colorNeutralBackground4Selected: #665c54 !important;
+  /* Background5 = the chat/teams sidebar pane. Teams maps the sidebar to this
+     token; gruvbox's #665c54 made it far too bright, so pin it dark (#1d2021)
+     with only subtle interaction states. */
+  --colorNeutralBackground5: #1d2021 !important;
+  --colorNeutralBackground5Hover: #282828 !important;
+  --colorNeutralBackground5Pressed: #3c3836 !important;
+  --colorNeutralBackground5Selected: #3c3836 !important;
+  --colorNeutralBackground6: #7c6f64 !important;
+  --colorNeutralBackgroundInverted: #ebdbb2 !important;
+  --colorNeutralBackgroundInvertedDisabled: #504945 !important;
+  --colorNeutralBackgroundStatic: #1d2021 !important;
+  --colorNeutralBackgroundAlpha: rgba(29, 32, 33, 0.5) !important;
+  --colorNeutralBackgroundAlpha2: rgba(29, 32, 33, 0.7) !important;
+  --colorNeutralBackgroundDisabled: #282828 !important;
+
+  /* --- Subtle Backgrounds --- */
+  --colorSubtleBackground: transparent !important;
+  --colorSubtleBackgroundHover: #3c3836 !important;
+  --colorSubtleBackgroundPressed: #504945 !important;
+  --colorSubtleBackgroundSelected: #3c3836 !important;
+  --colorSubtleBackgroundLightAlphaHover: rgba(60, 56, 54, 0.7) !important;
+  --colorSubtleBackgroundLightAlphaPressed: rgba(80, 73, 69, 0.5) !important;
+  --colorSubtleBackgroundLightAlphaSelected: transparent !important;
+  --colorSubtleBackgroundInvertedHover: rgba(29, 32, 33, 0.1) !important;
+  --colorSubtleBackgroundInvertedPressed: rgba(29, 32, 33, 0.3) !important;
+  --colorSubtleBackgroundInvertedSelected: rgba(29, 32, 33, 0.2) !important;
+
+  /* --- Transparent Backgrounds --- */
+  --colorTransparentBackground: transparent !important;
+  --colorTransparentBackgroundHover: transparent !important;
+  --colorTransparentBackgroundPressed: transparent !important;
+  --colorTransparentBackgroundSelected: transparent !important;
+
+  /* --- Neutral Foregrounds (text) --- */
+  --colorNeutralForeground1: #ebdbb2 !important;
+  --colorNeutralForeground1Hover: #fbf1c7 !important;
+  --colorNeutralForeground1Pressed: #fbf1c7 !important;
+  --colorNeutralForeground1Selected: #fbf1c7 !important;
+  --colorNeutralForeground1Static: #ebdbb2 !important;
+  --colorNeutralForeground2: #d5c4a1 !important;
+  --colorNeutralForeground2Hover: #ebdbb2 !important;
+  --colorNeutralForeground2Pressed: #ebdbb2 !important;
+  --colorNeutralForeground2Selected: #ebdbb2 !important;
+  --colorNeutralForeground2BrandHover: #83a598 !important;
+  --colorNeutralForeground2BrandPressed: #458588 !important;
+  --colorNeutralForeground2BrandSelected: #83a598 !important;
+  --colorNeutralForeground3: #bdae93 !important;
+  --colorNeutralForeground3Hover: #d5c4a1 !important;
+  --colorNeutralForeground3Pressed: #d5c4a1 !important;
+  --colorNeutralForeground3Selected: #d5c4a1 !important;
+  --colorNeutralForeground4: #a89984 !important;
+  --colorNeutralForegroundDisabled: #665c54 !important;
+  --colorNeutralForegroundInverted: #1d2021 !important;
+  --colorNeutralForegroundInvertedHover: #1d2021 !important;
+  --colorNeutralForegroundInvertedPressed: #282828 !important;
+  --colorNeutralForegroundInvertedSelected: #1d2021 !important;
+  --colorNeutralForegroundInverted2: #1d2021 !important;
+  --colorNeutralForegroundOnBrand: #1d2021 !important;
+  --colorNeutralForegroundStaticInverted: #1d2021 !important;
+
+  /* --- Brand Colors (accent — using Gruvbox Blue) --- */
+  --colorBrandBackground: #458588 !important;
+  --colorBrandBackgroundHover: #83a598 !important;
+  --colorBrandBackgroundPressed: #3b7174 !important;
+  --colorBrandBackgroundSelected: #458588 !important;
+  --colorBrandBackground2: #1d2021 !important;
+  --colorBrandBackground2Hover: #282828 !important;
+  --colorBrandBackground2Pressed: #3c3836 !important;
+  --colorBrandBackground3Static: #458588 !important;
+  --colorBrandBackground4Static: #83a598 !important;
+  --colorBrandBackgroundInverted: #ebdbb2 !important;
+  --colorBrandBackgroundInvertedHover: #fbf1c7 !important;
+  --colorBrandBackgroundInvertedPressed: #d5c4a1 !important;
+  --colorBrandBackgroundInvertedSelected: #ebdbb2 !important;
+  --colorBrandBackgroundStatic: #458588 !important;
+  --colorCompoundBrandBackground: #458588 !important;
+  --colorCompoundBrandBackgroundHover: #83a598 !important;
+  --colorCompoundBrandBackgroundPressed: #3b7174 !important;
+
+  --colorBrandForeground1: #83a598 !important;
+  --colorBrandForeground2: #458588 !important;
+  --colorBrandForegroundLink: #83a598 !important;
+  --colorBrandForegroundLinkHover: #b8bb26 !important;
+  --colorBrandForegroundLinkPressed: #98971a !important;
+  --colorBrandForegroundLinkSelected: #83a598 !important;
+  --colorBrandForegroundInverted: #458588 !important;
+  --colorBrandForegroundInvertedHover: #83a598 !important;
+  --colorBrandForegroundInvertedPressed: #3b7174 !important;
+  --colorBrandForegroundOnLight: #458588 !important;
+  --colorBrandForegroundOnLightHover: #83a598 !important;
+  --colorBrandForegroundOnLightPressed: #3b7174 !important;
+  --colorCompoundBrandForeground1: #83a598 !important;
+  --colorCompoundBrandForeground1Hover: #b8bb26 !important;
+  --colorCompoundBrandForeground1Pressed: #458588 !important;
+
+  /* --- Brand Stroke --- */
+  --colorBrandStroke1: #458588 !important;
+  --colorBrandStroke2: #83a598 !important;
+  --colorBrandStroke2Hover: #83a598 !important;
+  --colorBrandStroke2Pressed: #458588 !important;
+  --colorBrandStroke2Contrast: #83a598 !important;
+  --colorCompoundBrandStroke: #458588 !important;
+  --colorCompoundBrandStrokeHover: #83a598 !important;
+  --colorCompoundBrandStrokePressed: #3b7174 !important;
+
+  /* --- Neutral Strokes (borders) --- */
+  --colorNeutralStroke1: #504945 !important;
+  --colorNeutralStroke1Hover: #665c54 !important;
+  --colorNeutralStroke1Pressed: #7c6f64 !important;
+  --colorNeutralStroke1Selected: #458588 !important;
+  --colorNeutralStroke2: #3c3836 !important;
+  --colorNeutralStroke3: #282828 !important;
+  --colorNeutralStrokeAccessible: #a89984 !important;
+  --colorNeutralStrokeAccessibleHover: #bdae93 !important;
+  --colorNeutralStrokeAccessiblePressed: #d5c4a1 !important;
+  --colorNeutralStrokeAccessibleSelected: #458588 !important;
+  --colorNeutralStrokeDisabled: #3c3836 !important;
+  --colorNeutralStrokeInvertedDisabled: rgba(235, 219, 178, 0.4) !important;
+  --colorNeutralStrokeOnBrand: #1d2021 !important;
+  --colorNeutralStrokeOnBrand2: #1d2021 !important;
+  --colorNeutralStrokeOnBrand2Hover: #282828 !important;
+  --colorNeutralStrokeOnBrand2Pressed: #3c3836 !important;
+  --colorNeutralStrokeOnBrand2Selected: #1d2021 !important;
+  --colorNeutralStrokeSubtle: #3c3836 !important;
+  --colorNeutralStrokeAlpha: rgba(60, 56, 54, 0.5) !important;
+  --colorNeutralStrokeAlpha2: rgba(235, 219, 178, 0.2) !important;
+
+  /* --- Status Colors --- */
+  --colorStatusSuccessBackground1: rgba(152, 151, 26, 0.15) !important;
+  --colorStatusSuccessBackground3: #98971a !important;
+  --colorStatusSuccessForeground1: #b8bb26 !important;
+  --colorStatusSuccessForeground3: #b8bb26 !important;
+  --colorStatusSuccessForegroundInverted: #98971a !important;
+  --colorStatusSuccessBorderActive: #b8bb26 !important;
+
+  --colorStatusWarningBackground1: rgba(215, 153, 33, 0.15) !important;
+  --colorStatusWarningBackground3: #d79921 !important;
+  --colorStatusWarningForeground1: #fabd2f !important;
+  --colorStatusWarningForeground3: #1d2021 !important;
+  --colorStatusWarningForegroundInverted: #d79921 !important;
+  --colorStatusWarningBorderActive: #fabd2f !important;
+
+  --colorStatusDangerBackground1: rgba(204, 36, 29, 0.15) !important;
+  --colorStatusDangerBackground3: #cc241d !important;
+  --colorStatusDangerForeground1: #fb4934 !important;
+  --colorStatusDangerForeground3: #fbf1c7 !important;
+  --colorStatusDangerForegroundInverted: #cc241d !important;
+  --colorStatusDangerBorderActive: #fb4934 !important;
+
+  /* --- Shadows (tinted for Gruvbox) --- */
+  --shadow2: 0 0 2px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.28) !important;
+  --shadow4: 0 0 2px rgba(0, 0, 0, 0.24), 0 2px 4px rgba(0, 0, 0, 0.28) !important;
+  --shadow8: 0 0 2px rgba(0, 0, 0, 0.24), 0 4px 8px rgba(0, 0, 0, 0.28) !important;
+  --shadow16: 0 0 2px rgba(0, 0, 0, 0.24), 0 8px 16px rgba(0, 0, 0, 0.28) !important;
+  --shadow28: 0 0 8px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.36) !important;
+  --shadow64: 0 0 8px rgba(0, 0, 0, 0.24), 0 32px 64px rgba(0, 0, 0, 0.36) !important;
+
+  /* --- Palette (for overrides that read these tokens) --- */
+  --colorPaletteRedBackground3: #cc241d !important;
+  --colorPaletteRedForeground1: #fb4934 !important;
+  --colorPaletteRedForeground3: #fb4934 !important;
+  --colorPaletteGreenBackground3: #98971a !important;
+  --colorPaletteGreenForeground1: #b8bb26 !important;
+  --colorPaletteGreenForeground3: #b8bb26 !important;
+  --colorPaletteYellowBackground3: #d79921 !important;
+  --colorPaletteYellowForeground1: #fabd2f !important;
+  --colorPaletteYellowForeground2: #fabd2f !important;
+}
+
+/* ============================================================
+   2. Global Element Overrides
+   ============================================================ */
+
+/* Base body */
+body {
+  background-color: #1d2021 !important;
+  color: #ebdbb2 !important;
+}
+
+/* ============================================================
+   3. Left Sidebar / App Rail
+   ============================================================ */
+
+/* Left navigation rail */
+[data-tid="app-bar"],
+[data-tid="app-bar-container"],
+.app-bar,
+.teams-app-bar,
+nav[role="navigation"] {
+  background-color: #1d2021 !important;
+}
+
+/* Sidebar channel/chat list area */
+[data-tid="left-rail"],
+[data-tid="left-rail-container"],
+.left-rail,
+.team-panel-container,
+.left-rail-list {
+  background-color: #1d2021 !important;
+}
+
+/* Active/selected item in sidebar */
+[data-tid="left-rail"] [aria-selected="true"],
+[data-tid="left-rail"] .selected,
+.left-rail .is-selected,
+.team-panel-container .is-selected {
+  background-color: #3c3836 !important;
+  border-left: 3px solid #458588 !important;
+}
+
+/* Hover on sidebar items */
+[data-tid="left-rail"] [role="treeitem"]:hover,
+[data-tid="left-rail"] [role="listitem"]:hover,
+.left-rail li:hover {
+  background-color: #3c3836 !important;
+}
+
+/* Real sidebar list rows (current Teams V2 uses stable Fluent classes).
+   The conversation/teams tree is .fui-TreeItemLayout; its hover/selected state
+   was rendering at #665c54 (bg3) — far too bright. Keep rows flush with the
+   dark list, with only a subtle gruvbox highlight on hover/selected. */
+.fui-TreeItemLayout {
+  background-color: transparent !important;
+}
+.fui-TreeItemLayout:hover {
+  background-color: #3c3836 !important;
+}
+[aria-selected="true"] > .fui-TreeItemLayout,
+[aria-selected="true"] .fui-TreeItemLayout,
+.fui-TreeItem[aria-selected="true"] .fui-TreeItemLayout {
+  background-color: #504945 !important;
+}
+
+/* Sidebar search box (data-tid is stable) */
+[data-tid="AUTOSUGGEST_INPUT"] {
+  background-color: #282828 !important;
+}
+
+/* ============================================================
+   4. Top Header / Title Bar
+   ============================================================ */
+
+[data-tid="title-bar"],
+.ts-title-bar,
+header,
+[data-tid="app-header-bar"],
+.app-header-bar {
+  background-color: #1d2021 !important;
+  border-bottom: 1px solid #3c3836 !important;
+}
+
+/* Search box */
+[data-tid="search-box"],
+[data-tid="search-container"],
+.ts-search-box,
+input[type="search"],
+[role="search"] input {
+  background-color: #3c3836 !important;
+  color: #ebdbb2 !important;
+  border-color: #504945 !important;
+}
+
+[data-tid="search-box"]:focus-within,
+input[type="search"]:focus {
+  border-color: #458588 !important;
+  box-shadow: 0 0 0 1px #458588 !important;
+}
+
+/* ============================================================
+   5. Main Content / Chat Area
+   ============================================================ */
+
+/* Main content pane */
+[data-tid="message-pane-layout"],
+[data-tid="chat-pane"],
+.ts-message-list-container,
+.message-pane,
+.chat-body,
+[data-tid="message-pane"] {
+  background-color: #1d2021 !important;
+}
+
+/* Individual messages */
+.ts-message,
+[data-tid="chat-pane-message"],
+.message-body,
+.message-body-content {
+  color: #ebdbb2 !important;
+}
+
+/* My own messages (bubble style) */
+.self .message-body-content,
+.from-me .message-body-content {
+  background-color: #3b7174 !important;
+  color: #fbf1c7 !important;
+}
+
+/* Others' messages */
+.message-body-content {
+  background-color: #3c3836 !important;
+}
+
+/* Message hover */
+.ts-message:hover,
+[data-tid="chat-pane-message"]:hover {
+  background-color: #282828 !important;
+}
+
+/* Compose box */
+[data-tid="ckeditor-replyConversation"],
+.ts-new-message,
+.ts-add-message,
+[data-tid="newMessageCommands"],
+[contenteditable="true"],
+.cke_editable {
+  background-color: #282828 !important;
+  color: #ebdbb2 !important;
+  border-color: #504945 !important;
+}
+
+[contenteditable="true"]:focus,
+.cke_focus {
+  border-color: #458588 !important;
+}
+
+/* ============================================================
+   6. Buttons, Menus & Dropdowns
+   ============================================================ */
+
+/* Generic buttons */
+button,
+.fui-Button {
+  color: #ebdbb2 !important;
+}
+
+/* Primary / brand buttons */
+button[class*="primary"],
+.fui-Button--primary {
+  background-color: #458588 !important;
+  color: #1d2021 !important;
+  border-color: #458588 !important;
+}
+
+button[class*="primary"]:hover,
+.fui-Button--primary:hover {
+  background-color: #83a598 !important;
+  border-color: #83a598 !important;
+}
+
+/* Menus and popups */
+[role="menu"],
+[role="listbox"],
+[role="dialog"],
+.fui-MenuList,
+.fui-PopoverSurface,
+.ts-callout-content {
+  background-color: #282828 !important;
+  border-color: #504945 !important;
+  color: #ebdbb2 !important;
+}
+
+[role="menuitem"]:hover,
+[role="option"]:hover,
+.fui-MenuItem:hover,
+.fui-Option:hover {
+  background-color: #3c3836 !important;
+}
+
+[role="menuitem"]:focus,
+[role="option"]:focus,
+[role="menuitem"][aria-selected="true"],
+.fui-MenuItem:active {
+  background-color: #504945 !important;
+}
+
+/* Tooltips */
+[role="tooltip"],
+.fui-Tooltip {
+  background-color: #3c3836 !important;
+  color: #ebdbb2 !important;
+  border-color: #504945 !important;
+}
+
+/* ============================================================
+   7. Tabs and Pivots
+   ============================================================ */
+
+[role="tab"],
+.fui-Tab {
+  color: #bdae93 !important;
+}
+
+[role="tab"]:hover,
+.fui-Tab:hover {
+  color: #ebdbb2 !important;
+}
+
+[role="tab"][aria-selected="true"],
+.fui-Tab[aria-selected="true"] {
+  color: #83a598 !important;
+  border-bottom-color: #83a598 !important;
+}
+
+/* ============================================================
+   8. Badges and Notifications
+   ============================================================ */
+
+/* Unread badge */
+[data-tid="unread-badge"],
+.activity-badge,
+.fui-Badge {
+  background-color: #cc241d !important;
+  color: #fbf1c7 !important;
+}
+
+/* Mention badge */
+[data-tid="mention-badge"] {
+  background-color: #d79921 !important;
+  color: #1d2021 !important;
+}
+
+/* ============================================================
+   9. Scrollbars
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #1d2021 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #504945 !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #665c54 !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: #1d2021 !important;
+}
+
+/* ============================================================
+   10. Links
+   ============================================================ */
+
+a,
+a:visited {
+  color: #83a598 !important;
+}
+
+a:hover {
+  color: #b8bb26 !important;
+}
+
+/* ============================================================
+   11. Code Blocks & Pre
+   ============================================================ */
+
+pre,
+code,
+.code-snippet,
+[data-tid="code-block"] {
+  background-color: #282828 !important;
+  color: #ebdbb2 !important;
+  border-color: #3c3836 !important;
+}
+
+/* ============================================================
+   12. Presence / Status Indicators
+   ============================================================ */
+
+/* Available (green) */
+.fui-PresenceBadge[data-status="available"]::after,
+[data-tid="presence-available"] {
+  background-color: #b8bb26 !important;
+}
+
+/* Busy (red) */
+.fui-PresenceBadge[data-status="busy"]::after,
+[data-tid="presence-busy"] {
+  background-color: #fb4934 !important;
+}
+
+/* Away (yellow) */
+.fui-PresenceBadge[data-status="away"]::after,
+[data-tid="presence-away"] {
+  background-color: #fabd2f !important;
+}
+
+/* Do not disturb (red) */
+.fui-PresenceBadge[data-status="donotdisturb"]::after,
+[data-tid="presence-dnd"] {
+  background-color: #cc241d !important;
+}
+
+/* Offline (gray) */
+.fui-PresenceBadge[data-status="offline"]::after,
+[data-tid="presence-offline"] {
+  background-color: #928374 !important;
+}
+
+/* ============================================================
+   13. Dividers and Separators
+   ============================================================ */
+
+hr,
+.fui-Divider,
+[role="separator"] {
+  border-color: #3c3836 !important;
+  background-color: #3c3836 !important;
+}
+
+/* ============================================================
+   14. Selection highlight
+   ============================================================ */
+
+::selection {
+  background-color: #458588 !important;
+  color: #fbf1c7 !important;
+}
+
+/* ============================================================
+   15. Input fields
+   ============================================================ */
+
+input,
+textarea,
+select,
+.fui-Input,
+.fui-Textarea {
+  background-color: #3c3836 !important;
+  color: #ebdbb2 !important;
+  border-color: #504945 !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.fui-Input:focus-within,
+.fui-Textarea:focus-within {
+  border-color: #458588 !important;
+  outline-color: #458588 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #928374 !important;
+}
+
+/* ============================================================
+   16. Compact theme hover rows (from existing themes)
+   ============================================================ */
+
+/* Teams thread: 1st message hover */
+.message-list-common:not(.chat-style)
+  .conversation-start
+  .ts-message-thread-body:hover
+  .message-body-top-row,
+.message-list-common:not(.chat-style)
+  .conversation-start
+  .ts-message-thread-body:hover
+  .message-body-top-row
+  .timestamp-column {
+  background: #3c3836 !important;
+}
+
+/* Teams thread: replies hover */
+.message-list-common:not(.chat-style)
+  .conversation-reply
+  .ts-message-thread-body:hover
+  .message-body-top-row,
+.message-list-common:not(.chat-style)
+  .conversation-reply
+  .ts-message-thread-body:hover
+  .message-body-top-row
+  .timestamp-column {
+  background: #282828 !important;
+}
+
+/* Chat: other people's messages hover */
+.message-list-common.chat-style
+  .ts-message-thread-body:hover
+  .message-body-top-row,
+.message-list-common.chat-style
+  .ts-message-thread-body:hover
+  .message-body-top-row
+  .timestamp-column {
+  background: #3c3836 !important;
+}
+
+/* Chat: my messages hover */
+.message-list-common.chat-style
+  .self
+  .ts-message-thread-body:hover
+  .message-body-top-row,
+.message-list-common.chat-style
+  .self
+  .ts-message-thread-body:hover
+  .message-body-top-row
+  .timestamp-column {
+  background: #3b7174 !important;
+}
+
+/* ============================================================
+   17. Calendar / Meeting
+   ============================================================ */
+
+[data-tid="calendar-view"],
+.calendar-container {
+  background-color: #1d2021 !important;
+}
+
+[data-tid="calendar-event"],
+.calendar-event {
+  background-color: #3c3836 !important;
+  border-left-color: #458588 !important;
+  color: #ebdbb2 !important;
+}
+
+/* ============================================================
+   18. Cards & Panels
+   ============================================================ */
+
+.fui-Card,
+[data-tid="adaptive-card"],
+.fui-DialogSurface {
+  background-color: #282828 !important;
+  border-color: #504945 !important;
+  color: #ebdbb2 !important;
+}
+
+/* ============================================================
+   19. Emoji Picker & Reactions
+   ============================================================ */
+
+[data-tid="emoji-picker"],
+.emoji-picker {
+  background-color: #282828 !important;
+}
+
+.reaction-btn {
+  background-color: #3c3836 !important;
+  border-color: #504945 !important;
+}
+
+.reaction-btn:hover {
+  background-color: #504945 !important;
+}
