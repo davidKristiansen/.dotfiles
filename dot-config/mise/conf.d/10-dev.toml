@@ -16,8 +16,9 @@ npm = "latest"
 # Python
 python = "3.14"
 pipx = "latest"
-uv = "0.9.2"
+uv = "0.11.24"
 "pipx:isort" = "latest"
+"pipx:xonsh" = { version = "latest", extras = "full" }  # Python shell; extras=full → ptk editor + pygments
 ty = "latest"
 ruff = "latest"
 
@@ -30,7 +31,7 @@ rust = "latest"
 cargo-binstall = "latest"
 
 # Java
-java = "21"
+java = "26"
 
 # Zig
 zig = "latest"
