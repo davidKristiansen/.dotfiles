@@ -42,5 +42,8 @@ window#DP-7 {
 }
 
 #input-field {
-  background-color: black;
+  background-color: rgba(40, 40, 40, 0.85);
+  color: #ebdbb2;
+  border: 1px solid #504945;
+  border-radius: 4px;
 }

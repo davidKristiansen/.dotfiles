@@ -2,7 +2,11 @@
 # mouse button for dragging.
 floating_modifier $mod normal
 
-bindsym $mod+Shift+n exec swaync-client -t -sw
+# Notifications (mako). $mod+n / $mod+p are taken by playerctl, so dismiss
+# lives on $mod+Control+n.
+bindsym $mod+Shift+n exec makoctl mode -t do-not-disturb && pkill -RTMIN+9 waybar
+bindsym $mod+Control+n exec makoctl dismiss
+bindsym $mod+Control+Shift+n exec makoctl dismiss --all
 
 bindsym $mod+Delete exec $lock
 
@@ -135,8 +139,8 @@ bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDI
 bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && ${XDG_BIN_HOME}/wp-vol
 bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && ${XDG_BIN_HOME}/wp-vol
 bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym --locked XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym --locked XF86MonBrightnessDown exec $XDG_BIN_HOME/backlight.sh down 5
+bindsym --locked XF86MonBrightnessUp exec $XDG_BIN_HOME/backlight.sh up 5
 bindsym --locked $mod+Space exec playerctl play-pause
 bindsym --locked $mod+n exec playerctl next
 bindsym --locked $mod+p exec playerctl previous

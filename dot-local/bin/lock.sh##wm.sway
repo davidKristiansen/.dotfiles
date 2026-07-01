@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Enhanced Wayland screen locker with optional per-output corrupted screenshots.
 #
-# This version is refactored to use command-line arguments instead of
-# environment variables and to be more modular and maintainable.
+# Generates a corrupted screenshot for each active output and launches swaylock.
+# Uses a background fprintd-verify loop for parallel fingerprint unlock.
 
 set -euo pipefail
 
@@ -41,7 +41,7 @@ Image Generation Modes:
 Effects:
   --cool-effects            Enable post-processing effects with ImageMagick.
   --style <STYLE>           Apply a specific effect style. Implies --cool-effects.
-                            Styles: glitch, scanlines, cyberpunk, mosaic, swirl, vaporwave.
+                            Styles: glitch, datamosh, crt-glitch, scanlines, cyberpunk, mosaic, vaporwave.
                             If not specified, a random style is chosen.
 
 All arguments after '--' are passed directly to the swaylock command.
@@ -58,8 +58,7 @@ die() {
 }
 
 # --- Argument Parsing ---
-PARSED_ARGS=$(getopt -o hd --long "help,debug,force-per-output,force-no-per-output,auto-detect,use-all-images,cool-effects,style:" -n "$(basename "$0")" -- "$@")
-if [[ $? -ne 0 ]]; then
+if ! PARSED_ARGS=$(getopt -o hd --long "help,debug,force-per-output,force-no-per-output,auto-detect,use-all-images,cool-effects,style:" -n "$(basename "$0")" -- "$@"); then
   usage
   exit 1
 fi
@@ -98,6 +97,10 @@ while true; do
     --style)
       COOL_EFFECTS=1
       COOL_EFFECTS_STYLE="$2"
+      case "$COOL_EFFECTS_STYLE" in
+        glitch|datamosh|crt-glitch|scanlines|cyberpunk|mosaic|vaporwave) ;;
+        *) die "Unknown style '$COOL_EFFECTS_STYLE'. Valid styles: glitch, datamosh, crt-glitch, scanlines, cyberpunk, mosaic, vaporwave." ;;
+      esac
       shift 2
       ;;
     --)
@@ -121,8 +124,7 @@ find "$DIR" -type f -mtime +1 -delete 2>/dev/null || true
 get_outputs() {
   if command -v swaymsg >/dev/null 2>&1 && [[ -n "${SWAYSOCK-}" ]]; then
     swaymsg -t get_outputs | jq -r '.[] | select(.active == true) | .name'
-  elif command -v wlr-randr >/dev/null 2>&1;
-  then
+  elif command -v wlr-randr >/dev/null 2>&1; then
     wlr-randr | awk '/ connected / {print $1}'
   elif command -v niri >/dev/null 2>&1 && [[ -n "${NIRI_SOCKET-}" ]]; then
     niri msg outputs 2>/dev/null | awk '/^[[:space:]]+Name: / {print $2}'
@@ -147,32 +149,138 @@ run_corrupter() {
 apply_cool_effects() {
   local f="$1"
   ((COOL_EFFECTS)) || return 0
-  if ! command -v convert >/dev/null 2>&1;
-  then
+
+  if ! command -v convert >/dev/null 2>&1; then
     log "COOL_EFFECTS requested but 'convert' not found; skipping."
     return 0
   fi
+
   local style="$COOL_EFFECTS_STYLE"
   if [[ -z "$style" ]]; then
-    local styles=(glitch scanlines cyberpunk mosaic swirl vaporwave)
+    local styles=(glitch datamosh crt-glitch scanlines cyberpunk mosaic vaporwave)
     style=${styles[RANDOM % ${#styles[@]}]}
   fi
+
   local tmp
   tmp="${f%.png}_fx.png"
+
   case "$style" in
-    glitch) convert "$f" -channel R -virtual-pixel edge -motion-blur 10x80+30 -channel GB -separate +channel -compose screen -combine -colorspace RGB "$tmp" 2>/dev/null || return 0 ;;
-    scanlines) convert "$f" \( -size 1x2 pattern:gray50 -resize 100x100%! \) -tile +clone -compose overlay -composite "$tmp" 2>/dev/null || return 0 ;;
-    cyberpunk) convert "$f" -modulate 110,160,140 -colorize 5,0,15 -contrast -contrast "$tmp" 2>/dev/null || return 0 ;;
-    mosaic) convert "$f" -scale 20% -scale 500% "$tmp" 2>/dev/null || return 0 ;;
-    swirl) convert "$f" -swirl 65 "$tmp" 2>/dev/null || return 0 ;;
-    vaporwave) convert "$f" -modulate 110,150,120 -colorize 10,0,25 -gamma 0.9 "$tmp" 2>/dev/null || return 0 ;;
-    *) convert "$f" -modulate 105,120,100 "$tmp" 2>/dev/null || return 0 ;;
+    glitch)
+      local r g b
+      r="${f%.png}_r.png"
+      g="${f%.png}_g.png"
+      b="${f%.png}_b.png"
+
+      convert "$f" -channel R -separate +channel -roll +14+0 "$r" 2>/dev/null || return 0
+      convert "$f" -channel G -separate +channel -roll -9+0 "$g" 2>/dev/null || {
+        rm -f -- "$r"
+        return 0
+      }
+      convert "$f" -channel B -separate +channel -roll +0+0 "$b" 2>/dev/null || {
+        rm -f -- "$r" "$g"
+        return 0
+      }
+
+      convert "$r" "$g" "$b" -combine \
+        -sharpen 0x1.0 \
+        -contrast \
+        "$tmp" 2>/dev/null || {
+          rm -f -- "$r" "$g" "$b"
+          return 0
+        }
+
+      rm -f -- "$r" "$g" "$b"
+      ;;
+
+    datamosh)
+      convert "$f" \
+        -filter point \
+        -scale 25% \
+        -scale 400% \
+        -sharpen 0x1.2 \
+        -contrast \
+        "$tmp" 2>/dev/null || return 0
+      ;;
+
+    crt-glitch)
+      convert "$f" \
+        -modulate 105,130,100 \
+        -contrast \
+        \( -size 1x3 pattern:gray50 -resize 100x100%! \) \
+        -tile +clone \
+        -compose overlay \
+        -composite \
+        -sharpen 0x0.8 \
+        "$tmp" 2>/dev/null || return 0
+      ;;
+
+    scanlines)
+      convert "$f" \
+        \( -size 1x2 pattern:gray50 -resize 100x100%! \) \
+        -tile +clone \
+        -compose overlay \
+        -composite \
+        -sharpen 0x0.6 \
+        "$tmp" 2>/dev/null || return 0
+      ;;
+
+    cyberpunk)
+      convert "$f" \
+        -modulate 110,160,140 \
+        -colorize 5,0,15 \
+        -contrast \
+        -contrast \
+        -sharpen 0x0.8 \
+        "$tmp" 2>/dev/null || return 0
+      ;;
+
+    mosaic)
+      convert "$f" \
+        -filter point \
+        -scale 20% \
+        -scale 500% \
+        -sharpen 0x1.0 \
+        "$tmp" 2>/dev/null || return 0
+      ;;
+
+    vaporwave)
+      convert "$f" \
+        -modulate 110,150,120 \
+        -colorize 10,0,25 \
+        -gamma 0.9 \
+        -sharpen 0x0.7 \
+        "$tmp" 2>/dev/null || return 0
+      ;;
+
+    *)
+      log "Unknown effect style '$style'; using fallback."
+      convert "$f" \
+        -modulate 105,120,100 \
+        -sharpen 0x0.8 \
+        "$tmp" 2>/dev/null || return 0
+      ;;
   esac
+
   if [[ -s "$tmp" ]]; then
     mv -f -- "$tmp" "$f"
     log "Applied cool effect style=$style to $f"
   else
     rm -f -- "$tmp"
+  fi
+}
+
+lock_1password() {
+  if command -v 1password >/dev/null 2>&1; then
+    1password --lock >/dev/null 2>&1 || true
+    return 0
+  fi
+
+  if command -v gdbus >/dev/null 2>&1; then
+    gdbus call --session \
+      --dest com.1password.1Password \
+      --object-path /com/1password/OnePassword \
+      --method com.1password.OnePassword.Lock \
+      >/dev/null 2>&1 || true
   fi
 }
 
@@ -192,15 +300,18 @@ generate_image_for_output() {
 
   corrupted="${raw%.png}_corrupted.png"
   local add mag boffset meanabber
-  add=$((RANDOM % 10 + 3))
-  mag=$((RANDOM % 8 + 3))
-  boffset=$((RANDOM % 10 + 3))
-  meanabber=$((RANDOM % 10 + 5))
+  add=$((RANDOM % 60 + 60))
+  mag=1
+  boffset=$((RANDOM % 50 + 50))
+  meanabber=$((RANDOM % 30 + 40))
   run_corrupter "$raw" "$corrupted" "$add" "$mag" "$boffset" "$meanabber"
 
   [[ -s "$corrupted" ]] || corrupted="$raw"
   apply_cool_effects "$corrupted"
-  [[ -s "$corrupted" ]] && echo "$corrupted"
+
+  if [[ -s "$corrupted" ]]; then
+    echo "$corrupted"
+  fi
 }
 
 # --- Execution ---
@@ -260,8 +371,6 @@ else
   fi
 fi
 
-log "Invoking swaylock with args: ${swaylock_args[*]} $*"
-
 # --- Diagnostics ---
 log "Beginning image diagnostics..."
 idx=0
@@ -293,8 +402,70 @@ while (( idx < ${#swaylock_args[@]} )); do
 done
 log "End of image diagnostics."
 
+# --- Fingerprint listener ---
+# Runs fprintd-verify in a loop in the background. On a successful match,
+# kills swaylock directly, which releases the ext-session-lock-v1 lock.
+# This bypasses PAM entirely, giving us parallel password + fingerprint.
+FINGERPRINT_PID=""
+start_fingerprint_listener() {
+  local locker_pid="$1"
+
+  (
+    trap 'exit 0' TERM
+    echo "--- Started fingerprint listener for PID $locker_pid ---" >> /tmp/fp.log
+    while kill -0 "$locker_pid" 2>/dev/null; do
+      echo "Checking fprintd-verify..." >> /tmp/fp.log
+      result=$(fprintd-verify 2>&1) || true
+      echo "Result: $result" >> /tmp/fp.log
+      if echo "$result" | grep -q "verify-match"; then
+        log "Fingerprint matched — unlocking swaylock cleanly (PID=$locker_pid)."
+        echo "Match found! Sending SIGUSR1 to $locker_pid" >> /tmp/fp.log
+        kill -USR1 "$locker_pid" 2>/dev/null || true
+        break
+      fi
+      sleep 0.5
+    done
+    echo "--- Listener loop exited ---" >> /tmp/fp.log
+  ) &
+  FINGERPRINT_PID=$!
+  log "Started fingerprint listener (PID=$FINGERPRINT_PID)"
+}
 
 # --- Lock ---
-exec swaylock "${swaylock_args[@]}" "$@"
+filtered_args=()
+for arg in "$@"; do
+  if [[ "$arg" == "-f" || "$arg" == "--daemonize" ]]; then
+    log "Stripped $arg from swaylock arguments (daemonizing manually)."
+  else
+    filtered_args+=("$arg")
+  fi
+done
+set -- "${filtered_args[@]}"
 
-# vim: set ft=sh ts=2 sw=2:
+log "Invoking swaylock with args: ${swaylock_args[*]} $*"
+
+lock_1password
+
+# Run everything in a detached subshell so lock.sh exits immediately.
+# This unblocks swayidle's 'wait: true' behavior so monitors can turn off.
+(
+  # Redirect output so swayidle doesn't wait for EOF on stdout/stderr
+  exec </dev/null >"$DIR/lock-daemon.log" 2>&1
+
+  swaylock "${swaylock_args[@]}" "$@" &
+  SWAYLOCK_PID=$!
+  log "swaylock started (PID=$SWAYLOCK_PID)"
+
+  start_fingerprint_listener "$SWAYLOCK_PID"
+
+  wait "$SWAYLOCK_PID" 2>/dev/null
+
+  if [[ -n "$FINGERPRINT_PID" ]]; then
+    kill "$FINGERPRINT_PID" 2>/dev/null || true
+    wait "$FINGERPRINT_PID" 2>/dev/null || true
+  fi
+  pkill -x fprintd-verify 2>/dev/null || true
+  log "Session unlocked."
+) &
+
+exit 0

@@ -27,7 +27,7 @@ set $menu_fallback 'bemenu-run \
   --prompt ">"   \
   --line-height 24'
 
-set $lock '~/.local/bin/lock.sh'
+set $lock '~/.local/bin/lock.sh -- -f'
 
 set $screengrab slurp \
         | grim -g - - \

@@ -45,13 +45,15 @@
       "network",
       "pulseaudio",
       "backlight",
+      "custom/backlight-mode",
       "custom/gammastep",
       "idle_inhibitor",
       "temperature",
       "disk",
       "cpu",
       "memory",
-      "battery"
+      "battery",
+      "custom/mako"
     ]
   },
 
@@ -190,8 +192,18 @@
     "device": "intel_backlight",
     "format": "{icon}  {percent}%",
     "format-icons": ["󰃞", "󰃟", "󰃠"],
-    "on-scroll-up": "brightnessctl set 1%+",
-    "on-scroll-down": "brightnessctl set 1%-"
+    "on-scroll-up": "$XDG_BIN_HOME/backlight.sh up 1",
+    "on-scroll-down": "$XDG_BIN_HOME/backlight.sh down 1"
+  },
+
+  // ── Backlight mode (auto/manual toggle for wluma) ─────────────────────────
+  "custom/backlight-mode": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 10,
+    "exec": "$XDG_BIN_HOME/backlight.sh mode",
+    "on-click": "$XDG_BIN_HOME/backlight.sh toggle"
   },
 
   // ── Night light (gammastep — toggle on click) ─────────────────────────────
@@ -202,6 +214,16 @@
     "signal": 8,
     "exec": "$HOME/.config/waybar/gammastep.sh",
     "on-click": "$HOME/.config/waybar/gammastep.sh toggle && pkill -RTMIN+8 waybar"
+  },
+
+  // ── Do Not Disturb (mako) ─────────────────────────────────────────────────
+  "custom/mako": {
+    "format": " {} ",
+    "return-type": "json",
+    "interval": 30,
+    "signal": 9,
+    "exec": "$HOME/.config/waybar/mako-dnd.sh",
+    "on-click": "$HOME/.config/waybar/mako-dnd.sh toggle && pkill -RTMIN+9 waybar"
   },
 
   // ── Idle inhibitor ────────────────────────────────────────────────────────

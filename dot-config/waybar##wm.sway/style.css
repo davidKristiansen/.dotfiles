@@ -67,6 +67,9 @@ window#waybar {
 #network,
 #pulseaudio,
 #backlight,
+#custom-backlight-mode,
+#custom-gammastep,
+#custom-mako,
 #idle_inhibitor,
 #temperature,
 #disk,
@@ -91,6 +94,9 @@ window#waybar {
 #network:hover,
 #pulseaudio:hover,
 #backlight:hover,
+#custom-backlight-mode:hover,
+#custom-gammastep:hover,
+#custom-mako:hover,
 #idle_inhibitor:hover,
 #temperature:hover,
 #disk:hover,
@@ -171,8 +177,14 @@ window#waybar {
 #pulseaudio      { color: @yellow; }
 #pulseaudio.muted { color: @gray; }
 #backlight       { color: @yellow; }
-#idle_inhibitor  { color: @fg_dim; }
-#idle_inhibitor.activated { color: @orange; }
+#custom-backlight-mode       { color: @fg_dim; padding: 0 5px; }
+#custom-backlight-mode.auto  { color: @aqua; }
+#custom-gammastep            { color: @fg_dim; padding: 0 5px; }
+#custom-gammastep.on         { color: @orange; }
+#idle_inhibitor  { color: @fg_dim; padding: 0 5px; }
+#idle_inhibitor.activated { color: @yellow; }
+#custom-mako     { color: @fg_dim; padding: 0 5px; }
+#custom-mako.on  { color: @purple; }
 #temperature     { color: @orange; }
 #disk            { color: @blue; }
 #cpu             { color: @aqua; }

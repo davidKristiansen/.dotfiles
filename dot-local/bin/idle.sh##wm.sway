@@ -1,10 +1,15 @@
 #!/bin/sh
+set -eu
 
-/usr/bin/swayidle -d -w \
-  timeout 240   'swaymsg "output * dpms off"' \
-    resume   'swaymsg "output * dpms on"'  \
-  timeout 120   '"${XDG_BIN_HOME}"/lock.sh'       \
-    resume   'swaymsg "output * dpms on"'  \
-  timeout 1800   'systemctl suspend'           \
-    resume   'swaymsg "output * dpms on"'  \
-    before-sleep   '"${XDG_BIN_HOME}"/lock.sh'
+pkill -x swayidle 2>/dev/null || true
+
+XDG_BIN_HOME="${XDG_BIN_HOME:-"$HOME/.local/bin"}"
+LOCK="${XDG_BIN_HOME}/lock.sh -- -f"
+
+exec /usr/bin/swayidle -d -w \
+  timeout 120  "$LOCK" \
+  timeout 240  'swaymsg "output * power off"' \
+    resume     'swaymsg "output * power on"' \
+  timeout 1800 'systemctl suspend' \
+  before-sleep "$LOCK" \
+  after-resume 'swaymsg "output * power on"'

@@ -8,10 +8,18 @@ exec_always /usr/libexec/xdg-desktop-portal_wlr --replace
 
 # Launcher daemon and idle/lock manager
 exec_always 'vicinae server'
-exec '${XDG_BIN_HOME}/idle.sh'
+exec_always '${HOME}/.local/bin/idle.sh'
+
+# Notification daemon (mako). exec, not exec_always: mako is dbus-activatable
+# and reloads its own config via `makoctl reload`, so no respawn on sway reload.
+exec mako
 
 # Night light (toggle from waybar's gammastep module)
 exec gammastep
+
+# Auto-brightness (toggle from waybar's backlight-mode module)
+exec_always ${HOME}/.local/bin/wluma
+exec_always pkill -x wluma 2>/dev/null || true; sleep 0.3; exec "${XDG_BIN_HOME:-$HOME/.local/bin}/wluma"
 
 # Export the session environment to D-Bus/systemd so portals and user
 # services see WAYLAND_DISPLAY and XDG_CURRENT_DESKTOP.
