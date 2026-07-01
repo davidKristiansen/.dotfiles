@@ -1,32 +1,110 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
-
+#
+# Gruvbox dark (hard) powerline prompt — shared across all shells.
+# Mirrors the p10k layout: docker · user@host · dir · git  ↵  ❯
+# Right side: direnv · cmd_duration · exit status.
 
 add_newline = true
 command_timeout = 1000
-[line_break]
-disabled = false
+palette = "gruvbox_dark_hard"
 
-# [character]
-# success_symbol = "[➜](bold green) "
-# error_symbol = "[✗](bold red) "
+format = """
+[](color_aqua)\
+$docker_context\
+$username\
+$hostname\
+[](bg:color_yellow fg:color_aqua)\
+$directory\
+[](fg:color_yellow bg:color_blue)\
+$git_branch\
+$git_status\
+[](fg:color_blue)\
+$fill\
+$direnv\
+$cmd_duration\
+$status\
+$line_break\
+$character"""
+
+[palettes.gruvbox_dark_hard]
+color_bg0_h  = "#1d2021"   # hard background — used as dark text on bright segments
+color_bg1    = "#3c3836"
+color_bg2    = "#504945"
+color_fg1    = "#ebdbb2"
+color_red    = "#fb4934"
+color_green  = "#b8bb26"
+color_yellow = "#fabd2f"
+color_blue   = "#83a598"
+color_purple = "#d3869b"
+color_aqua   = "#8ec07c"
+color_orange = "#fe8019"
+color_gray   = "#928374"
+
+[fill]
+symbol = " "
 
 [docker_context]
-format = 'via [🐋 $context](blue bold)'
+symbol = "󰡨 "
+style = "bg:color_aqua fg:color_bg0_h"
+format = '[ $symbol$context ]($style)'
+only_with_files = false
+
+[username]
+show_always = true
+style_user = "bg:color_aqua fg:color_bg0_h"
+style_root = "bg:color_red fg:color_bg0_h"
+format = '[ $user]($style)'
+
+[hostname]
+ssh_only = false
+style = "bg:color_aqua fg:color_bg0_h"
+format = '[@$hostname ]($style)'
 
 [directory]
+style = "bg:color_yellow fg:color_bg0_h"
+format = "[ $path ]($style)"
 truncation_length = 8
 truncation_symbol = "…/"
 truncate_to_repo = false
+read_only = " 󰌾"
+read_only_style = "bg:color_yellow fg:color_red"
+
+[git_branch]
+symbol = ""
+style = "bg:color_blue fg:color_bg0_h"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:color_blue fg:color_bg0_h"
+format = '[$all_status$ahead_behind ]($style)'
+
+[direnv]
+disabled = false
+style = "fg:color_green"
+symbol = " "
+format = '[ $symbol$loaded]($style)'
 
 [cmd_duration]
-min_time = 0
-format = "took [$duration](bold yellow)"
+min_time = 500            # was 0 (printed "took 0ms" every prompt); bump to >0.5s only
+style = "fg:color_yellow"
+format = '[ took $duration]($style)'
 
 [status]
-# style = "bg:blue"
-# symbol = "🔴 "
-# success_symbol = "🟢 SUCCESS"
-format = '[$status]($style) '
+disabled = false
 map_symbol = true
+style = "fg:color_red"
+symbol = "✗ "
+not_executable_symbol = " "
+not_found_symbol = " "
+sigint_symbol = " "
+signal_symbol = "⚡ "
+format = '[ $symbol$status]($style)'
+
+[character]
+success_symbol = "[❯](bold color_green)"
+error_symbol = "[❯](bold color_red)"
+vimcmd_symbol = "[❮](bold color_yellow)"
+
+[line_break]
 disabled = false
