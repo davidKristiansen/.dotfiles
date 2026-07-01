@@ -9,7 +9,7 @@ APP_URL=https://chatgpt.com/
 # if ! (ps aux | grep "${APP_ID}" | grep -v grep >/dev/null); then
   swaymsg "exec                          \
     --no-startup-id                      \
-    /opt/microsoft/msedge/microsoft-edge \
+    /usr/bin/microsoft-edge-stable       \
     --profile-directory=Default          \
     --app-id=${APP_ID}                   \
     --app-url=${APP_URL}                 \
