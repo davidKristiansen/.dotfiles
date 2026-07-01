@@ -140,9 +140,23 @@ dce() {
     devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder" "${cmd[@]}"
   else
     # Interactive tmux: use docker exec -it for proper TTY allocation
+    #
+    # Seed the host TERM's terminfo into the container when it's missing.
+    # Terminals like ghostty (TERM=xterm-ghostty) ship an entry the
+    # container's ncurses db usually lacks, which makes tmux abort with
+    # "missing or unsuitable terminal". Fall back to xterm-256color if we
+    # can't install it (e.g. no tic/infocmp in a minimal image).
+    local term="$TERM"
+    if ! command docker exec "$container_id" infocmp "$term" >/dev/null 2>&1; then
+      if ! infocmp -x "$term" 2>/dev/null \
+           | command docker exec -i "$container_id" tic -x - >/dev/null 2>&1; then
+        term="xterm-256color"
+      fi
+    fi
+
     local -a docker_exec=(
       docker exec -it
-      -e TERM="$TERM"
+      -e TERM="$term"
       -e LANG="${LANG}"
       -e LC_ALL="${LC_ALL}"
     )
