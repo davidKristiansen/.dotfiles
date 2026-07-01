@@ -12,6 +12,14 @@ if [ -d "$XDG_CONFIG_HOME/environment.d" ]; then
 fi
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+# Completion dump belongs in the cache dir. Defined here (not only in the
+# interactive rc) so any zsh that runs compinit — including a non-interactive
+# `zsh -c` from tooling — never falls back to ~/.zcompdump. $HOST is a zsh
+# builtin (no fork), and %%.* trims any domain to match `hostname -s`.
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}"
+export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump-${${HOST:-host}%%.*}}"
+
 # NOTE: do not set TERM here. The terminal emulator (and tmux) set the correct
 # TERM; forcing xterm-256color clobbers truecolor/italics-capable values such as
 # xterm-kitty / alacritty / tmux-256color, and .zshenv runs for non-interactive
