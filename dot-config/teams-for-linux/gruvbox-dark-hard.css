@@ -465,6 +465,52 @@ button[class*="primary"]:hover,
   color: #1d2021 !important;
 }
 
+/* ------------------------------------------------------------
+   8b. Toasts / In-app Notifications
+   Teams renders activity/message toasts on the Gruvbox brand blue
+   (#458588) with near-black on-brand text. #458588 is a mid-tone blue
+   that fails contrast against both dark and light text (~3.9:1). Brighten
+   the surface to Gruvbox *bright* blue (#83a598) so the existing dark text
+   reads clearly (~6:1, passes WCAG AA) while staying on the gruvbox palette.
+   ------------------------------------------------------------ */
+
+.fui-Toast,
+.fui-ToastBody,
+.fui-ToastTitle,
+.fui-ToastFooter,
+.fui-ToastTitleMedia,
+[data-tid="toast"],
+[data-tid="toast-container"],
+[data-tid="toast-notification"],
+[data-tid="notification-toast"],
+[data-tid="activity-toast"],
+.ts-notification,
+.ts-toast {
+  background-color: #83a598 !important;
+  color: #1d2021 !important;
+  border-color: #458588 !important;
+}
+
+/* Make all text/icons inside the toast inherit the dark, readable color */
+.fui-Toast *,
+[data-tid="toast"] *,
+[data-tid="toast-container"] *,
+[data-tid="notification-toast"] *,
+.ts-notification *,
+.ts-toast * {
+  color: #1d2021 !important;
+}
+
+/* Links inside a toast: keep dark + underlined so they stay legible on the
+   bright-blue surface (link blue would be too low-contrast here) */
+.fui-Toast a,
+[data-tid="toast"] a,
+[data-tid="notification-toast"] a,
+.ts-notification a {
+  color: #1d2021 !important;
+  text-decoration: underline !important;
+}
+
 /* ============================================================
    9. Scrollbars
    ============================================================ */

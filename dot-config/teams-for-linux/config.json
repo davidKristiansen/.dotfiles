@@ -17,6 +17,7 @@
         }
     },
     "customCSSLocation": "/home/SONY/s7000026748/.config/teams-for-linux/gruvbox-dark-hard.css",
+    "notificationMethod": "electron",
     "mqtt": {
         "enabled": true,
         "brokerUrl": "mqtt://localhost:1883",
