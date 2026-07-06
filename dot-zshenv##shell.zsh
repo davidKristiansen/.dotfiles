@@ -18,7 +18,11 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 # `zsh -c` from tooling — never falls back to ~/.zcompdump. $HOST is a zsh
 # builtin (no fork), and %%.* trims any domain to match `hostname -s`.
 export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}"
-export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump-${${HOST:-host}%%.*}}"
+# Two-step expansion (not zsh's nested ${${...}}) so bash can source this file
+# too (bootstrap does, under `set -u`).
+_zshenv_host="${HOST:-${HOSTNAME:-host}}"
+export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump-${_zshenv_host%%.*}}"
+unset _zshenv_host
 
 # NOTE: do not set TERM here. The terminal emulator (and tmux) set the correct
 # TERM; forcing xterm-256color clobbers truecolor/italics-capable values such as
@@ -29,8 +33,9 @@ export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump-${${HOST:-host}%%
 : "${DEVCONTAINER_ENV_FILE:=$XDG_CONFIG_HOME/devcontainer_environment/environment_variables}"
 
 if [ -f /.dockerenv ]; then
-  # $TTY is a zsh builtin parameter — no `tty` fork.
-  if [ -n "$TTY" ]; then
+  # $TTY is a zsh builtin parameter — no `tty` fork. Default guards bash
+  # sourcing under `set -u`, where TTY doesn't exist.
+  if [ -n "${TTY:-}" ]; then
     export GPG_TTY="$TTY"
   fi
   if [ -r "$DEVCONTAINER_ENV_FILE" ]; then
