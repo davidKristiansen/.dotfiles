@@ -36,7 +36,7 @@ window#waybar {
 }
 
 /* ── The islands ─────────────────────────────────────────────────────────
- * #left / #right are the group modules; #clock and #tray ride solo. A soft
+ * #left / #right are the group modules; #clock and #tray ride solo. A faint
  * shadow lifts each island off the wallpaper. */
 #custom-power,
 #left,
@@ -44,9 +44,21 @@ window#waybar {
 #clock,
 #tray {
   background: @bg;
-  border-radius: 15px;
+  border-radius: 9px;
   padding: 0 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+/* Straight outer edges aligned to sway's 7px window gap: square the outward-
+ * facing corners of the leftmost (power) and rightmost (tray) islands so the
+ * bar presents a flat vertical edge at the same indent as the tiled windows. */
+#custom-power {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+#tray {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 #clock {
@@ -79,32 +91,31 @@ window#waybar {
   padding: 0 9px;
   margin: 4px 1px;
   background: transparent;
-  border-radius: 11px;
+  border-radius: 8px;
   transition: background 150ms ease, color 150ms ease;
 }
 
-/* Subtle hover affordance for everything interactive. */
-#mode:hover,
-#custom-media:hover,
-#custom-media-prev:hover,
-#custom-media-playpause:hover,
-#custom-media-next:hover,
-#language:hover,
+/* Accent-fill affordance: on hover a module fills with its own accent color
+ * and the glyph flips to @bg. Toggle modules also fill when active/on, so
+ * their state reads at a glance. */
+#language:hover               { background: @purple; color: @bg; }
 #bluetooth:hover,
-#network:hover,
-#pulseaudio:hover,
-#backlight:hover,
-#custom-backlight-mode:hover,
-#custom-gammastep:hover,
-#custom-mako:hover,
-#idle_inhibitor:hover,
-#temperature:hover,
-#disk:hover,
-#cpu:hover,
-#memory:hover,
-#battery:hover {
-  background: @bg_hl;
-}
+#bluetooth.connected:hover    { background: @blue;   color: @bg; }
+#network:hover                { background: @aqua;   color: @bg; }
+#pulseaudio:hover             { background: @yellow; color: @bg; }
+#backlight:hover              { background: @yellow; color: @bg; }
+#temperature:hover            { background: @orange; color: @bg; }
+#disk:hover                   { background: @blue;   color: @bg; }
+#cpu:hover                    { background: @aqua;   color: @bg; }
+#memory:hover                 { background: @purple; color: @bg; }
+#battery:hover                { background: @green;  color: @bg; }
+#mode:hover                   { background: @orange; color: @bg; }
+#custom-media:hover           { background: @green;  color: @bg; }
+
+#idle_inhibitor:hover         { background: @yellow; color: @bg; }
+#custom-gammastep:hover        { background: @orange; color: @bg; }
+#custom-mako:hover             { background: @purple; color: @bg; }
+#custom-backlight-mode:hover   { background: @aqua;   color: @bg; }
 
 /* ── Power button (its own island, like the tray) ───────────────────────── */
 #custom-power {
@@ -142,6 +153,13 @@ window#waybar {
 #mode {
   color: @orange;
   font-weight: bold;
+}
+
+/* Focused-window title: secondary, non-interactive — dimmed and italic. */
+#window {
+  color: @fg_dim;
+  font-style: italic;
+  padding: 0 10px;
 }
 
 /* ── Media ──────────────────────────────────────────────────────────────── */

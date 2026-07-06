@@ -7,7 +7,7 @@
       "Bash(mise *)"
     ]
   },
-  "model": "claude-fable-5[1m]",
+  "model": "haiku",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true

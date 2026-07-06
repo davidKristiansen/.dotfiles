@@ -5,7 +5,7 @@
   "layer": "top",
   "position": "top",
   "height": 30,
-  "spacing": 8,
+  "spacing": 7,
   "margin-top": 7,
   "margin-left": 7,
   "margin-right": 7,
@@ -30,6 +30,7 @@
     "orientation": "horizontal",
     "modules": [
       "sway/workspaces",
+      "sway/window",
       "sway/mode",
       "custom/media-prev",
       "custom/media-playpause",
@@ -76,8 +77,12 @@
     "max-length": 50
   },
   "sway/window": {
-    "max-length": 60,
-    "tooltip": true
+    "max-length": 40,
+    "tooltip": true,
+    "rewrite": {
+      "(.*) — Mozilla Firefox": "$1",
+      "(.*) - (.*)": "$1"
+    }
   },
 
   // ── Media (generic MPRIS — Spotify, mpv, browsers, …) ─────────────────────
