@@ -3,7 +3,10 @@
 # polkit agent, and the portals. Export the session environment first, then
 # pull up the target. Both lines are idempotent, so exec_always keeps
 # reloads safe.
-exec_always dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+# PATH must be exported too: sway runs from /opt/sway/bin, and units like
+# swayidle call swaymsg — without the session PATH the user manager's default
+# PATH can't find it (lock.sh output detection and DPMS silently fail).
+exec_always dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK PATH XDG_CURRENT_DESKTOP=sway
 exec_always systemctl --user start sway-session.target
 
 # Desktop preferences (idempotent one-shots).
