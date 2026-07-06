@@ -22,10 +22,10 @@ mkdir -p "$TPM_PATH" || {
 
 # Check if tpm is already installed
 if [ -d "$TPM_DIR" ]; then
-  # Update existing tpm installation
-  if git -C "$TPM_DIR" rev-parse --git-dir > /dev/null 2>&1; then
-    git -C "$TPM_DIR" pull origin master > /dev/null 2>&1 || true
-  fi
+  # Already installed: never touch the network on the startup path. A
+  # synchronous `git pull` here blocked every server start / config reload
+  # by seconds. Update TPM and plugins via `prefix + U` instead.
+  :
 else
   # Clone tpm with retry logic
   if git clone "$TPM_REPO" "$TPM_DIR" > /dev/null 2>&1; then
