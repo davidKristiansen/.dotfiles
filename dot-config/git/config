@@ -6,9 +6,7 @@
 [includeIf "gitdir:~/Work/"]
     path = ~/.config/git/work.conf
 
-[includeIf "gitdir:~/ROOTDIR/"]
-    path = ~/.config/git/work.conf
-
+# Container mounts (e.g. devcontainers) get the work identity
 [includeIf "gitdir:/Project/"]
     path = ~/.config/git/work.conf
 
