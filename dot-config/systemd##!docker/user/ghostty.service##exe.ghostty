@@ -1,0 +1,15 @@
+[Unit]
+Description=Ghostty terminal daemon (pre-spawned so the first window opens instantly)
+Documentation=https://ghostty.org/docs
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ghostty --initial-window=false
+# Clean exit if another instance already owns the session (single-instance
+# via D-Bus); on-failure only resurrects a crashed daemon.
+Restart=on-failure
+
+[Install]
+WantedBy=sway-session.target

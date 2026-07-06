@@ -1,18 +1,36 @@
 #!/bin/bash
 
-# TERMINAL="${XDG_BIN_HOME}/kitty"
-TERMINAL=ghostty
+# Quake-style terminal. Runs as a dedicated ghostty instance with its own
+# class (not the ghostty daemon: daemon windows share its app_id and can
+# only be matched by title, which arrives after mapping — the window would
+# tile into the layout before flying to the scratchpad). With a distinct
+# app_id the for_window rule catches it at map time and it never disturbs
+# the layout. The cold start (~400ms) is paid at sway startup via
+# --prelaunch (see ~/.config/sway/scratchpad), so the toggle is instant.
+APP_ID="term.scratchpad"
 
-echo 1
-if [[ ! $(ps aux | \grep "term.scratchpad" | \grep -v grep) ]]; then
-echo 2
-  swaymsg 'exec --no-startup-id ghostty --class="term.scratchpad" -e tmux new-session -A -s scratch'
-  # swaymsg 'exec --no-startup-id "${XDG_BIN_HOME}/kitty" --class="term.scratchpad"'
-echo 3
-  sleep 1.5
+window_exists() {
+  swaymsg -t get_tree | jq -e --arg a "$APP_ID" 'any(..; .app_id? == $a)' >/dev/null
+}
+
+launch() {
+  swaymsg "exec --no-startup-id ghostty --class=${APP_ID} -e tmux new-session -A -s scratch"
+}
+
+if [[ "$1" == "--prelaunch" ]]; then
+  window_exists || launch
+  exit 0
 fi
-echo 4
 
-swaymsg '[app_id=term.scratchpad] scratchpad show'
+if ! window_exists; then
+  launch
+  # poll instead of a fixed sleep — show as soon as the window maps
+  for _ in {1..60}; do
+    window_exists && break
+    sleep 0.05
+  done
+fi
+
+swaymsg "[app_id=${APP_ID}] scratchpad show"
 
 # vim.filetype=bash:

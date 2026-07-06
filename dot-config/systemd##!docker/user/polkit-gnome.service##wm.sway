@@ -1,12 +1,11 @@
 [Unit]
-Description=Dynamic output configuration
-Documentation=man:kanshi(1)
+Description=PolicyKit authentication agent (GNOME)
 PartOf=graphical-session.target
 After=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/kanshi
+ExecStart=/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 Restart=on-failure
 
 [Install]

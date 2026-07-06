@@ -1,36 +1,37 @@
-## Scratchpad // Show SpeedCrunch //  <> s ##
-# exec --no-startup-id speedcrunch
-for_window [app_id="org.speedcrunch.speedcrunch"] move scratchpad
-bindsym $mod+c exec --no-startup-id sh -c $XDG_BIN_HOME/speedcrunch.sh
+# App scratchpads — each helper script launches the app on first use and
+# toggles it afterwards.
 
-## Scratchpad // Show Kuro Todo //  <> o ##
-# exec --no-startup-id kuro
+# SpeedCrunch calculator
+# speedcrunch.sh lives in dot-local/bin gated on ##exe.speedcrunch; re-enable the bind if speedcrunch gets installed.
+for_window [app_id="org.speedcrunch.speedcrunch"] move scratchpad
+for_window [class="SpeedCrunch" window_type="normal"] move scratchpad
+# bindsym $mod+c exec $XDG_BIN_HOME/speedcrunch.sh
+
+# Kuro (Microsoft To Do)
 for_window [class="Kuro"] move scratchpad
 bindsym $mod+m [class="Kuro"] scratchpad show
 
-# ## Scratchpad // Show 1Password //  <> [ ##
-# exec --no-startup-id 1password
+# 1Password
 for_window [app_id="1Password"] move scratchpad
-bindsym $mod+o exec --no-startup-id sh -c $XDG_BIN_HOME/1password.sh
-#
-# ## Scratchpad // Show kitty (quake mode) //  <> [ ##
+bindsym $mod+o exec $XDG_BIN_HOME/1password.sh
+
+# Quake-style terminal — dedicated instance so the rule matches at map time
+# and the window never enters the tiling layout; pre-launched at startup so
+# the first toggle is instant
 for_window [app_id="term.scratchpad"] move scratchpad
-# bindsym $mod+q [app_id="__scratchpad"] scratchpad show
-bindsym $mod+q exec --no-startup-id sh -c $XDG_BIN_HOME/scratchpad.sh
+bindsym $mod+q exec $XDG_BIN_HOME/scratchpad.sh
+exec $XDG_BIN_HOME/scratchpad.sh --prelaunch
 
+# Spotify
 for_window [class="Spotify"] move scratchpad
-bindsym $mod+s exec --no-startup-id sh -c $XDG_BIN_HOME/spotify.sh
+bindsym $mod+s exec $XDG_BIN_HOME/spotify.sh
 
-# ## Scratchpad // Show Enterprise LLM //  <> [ ##
+# Enterprise LLM (browser PWA)
 for_window [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] move scratchpad
 bindsym $mod+bracketleft [instance="crx__hijngppadlmpfgmhgphggfinhcbebdem"] scratchpad show, move position center, resize set 90 ppt 90 ppt
-#
-# ## Scratchpad // Show e LLM //  <> ] ##
+
+# LLM launcher (browser PWA)
 for_window [instance="crx__cadlkienfkclaiaibeoongdcgmdikeeg"] move scratchpad
-bindsym $mod+bracketright exec --no-startup-id sh -c $XDG_BIN_HOME/llm.sh
-
-# for_window [class="teams-for-linux"] move scratchpad
-# bindsym $mod+t [class="teams-for-linux"] scratchpad show, move position center, resize set 90 ppt 90 ppt
-
+bindsym $mod+bracketright exec $XDG_BIN_HOME/llm.sh
 
 # vim: filetype=i3config

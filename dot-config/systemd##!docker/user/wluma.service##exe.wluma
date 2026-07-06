@@ -1,0 +1,16 @@
+[Unit]
+Description=Automatic brightness based on screen contents and ambient light
+Documentation=https://github.com/maximbaz/wluma
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/wluma
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=-%E/wluma/service.conf
+PrivateNetwork=true
+
+[Install]
+WantedBy=sway-session.target

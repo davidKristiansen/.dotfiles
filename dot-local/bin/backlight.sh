@@ -17,8 +17,6 @@ DDC_SLEEP="${DDC_SLEEP:-.4}"    # I2C sleep multiplier (lower = faster, raise if
 
 DDCUTIL="${DDCUTIL:-ddcutil}"
 BRIGHTNESSCTL="${BRIGHTNESSCTL:-brightnessctl}"
-WLUMA="${WLUMA:-wluma}"
-WLUMA_LOG="/tmp/wluma.log"
 
 # Common ddcutil flags — applied to every call for speed.
 DDC_OPTS=(--bus "$EXTERNAL_BUS" --sleep-multiplier "$DDC_SLEEP")
@@ -42,8 +40,8 @@ Usage:
   $(basename "$0") down [STEP]
   $(basename "$0") mode          Waybar JSON: current auto/manual state
   $(basename "$0") toggle        Toggle between auto (wluma) and manual
-  $(basename "$0") auto          Start wluma
-  $(basename "$0") manual        Stop wluma
+  $(basename "$0") auto          Start wluma.service
+  $(basename "$0") manual        Stop wluma.service
 
 Environment:
   INTERNAL_DEVICE   default: intel_backlight
@@ -52,7 +50,6 @@ Environment:
   MIN_BRIGHTNESS    default: 1
   MAX_BRIGHTNESS    default: 100
   DDC_SLEEP         default: .4  (I2C sleep multiplier; raise if DDC/CI is unreliable)
-  WLUMA             default: wluma
 
 Examples:
   $(basename "$0") get
@@ -66,9 +63,9 @@ Sway:
 EOF
 }
 
-# ── Auto-brightness (wluma) ──────────────────────────────────────────────────
+# ── Auto-brightness (wluma, runs as the wluma.service user unit) ─────────────
 
-is_auto() { pgrep -x wluma >/dev/null 2>&1; }
+is_auto() { systemctl --user is-active --quiet wluma.service; }
 
 mode_json() {
   if is_auto; then
@@ -79,12 +76,11 @@ mode_json() {
 }
 
 start_auto() {
-  is_auto && return 0
-  swaymsg -q exec "$HOME/.local/bin/$WLUMA"
+  systemctl --user start wluma.service
 }
 
 stop_auto() {
-  pkill -x wluma 2>/dev/null || true
+  systemctl --user stop wluma.service
 }
 
 toggle_mode() {

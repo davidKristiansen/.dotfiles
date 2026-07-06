@@ -9,8 +9,8 @@ set $term ghostty
 set $default_gaps_inner 7
 set $default_gaps_outer 0
 
-set $menu swaymsg 'exec $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher'
-# set $menu swaymsg 'exec vicinae toggle'
+set $menu $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher
+# set $menu vicinae toggle
 set $menu_fallback 'bemenu-run \
   --ignorecase   \
   --fb "#1d2021" \
@@ -21,7 +21,6 @@ set $menu_fallback 'bemenu-run \
   --hb "#1d2021" \
   --tf "#fe8019" \
   --hf "#fabd2f" \
-  --nf "#ebdbb2" \
   --af "#ebdbb2" \
   --ab "#1d2021" \
   --prompt ">"   \
