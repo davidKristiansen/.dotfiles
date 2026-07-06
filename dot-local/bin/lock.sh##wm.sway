@@ -270,13 +270,16 @@ apply_cool_effects() {
 }
 
 lock_1password() {
+  # Must never block: `1password --lock` can hang on GUI IPC, and with
+  # `swayidle -w` a stuck child here freezes the whole idle pipeline
+  # (swaylock is only spawned after this returns). Detach + timeout.
   if command -v 1password >/dev/null 2>&1; then
-    1password --lock >/dev/null 2>&1 || true
+    setsid -f timeout 10 1password --lock >/dev/null 2>&1 || true
     return 0
   fi
 
   if command -v gdbus >/dev/null 2>&1; then
-    gdbus call --session \
+    timeout 5 gdbus call --session \
       --dest com.1password.1Password \
       --object-path /com/1password/OnePassword \
       --method com.1password.OnePassword.Lock \
