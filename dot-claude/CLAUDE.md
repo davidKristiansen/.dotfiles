@@ -15,22 +15,11 @@ when they're available — they keep output out of the context window.
 
 CLI: `mcpipe list`, `mcpipe run <tool>`, `mcpipe view <handle>`, `mcpipe approve`
 
-Custom plugins live in `~/.config/mcpipe/plugins/` or `./mcpipe_plugins/`.
-
 ### Feedback
 
 David Kristiansen is the **author** of mcpipe. Whenever you notice a bug, papercut, or
-improvement idea — even incidental to the current task — append it to `FEEDBACK.md` in
-the mcpipe repo (`~/src/mcpipe/FEEDBACK.md`). Do not silently ignore it.
-
-Format:
-```
-## <short title>
-
-**Type:** bug | suggestion | question
-**Context:** <what you were doing when you noticed it>
-**Detail:** <clear description>
-```
+improvement idea — even incidental to the current task — use the `mcpipe-feedback` skill
+to log it in `~/src/mcpipe/mcpipe-feedback.md`. Do not silently ignore it.
 # graphify
 - **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
 When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.

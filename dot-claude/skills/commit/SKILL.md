@@ -1,36 +1,38 @@
 ---
 name: commit
-description: Stage, commit, and push with conventional commits. Use when the user asks to commit, save changes, or push code.
+description: Stage, commit, and optionally push changes using Conventional Commits. Use when the user asks to commit, save changes, or push code.
+disable-model-invocation: true
+argument-hint: [optional scope or message hint]
+allowed-tools: Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git add *), Bash(git commit *), Bash(git push *), Bash(git branch *), Bash(git rev-parse *), Bash(git checkout -b *)
 ---
 
-Follow this commit workflow:
+## Current state
 
-### 1. Check the Current Branch
-Run `git rev-parse --abbrev-ref HEAD` to verify the current branch.
+- Branch: !`git branch --show-current`
+- Status: !`git status --short`
 
-If on a protected branch (`main`, `develop`, or `master`):
-- **DO NOT** proceed with the commit
-- Suggest creating a branch with a naming pattern like:
-  - `feature/short-description` for new features
-  - `fix/short-description` for bug fixes
-  - `docs/short-description` for documentation
-  - `refactor/short-description` for refactoring
-- Create and switch to the new branch with `git checkout -b <branch-name>`
+## Checklist — copy this and check off each item
 
-### 2. Review Changes
-Run `git status`, `git --no-pager diff`, and `git --no-pager diff --cached` to understand all changes (`--no-pager` avoids opening the interactive `hunk` pager).
+```
+Commit progress:
+- [ ] 1. Branch safe (not main/develop/master)
+- [ ] 2. Full diff reviewed
+- [ ] 3. Changes grouped into atomic commits
+- [ ] 4. No secrets or identifying info staged
+- [ ] 5. Committed (and pushed if appropriate)
+```
 
-### 3. Suggest Logical Chunking
-If staged changes touch multiple unrelated areas (different directories/concerns, independent features or fixes, different subsystems):
-- Suggest splitting into logical commits
-- Keep related changes together (a feature and its tests, a fix and related docs)
-- Separate independent changes (a parser fix + auth refactoring = 2 commits)
+**Step 1 — Branch.** Never commit directly to `main`, `develop`, or `master`. If on one, create a branch first — `git checkout -b <type>/<short-description>` where `<type>` is `feature`, `fix`, `docs`, or `refactor` — and tell the user.
 
-### 4. Stage Changes
-Stage the appropriate files with `git add`. NEVER commit `.env` files, credentials, or secrets.
+**Step 2 — Review.** Read the full diff before writing any message: `git --no-pager diff` and `git --no-pager diff --cached`. If mcpipe MCP tools are available, prefer `mcpipe:git_diff` / `mcpipe:git_log` for large output (returns a handle; read with `mcpipe:view`).
 
-### 5. Draft the Commit Message
-Use [Conventional Commits](https://www.conventionalcommits.org/) format:
+**Step 3 — Group.** One commit per concern: a feature stays with its tests; unrelated changes (a parser fix + an auth refactor) become separate commits. Stage each group explicitly with `git add <paths>` — never `git add -A` without checking what it grabs.
+
+**Step 4 — Secrets & identifying info.** Never stage `.env` files, credentials, keys, or tokens. Also keep personal/company identifiers out of diffs headed for shared or public repos: usernames and employee IDs, company email addresses, internal hostnames and URLs, and absolute `/home/<user>` paths (use `$HOME`, `%h`, or XDG variables instead). Scan the staged diff for these before committing — `git diff --cached | grep -inE '<username>|<employee-id>|corp domain'` — and if something identifying is already tracked, warn the user rather than silently committing more of it.
+
+**Step 5 — Commit and push.** The `/commit` invocation is approval to commit. Ask before pushing to a branch that doesn't exist on the remote yet.
+
+## Message format — Conventional Commits
 
 ```
 type(scope): description
@@ -38,13 +40,9 @@ type(scope): description
 [optional body explaining the why]
 ```
 
-**Valid types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
 
-**Rules:**
-- Description must be lowercase and concise (50 chars max for first line)
-- Use imperative mood ("add feature" not "added feature")
-- No period at the end
-- Breaking changes: add `!` after the type: `feat!: breaking change`
+**Rules:** first line lowercase, imperative mood, ≤50 chars, no trailing period. Breaking changes: `!` after the type (`feat!: …`).
 
 **Examples:**
 ```
@@ -54,10 +52,3 @@ docs: update CLI reference in README
 refactor(orchestrator): simplify task execution logic
 chore(deps): upgrade dependencies to latest versions
 ```
-
-### 6. Execute and Push
-Commit with the approved message, then push to the remote.
-
-### Notes
-- Always ask before creating branches or making commits
-- Atomic commits are easier to review and revert

@@ -1,0 +1,42 @@
+{
+  "skill": "vault",
+  "cases": [
+    {
+      "name": "conventions-before-writing",
+      "query": "put this in my vault: a note about how tmux clipboard integration works over ssh",
+      "setup": "Vault exists at ~/.local/share/vault with AGENTS.md conventions file and Johnny Decimal structure.",
+      "expected_behavior": [
+        "Reads the vault conventions file (AGENTS.md or .github/copilot-instructions.md) before writing",
+        "Places the note in the correct Johnny Decimal category with the next available ID and `<JD#> <Title>.md` filename",
+        "Note has YAML front-matter with id, aliases, tags; wikilinks for known concepts; ends with a Related Notes section"
+      ]
+    },
+    {
+      "name": "update-not-duplicate",
+      "query": "add to my vault: pytest fixtures can be parametrized indirectly",
+      "setup": "Vault already contains a note covering pytest under 14 Concepts.",
+      "expected_behavior": [
+        "Finds the existing pytest note and extends it instead of creating a duplicate",
+        "Preserves the existing note structure and front-matter"
+      ]
+    },
+    {
+      "name": "hub-update-on-new-concept",
+      "query": "create a vault note about the mcpipe handle/view pattern",
+      "setup": "No existing note on the topic; 14 Concepts category exists with a 14.00 Knowledge Base Hub.md.",
+      "expected_behavior": [
+        "Creates the note as a new 14.XX entry",
+        "Also updates 14 Concepts/14.00 Knowledge Base Hub.md and index.md to reference it"
+      ]
+    },
+    {
+      "name": "trigger-precision-negative",
+      "query": "leave a note in the code explaining why this retry constant is 3",
+      "setup": "Ordinary code-editing session in a repo.",
+      "expected_behavior": [
+        "Does NOT invoke the vault skill (\"note\" here means a code comment)",
+        "Adds the code comment as asked"
+      ]
+    }
+  ]
+}

@@ -1,65 +1,47 @@
 ---
 name: vault
-description: Read, write, and manage notes in the Obsidian knowledge vault at ~/.local/share/vault. Uses Johnny Decimal organization with wikilink cross-references. Use when the user mentions vault, notes, or knowledge base.
+description: Read, write, and manage notes in the Obsidian knowledge vault at ~/.local/share/vault. Johnny Decimal organization with wikilink cross-references.
+when_to_use: When the user mentions their vault, notes, or knowledge base, or says things like "put this in my vault" or "add a note about this".
 ---
 
-## What this skill does
+Interact with the user's personal knowledge vault — an Obsidian-compatible markdown vault at `~/.local/share/vault`, organized with the Johnny Decimal system and Obsidian wikilinks.
 
-Interact with the user's personal knowledge vault — an Obsidian-compatible markdown vault stored at `~/.local/share/vault`. The vault uses the Johnny Decimal organizational system for structure and Obsidian wikilinks for cross-references.
+## Standing instruction
 
-## First steps — always do this
-
-1. Read the vault's conventions file (look for `.github/copilot-instructions.md` or `AGENTS.md` at the vault root) for note format, cross-linking rules, tags, and the full category map. This file is the source of truth.
-2. Read `~/.local/share/vault/index.md` for a quick overview of all notes and navigation links.
-
-## Vault location
-
-`~/.local/share/vault`
+Before writing anything, read the vault's conventions file (`.github/copilot-instructions.md` or `AGENTS.md` at the vault root). It is the source of truth for note format, cross-linking rules, tags, and the full category map. `index.md` gives a quick overview of all notes.
 
 ## Organization
 
-The vault uses the Johnny Decimal system:
-
 ```
 10-19  Area
-  11   Category
-    11.01  Individual note
+  11   Category            → directory, e.g. `14 Concepts/`
+    11.01  Individual note → file named `<JD#> <Title>.md`
 ```
 
-Categories are directories (e.g., `14 Concepts/`). Notes are markdown files named `<JD#> <Title>.md`.
+## Reading
 
-## Reading notes
+- Discover: `find ~/.local/share/vault -name '*.md'`; search: `grep -r`
+- `index.md` / `Vault Map.md` — full listing; `14 Concepts/14.00 Knowledge Base Hub.md` — concept index
+- Prefer a vault semantic-search MCP tool for conceptual queries if one is available; `grep` for exact strings
 
-- Use bash with `find` or `ls` to discover notes: `find ~/.local/share/vault -name '*.md'`
-- Use bash with `grep -r` to search content across the vault
-- Read `index.md` or `Vault Map.md` for a full directory listing
-- Read `14 Concepts/14.00 Knowledge Base Hub.md` for the concept index
+## Writing and updating
 
-## Writing and updating notes
-
-When creating or editing notes, follow these rules strictly:
-
-1. **Read the conventions first** — always read the vault conventions file before writing
-2. **Front-matter is mandatory** — every note must have YAML front-matter with `id`, `aliases`, and `tags`
-3. **Cross-link aggressively** — every mention of a known concept must use a wikilink in the format `[[14 Concepts/14.XX Name|Display Name]]`
-4. **Related Notes section** — every note must end with a "Related Notes" section linking to relevant pages
-5. **Next available ID** — when creating a new note, list the category directory to find the next available number
-6. **Update the hub** — when adding a new concept (14.XX), also update `14 Concepts/14.00 Knowledge Base Hub.md` and `index.md`
+1. **Front-matter is mandatory** — every note needs YAML front-matter with `id`, `aliases`, and `tags`
+2. **Cross-link aggressively** — every mention of a known concept uses a wikilink: `[[14 Concepts/14.XX Name|Display Name]]`
+3. **Related Notes section** — every note ends with one, linking to relevant pages
+4. **Next available ID** — list the category directory to find the next free number
+5. **Update the hub** — a new concept (14.XX) also gets added to `14.00 Knowledge Base Hub.md` and `index.md`
 
 ## When the user says "put this in my vault"
 
-1. Determine the right category based on content
-2. Check if an existing note covers the topic (update it rather than creating a duplicate)
-3. If creating new: assign next ID, write with full front-matter and cross-links
-4. If updating: preserve existing structure, add new sections or extend existing ones
-
-## Semantic search
-
-If a semantic-search MCP tool for the vault is available, prefer it for conceptual queries. Fall back to `grep -r` for exact string matches.
+1. Read the conventions file (standing instruction above), then `index.md`.
+2. Search for an existing note on the topic: `grep -ril "<topic>" ~/.local/share/vault --include='*.md'`. If found, **update it** — preserve its structure and front-matter — instead of creating a duplicate. Stop here.
+3. Pick the category from the map in the conventions file, then find the next free ID: `ls ~/.local/share/vault/"<NN Category>"/`.
+4. Create `<JD#> <Title>.md` following rules 1–3 above.
+5. Apply rule 5: register new concepts in the hub and `index.md`.
 
 ## Do not
 
-- Do not create notes without front-matter
-- Do not use plain text where a wikilink should be
-- Do not guess the vault path — it is always `~/.local/share/vault`
-- Do not put sensitive project paths or credentials in notes
+- Create notes without front-matter, or use plain text where a wikilink belongs
+- Guess the vault path — it is always `~/.local/share/vault`
+- Put sensitive project paths or credentials in notes

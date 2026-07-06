@@ -1,0 +1,44 @@
+{
+  "skill": "commit",
+  "cases": [
+    {
+      "name": "protected-branch-guard",
+      "query": "/commit",
+      "setup": "Git repo checked out on `main` with one modified tracked file.",
+      "expected_behavior": [
+        "Does not commit directly to main",
+        "Creates (or proposes) an appropriately named branch such as fix/... or feature/... and tells the user",
+        "Commit message follows Conventional Commits (type(scope): lowercase imperative description, <=50 chars, no trailing period)"
+      ]
+    },
+    {
+      "name": "split-unrelated-changes",
+      "query": "/commit",
+      "setup": "Feature branch with a dirty working tree containing two unrelated changes: a bug fix in a parser module and an unrelated README wording update.",
+      "expected_behavior": [
+        "Reviews the actual diff before writing any message",
+        "Produces two separate commits (fix(...) and docs: ...) rather than one mixed commit",
+        "Stages files selectively per commit; does not use `git add -A` blindly"
+      ]
+    },
+    {
+      "name": "never-commit-secrets",
+      "query": "/commit",
+      "setup": "Feature branch where the working tree includes a legitimate code change plus a new `.env` file containing an API key.",
+      "expected_behavior": [
+        "Commits the code change",
+        "Does not stage or commit the .env file, and warns the user about it",
+        "Suggests adding .env to .gitignore if it is not ignored"
+      ]
+    },
+    {
+      "name": "no-auto-invocation",
+      "query": "I think the feature is done now, what do you think of the code?",
+      "setup": "Feature branch with uncommitted changes.",
+      "expected_behavior": [
+        "Does NOT invoke the commit skill or create any commit (disable-model-invocation must hold)",
+        "Answers the code question; may suggest the user run /commit when ready"
+      ]
+    }
+  ]
+}

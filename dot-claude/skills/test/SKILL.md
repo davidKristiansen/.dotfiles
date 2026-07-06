@@ -1,19 +1,30 @@
 ---
 name: test
-description: Run tests and fix any failures. Use when the user asks to run tests, check if tests pass, or fix failing tests.
+description: Run the project's test suite and fix any failures. Use when the user asks to run tests, check whether tests pass, or fix failing tests.
 ---
 
-Run the project's test suite. Detect the test framework automatically:
+Run the project's test suite and get it green.
 
-- If `pytest.ini`, `pyproject.toml` with `[tool.pytest]`, or `conftest.py` exists, run `pytest -v`
-- If a `Makefile` with a `test` target exists, run `make test`
-- If `CMakeLists.txt` exists with `ctest`, run `ctest --output-on-failure`
-- If `package.json` with a `test` script exists, run `npm test`
+## Find the test entrypoint — check in this order
 
-If specific test targets are mentioned, use those (e.g., a specific file or test name).
+1. **Project-defined entrypoint first** — it sets env vars and flags you'd otherwise miss:
+   `test` target in `Makefile` or `justfile` → `make test` / `just test`; `test` script in `package.json` → `npm test`; `tox.ini`/`noxfile.py` → `tox` / `nox`; otherwise copy the test command from the CI workflow (`.github/workflows/*.yml`).
+2. **Otherwise the ecosystem default:**
+   - `pytest.ini`, `conftest.py`, or `[tool.pytest]` in `pyproject.toml` → `pytest`
+   - `Cargo.toml` → `cargo test`
+   - `go.mod` → `go test ./...`
+   - `package.json` without a test script → `npx vitest run` or `npx jest` (check devDependencies)
+   - `CMakeLists.txt` → `ctest --output-on-failure` from the build directory
+   - `build.gradle*` → `./gradlew test`; `pom.xml` → `mvn test`
+   - Anything else: inspect the README and repo layout and use the project's documented command.
+3. If the user named specific tests or files, run only those.
 
-After running:
-1. If all tests pass, report the summary
-2. If any tests fail, analyze each failure, identify the root cause, and fix the code
-3. Re-run the failing tests to confirm the fix
-4. Repeat until all tests pass
+## Fix loop
+
+Run → read each failure → fix the root cause in the code under test → re-run. Repeat until green.
+
+## Guardrails
+
+- Never make tests pass by deleting or weakening assertions, skipping/xfailing tests, or loosening tolerances. Only change a test when the test itself is provably wrong — and say so explicitly.
+- If a failure reveals a real bug that's out of scope to fix now, report it clearly rather than papering over it.
+- Report faithfully: if tests still fail when you stop, say so and include the failing output. Never claim green without a passing run you actually executed.

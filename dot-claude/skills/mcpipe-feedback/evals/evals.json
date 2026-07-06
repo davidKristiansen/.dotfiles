@@ -1,0 +1,34 @@
+{
+  "skill": "mcpipe-feedback",
+  "cases": [
+    {
+      "name": "incidental-bug-capture",
+      "query": "(during unrelated work) an mcp__mcpipe__git_log call returns a handle whose preview is empty even though lines=847",
+      "setup": "Any session where an mcpipe tool visibly misbehaves while Claude works on something else.",
+      "expected_behavior": [
+        "Logs the observation to ~/src/mcpipe/mcpipe-feedback.md without abandoning the primary task",
+        "Entry uses the ## title + Type/Context/Detail template",
+        "Detail names the exact tool, arguments, observed vs expected behavior"
+      ]
+    },
+    {
+      "name": "dedupe-existing-entry",
+      "query": "/mcpipe-feedback the fs_grep before/after context flags are ignored when _search is also set",
+      "setup": "mcpipe-feedback.md already contains an entry about fs_grep context flags.",
+      "expected_behavior": [
+        "Searches the file first and extends the existing fs_grep entry rather than appending a duplicate",
+        "Keeps one entry per distinct issue"
+      ]
+    },
+    {
+      "name": "direct-invocation-format",
+      "query": "/mcpipe-feedback compose_logs should accept a since= argument like git_log does",
+      "setup": "Clean feedback file.",
+      "expected_behavior": [
+        "Appends a new entry typed as `suggestion` with a short title",
+        "Context and Detail fields are filled in factually",
+        "Writes to ~/src/mcpipe/mcpipe-feedback.md (not FEEDBACK.md)"
+      ]
+    }
+  ]
+}
