@@ -8,3 +8,6 @@ bootstrap
 .github
 .gitignore
 .gitmodules
+
+# Claude Code project-local state for this repo (not the dot-claude package)
+.claude
