@@ -18,19 +18,23 @@ local claude = require('utils.lazy').add({
     -- Bind <leader>as in any neo-tree buffers that were already open at load.
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       if vim.bo[buf].filetype == 'neo-tree' then
-        vim.keymap.set('n', '<leader>as', '<cmd>ClaudeCodeTreeAdd<cr>',
-          { buffer = buf, desc = 'Claude: Add file from tree' })
+        vim.keymap.set(
+          'n',
+          '<leader>as',
+          '<cmd>ClaudeCodeTreeAdd<cr>',
+          { buffer = buf, desc = 'Claude: Add file from tree' }
+        )
       end
     end
   end,
   keys = {
-    { '<leader>ac', '<cmd>ClaudeCode<cr>',           desc = 'Claude: Toggle' },
-    { '<leader>af', '<cmd>ClaudeCodeFocus<cr>',      desc = 'Claude: Focus' },
-    { '<leader>ar', '<cmd>ClaudeCode --resume<cr>',  desc = 'Claude: Resume' },
-    { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>',      desc = 'Claude: Add buffer' },
+    { '<leader>ac', '<cmd>ClaudeCode<cr>', desc = 'Claude: Toggle' },
+    { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', desc = 'Claude: Focus' },
+    { '<leader>ar', '<cmd>ClaudeCode --resume<cr>', desc = 'Claude: Resume' },
+    { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>', desc = 'Claude: Add buffer' },
     { '<leader>aa', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Claude: Accept diff' },
-    { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>',   desc = 'Claude: Deny diff' },
-    { '<leader>as', '<cmd>ClaudeCodeSend<cr>',       mode = 'v', desc = 'Claude: Send selection' },
+    { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', desc = 'Claude: Deny diff' },
+    { '<leader>as', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = 'Claude: Send selection' },
   },
 })
 

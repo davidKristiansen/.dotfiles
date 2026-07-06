@@ -13,12 +13,20 @@ require('utils.lazy').add({
     require('neotest').setup({
       discovery = {
         filter_dir = function(name)
-          if name:match('^%d%d%-%d%d%-%d%d_') then return false end
+          if name:match('^%d%d%-%d%d%-%d%d_') then
+            return false
+          end
           return not ({
-            ['.git'] = true, ['.venv'] = true, ['.venv.devcontainer'] = true,
-            ['99.Artifacts'] = true, ['bazel-bin'] = true, ['bazel-out'] = true,
-            ['bazel-testlogs'] = true, ['bazel-Project'] = true,
-            node_modules = true, __pycache__ = true,
+            ['.git'] = true,
+            ['.venv'] = true,
+            ['.venv.devcontainer'] = true,
+            ['99.Artifacts'] = true,
+            ['bazel-bin'] = true,
+            ['bazel-out'] = true,
+            ['bazel-testlogs'] = true,
+            ['bazel-Project'] = true,
+            node_modules = true,
+            __pycache__ = true,
           })[name]
         end,
       },
@@ -27,7 +35,11 @@ require('utils.lazy').add({
           local ok, gtest = pcall(require, 'neotest-gtest')
           if ok then
             return gtest.setup({
-              is_test_file = function(p) if p:find('/build/') then return false end end,
+              is_test_file = function(p)
+                if p:find('/build/') then
+                  return false
+                end
+              end,
             })
           end
         end)(),
@@ -38,19 +50,23 @@ require('utils.lazy').add({
           pytest_discover_instances = true,
           args = { '-s', '-v', '-p', 'no:macpyver', '-p', 'no:macpyver_native' },
           is_test_file = function(p)
-            if p:find('/build/') then return false end
-            if p:find('/99%.Artifacts/') then return false end
+            if p:find('/build/') then
+              return false
+            end
+            if p:find('/99%.Artifacts/') then
+              return false
+            end
             return p:match('/test_.*%.py$') or p:sub(-8) == '_test.py' or p:sub(-7) == 'test_.py'
           end,
         }),
       },
-      status       = { virtual_text = false, signs = true },
-      output       = { open_on_run = true },
+      status = { virtual_text = false, signs = true },
+      output = { open_on_run = true },
       output_panel = { open = 'botright split | resize 15' },
       signs = {
         enabled = true,
-        passed  = '',
-        failed  = '',
+        passed = '',
+        failed = '',
         running = '',
         skipped = '',
       },
@@ -60,21 +76,71 @@ require('utils.lazy').add({
     })
 
     vim.api.nvim_create_autocmd('User', {
-      pattern  = 'NeotestRunStarted',
-      callback = function() require('neotest').output_panel.open() end,
+      pattern = 'NeotestRunStarted',
+      callback = function()
+        require('neotest').output_panel.open()
+      end,
     })
 
     -- Auto-watch test files
     require('plugins.neotest.auto')
   end,
   keys = {
-    { '<leader>ts', function() require('neotest').summary.toggle() end,                desc = 'Neotest: Toggle summary' },
-    { '<leader>tr', function() require('neotest').run.run() end,                       desc = 'Neotest: Run nearest' },
-    { '<leader>tf', function() require('neotest').run.run(vim.fn.expand('%')) end,     desc = 'Neotest: Run file' },
-    { '<leader>ta', function() require('neotest').run.run(vim.uv.cwd()) end,           desc = 'Neotest: Run all (cwd)' },
-    { '<leader>tn', function() require('neotest').jump.next({ status = 'failed' }) end, desc = 'Neotest: Next failed' },
-    { '<leader>tp', function() require('neotest').jump.prev({ status = 'failed' }) end, desc = 'Neotest: Prev failed' },
-    { '<leader>tm', function() require('neotest').summary.run_marked() end,            desc = 'Neotest: Run marked' },
-    { '<leader>to', function() require('neotest').output_panel.open() end,             desc = 'Neotest: Open output panel' },
+    {
+      '<leader>ts',
+      function()
+        require('neotest').summary.toggle()
+      end,
+      desc = 'Neotest: Toggle summary',
+    },
+    {
+      '<leader>tr',
+      function()
+        require('neotest').run.run()
+      end,
+      desc = 'Neotest: Run nearest',
+    },
+    {
+      '<leader>tf',
+      function()
+        require('neotest').run.run(vim.fn.expand('%'))
+      end,
+      desc = 'Neotest: Run file',
+    },
+    {
+      '<leader>ta',
+      function()
+        require('neotest').run.run(vim.uv.cwd())
+      end,
+      desc = 'Neotest: Run all (cwd)',
+    },
+    {
+      '<leader>tn',
+      function()
+        require('neotest').jump.next({ status = 'failed' })
+      end,
+      desc = 'Neotest: Next failed',
+    },
+    {
+      '<leader>tp',
+      function()
+        require('neotest').jump.prev({ status = 'failed' })
+      end,
+      desc = 'Neotest: Prev failed',
+    },
+    {
+      '<leader>tm',
+      function()
+        require('neotest').summary.run_marked()
+      end,
+      desc = 'Neotest: Run marked',
+    },
+    {
+      '<leader>to',
+      function()
+        require('neotest').output_panel.open()
+      end,
+      desc = 'Neotest: Open output panel',
+    },
   },
 })

@@ -21,16 +21,19 @@ require('utils.lazy').add({
         augend.constant.new({ elements = { 'on', 'off' }, word = false, cyclic = true }),
         augend.constant.new({
           elements = { 'debug', 'info', 'warning', 'error', 'critical' },
-          word = false, cyclic = false,
+          word = false,
+          cyclic = false,
         }),
         augend.constant.new({
           elements = { '######', '#####', '####', '###', '##', '#' },
-          word = false, cyclic = false,
+          word = false,
+          cyclic = false,
         }),
         -- Markdown checkbox states: [ ] -> [-] -> [/] -> [>] -> [x] -> [ ]
         augend.constant.new({
           elements = { '[ ]', '[-]', '[/]', '[>]', '[x]' },
-          word = false, cyclic = true,
+          word = false,
+          cyclic = true,
         }),
       },
       mygroup = {
@@ -42,14 +45,30 @@ require('utils.lazy').add({
 
     local map = vim.keymap.set
 
-    map('n', '<C-a>',  function() require('dial.map').manipulate('increment', 'normal') end,  { silent = true, desc = 'Increment' })
-    map('n', '<C-x>',  function() require('dial.map').manipulate('decrement', 'normal') end,  { silent = true, desc = 'Decrement' })
-    map('n', 'g<C-a>', function() require('dial.map').manipulate('increment', 'gnormal') end, { silent = true, desc = 'Increment sequential' })
-    map('n', 'g<C-x>', function() require('dial.map').manipulate('decrement', 'gnormal') end, { silent = true, desc = 'Decrement sequential' })
-    map('v', '<C-a>',  function() require('dial.map').manipulate('increment', 'visual') end,  { silent = true, desc = 'Increment' })
-    map('v', '<C-x>',  function() require('dial.map').manipulate('decrement', 'visual') end,  { silent = true, desc = 'Decrement' })
-    map('v', 'g<C-a>', function() require('dial.map').manipulate('increment', 'gvisual') end, { silent = true, desc = 'Increment sequential' })
-    map('v', 'g<C-x>', function() require('dial.map').manipulate('decrement', 'gvisual') end, { silent = true, desc = 'Decrement sequential' })
+    map('n', '<C-a>', function()
+      require('dial.map').manipulate('increment', 'normal')
+    end, { silent = true, desc = 'Increment' })
+    map('n', '<C-x>', function()
+      require('dial.map').manipulate('decrement', 'normal')
+    end, { silent = true, desc = 'Decrement' })
+    map('n', 'g<C-a>', function()
+      require('dial.map').manipulate('increment', 'gnormal')
+    end, { silent = true, desc = 'Increment sequential' })
+    map('n', 'g<C-x>', function()
+      require('dial.map').manipulate('decrement', 'gnormal')
+    end, { silent = true, desc = 'Decrement sequential' })
+    map('v', '<C-a>', function()
+      require('dial.map').manipulate('increment', 'visual')
+    end, { silent = true, desc = 'Increment' })
+    map('v', '<C-x>', function()
+      require('dial.map').manipulate('decrement', 'visual')
+    end, { silent = true, desc = 'Decrement' })
+    map('v', 'g<C-a>', function()
+      require('dial.map').manipulate('increment', 'gvisual')
+    end, { silent = true, desc = 'Increment sequential' })
+    map('v', 'g<C-x>', function()
+      require('dial.map').manipulate('decrement', 'gvisual')
+    end, { silent = true, desc = 'Decrement sequential' })
 
     vim.api.nvim_create_user_command('DialDebug', function()
       local group = vim.b.dial_config_group or 'default'

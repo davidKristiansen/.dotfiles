@@ -41,7 +41,8 @@ All plugins load through one declarative helper, **`lua/utils/lazy.lua`**. A plu
   - `keys` — list of `{ lhs, rhs, desc=, mode=, silent= }`. A stub (with `desc`, for which-key) is registered now; the real keymap is installed from the same entry on load. `rhs` may be a function or a `<cmd>…<cr>` string.
 - `cond` — environment gate; if it returns false the plugin never loads (and `init` never runs).
 - `init` — runs eagerly at `add()` time (globals/options needed before the plugin loads).
-- `config` — runs after `vim.pack.add()` (setup, signs, autocmds, user commands).
+- `opts` / `main` — sugar for the common case: after load the helper calls `require(main).setup(opts)`. `main` is inferred from the src repo name (strips `.nvim`/`.lua`/`-nvim`); set it explicitly only when inference fails. `opts` may be a table or a function returning one. Prefer `opts` over `config` when the setup is a plain `setup(opts)` call (see `plugin/render-markdown.lua`, `plugin/blink-pairs.lua`).
+- `config` — runs after `vim.pack.add()` and after `opts` setup (extra keymaps, signs, autocmds, user commands).
 - `on_pack_changed` — PackChanged handler, registered before `vim.pack.add()` (e.g. treesitter `TSUpdate`).
 
 Combine triggers in one spec to share a single load guard (e.g. obsidian loads on `ft` markdown-in-vault **or** `<leader>n*` keys). `add()` returns `{ load }` so external triggers (e.g. a buffer-local map) can drive the same guard.
@@ -68,10 +69,11 @@ Combine triggers in one spec to share a single load guard (e.g. obsidian loads o
 ## Directory Layout
 
 Top-level files:
-- init.lua — Entry point: `vim.loader.enable()`, leader key, core requires, built-in ui2.
+- init.lua — Entry point: `vim.loader.enable()`, leader keys (mapleader + maplocalleader), core requires, built-in ui2.
 - AGENTS.md — This living document.
 - nvim-pack-lock.json — vim.pack lockfile.
 - .luarc.json — lua_ls workspace config.
+- .stylua.toml — Formatting standard (2-space indent, single quotes, 100 columns). Run `stylua .` after edits.
 
 ### .opencode/ (OpenCode agent config)
 - skills/add-plugin/SKILL.md — Skill for installing a new plugin.
@@ -106,7 +108,7 @@ Then alphabetically:
 - pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (keymap: `<leader>p*`).
 - render-markdown.lua — Markdown rendering (FileType: markdown).
 - sshfs.lua — Remote file editing (cmd: `:SSHConnect`/`:SSHConfig`; loads the full `SSH*` command set on first use).
-- tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`).
+- tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`). Owns the `<C-h/j/k/l>` pane-navigation maps; outside tmux it maps them to plain `<C-w>` window navigation instead.
 - typst.lua — Typst language support (FileType: typst).
 - undotree.lua — Visual undo history, built-in Neovim 0.12+ (keymap: `<leader>u`).
 - vimtex.lua — LaTeX support (FileType: tex).
@@ -139,6 +141,7 @@ Server-specific overrides (one file per server):
 ### lua/plugins/ (legacy, mostly removed)
 Only config-returning modules remain (loaded by plugin/ files):
 - mini/minis/*.lua — Option tables for individual mini modules (loaded by `plugin/01-mini.lua`).
+  - **starter.lua** — Items are lazily evaluated at render time (not module load). Recent files are named `filename (dir)` so typing the filename selects them; the cwd and global sections are disjoint. Opening a recent file `:cd`s to its nearest project root per `vim.g.root_markers` (set in core/options.lua; nearest ancestor with *any* marker wins) — but never moves cwd *up* out of a deliberate subdir launch; outside-cwd files with no marker fall back to their own directory.
   - **sessions.lua** — mini.sessions config with path-encoded session naming (`/` → `%`), display name metadata via `~/.local/share/nvim/session_meta.json`, VimEnter auto-restore (`nested = true`), `post_read` hook for plugin re-attachment, and `_G._session_helpers` global for cross-module access.
 - neotest/auto.lua — Auto-watch test file logic (loaded by `plugin/neotest.lua`).
 
@@ -156,7 +159,7 @@ Only config-returning modules remain (loaded by plugin/ files):
 
 - Global mappings: `lua/core/keymaps.lua` (loaded after plugins via `after/plugin/keymaps.lua`)
 - LSP buffer-local: `lua/core/lsp/keymaps.lua` invoked from on_attach
-- Plugin-specific: defined inline in each `plugin/*.lua` file
+- Plugin-specific: defined inline in each `plugin/*.lua` file (e.g. `<C-h/j/k/l>` pane navigation lives in `plugin/tmux.lua`, with a `<C-w>`-fallback outside tmux)
 - Keymap-triggered plugins: stub keymaps defined eagerly, real keymaps set on load
 - All keymaps MUST include `desc` for discoverability (which-key).
 
@@ -194,10 +197,11 @@ When adding a plugin that introduces a new `<leader>` prefix, register the group
 7. **LSP changes:** create/modify `lsp/<server>.lua` at the config root (Neovim 0.11+ native path).
 8. Ask for clarification before large structural refactors.
 9. Plugin file naming: use numeric prefix only when load order matters (e.g. `00-`, `01-`). Otherwise use plain `<name>.lua`.
-10. Each `plugin/*.lua` file is a single `require('utils.lazy').add({ ... })` call that declares its own deps, trigger, setup (`config`), and keymaps (`keys`). The helper owns `vim.pack.add`, the load guard, PackChanged hooks (`on_pack_changed`), and the stub→real keymap swap.
+10. Each `plugin/*.lua` file is a single `require('utils.lazy').add({ ... })` call that declares its own deps, trigger, setup (`opts` or `config`), and keymaps (`keys`). The helper owns `vim.pack.add`, the load guard, PackChanged hooks (`on_pack_changed`), and the stub→real keymap swap.
 11. Use semantic commits (see Commit Rules); never append a manual changelog.
 12. **Lazy loading:** new plugins MUST pick an appropriate `utils.lazy` tier (see Lazy Loading Strategy). Choose the most aggressive trigger that still works correctly. Never hand-roll a `loaded` guard, stub table, or `nvim_feedkeys` replay — the helper provides all of it.
 13. **After any change**, verify AGENTS.md still reflects reality. Update the lazy loading table, plugin list, and which-key groups if needed.
+14. **Formatting:** run `stylua .` (config in `.stylua.toml`) after any Lua change; the formatter is the style authority.
 
 ## Quick Reference
 

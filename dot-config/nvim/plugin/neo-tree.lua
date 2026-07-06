@@ -45,9 +45,9 @@ require('utils.lazy').add({
   config = function()
     require('neo-tree').setup({
       use_popups_for_input = false,
-      enable_git_status    = true,
-      window               = { mappings = { ['<C-v>'] = 'open_vsplit' } },
-      filesystem           = {
+      enable_git_status = true,
+      window = { mappings = { ['<C-v>'] = 'open_vsplit' } },
+      filesystem = {
         use_libuv_file_watcher = true,
         follow_current_file = {
           enabled = false,
@@ -57,7 +57,9 @@ require('utils.lazy').add({
     })
 
     -- Hook file operations now that neo-tree is loaded.
-    pcall(function() require('lsp-file-operations').setup() end)
+    pcall(function()
+      require('lsp-file-operations').setup()
+    end)
   end,
   keys = {
     -- Toggle the explorer; on open, reveal (jump to) the current file.

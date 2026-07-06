@@ -5,7 +5,7 @@ require('utils.lazy').add({
   src = 'https://github.com/folke/which-key.nvim',
   lazy = false,
   init = function()
-    vim.o.timeout    = true
+    vim.o.timeout = true
     vim.o.timeoutlen = 400
   end,
   config = function()
@@ -26,10 +26,10 @@ require('utils.lazy').add({
       { '<leader>t', group = 'tests' },
       { '<leader>T', group = 'toggles' },
       { '<leader>w', group = 'worktree' },
-      { ']',         group = 'next ->' },
-      { '[',         group = 'prev <-' },
-      { 'g',         group = 'goto' },
-      { 'z',         group = 'folds/scroll' },
+      { ']', group = 'next ->' },
+      { '[', group = 'prev <-' },
+      { 'g', group = 'goto' },
+      { 'z', group = 'folds/scroll' },
     }, { mode = { 'n', 'v', 'o' } })
 
     wk.add({

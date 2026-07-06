@@ -7,9 +7,8 @@ require('utils.lazy').add({
     'https://github.com/saghen/blink.download',
   },
   event = 'InsertEnter',
-  config = function()
-    require('blink.pairs').setup({
-      highlights = { enabled = true },
-    })
-  end,
+  main = 'blink.pairs',
+  opts = {
+    highlights = { enabled = true },
+  },
 })

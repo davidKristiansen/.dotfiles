@@ -8,38 +8,45 @@ require('utils.lazy').add({
   },
   config = function()
     local default_ignores = {
-      '**/.pytest_cache/**', '**/__pycache__/**', '**/.mypy_cache/**',
-      '**/.venv/**', '**/venv/**', '**/.git/**', '**/.idea/**',
-      '**/build/**', '**/dist/**', '**/*.egg-info/**',
+      '**/.pytest_cache/**',
+      '**/__pycache__/**',
+      '**/.mypy_cache/**',
+      '**/.venv/**',
+      '**/venv/**',
+      '**/.git/**',
+      '**/.idea/**',
+      '**/build/**',
+      '**/dist/**',
+      '**/*.egg-info/**',
     }
 
     require('fzf-lua').setup({
       fzf_opts = { ['--layout'] = 'default' },
-      winopts  = {
+      winopts = {
         height = 0.40,
-        width  = 1.00,
-        row    = 1.00,
-        col    = 0.50,
+        width = 1.00,
+        row = 1.00,
+        col = 0.50,
       },
-      keymap   = { fzf = { ['ctrl-c'] = 'abort' } },
-      actions  = {
+      keymap = { fzf = { ['ctrl-c'] = 'abort' } },
+      actions = {
         files = {
           true,
-          ['enter']  = FzfLua.actions.file_edit_or_qf,
+          ['enter'] = FzfLua.actions.file_edit_or_qf,
           ['ctrl-s'] = FzfLua.actions.file_split,
           ['ctrl-v'] = FzfLua.actions.file_vsplit,
           ['ctrl-t'] = FzfLua.actions.file_tabedit,
           ['ctrl-q'] = FzfLua.actions.file_sel_to_qf,
-          ['alt-Q']  = FzfLua.actions.file_sel_to_ll,
-          ['alt-i']  = FzfLua.actions.toggle_ignore,
-          ['alt-h']  = FzfLua.actions.toggle_hidden,
-          ['alt-f']  = FzfLua.actions.toggle_follow,
+          ['alt-Q'] = FzfLua.actions.file_sel_to_ll,
+          ['alt-i'] = FzfLua.actions.toggle_ignore,
+          ['alt-h'] = FzfLua.actions.toggle_hidden,
+          ['alt-f'] = FzfLua.actions.toggle_follow,
         },
       },
-      grep     = {
-        rg_glob         = true,
-        glob_flag       = '--iglob',
-        glob_separator  = '%s%-%-',
+      grep = {
+        rg_glob = true,
+        glob_flag = '--iglob',
+        glob_separator = '%s%-%-',
         additional_args = function()
           local args = {}
           for _, g in ipairs(default_ignores) do

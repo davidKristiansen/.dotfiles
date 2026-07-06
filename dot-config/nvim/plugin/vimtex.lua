@@ -7,12 +7,12 @@ require('utils.lazy').add({
   init = function()
     vim.g.vimtex_view_method = 'zathura'
     vim.g.vimtex_compiler_latexmk = {
-      aux_dir    = 'build',
-      out_dir    = 'build',
-      callback   = 1,
+      aux_dir = 'build',
+      out_dir = 'build',
+      callback = 1,
       continuous = 1,
     }
-    vim.g.vimtex_syntax_enabled   = 1
+    vim.g.vimtex_syntax_enabled = 1
     vim.g.vimtex_quickfix_enabled = 1
   end,
 })

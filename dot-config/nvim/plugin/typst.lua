@@ -5,8 +5,8 @@ require('utils.lazy').add({
   src = 'https://github.com/kaarmu/typst.vim',
   ft = 'typst',
   init = function()
-    vim.g.typst_conceal       = 1
-    vim.g.typst_conceal_math  = 1
+    vim.g.typst_conceal = 1
+    vim.g.typst_conceal_math = 1
     vim.g.typst_conceal_emoji = 1
   end,
   config = function()
@@ -14,9 +14,13 @@ require('utils.lazy').add({
 
     local function open_typst_pdf()
       local filepath = vim.api.nvim_buf_get_name(0)
-      if not filepath:match('%.typ$') then return end
+      if not filepath:match('%.typ$') then
+        return
+      end
       local pdf_path = filepath:gsub('%.typ$', '.pdf')
-      if opened_pdfs[pdf_path] then return end
+      if opened_pdfs[pdf_path] then
+        return
+      end
       if vim.uv.fs_stat(pdf_path) then
         opened_pdfs[pdf_path] = true
         vim.system({ 'zathura', pdf_path }, { detach = true })
@@ -26,9 +30,11 @@ require('utils.lazy').add({
     local augroup = vim.api.nvim_create_augroup('TypstPdf', { clear = true })
 
     vim.api.nvim_create_autocmd('BufWritePost', {
-      group    = augroup,
-      pattern  = '*.typ',
-      callback = function() vim.defer_fn(open_typst_pdf, 500) end,
+      group = augroup,
+      pattern = '*.typ',
+      callback = function()
+        vim.defer_fn(open_typst_pdf, 500)
+      end,
     })
 
     vim.api.nvim_create_user_command('TypstOpenPdf', function()

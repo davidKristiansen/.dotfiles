@@ -1,5 +1,5 @@
 return {
   diagnostics = {
     enable = false,
-  }
+  },
 }

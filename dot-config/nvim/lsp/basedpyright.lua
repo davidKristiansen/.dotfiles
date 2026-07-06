@@ -15,8 +15,8 @@ return {
       analysis = {
         autoSearchPaths = true,
         useLibraryCodeForTypes = true,
-        typeCheckingMode = "off",
-        ignore = { "**" },
+        typeCheckingMode = 'off',
+        ignore = { '**' },
       },
     },
   },

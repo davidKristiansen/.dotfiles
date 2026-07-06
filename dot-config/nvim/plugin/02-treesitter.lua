@@ -11,7 +11,9 @@ require('utils.lazy').add({
   on_pack_changed = function(ev)
     local name, kind = ev.data.spec.name, ev.data.kind
     if name == 'nvim-treesitter' and kind == 'update' then
-      if not ev.data.active then vim.cmd.packadd('nvim-treesitter') end
+      if not ev.data.active then
+        vim.cmd.packadd('nvim-treesitter')
+      end
       vim.cmd('TSUpdate')
     end
   end,
@@ -26,19 +28,30 @@ require('utils.lazy').add({
       end,
     })
 
-    require('nvim-treesitter').setup {
-      install_dir = vim.fn.stdpath('data') .. '/site'
-    }
+    require('nvim-treesitter').setup({
+      install_dir = vim.fn.stdpath('data') .. '/site',
+    })
 
-    require('nvim-treesitter').install {
-      'rust', 'javascript', 'zig', 'python', 'lua', 'cpp', 'c', 'typst',
-      'markdown', 'comment', 'json', 'yaml', 'groovy'
-    }
+    require('nvim-treesitter').install({
+      'rust',
+      'javascript',
+      'zig',
+      'python',
+      'lua',
+      'cpp',
+      'c',
+      'typst',
+      'markdown',
+      'comment',
+      'json',
+      'yaml',
+      'groovy',
+    })
 
     -- Textobjects: select
     require('nvim-treesitter-textobjects').setup({
       select = { lookahead = true },
-      move   = { set_jumps = true },
+      move = { set_jumps = true },
     })
 
     local select_fn = function(capture)
@@ -47,29 +60,65 @@ require('utils.lazy').add({
       end
     end
 
-    vim.keymap.set({ 'x', 'o' }, 'af', select_fn('@function.outer'),    { desc = 'Select outer function' })
-    vim.keymap.set({ 'x', 'o' }, 'if', select_fn('@function.inner'),    { desc = 'Select inner function' })
-    vim.keymap.set({ 'x', 'o' }, 'ac', select_fn('@class.outer'),       { desc = 'Select outer class' })
-    vim.keymap.set({ 'x', 'o' }, 'ic', select_fn('@class.inner'),       { desc = 'Select inner class' })
-    vim.keymap.set({ 'x', 'o' }, 'al', select_fn('@loop.outer'),        { desc = 'Select outer loop' })
-    vim.keymap.set({ 'x', 'o' }, 'il', select_fn('@loop.inner'),        { desc = 'Select inner loop' })
-    vim.keymap.set({ 'x', 'o' }, 'ib', select_fn('@block.inner'),       { desc = 'Select inner block' })
-    vim.keymap.set({ 'x', 'o' }, 'ab', select_fn('@block.outer'),       { desc = 'Select outer block' })
-    vim.keymap.set({ 'x', 'o' }, 'as', select_fn('@statement.outer'),   { desc = 'Select statement' })
-    vim.keymap.set({ 'x', 'o' }, 'ad', select_fn('@conditional.outer'), { desc = 'Select outer conditional' })
-    vim.keymap.set({ 'x', 'o' }, 'id', select_fn('@conditional.inner'), { desc = 'Select inner conditional' })
-    vim.keymap.set({ 'x', 'o' }, 'a/', select_fn('@comment.outer'),     { desc = 'Select comment' })
+    vim.keymap.set(
+      { 'x', 'o' },
+      'af',
+      select_fn('@function.outer'),
+      { desc = 'Select outer function' }
+    )
+    vim.keymap.set(
+      { 'x', 'o' },
+      'if',
+      select_fn('@function.inner'),
+      { desc = 'Select inner function' }
+    )
+    vim.keymap.set({ 'x', 'o' }, 'ac', select_fn('@class.outer'), { desc = 'Select outer class' })
+    vim.keymap.set({ 'x', 'o' }, 'ic', select_fn('@class.inner'), { desc = 'Select inner class' })
+    vim.keymap.set({ 'x', 'o' }, 'al', select_fn('@loop.outer'), { desc = 'Select outer loop' })
+    vim.keymap.set({ 'x', 'o' }, 'il', select_fn('@loop.inner'), { desc = 'Select inner loop' })
+    vim.keymap.set({ 'x', 'o' }, 'ib', select_fn('@block.inner'), { desc = 'Select inner block' })
+    vim.keymap.set({ 'x', 'o' }, 'ab', select_fn('@block.outer'), { desc = 'Select outer block' })
+    vim.keymap.set({ 'x', 'o' }, 'as', select_fn('@statement.outer'), { desc = 'Select statement' })
+    vim.keymap.set(
+      { 'x', 'o' },
+      'ad',
+      select_fn('@conditional.outer'),
+      { desc = 'Select outer conditional' }
+    )
+    vim.keymap.set(
+      { 'x', 'o' },
+      'id',
+      select_fn('@conditional.inner'),
+      { desc = 'Select inner conditional' }
+    )
+    vim.keymap.set({ 'x', 'o' }, 'a/', select_fn('@comment.outer'), { desc = 'Select comment' })
 
     -- Textobjects: move
     local move = require('nvim-treesitter-textobjects.move')
 
-    vim.keymap.set({ 'n', 'x', 'o' }, ']f', function() move.goto_next_start('@function.outer', 'textobjects') end, { desc = 'Next function start' })
-    vim.keymap.set({ 'n', 'x', 'o' }, ']c', function() move.goto_next_start('@class.outer', 'textobjects') end,    { desc = 'Next class start' })
-    vim.keymap.set({ 'n', 'x', 'o' }, ']F', function() move.goto_next_end('@function.outer', 'textobjects') end,   { desc = 'Next function end' })
-    vim.keymap.set({ 'n', 'x', 'o' }, ']C', function() move.goto_next_end('@class.outer', 'textobjects') end,      { desc = 'Next class end' })
-    vim.keymap.set({ 'n', 'x', 'o' }, '[f', function() move.goto_previous_start('@function.outer', 'textobjects') end, { desc = 'Prev function start' })
-    vim.keymap.set({ 'n', 'x', 'o' }, '[c', function() move.goto_previous_start('@class.outer', 'textobjects') end,    { desc = 'Prev class start' })
-    vim.keymap.set({ 'n', 'x', 'o' }, '[F', function() move.goto_previous_end('@function.outer', 'textobjects') end,   { desc = 'Prev function end' })
-    vim.keymap.set({ 'n', 'x', 'o' }, '[C', function() move.goto_previous_end('@class.outer', 'textobjects') end,      { desc = 'Prev class end' })
+    vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
+      move.goto_next_start('@function.outer', 'textobjects')
+    end, { desc = 'Next function start' })
+    vim.keymap.set({ 'n', 'x', 'o' }, ']c', function()
+      move.goto_next_start('@class.outer', 'textobjects')
+    end, { desc = 'Next class start' })
+    vim.keymap.set({ 'n', 'x', 'o' }, ']F', function()
+      move.goto_next_end('@function.outer', 'textobjects')
+    end, { desc = 'Next function end' })
+    vim.keymap.set({ 'n', 'x', 'o' }, ']C', function()
+      move.goto_next_end('@class.outer', 'textobjects')
+    end, { desc = 'Next class end' })
+    vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
+      move.goto_previous_start('@function.outer', 'textobjects')
+    end, { desc = 'Prev function start' })
+    vim.keymap.set({ 'n', 'x', 'o' }, '[c', function()
+      move.goto_previous_start('@class.outer', 'textobjects')
+    end, { desc = 'Prev class start' })
+    vim.keymap.set({ 'n', 'x', 'o' }, '[F', function()
+      move.goto_previous_end('@function.outer', 'textobjects')
+    end, { desc = 'Prev function end' })
+    vim.keymap.set({ 'n', 'x', 'o' }, '[C', function()
+      move.goto_previous_end('@class.outer', 'textobjects')
+    end, { desc = 'Prev class end' })
   end,
 })

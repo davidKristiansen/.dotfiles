@@ -7,8 +7,8 @@ require('utils.lazy').add({
     require('overseer').setup({})
   end,
   keys = {
-    { '<leader>or', '<cmd>OverseerRun<cr>',        desc = 'Overseer: Run task' },
-    { '<leader>ot', '<cmd>OverseerToggle<cr>',     desc = 'Overseer: Toggle task list' },
+    { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer: Run task' },
+    { '<leader>ot', '<cmd>OverseerToggle<cr>', desc = 'Overseer: Toggle task list' },
     { '<leader>oa', '<cmd>OverseerTaskAction<cr>', desc = 'Overseer: Task action' },
     {
       '<leader>ol',

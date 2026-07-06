@@ -8,6 +8,12 @@ require('utils.lazy').add({
   end,
   keys = {
     -- Under the <leader>T toggles group (<leader>h is the start screen).
-    { '<leader>Tx', function() require('hex').toggle() end, desc = 'Toggle hex view' },
+    {
+      '<leader>Tx',
+      function()
+        require('hex').toggle()
+      end,
+      desc = 'Toggle hex view',
+    },
   },
 })

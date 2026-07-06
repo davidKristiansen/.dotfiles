@@ -2,15 +2,15 @@
 -- SPDX-License-Identifier: MIT
 return {
   cmd = {
-    "clangd",
-    "-j=16",
-    "--background-index",
-    "--background-index-priority=low",
-    "--clang-tidy",
-    "--completion-style=detailed",
-    "--header-insertion=never",
-    "--pch-storage=memory",
-    "--pretty",
+    'clangd',
+    '-j=16',
+    '--background-index',
+    '--background-index-priority=low',
+    '--clang-tidy',
+    '--completion-style=detailed',
+    '--header-insertion=never',
+    '--pch-storage=memory',
+    '--pretty',
   },
   init_options = { clangdFileStatus = true },
   capabilities = {
@@ -21,4 +21,3 @@ return {
     },
   },
 }
-

@@ -29,7 +29,9 @@ local section_for = {
 ---@return integer? line number (0-indexed) or nil
 local function find_section(lines, heading)
   for i, line in ipairs(lines) do
-    if line == heading then return i - 1 end
+    if line == heading then
+      return i - 1
+    end
   end
   return nil
 end
@@ -43,7 +45,9 @@ local function section_end(lines, section_line)
   local pos = section_line + 1
   for i = section_line + 2, #lines do
     local line = lines[i]
-    if line:match('^##? ') then break end
+    if line:match('^##? ') then
+      break
+    end
     if line:match('%S') then
       pos = i - 1 -- 0-indexed
     end
@@ -72,8 +76,12 @@ local function collect_block(bufnr, row)
     local line = all_lines[i]
     -- Stop at lines with same or lesser indent (or headings, or blank lines
     -- that are followed by non-child content)
-    if line:match('^##? ') then break end
-    if indent_of(line) <= parent_indent and line:match('%S') then break end
+    if line:match('^##? ') then
+      break
+    end
+    if indent_of(line) <= parent_indent and line:match('%S') then
+      break
+    end
     -- Blank lines: include if the next non-blank line is still a child
     if not line:match('%S') then
       -- Peek ahead for a child line
@@ -84,7 +92,9 @@ local function collect_block(bufnr, row)
           break
         end
       end
-      if not has_child then break end
+      if not has_child then
+        break
+      end
     end
     row_end = i - 1 -- 0-indexed
   end
@@ -121,8 +131,12 @@ local function apply_state(row, new_state)
   local line = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1]
 
   local prefix, old_state, rest = line:match('^(%s*%- )(%[.%])(.*)')
-  if not old_state then return end
-  if old_state == new_state then return end
+  if not old_state then
+    return
+  end
+  if old_state == new_state then
+    return
+  end
 
   -- Collect parent + children
   local _, row_end, block = collect_block(bufnr, row)
@@ -166,7 +180,9 @@ local function apply_state(row, new_state)
   -- Re-read and find target
   lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   target_section = find_section(lines, target_heading)
-  if not target_section then return end
+  if not target_section then
+    return
+  end
 
   local insert_at = section_end(lines, target_section) + 1
   vim.api.nvim_buf_set_lines(bufnr, insert_at, insert_at, false, block)
@@ -183,13 +199,20 @@ function M.cycle(direction)
   local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1]
 
   local _, old_state = line:match('^(%s*%- )(%[.%])')
-  if not old_state then return end
+  if not old_state then
+    return
+  end
 
   local idx
   for i, s in ipairs(states) do
-    if s == old_state then idx = i; break end
+    if s == old_state then
+      idx = i
+      break
+    end
   end
-  if not idx then return end
+  if not idx then
+    return
+  end
 
   local new_idx = ((idx - 1 + direction) % #states) + 1
   apply_state(row, states[new_idx])
@@ -198,7 +221,9 @@ end
 --- Set the checkbox to a specific state and move to the correct section.
 ---@param state string one of '[ ]', '[/]', '[>]', '[x]'
 function M.set(state)
-  if not section_for[state] then return end
+  if not section_for[state] then
+    return
+  end
   local row = vim.api.nvim_win_get_cursor(0)[1] - 1
   apply_state(row, state)
 end

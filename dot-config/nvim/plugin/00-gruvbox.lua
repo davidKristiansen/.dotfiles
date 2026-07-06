@@ -18,11 +18,15 @@ require('utils.lazy').add({
   config = function()
     vim.cmd.colorscheme('gruvbox-material')
 
-    local Pmenu    = vim.api.nvim_get_hl(0, { name = 'Pmenu' })
+    local Pmenu = vim.api.nvim_get_hl(0, { name = 'Pmenu' })
     local PmenuSel = vim.api.nvim_get_hl(0, { name = 'PmenuSel' })
 
     vim.api.nvim_set_hl(0, 'BlinkCmpMenu', { bg = 'NONE', fg = Pmenu.fg })
-    vim.api.nvim_set_hl(0, 'BlinkCmpMenuSelection', { bg = PmenuSel.bg, fg = PmenuSel.fg, bold = true })
+    vim.api.nvim_set_hl(
+      0,
+      'BlinkCmpMenuSelection',
+      { bg = PmenuSel.bg, fg = PmenuSel.fg, bold = true }
+    )
     vim.api.nvim_set_hl(0, 'BlinkCmpMenuBorder', { bg = 'NONE', fg = Pmenu.fg })
   end,
 })

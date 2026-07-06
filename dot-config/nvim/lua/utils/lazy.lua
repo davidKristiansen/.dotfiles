@@ -8,7 +8,15 @@
 --
 -- Spec fields (all optional unless noted):
 --   src   string|table     primary plugin source (url string or { src=, version= })
---   deps  list             extra sources loaded *before* src (url strings or tables)
+--   deps  list             extra sources loaded *before* src (url strings or tables).
+--                          Deps are RAW vim.pack sources: they are installed and
+--                          packadd'ed, nothing more. If a dep also has its own
+--                          add() spec elsewhere, that spec's opts/config/keys are
+--                          NOT run here — they still wait for their own trigger
+--                          (duplicate vim.pack.add is idempotent, so this is safe).
+--                          Pin a version only in a plugin's own spec, never in a
+--                          deps entry: vim.pack silently adopts the last version
+--                          it is handed, so divergent pins depend on load order.
 --
 --   -- choose a load tier (omit all triggers + `lazy` => vim.schedule, "later"):
 --   lazy  false            load eagerly, now, during plugin/ sourcing
@@ -22,16 +30,26 @@
 --                          keymap is installed from the same entry on load.
 --
 --   cond  fn():bool        gate: if it returns false the plugin is never loaded
---   init  fn()             runs eagerly at add() time (globals/options needed pre-load)
---   config fn()            runs after vim.pack.add (setup, signs, autocmds, user cmds);
+--   init  fn()             runs eagerly at add() time (globals/options needed pre-load);
 --                          wrapped in pcall — failures are reported, not fatal
+--   opts  table|fn():table sugar: after load, calls require(main).setup(opts).
+--                          `main` is inferred from the src repo name (strips a
+--                          .nvim/.lua/-nvim suffix); set `main` to override.
+--                          For anything beyond a plain setup(opts), use `config`.
+--   main  string           module name for `opts` (only needed when inference fails)
+--   config fn()            runs after vim.pack.add and after `opts` setup (extra
+--                          keymaps, signs, autocmds, user cmds); wrapped in pcall
 --   on_pack_changed fn(ev) PackChanged handler, registered before vim.pack.add
 
 local M = {}
 
 local function listify(v)
-  if v == nil then return {} end
-  if type(v) == 'table' then return v end
+  if v == nil then
+    return {}
+  end
+  if type(v) == 'table' then
+    return v
+  end
   return { v }
 end
 
@@ -55,6 +73,27 @@ local function map_opts(k)
   }
 end
 
+-- Infer the module to `require()` for the `opts` sugar from the src repo
+-- name: 'render-markdown.nvim' -> 'render-markdown', 'blink.pairs' -> 'blink.pairs'.
+local function infer_main(spec)
+  if spec.main then
+    return spec.main
+  end
+  local src = type(spec.src) == 'table' and spec.src.src or spec.src
+  if type(src) ~= 'string' then
+    return nil
+  end
+  local name = src:gsub('/+$', ''):match('[^/]+$')
+  return name and name:gsub('%.git$', ''):gsub('%.nvim$', ''):gsub('%.lua$', ''):gsub('%-nvim$', '')
+end
+
+local function report(spec, what, err)
+  vim.notify(
+    ('utils.lazy: %s failed for %s\n%s'):format(what, spec.src or '<anon>', err),
+    vim.log.levels.ERROR
+  )
+end
+
 function M.add(spec)
   -- Environment gate: never load (or set state) when the condition fails.
   if spec.cond and not spec.cond() then
@@ -63,7 +102,10 @@ function M.add(spec)
 
   -- Eagerly-needed globals/options (e.g. conceal flags, laststatus).
   if spec.init then
-    spec.init()
+    local ok, err = pcall(spec.init)
+    if not ok then
+      report(spec, 'init', err)
+    end
   end
 
   local has_cmd = spec.cmd ~= nil
@@ -78,7 +120,9 @@ function M.add(spec)
 
     if spec.on_pack_changed then
       vim.api.nvim_create_autocmd('PackChanged', {
-        callback = function(ev) spec.on_pack_changed(ev) end,
+        callback = function(ev)
+          spec.on_pack_changed(ev)
+        end,
       })
     end
 
@@ -92,13 +136,22 @@ function M.add(spec)
       pcall(vim.api.nvim_del_user_command, name)
     end
 
+    -- `opts` sugar: plain require(main).setup(opts).
+    if spec.opts then
+      local ok, err = pcall(function()
+        local main = assert(infer_main(spec), 'cannot infer main module; set `main`')
+        local opts = type(spec.opts) == 'function' and spec.opts() or spec.opts
+        require(main).setup(opts)
+      end)
+      if not ok then
+        report(spec, 'opts setup', err)
+      end
+    end
+
     if spec.config then
       local ok, err = pcall(spec.config)
       if not ok then
-        vim.notify(
-          ('utils.lazy: config failed for %s\n%s'):format(spec.src or '<anon>', err),
-          vim.log.levels.ERROR
-        )
+        report(spec, 'config', err)
       end
     end
 
@@ -156,7 +209,9 @@ function M.add(spec)
   if spec.event then
     vim.api.nvim_create_autocmd(listify(spec.event), {
       once = true,
-      callback = function() do_load() end,
+      callback = function()
+        do_load()
+      end,
     })
   end
 

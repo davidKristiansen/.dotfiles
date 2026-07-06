@@ -10,7 +10,9 @@ require('utils.lazy').add({
   },
   config = function()
     -- blink.cmp native library build (async, only runs if missing)
-    pcall(function() require('blink.cmp').build() end)
+    pcall(function()
+      require('blink.cmp').build()
+    end)
 
     -- LuaSnip jsregexp build
     local function build_jsregexp()
@@ -33,12 +35,12 @@ require('utils.lazy').add({
       },
 
       sources = {
-        default   = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
           copilot = {
-            name         = 'copilot',
-            module       = 'blink-copilot',
-            async        = true,
+            name = 'copilot',
+            module = 'blink-copilot',
+            async = true,
             score_offset = 100,
           },
         },
@@ -46,46 +48,48 @@ require('utils.lazy').add({
 
       appearance = {
         use_nvim_cmp_as_default = false,
-        nerd_font_variant       = 'mono',
+        nerd_font_variant = 'mono',
       },
 
       completion = {
-        menu          = { draw = { treesitter = { 'lsp' } } },
-        accept        = { auto_brackets = { enabled = true } },
-        trigger       = {
-          show_on_insert            = true,
+        menu = { draw = { treesitter = { 'lsp' } } },
+        accept = { auto_brackets = { enabled = true } },
+        trigger = {
+          show_on_insert = true,
           show_on_trigger_character = true,
         },
-        list          = { selection = { preselect = false } },
-        ghost_text    = { enabled = vim.g.ai_cmp },
+        list = { selection = { preselect = false } },
+        ghost_text = { enabled = vim.g.ai_cmp },
         documentation = { auto_show = true },
       },
 
       cmdline = {
-        enabled    = true,
-        keymap     = {
-          preset      = 'cmdline',
+        enabled = true,
+        keymap = {
+          preset = 'cmdline',
           ['<Right>'] = false,
-          ['<Left>']  = false,
+          ['<Left>'] = false,
         },
         completion = {
           list = { selection = { preselect = false } },
           menu = {
-            auto_show = function(ctx) return vim.fn.getcmdtype() == ':' end,
+            auto_show = function(ctx)
+              return vim.fn.getcmdtype() == ':'
+            end,
           },
           ghost_text = { enabled = true },
         },
       },
 
       keymap = {
-        preset        = 'default',
-        ['<CR>']      = { 'accept', 'fallback' },
-        ['<C-e>']     = { 'hide' },
+        preset = 'default',
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<C-e>'] = { 'hide' },
         ['<C-Space>'] = { 'show' },
-        ['<Tab>']     = { 'select_next', 'snippet_forward', 'fallback' },
-        ['<S-Tab>']   = { 'select_prev', 'snippet_backward', 'fallback' },
-        ['<C-b>']     = { 'scroll_documentation_up', 'fallback' },
-        ['<C-f>']     = { 'scroll_documentation_down', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
       },
     })
 

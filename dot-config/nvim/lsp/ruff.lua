@@ -3,22 +3,22 @@
 
 return {
   settings = {
-    configurationPreference = "filesystemFirst",
+    configurationPreference = 'filesystemFirst',
     lineLength = 88,
     fixAll = true,
     organizeImports = true,
     showSyntaxErrors = true,
     codeAction = {
       disableRuleComment = {
-        enable = true
+        enable = true,
       },
       fixViolation = {
-        enable = false
-      }
+        enable = false,
+      },
     },
     lint = {
       enable = true,
-      preview = true
-    }
-  }
+      preview = true,
+    },
+  },
 }

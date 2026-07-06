@@ -10,7 +10,9 @@ end
 ---@return boolean
 local function uses_uv(project_dir)
   -- Fast check: uv.lock exists
-  if vim.uv.fs_stat(project_dir .. '/uv.lock') then return true end
+  if vim.uv.fs_stat(project_dir .. '/uv.lock') then
+    return true
+  end
   return false
 end
 

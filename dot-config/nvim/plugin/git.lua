@@ -14,12 +14,12 @@ require('utils.lazy').add({
   config = function()
     require('gitsigns').setup({
       signs = {
-        add          = { text = '▎' },
-        change       = { text = '▎' },
-        delete       = { text = '▁' },
-        topdelete    = { text = '▔' },
+        add = { text = '▎' },
+        change = { text = '▎' },
+        delete = { text = '▁' },
+        topdelete = { text = '▔' },
         changedelete = { text = '▎' },
-        untracked    = { text = '▎' },
+        untracked = { text = '▎' },
       },
       on_attach = function(_bufnr) end,
     })
@@ -29,16 +29,32 @@ require('utils.lazy').add({
     end
 
     -- Gitsigns-only keymaps
-    map('n', '<leader>gh', function() require('gitsigns').preview_hunk() end, 'Preview hunk')
-    map('n', '<leader>gr', function() require('gitsigns').reset_hunk() end, 'Reset hunk')
-    map('n', '<leader>gR', function() require('gitsigns').reset_buffer() end, 'Reset buffer')
-    map('n', '<leader>gs', function() require('gitsigns').stage_hunk() end, 'Stage hunk')
-    map('n', '<leader>gS', function() require('gitsigns').stage_buffer() end, 'Stage buffer')
-    map('n', '<leader>gu', function() require('gitsigns').undo_stage_hunk() end, 'Undo stage hunk')
+    map('n', '<leader>gh', function()
+      require('gitsigns').preview_hunk()
+    end, 'Preview hunk')
+    map('n', '<leader>gr', function()
+      require('gitsigns').reset_hunk()
+    end, 'Reset hunk')
+    map('n', '<leader>gR', function()
+      require('gitsigns').reset_buffer()
+    end, 'Reset buffer')
+    map('n', '<leader>gs', function()
+      require('gitsigns').stage_hunk()
+    end, 'Stage hunk')
+    map('n', '<leader>gS', function()
+      require('gitsigns').stage_buffer()
+    end, 'Stage buffer')
+    map('n', '<leader>gu', function()
+      require('gitsigns').undo_stage_hunk()
+    end, 'Undo stage hunk')
 
     -- fzf-lua git keymaps
-    map('n', '<leader>gt', function() require('fzf-lua').git_status() end, 'Git status')
-    map('n', '<leader>gb', function() require('fzf-lua').git_branches() end, 'Git checkout branch')
+    map('n', '<leader>gt', function()
+      require('fzf-lua').git_status()
+    end, 'Git status')
+    map('n', '<leader>gb', function()
+      require('fzf-lua').git_branches()
+    end, 'Git checkout branch')
 
     -- Hunk navigation
     map('n', ']h', function()
@@ -190,11 +206,11 @@ require('utils.lazy').add({
           [']f'] = actions.select_next_entry,
         },
         file_panel = {
-          ['j']    = actions.next_entry,
-          ['k']    = actions.prev_entry,
+          ['j'] = actions.next_entry,
+          ['k'] = actions.prev_entry,
           ['<CR>'] = actions.select_entry,
-          ['[f']   = actions.select_prev_entry,
-          [']f']   = actions.select_next_entry,
+          ['[f'] = actions.select_prev_entry,
+          [']f'] = actions.select_next_entry,
         },
       },
     })
@@ -206,21 +222,53 @@ require('utils.lazy').add({
   end,
   keys = {
     -- Diffview
-    { '<leader>gv', toggle_diffview,                       desc = 'Toggle Diffview' },
-    { '<leader>gV', open_pr_view,                          desc = 'PR View (Cumulative)' },
-    { '<leader>gl', open_pr_history,                       desc = 'PR History (Commit-by-Commit)' },
-    { '<leader>gf', '<cmd>DiffviewFileHistory %<CR>',      desc = 'Diffview File History (Buffer)' },
-    { '<leader>gH', '<cmd>DiffviewFileHistory<CR>',        desc = 'Diffview File History (Project)' },
-    { '<leader>gD', open_diff_vs_ref,                      desc = 'Diff vs Ref (Merge-Base)' },
+    { '<leader>gv', toggle_diffview, desc = 'Toggle Diffview' },
+    { '<leader>gV', open_pr_view, desc = 'PR View (Cumulative)' },
+    { '<leader>gl', open_pr_history, desc = 'PR History (Commit-by-Commit)' },
+    {
+      '<leader>gf',
+      '<cmd>DiffviewFileHistory %<CR>',
+      desc = 'Diffview File History (Buffer)',
+    },
+    {
+      '<leader>gH',
+      '<cmd>DiffviewFileHistory<CR>',
+      desc = 'Diffview File History (Project)',
+    },
+    { '<leader>gD', open_diff_vs_ref, desc = 'Diff vs Ref (Merge-Base)' },
     -- Branches
-    { '<leader>gB', create_branch,                         desc = 'Create new branch' },
+    { '<leader>gB', create_branch, desc = 'Create new branch' },
     -- Neogit
-    { '<leader>gn', function() require('neogit').open({ kind = 'tab' }) end, desc = 'Neogit status' },
-    { '<leader>gp', push_upstream,                         desc = 'Push upstream' },
-    { '<leader>gP', function() require('neogit').open({ 'push' }) end, desc = 'Push menu' },
-    { '<leader>gU', function() require('neogit').open({ 'pull' }) end, desc = 'Pull' },
-    { '<leader>gm', function() require('neogit').open({ 'merge' }) end, desc = 'Merge' },
+    {
+      '<leader>gn',
+      function()
+        require('neogit').open({ kind = 'tab' })
+      end,
+      desc = 'Neogit status',
+    },
+    { '<leader>gp', push_upstream, desc = 'Push upstream' },
+    {
+      '<leader>gP',
+      function()
+        require('neogit').open({ 'push' })
+      end,
+      desc = 'Push menu',
+    },
+    {
+      '<leader>gU',
+      function()
+        require('neogit').open({ 'pull' })
+      end,
+      desc = 'Pull',
+    },
+    {
+      '<leader>gm',
+      function()
+        require('neogit').open({ 'merge' })
+      end,
+      desc = 'Merge',
+    },
     -- LazyGit
-    { '<leader>gg', '<cmd>LazyGit<cr>',                    desc = 'Open LazyGit' },
+    { '<leader>gg', '<cmd>LazyGit<cr>', desc = 'Open LazyGit' },
   },
 })
