@@ -28,37 +28,33 @@ else
   export FZF_ALT_C_OPTS="--preview 'ls -lah --color=always {}'"
 fi
 
-# Load fzf keybindings + completion
-eval "$(fzf --zsh 2>/dev/null)" || {
+# Load fzf keybindings + completion (cached — see 03-cached-eval.zsh).
+# NOTE: the old `eval "$(fzf --zsh 2>/dev/null)" || fallback` never fell back:
+# eval of an empty string exits 0. _cached_eval propagates the real status.
+if ! _cached_eval fzf fzf --zsh; then
   # Fallback for older fzf versions without --zsh flag
-  local fzf_base
-  for fzf_base in /usr/share/fzf /usr/local/opt/fzf/shell /usr/share/doc/fzf/examples; do
-    if [[ -d "$fzf_base" ]]; then
-      [[ -r "$fzf_base/key-bindings.zsh" ]] && source "$fzf_base/key-bindings.zsh"
-      [[ -r "$fzf_base/completion.zsh" ]]    && source "$fzf_base/completion.zsh"
-      break
-    fi
-  done
-}
+  () {
+    local fzf_base
+    for fzf_base in /usr/share/fzf /usr/local/opt/fzf/shell /usr/share/doc/fzf/examples; do
+      if [[ -d "$fzf_base" ]]; then
+        [[ -r "$fzf_base/key-bindings.zsh" ]] && source "$fzf_base/key-bindings.zsh"
+        [[ -r "$fzf_base/completion.zsh" ]]   && source "$fzf_base/completion.zsh"
+        break
+      fi
+    done
+  }
+fi
 
-# Rebind for vi-mode compatibility (zsh-vi-mode may steal keymaps)
+# Bindings (applied by _user_rebind_all in 80-keybindings.zsh):
+# ^R/^T/Alt-C widgets, and fzf-tab re-enabled after `fzf --zsh` steals ^I.
 _fzf_bind_all() {
+  local m
   for m in emacs vicmd viins; do
-    bindkey -M $m '^R' fzf-history-widget    2>/dev/null
-    bindkey -M $m '^T' fzf-file-widget       2>/dev/null
-    bindkey -M $m '\ec' fzf-cd-widget        2>/dev/null
+    bindkey -M $m '^R'  fzf-history-widget 2>/dev/null
+    bindkey -M $m '^T'  fzf-file-widget    2>/dev/null
+    bindkey -M $m '\ec' fzf-cd-widget      2>/dev/null
   done
 }
-_fzf_bind_all
-zvm_after_init_commands+=('_fzf_bind_all')
-zvm_after_lazy_keybindings_commands+=('_fzf_bind_all')
-
-# Re-enable fzf-tab: `fzf --zsh` above binds ^I to fzf-completion,
-# overriding fzf-tab's fzf-tab-complete. Restore it now, and again
-# after zsh-vi-mode's deferred init resets keybindings.
-enable-fzf-tab 2>/dev/null
-zvm_after_init_commands+=('enable-fzf-tab')
-zvm_after_lazy_keybindings_commands+=('enable-fzf-tab')
 
 return 0
 # vim: set ft=zsh ts=2 sw=2:

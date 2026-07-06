@@ -29,8 +29,9 @@ export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump-${${HOST:-host}%%
 : "${DEVCONTAINER_ENV_FILE:=$XDG_CONFIG_HOME/devcontainer_environment/environment_variables}"
 
 if [ -f /.dockerenv ]; then
-  if [ -t 1 ] 2>/dev/null; then
-    GPG_TTY="$(tty 2>/dev/null || true)"; export GPG_TTY
+  # $TTY is a zsh builtin parameter — no `tty` fork.
+  if [ -n "$TTY" ]; then
+    export GPG_TTY="$TTY"
   fi
   if [ -r "$DEVCONTAINER_ENV_FILE" ]; then
     set -a
@@ -39,6 +40,7 @@ if [ -f /.dockerenv ]; then
   fi
 fi
 
-# vim: set ft=sh ts=2 sw=2:
+# Rustup/cargo environment (guarded: not every box has a rust toolchain)
+[ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-. "$HOME/.cargo/env"
+# vim: set ft=sh ts=2 sw=2:

@@ -7,18 +7,22 @@
 
 # ----------------------------- helpers --------------------------------------
 
-# Are we inside a (Docker/Podman/K8s) container?
-_in_container() {
+# Are we inside a (Docker/Podman/K8s) container? Detected ONCE at load —
+# container status can't change within a shell's lifetime, and the old
+# per-chpwd `grep /proc/1/cgroup` forked on every directory change.
+typeset -gi _SMART_VENV_IN_CONTAINER=0
+() {
   # Fast path for Docker/Podman
-  [[ -f "/.dockerenv" ]] && return 0
-  # cgroup/containerd/k8s hints
-  command -v grep >/dev/null 2>&1 && {
-    \grep -qaE '(docker|containerd|kubepods|libpod)' /proc/1/cgroup 2>/dev/null && return 0
-  }
-  # systemd containers sometimes set envs (best-effort)
-  [[ -n "$container" ]] && return 0
-  return 1
+  [[ -f /.dockerenv ]] && { _SMART_VENV_IN_CONTAINER=1; return }
+  # systemd containers sometimes set $container (best-effort)
+  [[ -n "$container" ]] && { _SMART_VENV_IN_CONTAINER=1; return }
+  # cgroup/containerd/k8s hints (zsh pattern match, no grep fork)
+  local cgroup=""
+  [[ -r /proc/1/cgroup ]] && cgroup="$(</proc/1/cgroup)" 2>/dev/null
+  [[ "$cgroup" == *(docker|containerd|kubepods|libpod)* ]] && _SMART_VENV_IN_CONTAINER=1
 }
+
+_in_container() { (( _SMART_VENV_IN_CONTAINER )) }
 
 # Find nearest parent dir containing any of the given venv names
 # Usage: _nearest_venv_dir .venv.devcontainer .venv
@@ -103,4 +107,6 @@ _python_venv_smart() {
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd _python_venv_smart
 _python_venv_smart  # run once now
+
+# vim: set ft=zsh ts=2 sw=2:
 

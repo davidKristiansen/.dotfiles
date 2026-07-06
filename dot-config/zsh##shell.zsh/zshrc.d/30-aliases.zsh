@@ -86,7 +86,7 @@ dce() {
 
   # ── parse arguments ──────────────────────────────────────────────────
   # Everything after a bare "--" becomes the custom command.
-  local parsing_opts=true
+  local arg parsing_opts=true
   local positional=()
   for arg in "$@"; do
     if $parsing_opts && [[ "$arg" == "--" ]]; then
@@ -170,18 +170,18 @@ dce() {
 
 # --- lazy helpers for git/docker --------------------------------------------
 git() {
-  if [[ -z "$1" ]] && command -v lazygit >/dev/null 2>&1; then
-    command \lazygit
+  if [[ -z "$1" ]] && (( $+commands[lazygit] )); then
+    command lazygit
   else
-    command \git "$@"
+    command git "$@"
   fi
 }
 
 docker() {
-  if [[ -z "$1" ]] && command -v lazydocker >/dev/null 2>&1; then
-    command \lazydocker
+  if [[ -z "$1" ]] && (( $+commands[lazydocker] )); then
+    command lazydocker
   else
-    command \docker "$@"
+    command docker "$@"
   fi
 }
 

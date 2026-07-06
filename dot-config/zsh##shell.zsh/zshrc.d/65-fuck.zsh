@@ -7,10 +7,10 @@
 #   - Ctrl-X Ctrl-X     : inline typo-fix the command on the line (insert mode)
 #   - command-not-found : suggests missing commands automatically
 
-if command -v pay-respects >/dev/null 2>&1; then
+if (( $+commands[pay-respects] )); then
   # Sets up the `fuck` alias, the `__pr_*` helpers, the `^X^X` inline widget,
-  # and the command_not_found_handler.
-  eval "$(pay-respects zsh --alias fuck)"
+  # and the command_not_found_handler. Output is static — cached (03-cached-eval).
+  _cached_eval pay-respects pay-respects zsh --alias fuck
 
   # pay-respects' generated __pr_base captures the prompt via `print -P "$PROMPT"`
   # to pass as a context hint. Powerlevel10k's $PROMPT contains constructs that
@@ -31,10 +31,7 @@ if command -v pay-respects >/dev/null 2>&1; then
   }
   zle -N __pr_fix_last
 
-  # zsh-vi-mode (zvm) resets all keymaps on its deferred init, wiping any
-  # bindkey done at source time — the same reason 70-fzf.zsh / 51-zoxide.zsh
-  # rebind via zvm hooks. Put every binding in a function, call it once, and
-  # register it with both zvm after-init hooks so it survives the reset.
+  # Bindings (applied by _user_rebind_all in 80-keybindings.zsh):
   #   vicmd Esc        -> fix last command (vi flow: Esc to normal, Esc to fix)
   #   emacs Esc-Esc    -> fix last command (if ever running in emacs mode)
   #   viins/emacs ^X^X -> inline fix of the command on the line (pay-respects)
@@ -44,9 +41,6 @@ if command -v pay-respects >/dev/null 2>&1; then
     bindkey -M viins '^X^X' __pr_inline   2>/dev/null
     bindkey -M emacs '^X^X' __pr_inline   2>/dev/null
   }
-  __pr_bind_keys
-  zvm_after_init_commands+=('__pr_bind_keys')
-  zvm_after_lazy_keybindings_commands+=('__pr_bind_keys')
 fi
 
 return 0

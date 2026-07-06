@@ -9,17 +9,16 @@ export LESSCHARSET="utf-8"
 # Set only LANG and let the LC_* categories inherit from it. LC_ALL is the
 # nuclear override (forces every category) and is best reserved for ad-hoc use.
 export LANG="en_US.UTF-8"
-unset LC_ALL 2>/dev/null
+unset LC_ALL
 
-# Zsh cache + history
-export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}"
-export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump-$(hostname -s 2>/dev/null || echo host)}"
+# Zsh cache + history. ZSH_CACHE_DIR / ZSH_COMPDUMP are exported by .zshenv
+# (using $HOST — no hostname fork); don't redefine them here.
 export HISTFILE="${HISTFILE:-${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history}"
 export HISTSIZE=100000
 export SAVEHIST=100000
 
-# Ensure dirs exist
-mkdir -p -- "$ZSH_CACHE_DIR" "${HISTFILE%/*}"
+# Ensure dirs exist (guarded: skip the mkdir fork on the common path)
+[[ -d "$ZSH_CACHE_DIR" && -d "${HISTFILE:h}" ]] || mkdir -p -- "$ZSH_CACHE_DIR" "${HISTFILE:h}"
 
 # Saner umask for dev boxes
 umask 022

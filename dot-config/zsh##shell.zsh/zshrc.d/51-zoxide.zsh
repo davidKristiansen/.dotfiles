@@ -1,17 +1,12 @@
 # ~/.config/zsh/zshrc.d/51-zoxide.zsh
 # SPDX-License-Identifier: MIT
-# Cache zoxide init output to avoid eval on every shell startup.
+# Cached zoxide init (see 03-cached-eval.zsh).
 
-if command -v zoxide >/dev/null 2>&1; then
-  _zoxide_cache="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}/zoxide-init.zsh"
-  if [[ ! -r "$_zoxide_cache" ]]; then
-    zoxide init zsh --cmd cd > "$_zoxide_cache"
-  fi
-  source "$_zoxide_cache"
-  unset _zoxide_cache
-  
+if (( $+commands[zoxide] )); then
+  _cached_eval zoxide zoxide init zsh --cmd cd
+
   # Wrap the original hook to handle cases where zoxide becomes unavailable later
-  if declare -F __zoxide_hook >/dev/null 2>&1; then
+  if (( $+functions[__zoxide_hook] )); then
     # Save the original hook
     function __zoxide_hook_original() {
       \command zoxide add -- "$(__zoxide_pwd)"
@@ -48,25 +43,16 @@ if command -v zoxide >/dev/null 2>&1; then
 
     function __zoxide_bind_cd_tab() {
       # Capture whatever tab is currently bound to so we can delegate.
+      # ${(z)...}[2] = second word of `bindkey '^I'` output (no awk fork).
       local current_tab
-      current_tab="$(\builtin bindkey '^I' 2>/dev/null | awk '{print $2}')"
+      current_tab="${${(z)$(\builtin bindkey '^I' 2>/dev/null)}[2]}"
       if [[ -n "$current_tab" && "$current_tab" != __zoxide_cd_tab_widget ]]; then
         __zoxide_orig_tab_widget="$current_tab"
       fi
       \builtin bindkey '^I' __zoxide_cd_tab_widget
     }
-
-    # Defer binding until after all plugins (fzf-tab, zsh-vi-mode) are loaded.
-    # Use precmd hook to run once on first prompt (all plugins initialized by then).
-    function __zoxide_deferred_bind() {
-      __zoxide_bind_cd_tab
-      add-zsh-hook -d precmd __zoxide_deferred_bind
-    }
-    autoload -Uz add-zsh-hook
-    add-zsh-hook precmd __zoxide_deferred_bind
-    # Also re-bind after zsh-vi-mode resets keymaps.
-    zvm_after_init_commands+=('__zoxide_bind_cd_tab')
-    zvm_after_lazy_keybindings_commands+=('__zoxide_bind_cd_tab')
+    # NOTE: binding is applied by _user_rebind_all in 80-keybindings.zsh —
+    # after enable-fzf-tab, so the delegate target is fzf-tab-complete.
   fi
 fi
 

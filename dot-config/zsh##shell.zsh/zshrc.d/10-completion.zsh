@@ -10,15 +10,23 @@ zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*:descriptions' format '%F{yellow}%d%f'
-zstyle ':completion:*' menu select=2
+# fzf-tab replaces the completion menu; the builtin menu must stay off or
+# fzf-tab silently falls back to it for some completers.
+zstyle ':completion:*' menu no
 setopt AUTO_MENU COMPLETE_IN_WORD NO_CASE_GLOB
 
 # SSH hosts: extract Host aliases from ~/.ssh/config (excluding wildcards).
 # Feeds both the completion system and fast-syntax-highlighting's ssh chroma.
+# Anonymous function so `local` actually scopes (at sourced-file top level it
+# behaves like typeset -g and leaks).
 if [[ -r "$HOME/.ssh/config" ]]; then
-  local -a _ssh_config_hosts
-  _ssh_config_hosts=(${(s: :)${${(M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }})
-  # Remove wildcard entries (e.g. Host *)
-  _ssh_config_hosts=(${_ssh_config_hosts:#*[*?]*})
-  zstyle ':completion:*:hosts' hosts $_ssh_config_hosts
+  () {
+    local -a hosts
+    hosts=(${(s: :)${${(M)${(f)"$(<$HOME/.ssh/config)"}:#Host *}#Host }})
+    # Remove wildcard entries (e.g. Host *)
+    hosts=(${hosts:#*[*?]*})
+    zstyle ':completion:*:hosts' hosts $hosts
+  }
 fi
+
+# vim: set ft=zsh ts=2 sw=2:

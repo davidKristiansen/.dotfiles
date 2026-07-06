@@ -24,7 +24,9 @@ ohmyzsh/ohmyzsh path:plugins/magic-enter
 # Fuzzy Finder / Tab Completion
 #############################################################
 Aloxaf/fzf-tab
-Freed-Wu/fzf-tab-source
+# fzf-tab-source only registers preview zstyles — only needed at first tab
+# press, so defer it past the first prompt (~12ms off startup).
+Freed-Wu/fzf-tab-source kind:defer
 
 #############################################################
 # Fish-like Enhancements
