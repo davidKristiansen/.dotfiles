@@ -7,7 +7,7 @@
       "Bash(mise *)"
     ]
   },
-  "model": "haiku",
+  "model": "sonnet",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true

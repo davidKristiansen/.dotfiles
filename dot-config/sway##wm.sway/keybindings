@@ -12,6 +12,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+d exec $menu_fallback
 bindsym $mod+Shift+q kill
+bindsym button2 kill
 bindsym $mod+Shift+s exec $screengrab
 bindsym $mod+Delete exec $lock
 bindsym $mod+z exec systemctl suspend
