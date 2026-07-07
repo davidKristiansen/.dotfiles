@@ -2,7 +2,8 @@
 # media/hardware, notifications, modes, gestures.
 
 # Hold $mod + left mouse button to drag windows, right mouse button to
-# resize. Despite the name, this also works for non-floating windows.
+# resize, middle mouse button (anywhere in the window) to kill. Despite
+# the name, this also works for non-floating windows.
 floating_modifier $mod normal
 
 #
@@ -13,6 +14,7 @@ bindsym $mod+d exec $menu
 bindsym $mod+Shift+d exec $menu_fallback
 bindsym $mod+Shift+q kill
 bindsym button2 kill
+bindsym --whole-window $mod+button2 kill
 bindsym $mod+Shift+s exec $screengrab
 bindsym $mod+Delete exec $lock
 bindsym $mod+z exec systemctl suspend

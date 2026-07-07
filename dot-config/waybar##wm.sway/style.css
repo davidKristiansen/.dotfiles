@@ -78,7 +78,7 @@ window#waybar {
 #bluetooth,
 #network,
 #pulseaudio,
-#backlight,
+#custom-backlight,
 #custom-backlight-mode,
 #custom-gammastep,
 #custom-mako,
@@ -103,7 +103,7 @@ window#waybar {
 #bluetooth.connected:hover    { background: @blue;   color: @bg; }
 #network:hover                { background: @aqua;   color: @bg; }
 #pulseaudio:hover             { background: @yellow; color: @bg; }
-#backlight:hover              { background: @yellow; color: @bg; }
+#custom-backlight:hover        { background: @yellow; color: @bg; }
 #temperature:hover            { background: @orange; color: @bg; }
 #disk:hover                   { background: @blue;   color: @bg; }
 #cpu:hover                    { background: @aqua;   color: @bg; }
@@ -194,7 +194,7 @@ window#waybar {
 #network.disconnected { color: @gray; }
 #pulseaudio      { color: @yellow; }
 #pulseaudio.muted { color: @gray; }
-#backlight       { color: @yellow; }
+#custom-backlight { color: @yellow; }
 #custom-backlight-mode       { color: @fg_dim; padding: 0 5px; }
 #custom-backlight-mode.auto  { color: @aqua; }
 #custom-gammastep            { color: @fg_dim; padding: 0 5px; }

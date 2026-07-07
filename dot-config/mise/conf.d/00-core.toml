@@ -36,3 +36,4 @@ node = "latest"
 claude = "latest"
 starship = "latest"
 "pipx:graphifyy" = {version = "latest", extras = "pdf,office,mcp,svg,ollama"}
+usage = "latest"

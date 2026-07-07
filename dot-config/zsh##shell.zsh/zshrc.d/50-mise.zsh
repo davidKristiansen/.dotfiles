@@ -30,6 +30,11 @@
   }
   _cached_eval mise _mise_activate_gen "$mise_bin"
   unfunction _mise_activate_gen
+
+  # Completion script is static per mise version too — cache it the same way.
+  _mise_completion_gen() { "$1" completion zsh }
+  _cached_eval mise-completion _mise_completion_gen "$mise_bin"
+  unfunction _mise_completion_gen
 }
 
 # vim: set ft=zsh ts=2 sw=2:

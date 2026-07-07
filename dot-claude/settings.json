@@ -7,7 +7,7 @@
       "Bash(mise *)"
     ]
   },
-  "model": "haiku",
+  "model": "opus[1m]",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true

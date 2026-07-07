@@ -45,7 +45,7 @@
       "bluetooth",
       "network",
       "pulseaudio",
-      "backlight",
+      "custom/backlight",
       "custom/backlight-mode",
       "custom/gammastep",
       "idle_inhibitor",
@@ -192,11 +192,14 @@
     "on-click-right": "pavucontrol"
   },
 
-  // ── Backlight ─────────────────────────────────────────────────────────────
-  "backlight": {
-    "device": "intel_backlight",
-    "format": "{icon}  {percent}%",
-    "format-icons": ["󰃞", "󰃟", "󰃠"],
+  // ── Backlight (custom: polls backlight.sh so wluma's changes stay in sync,
+  //    unlike waybar's native "backlight" module which can go stale) ─────────
+  "custom/backlight": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 2,
+    "signal": 11,
+    "exec": "$XDG_BIN_HOME/backlight.sh waybar",
     "on-scroll-up": "$XDG_BIN_HOME/backlight.sh up 1",
     "on-scroll-down": "$XDG_BIN_HOME/backlight.sh down 1"
   },

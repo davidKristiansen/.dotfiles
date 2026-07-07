@@ -39,6 +39,7 @@ Usage:
   $(basename "$0") up [STEP]
   $(basename "$0") down [STEP]
   $(basename "$0") mode          Waybar JSON: current auto/manual state
+  $(basename "$0") waybar        Waybar JSON: current brightness percent
   $(basename "$0") toggle        Toggle between auto (wluma) and manual
   $(basename "$0") auto          Start wluma.service
   $(basename "$0") manual        Stop wluma.service
@@ -73,6 +74,26 @@ mode_json() {
   else
     printf '{"text":"󰃠","tooltip":"Brightness: manual","class":"manual","alt":"manual"}\n'
   fi
+}
+
+# ── Waybar percentage display ────────────────────────────────────────────────
+# A custom module polling this (rather than waybar's native "backlight"
+# module, which watches /sys/class/backlight itself) so the displayed
+# percentage stays in sync when wluma changes brightness outside waybar.
+percent_json() {
+  local percent icon
+  percent="$(get_internal_percent)"
+
+  if (( percent < 34 )); then
+    icon="󰃞"
+  elif (( percent < 67 )); then
+    icon="󰃟"
+  else
+    icon="󰃠"
+  fi
+
+  printf '{"text":"%s  %s%%","tooltip":"Brightness: %s%%","percent":%s}\n' \
+    "$icon" "$percent" "$percent" "$percent"
 }
 
 start_auto() {
@@ -202,6 +223,7 @@ set_both_percent() {
   # External is the tie breaker, but for an explicit target both get the same value.
   set_external_percent "$percent"
   set_internal_percent "$percent"
+  pkill -RTMIN+11 waybar 2>/dev/null || true   # refresh waybar module
 }
 
 show_status() {
@@ -232,6 +254,7 @@ adjust_brightness() {
 
   # Set internal immediately — user sees instant feedback.
   "$BRIGHTNESSCTL" -q -d "$INTERNAL_DEVICE" set "${target}%"
+  pkill -RTMIN+11 waybar 2>/dev/null || true   # refresh waybar module
 
   # Set external in the background — don't block on slow I2C.
   max="$(get_ddc_max)"
@@ -243,12 +266,13 @@ main() {
   local command="${1:-}"
   shift || true
 
-  # Mode/toggle commands are instant — no flock, no dependency checks.
+  # Mode/toggle/percent commands are instant — no flock, no dependency checks.
   case "$command" in
     mode)    mode_json;   return ;;
     toggle)  toggle_mode; return ;;
     auto)    start_auto;  return ;;
     manual)  stop_auto;   return ;;
+    waybar)  need_cmd "$BRIGHTNESSCTL"; percent_json; return ;;
   esac
 
   # Everything below touches hardware — lock and check dependencies.
