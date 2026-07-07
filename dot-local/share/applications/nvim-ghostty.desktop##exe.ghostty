@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Neovim (Ghostty)
+GenericName=Text Editor
+Comment=Edit text files in Neovim inside a Ghostty window
+Exec=ghostty --gtk-single-instance=false --class=com.mitchellh.ghostty.nvim --title=Neovim --window-width=88 -e sh -c 'exec "$HOME/.local/share/mise/shims/nvim" "$@"' _ %F
+Icon=nvim
+Terminal=false
+Categories=Utility;TextEditor;
+MimeType=text/plain;text/markdown;text/x-markdown;application/json;application/x-yaml;text/yaml;text/x-yaml;text/x-toml;application/toml;text/x-python;application/x-shellscript;text/x-shellscript;text/csv;text/tab-separated-values;application/xml;text/xml;text/css;text/javascript;application/javascript;application/x-desktop;text/x-log;text/x-ini;text/x-diff;text/x-patch;text/x-c;text/x-c++;text/x-java;text/x-rust;text/x-go;application/x-ruby;application/x-perl;text/x-lua;text/x-makefile;

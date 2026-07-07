@@ -8,6 +8,7 @@ for_window {
     [app_id="term.screenshare"] floating enable, sticky enable, resize set 60 ppt 65 ppt, move position center, border pixel 10, opacity 0.95
     [app_id="termfloat"] floating enable, sticky enable, resize set 58 ppt 46 ppt, opacity 0.9
     [app_id="__btop"] floating enable, sticky enable, resize set 650 400, opacity 0.9
+    [app_id="com.mitchellh.ghostty.nvim"] floating enable, resize set height 80 ppt, move position center
     [app_id="^scratchpad$"] move scratchpad
 
     # Picture-in-Picture
@@ -15,6 +16,7 @@ for_window {
     [window_role="PictureInPicture"] sticky enable
 
     # Utilities
+    [app_id="com.gabm.satty"] floating enable, resize set 75 ppt 75 ppt, move position center
     [app_id="gnome-calculator"] floating enable
     [title="Calculator"] floating enable
     [title="Color Picker"] floating enable
@@ -23,6 +25,7 @@ for_window {
     [app_id="zenity"] floating enable
     [app_id="ReadySetDone"] floating enable
     [class="^ffplay$"] floating enable
+    [app_id="swayimg"] floating enable, resize set 75 ppt 75 ppt, move position center
     [class="Ulauncher"] border pixel 0
 
     # Meetings / screen sharing
