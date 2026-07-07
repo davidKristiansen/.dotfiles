@@ -25,7 +25,7 @@ for_window {
     [app_id="zenity"] floating enable
     [app_id="ReadySetDone"] floating enable
     [class="^ffplay$"] floating enable
-    [app_id="swayimg"] floating enable, resize set 75 ppt 75 ppt, move position center
+    [app_id="swayimg"] floating enable, move position center
     [class="Ulauncher"] border pixel 0
 
     # Meetings / screen sharing

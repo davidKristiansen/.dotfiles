@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Swayimg
+GenericName=Image viewer
+Comment=Image viewer for Sway/Wayland
+Icon=swayimg
+# Route through the fit launcher so the window is sized to the image but
+# capped to the focused output. $HOME is expanded at runtime by sh.
+Exec=sh -c 'exec "$HOME/.local/bin/swayimg-fit.sh" "$@"' _ %F
+Terminal=false
+Categories=Graphics;Viewer
+StartupNotify=false
+MimeType=image/avif;image/bmp;image/gif;image/heif;image/jpeg;image/jpg;image/jxl;image/pbm;image/pjpeg;image/png;image/svg+xml;image/tiff;image/webp;image/x-bmp;image/x-exr;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-targa;image/x-tga
+NoDisplay=true

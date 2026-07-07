@@ -1,0 +1,29 @@
+# Swayimg configuration.
+# vim: filetype=dosini
+#
+# Behaviour: no metadata overlay, cycle the folder with h/l or the arrow keys,
+# and open at 50% of the output width (aspect-correct). The window size is
+# driven by swayimg-fit.sh via swayimg.desktop; sway floats + centers it
+# (see ~/.config/sway/window_rules) and must NOT force a resize.
+
+[general]
+# Fallback window size for direct CLI launches; the swayimg.desktop handler
+# routes through swayimg-fit.sh, which overrides this with a 50%-width window.
+size = image
+
+[info]
+# Don't show the metadata overlay by default (toggle with `i` when wanted).
+show = no
+
+[list]
+# When opened on a single file (e.g. from the file manager), also load the
+# other images in that directory so prev_file/next_file can cycle through them.
+all = yes
+
+[keys.viewer]
+# Cycle through images with h/l and the arrow keys (defaults pan the image and
+# put file navigation on PageUp/PageDown).
+h = prev_file
+l = next_file
+Left = prev_file
+Right = next_file

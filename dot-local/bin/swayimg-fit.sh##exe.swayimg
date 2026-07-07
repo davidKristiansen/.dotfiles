@@ -1,0 +1,56 @@
+#!/usr/bin/env sh
+# swayimg-fit — launch swayimg with a window whose width is 50% of the focused
+# output, with height following the image's aspect ratio (so the metadata
+# overlay sits on the image, not in empty letterbox space). If that height
+# would exceed 90% of the output, the window is shrunk to fit. Falls back to
+# plain swayimg (which uses `size = image` from the config) if dimensions can't
+# be determined.
+#
+# Invoked by swayimg.desktop; args are the image path(s) from the file manager.
+set -eu
+
+# First existing path argument (skip option flags).
+img=""
+for a in "$@"; do
+    case "$a" in
+        -*) ;;
+        *) [ -e "$a" ] && { img="$a"; break; } ;;
+    esac
+done
+
+size_arg=""
+if [ -n "$img" ] && command -v identify >/dev/null 2>&1 \
+        && command -v swaymsg >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+    # Image aspect ratio — read from the header only, never modifies the file.
+    dims=$(identify -ping -format '%w %h' "$img[0]" 2>/dev/null || true)
+    iw=${dims% *}; ih=${dims#* }
+
+    # Focused output logical size. Width fraction + aspect ratio are both
+    # scale-invariant, so output scale doesn't enter the math.
+    out=$(swaymsg -t get_outputs 2>/dev/null \
+        | jq -r 'first(.[] | select(.focused)) | "\(.rect.width) \(.rect.height)"' 2>/dev/null || true)
+    ow=${out% *}; oh=${out#* }
+
+    # Guard: every field must be present and all-digits. Concatenate with NO
+    # separator — a delimiter would itself be a non-digit and always match.
+    case "$iw$ih$ow$oh" in
+        ''|*[!0-9]*) ;;          # missing / non-numeric → fall back
+        *)
+            # Width = 50% of the output; height follows the image aspect ratio.
+            # Shrink both if the height would exceed 90% of the output.
+            target=$(awk -v iw="$iw" -v ih="$ih" -v ow="$ow" -v oh="$oh" 'BEGIN{
+                if (iw<=0 || ih<=0 || ow<=0 || oh<=0) exit 1;
+                tw=0.5*ow;
+                th=tw*ih/iw;
+                if (th > 0.9*oh) { th=0.9*oh; tw=th*iw/ih; }
+                printf "%d,%d", tw+0.5, th+0.5;
+            }' 2>/dev/null || true)
+            [ -n "$target" ] && size_arg="general.size=$target"
+            ;;
+    esac
+fi
+
+if [ -n "$size_arg" ]; then
+    exec swayimg --config "$size_arg" -- "$@"
+fi
+exec swayimg -- "$@"
