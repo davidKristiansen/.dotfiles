@@ -3,4 +3,8 @@ output * bg ~/.config/sway/wallpaper.png fill
 
 # Per-output geometry is managed by kanshi (see startup_applications).
 
+# The laptop's built-in display defaults to workspace 10, so external
+# monitors keep the 1-9 range and the laptop screen doesn't fight over it.
+workspace 10 output eDP-1
+
 # vim: filetype=i3config
