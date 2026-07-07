@@ -1,0 +1,16 @@
+# ~/.config/zsh/zshrc.d/85-idle-screensaver.zsh
+# SPDX-License-Identifier: MIT
+# Idle "screensaver": after TMOUT seconds at a bare prompt (no foreground job),
+# run neo's matrix rain. Any keypress dismisses it. zsh fires SIGALRM only while
+# the line editor waits for input, so this never interrupts a running command.
+
+command -v neo >/dev/null || return 0
+
+TMOUT=120
+
+TRAPALRM() {
+  neo --colormode=16 -D -a --screensaver
+  zle reset-prompt   # redraw prompt + any half-typed line after dismiss
+}
+
+# vim: set ft=zsh ts=2 sw=2:

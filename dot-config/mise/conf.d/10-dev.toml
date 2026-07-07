@@ -1,47 +1,31 @@
 # SPDX-License-Identifier: MIT
 # Copyright David Kristiansen
 #
-# Languages, toolchains, and development tools
+# Lightweight dev tools — installed everywhere, including devcontainers.
+# Heavy toolchains (rust, java, zig, …) live in 20-host.toml##!docker;
+# devcontainers get those from their image or a project-local mise.toml.
 
 [tools]
-# Node
-node = "lts"
+# Node (runtime is declared once in 00-core.toml)
 npm = "latest"
 "npm:prettier" = "latest"
-"npm:markdown-toc" = "latest"
-"npm:@devcontainers/cli" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
-"npm:hunkdiff" = "latest"  # interactive diff viewer / git pager (`hunk`)
 
 # Python
 python = "3.14"
 pipx = "latest"
 uv = "0.11.24"
-"pipx:isort" = "latest"
 "pipx:xonsh" = { version = "latest", extras = "full" }  # Python shell; extras=full → ptk editor + pygments
 ty = "latest"
 ruff = "latest"
 
 # Go
 go = "latest"
-"go:github.com/jesseduffield/lazydocker" = "latest"
 
-# Rust
-rust = "latest"
-cargo-binstall = "latest"
-
-# Java
-java = "26"
-
-# Zig
-zig = "latest"
-
-# Build tools
-cmake = "latest"
+# Lua
 stylua = "latest"
-pre-commit = "latest"
-typst = "latest"
 
 # Git / CI
+pre-commit = "latest"
 github-cli = "latest"
 sqlite = "latest"

@@ -20,7 +20,6 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$GNUPGHOME" \
          "$XDG_CONFIG_HOME/systemd/user" \
          "$XDG_CONFIG_HOME/teams-for-linux" \
-         "$XDG_CONFIG_HOME/opencode" \
          "$HOME/.pi/agent/sessions" \
          "$HOME/.pi/context-mode/sessions"
 chmod 700 "$GNUPGHOME"
@@ -60,7 +59,7 @@ done
 mise plugin install neovim -q &> /dev/null
 
 mise install --yes
-mise upgrade --bump --quiet --yes --exclude java --exclude uv
+mise upgrade --bump --quiet --yes --exclude uv
 
 # vim: set ft=sh ts=2 sw=2:
 

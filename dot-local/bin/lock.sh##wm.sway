@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-# Enhanced Wayland screen locker with optional per-output corrupted screenshots.
+# Enhanced Wayland screen locker with optional per-output "broken monitor" screenshots.
 #
-# Generates a corrupted screenshot for each active output and launches swaylock.
-# Uses a background fprintd-verify loop for parallel fingerprint unlock.
+# Generates a broken-monitor-style screenshot for each active output and launches
+# swaylock. The effect is built from brightness-preserving ops (pixelation, band
+# tearing, channel shift) plus dropouts and a slight darken, so the lock screen
+# never ends up lighter than the desktop. If the effect can't run, falls back to
+# a solid dark fill (never the raw desktop). Uses a background fprintd-verify
+# loop for parallel fingerprint unlock.
 
 set -euo pipefail
 
@@ -12,7 +16,6 @@ PER_OUTPUT_MODE="force" # 'force' (default), 'force-no', 'auto'
 USE_ALL_IMAGES=0
 COOL_EFFECTS=0
 COOL_EFFECTS_STYLE=""
-CORRUPTER="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims/corrupter"
 DIR="/tmp/lock.sh"
 
 # --- Functions ---
@@ -23,8 +26,9 @@ Usage: $(basename "$0") [OPTIONS] -- [SWAYLOCK_ARGS]
 
 An enhanced Wayland screen locker script.
 
-It takes a screenshot of each active output, optionally corrupts it and applies
-effects, and then uses the result as the lock screen background for that output.
+It takes a screenshot of each active output, applies a "broken monitor" effect
+(pixelation, tear bands, channel shift, dead pixels — never brighter than the
+original), and uses the result as the lock screen background for that output.
 
 Options:
   -h, --help                Show this help message and exit.
@@ -133,17 +137,95 @@ get_outputs() {
   fi
 }
 
-run_corrupter() {
-  local in="$1" out="$2" add="$3" mag="$4" boffset="$5" meanabber="$6"
-  if [[ -x "$CORRUPTER" ]]; then
-    if ! "$CORRUPTER" -add "$add" -mag "$mag" -boffset "$boffset" -meanabber "$meanabber" "$in" "$out" 2>"$DIR/corrupter.err"; then
-      log "corrupter failed for $in; using original. See $DIR/corrupter.err"
-      cp -f -- "$in" "$out"
-    fi
+# Safe fallback background when the broken-monitor effect can't run: zero out
+# every pixel of the screenshot and tint it dark. Keeps the screenshot's exact
+# dimensions but leaks nothing of the desktop. Returns 1 if ImageMagick is
+# unavailable (caller then locks with a solid color instead).
+safe_fill() {
+  local in="$1" out="$2" im
+  if command -v magick >/dev/null 2>&1; then
+    im="magick"
+  elif command -v convert >/dev/null 2>&1; then
+    im="convert"
   else
-    log "corrupter not executable; using raw screenshot."
-    cp -f -- "$in" "$out"
+    return 1
   fi
+  "$im" "$in" -evaluate multiply 0 -fill '#0b0b10' -colorize 100 "$out" \
+    2>>"$DIR/broken-monitor.err" || return 1
+  [[ -s "$out" ]]
+}
+
+# Broken-monitor effect. Every step either rearranges pixels (pixelation,
+# rolls, channel shift — brightness-neutral) or removes light (dropout bands,
+# final darken), so the result is never lighter than the screenshot.
+apply_broken_monitor() {
+  local in="$1" out="$2"
+  local im
+  if command -v magick >/dev/null 2>&1; then
+    im="magick"
+  elif command -v convert >/dev/null 2>&1; then
+    im="convert"
+  else
+    return 1
+  fi
+
+  local W H
+  read -r W H < <(identify -format '%w %h\n' "$in" 2>/dev/null) || true
+  [[ -n "${W:-}" && -n "${H:-}" ]] || return 1
+
+  local err="$DIR/broken-monitor.err"
+
+  # Single ImageMagick pass (intermediate PNG writes at full res dominate
+  # runtime otherwise):
+  # 1) Pixelate so content is unreadable (pure pixel rearrangement).
+  # 2) Chromatic aberration: split channels, shift R and B apart, recombine.
+  local args=("$in" -filter point -resize 25% -resize "${W}x${H}!"
+    "(" -clone 0 -channel R -separate +channel -roll "+$((RANDOM % 10 + 6))+0" ")"
+    "(" -clone 0 -channel G -separate +channel ")"
+    "(" -clone 0 -channel B -separate +channel -roll "-$((RANDOM % 10 + 6))+0" ")"
+    -delete 0 -combine)
+
+  # 3) Horizontal tear bands: crop a strip, roll it sideways, paste it back.
+  local n=$((H / 80))
+  ((n < 6)) && n=6
+  ((n > 18)) && n=18
+  local i y h dx
+  for ((i = 0; i < n; i++)); do
+    y=$((RANDOM % H))
+    h=$((RANDOM % 60 + 10))
+    dx=$((RANDOM % (W / 6) + 20))
+    if ((RANDOM % 2)); then
+      dx=$((-dx))
+    fi
+    args+=("(" +clone -crop "${W}x${h}+0+${y}" +repage -roll "$(printf '%+d' "$dx")+0" ")" -geometry "+0+${y}" -composite)
+  done
+
+  # 4) Dropouts drawn in one pass: dead scanlines, darker flicker bands,
+  #    and a few stuck-pixel columns.
+  local prims=""
+  for ((i = 0; i < 3; i++)); do
+    y=$((RANDOM % H))
+    h=$((RANDOM % 4 + 1))
+    prims+="fill-opacity 0.9 fill black rectangle 0,$y $W,$((y + h)) "
+  done
+  for ((i = 0; i < 4; i++)); do
+    y=$((RANDOM % H))
+    h=$((RANDOM % 80 + 20))
+    prims+="fill-opacity 0.3 fill black rectangle 0,$y $W,$((y + h)) "
+  done
+  local colors=("#00e5ff" "#ff00aa" "#39ff14" "#ffffff" "#0033ff")
+  local x c
+  for ((i = 0, n = RANDOM % 3 + 3; i < n; i++)); do
+    x=$((RANDOM % W))
+    c=${colors[RANDOM % ${#colors[@]}]}
+    prims+="fill-opacity 0.85 fill $c rectangle $x,0 $((x + 1)),$H "
+  done
+
+  # multiply (not -modulate) so no pixel can end up brighter than the input
+  args+=(-draw "$prims" -modulate 100,115,100 -evaluate multiply 0.85
+    -define png:compression-level=2 "$out")
+  "$im" "${args[@]}" 2>>"$err" || return 1
+  [[ -s "$out" ]]
 }
 
 apply_cool_effects() {
@@ -302,14 +384,14 @@ generate_image_for_output() {
   fi
 
   corrupted="${raw%.png}_corrupted.png"
-  local add mag boffset meanabber
-  add=$((RANDOM % 60 + 60))
-  mag=1
-  boffset=$((RANDOM % 50 + 50))
-  meanabber=$((RANDOM % 30 + 40))
-  run_corrupter "$raw" "$corrupted" "$add" "$mag" "$boffset" "$meanabber"
+  if ! apply_broken_monitor "$raw" "$corrupted"; then
+    log "broken-monitor effect failed; using solid dark fill. See $DIR/broken-monitor.err"
+    if ! safe_fill "$raw" "$corrupted"; then
+      log "safe fill failed (no ImageMagick?); no image for this output — swaylock will use a solid color."
+      return 1
+    fi
+  fi
 
-  [[ -s "$corrupted" ]] || corrupted="$raw"
   apply_cool_effects "$corrupted"
 
   if [[ -s "$corrupted" ]]; then
@@ -357,10 +439,13 @@ else
   [[ -n "$img_path" ]] && image_specs+=("$img_path")
 fi
 
-(( ${#image_specs[@]} > 0 )) || die "Failed to generate any images."
-
 swaylock_args=()
-if ((PER_OUTPUT)); then
+if (( ${#image_specs[@]} == 0 )); then
+  # No backgrounds generated (e.g. ImageMagick missing). Never abort — that
+  # would leave the session unlocked. Lock with a solid dark color instead.
+  log "No background images generated; locking with a solid color."
+  swaylock_args+=(--color 0b0b10)
+elif ((PER_OUTPUT)); then
   for spec in "${image_specs[@]}"; do
     swaylock_args+=(--image "$spec")
   done

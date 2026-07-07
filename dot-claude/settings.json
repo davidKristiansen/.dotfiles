@@ -7,7 +7,7 @@
       "Bash(mise *)"
     ]
   },
-  "model": "opus[1m]",
+  "model": "sonnet",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true

@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# GUI / hardware-bound tools — laptop only (battery-detected).
+# Workstation and containers never get these.
+
+[tools]
+"ubi:gabm/Satty" = { version = "latest", exe = "satty" }  # Wayland screenshot annotation — prebuilt
+"aqua:google-antigravity/antigravity-cli" = "latest"
+"pipx:platformio" = "latest"  # embedded dev — needs USB devices

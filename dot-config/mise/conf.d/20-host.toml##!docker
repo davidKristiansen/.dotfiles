@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# Real hosts only (laptop + workstation) — skipped inside devcontainers.
+# Heavy toolchains, cargo-built tools (need rust from here), and
+# host-side utilities that make no sense inside a container.
+
+[tools]
+# Heavy toolchains — containers bring their own via image or project mise.toml
+rust = "latest"
+cargo-binstall = "latest"
+cmake = "latest"
+
+# Prebuilt binaries from GitHub releases — no toolchain needed
+"ubi:iffse/pay-respects" = "latest"
+"ubi:orhun/binsider" = "latest"
+
+# Cargo-built (no release binaries — requires the rust toolchain above)
+"cargo:nvim-mcp" = "latest"
+
+# Host-side utilities
+mutagen = "latest"  # laptop↔server sync — runs on hosts, not in containers
+allure = "latest"
+"npm:@devcontainers/cli" = "latest"
+lazydocker = "latest"  # aqua, prebuilt
+"go:github.com/maaslalani/sheets" = "latest"
+
+# Override: add the ollama extra where an ollama server can actually run
+"pipx:graphifyy" = { version = "latest", extras = "pdf,office,mcp,svg,ollama" }

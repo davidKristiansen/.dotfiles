@@ -33,6 +33,19 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
+# Mode name doubles as the waybar hint (sway/mode shows the raw name)
+set $mode_screenshot "screenshot: [s]nip → clipboard  [a]nnotate"
+mode $mode_screenshot {
+    bindsym s mode "default", exec $screengrab
+    bindsym a mode "default", exec $screenannotate
+
+    # Double-tap $mod+Shift+s = old quick-grab muscle memory
+    bindsym $mod+Shift+s mode "default", exec $screengrab
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
 mode "gaps" {
     bindsym o      mode "gaps outer"
     bindsym i      mode "gaps inner"

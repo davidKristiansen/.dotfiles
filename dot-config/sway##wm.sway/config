@@ -32,6 +32,15 @@ set $screengrab slurp \
         | grim -g - - \
         | wl-copy
 
+# Region screenshot into satty for annotation (mise shim — sway's exec PATH
+# may not include shims). Copy button → clipboard, save button → ~/Pictures.
+set $screenannotate slurp \
+        | grim -g - - \
+        | ~/.local/share/mise/shims/satty -f - \
+          --copy-command wl-copy \
+          --early-exit \
+          --output-filename ~/Pictures/Screenshots/satty-%Y%m%d-%H%M%S.png
+
 include colorscheme/gruvbox_dark_hard
 include startup_applications
 include input
