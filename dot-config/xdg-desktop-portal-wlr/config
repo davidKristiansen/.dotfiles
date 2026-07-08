@@ -1,10 +1,17 @@
 [screencast]
 max_fps=60
-# Canonical wlroots path: xdpw (>=0.8) enumerates monitors AND windows itself
-# (ext_foreign_toplevel_list_v1) and pipes the list to a dmenu-style program,
-# which just echoes back the chosen line. No custom enumeration needed.
-chooser_type=dmenu
-chooser_cmd=$HOME/.local/bin/screenshare-chooser
+# snib — native GTK4 layer-shell picker with live thumbnails. It does its OWN
+# enumeration + capture via ext_image_copy_capture_v1 / ext_foreign_toplevel_list_v1
+# (wlroots 0.20), so it's a `simple` chooser: xdpw pipes no stdin list, snib prints
+# the chosen source as "{type}: {id}" (its default --output-format).
+# snib is mise-managed (cargo:git rev-pin in mise/conf.d/30-gui.toml). Absolute shim
+# path is required: the portal runs the chooser from a systemd-user env whose PATH
+# lacks the mise shims dir. The shim is a symlink to the mise binary and self-bootstraps
+# from HOME + XDG_RUNTIME_DIR alone (verified), and inherits WAYLAND_DISPLAY from xdpw.
+# Fallback: the previous dmenu/fzf chooser is still at ~/.local/bin/screenshare-chooser
+#   chooser_type=dmenu ; chooser_cmd=$HOME/.local/bin/screenshare-chooser
+chooser_type=simple
+chooser_cmd=$HOME/.local/share/mise/shims/snib
 # Suppress notifications while screensharing (mako is the active daemon)
 exec_before=makoctl mode -a do-not-disturb
 exec_after=makoctl mode -r do-not-disturb

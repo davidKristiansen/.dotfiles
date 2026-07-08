@@ -41,6 +41,20 @@ set $screenannotate slurp \
           --early-exit \
           --output-filename ~/Pictures/Screenshots/satty-%Y%m%d-%H%M%S.png
 
+# Geometry ("x,y WxH") of the focused window — a drop-in replacement for slurp
+# that skips the region-select prompt and captures the current window.
+set $focusrect swaymsg -t get_tree \
+        | jq -r 'first(.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)")'
+
+set $windowgrab grim -g "$($focusrect)" - \
+        | wl-copy
+
+set $windowannotate grim -g "$($focusrect)" - \
+        | ~/.local/share/mise/shims/satty -f - \
+          --copy-command wl-copy \
+          --early-exit \
+          --output-filename ~/Pictures/Screenshots/satty-%Y%m%d-%H%M%S.png
+
 include colorscheme/gruvbox_dark_hard
 include startup_applications
 include input

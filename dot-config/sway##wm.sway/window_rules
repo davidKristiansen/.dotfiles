@@ -31,6 +31,9 @@ for_window {
     # Meetings / screen sharing
     [title="Microsoft Teams Notification"] floating enable
     [title="teams.microsoft.com is sharing your screen."] floating enable, move to output eDP-1, move position 1200 1096
+    # "<app> - Screen is being shared" indicator (e.g. teams-for-linux). Title-only
+    # regex so it catches any app's variant; the main window won't match this suffix.
+    [title=".* - Screen is being shared$"] floating enable
     [title="Firefox — Sharing Indicator"] floating enable
     [title="Share your screen - Google Cast"] floating enable
     [title="Cisco Secure Client - Login"] floating enable

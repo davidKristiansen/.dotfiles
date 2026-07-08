@@ -6,5 +6,11 @@
 
 [tools]
 "ubi:gabm/Satty" = { version = "latest", exe = "satty" }  # Wayland screenshot annotation — prebuilt
+# snib — Wayland screenshare thumbnail picker (xdg-desktop-portal-wlr chooser).
+# No upstream release binary, so it's source-built from git via cargo (not a clean
+# prebuilt like the others). Needs the system lib gtk4-layer-shell that mise can't
+# provide: `sudo apt install libgtk4-layer-shell-dev`. Rev-pinned for reproducibility;
+# bump the sha to update (upstream has no tags/releases).
+"cargo:https://github.com/zelane/snib" = "rev:c1a6473751932c1507c5cca9001d50b2318c01ed"
 "aqua:google-antigravity/antigravity-cli" = "latest"
 "pipx:platformio" = "latest"  # embedded dev — needs USB devices

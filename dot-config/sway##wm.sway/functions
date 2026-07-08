@@ -34,10 +34,14 @@ mode "resize" {
 }
 
 # Mode name doubles as the waybar hint (sway/mode shows the raw name)
-set $mode_screenshot "screenshot: [s]nip → clipboard  [a]nnotate"
+set $mode_screenshot "shot: [s]nip [a]nnotate [w]in [W]in+ann"
 mode $mode_screenshot {
     bindsym s mode "default", exec $screengrab
     bindsym a mode "default", exec $screenannotate
+
+    # Focused window instead of a region selection
+    bindsym w mode "default", exec $windowgrab
+    bindsym Shift+w mode "default", exec $windowannotate
 
     # Double-tap $mod+Shift+s = old quick-grab muscle memory
     bindsym $mod+Shift+s mode "default", exec $screengrab
