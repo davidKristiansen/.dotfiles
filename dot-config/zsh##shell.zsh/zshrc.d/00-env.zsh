@@ -23,5 +23,13 @@ export SAVEHIST=100000
 # Saner umask for dev boxes
 umask 022
 
+# Fixed default model for Claude Code. Set here (repo-tracked, never written by
+# Claude) rather than in ~/.claude/settings.json, which /model rewrites on every
+# switch and is a stow symlink into this repo. Env var takes precedence over the
+# settings.json `model` field, so this is the effective default for every new
+# session. Switch per-session with `/model` → `s` (not Enter), or `claude
+# --model <id>`; both are ephemeral and never touch settings.json.
+export ANTHROPIC_MODEL="opus"
+
 # vim: set ft=zsh ts=2 sw=2:
 
