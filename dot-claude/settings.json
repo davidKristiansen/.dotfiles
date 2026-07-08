@@ -7,11 +7,11 @@
       "Bash(mise *)"
     ]
   },
+  "model": "sonnet",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true
   },
   "effortLevel": "high",
-  "theme": "auto",
-  "model": "haiku"
+  "theme": "auto"
 }
