@@ -7,9 +7,9 @@ XDG_BIN_HOME="${XDG_BIN_HOME:-"$HOME/.local/bin"}"
 LOCK="${XDG_BIN_HOME}/lock.sh -- -f"
 
 exec /usr/bin/swayidle -d -w \
-  timeout 120  "$LOCK" \
-  timeout 600  'swaymsg "output * power off"' \
+  timeout 600  "$LOCK" \
+  timeout 1800  'swaymsg "output * power off"' \
     resume     'swaymsg "output * power on"' \
-  timeout 1800 'systemctl suspend' \
+  timeout 3600 'systemctl suspend' \
   before-sleep "$LOCK" \
   after-resume 'swaymsg "output * power on"'
