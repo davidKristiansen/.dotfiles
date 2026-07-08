@@ -49,10 +49,6 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   stow.sh --dotfiles -f -d dot-config -t "$XDG_CONFIG_HOME/mise" mise
 )
 
-# dot-zshenv is sourced straight from the repo (not the stowed copy), so it
-# doesn't need to be stowed in the first pass.
-. ./dot-zshenv##shell.zsh
-
 # ----- mise: dotfiles (incl. mise conf.d) are stowed now -----
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh

@@ -58,7 +58,6 @@ chicken-and-egg problem between stow and mise with a **two-pass stow**:
    stow.sh --dotfiles -f -d dot-config -t "$XDG_CONFIG_HOME/mise" mise
    ```
    (stow strips the `mise` package level, so `conf.d/*` lands at `~/.config/mise/conf.d/`.)
-   `dot-zshenv` is sourced straight from the repo here, so it needn't be stowed yet.
 2. **Install** mise + all tools from the conf.d tiers.
 3. **Pass 2 — full stow.** `stow.sh --dotfiles -f`. Now the tools exist, so every
    `##exe.X` config whose binary mise just installed resolves and gets linked.
