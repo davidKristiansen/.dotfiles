@@ -42,6 +42,7 @@
     "orientation": "horizontal",
     "modules": [
       "sway/language",
+      "custom/fcitx",
       "bluetooth",
       "network",
       "pulseaudio",
@@ -144,6 +145,15 @@
     "format": "  {short}",
     "tooltip-format": "{long}",
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
+  },
+
+  // ── Input method (fcitx5 — Mozc/Japanese layered atop the xkb layout) ─────
+  "custom/fcitx": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 1,
+    "exec": "$HOME/.config/waybar/fcitx.sh",
+    "on-click": "fcitx5-remote -t"
   },
 
   // ── Bluetooth ─────────────────────────────────────────────────────────────

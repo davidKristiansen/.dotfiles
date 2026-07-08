@@ -117,6 +117,16 @@ bindsym $mod+Control+n exec makoctl dismiss
 bindsym $mod+Control+Shift+n exec makoctl dismiss --all
 
 #
+# Input — sway owns both input toggles so they're deterministic:
+#   Ctrl+Space        cycle the xkb layout (us/no) on all keyboards
+#   Ctrl+Shift+Space  toggle fcitx (Japanese/Mozc) on/off via fcitx5-remote
+# fcitx's own default trigger (Ctrl+Space) is harmlessly shadowed — sway grabs
+# the key first — so latin typing and layouts stay entirely with sway.
+#
+bindsym Control+space input type:keyboard xkb_switch_layout next
+bindsym Control+Shift+space exec fcitx5-remote -t
+
+#
 # Modes (defined in functions)
 #
 bindsym $mod+r mode "resize"

@@ -75,6 +75,7 @@ window#waybar {
 #custom-media-next,
 #custom-media,
 #language,
+#custom-fcitx,
 #bluetooth,
 #network,
 #pulseaudio,
@@ -99,6 +100,7 @@ window#waybar {
  * and the glyph flips to @bg. Toggle modules also fill when active/on, so
  * their state reads at a glance. */
 #language:hover               { background: @purple; color: @bg; }
+#custom-fcitx:hover           { background: @orange; color: @bg; }
 #bluetooth:hover,
 #bluetooth.connected:hover    { background: @blue;   color: @bg; }
 #network:hover                { background: @aqua;   color: @bg; }
@@ -186,6 +188,9 @@ window#waybar {
 
 /* ── Right-side modules: accent glyphs ──────────────────────────────────── */
 #language        { color: @purple; }
+/* Input method: gray あ when off, warm accent while Japanese (Mozc) is on. */
+#custom-fcitx      { color: @gray; }
+#custom-fcitx.mozc { color: @orange; }
 #bluetooth       { color: @blue; }
 #bluetooth.connected { color: @aqua; }
 #bluetooth.disabled,
