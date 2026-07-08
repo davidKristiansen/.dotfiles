@@ -6,6 +6,13 @@
 
 command -v neo >/dev/null || return 0
 
+# Skip the scratchpad terminal: it runs tmux session "scratch" (see
+# ~/.local/bin/scratchpad.sh). A quake-style drop-down shouldn't paint matrix
+# rain over itself while idle.
+if [[ -n "$TMUX" && "$(tmux display-message -p '#S' 2>/dev/null)" == scratch ]]; then
+  return 0
+fi
+
 TMOUT=120
 
 TRAPALRM() {
