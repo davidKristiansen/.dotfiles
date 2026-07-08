@@ -41,10 +41,17 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   install -m 755 "$stow_tmp" "$XDG_BIN_HOME/stow.sh"
   rm -f "$stow_tmp"
 
-  stow.sh --dotfiles -f
+  # First pass: stow ONLY the mise config so `mise install` below can read
+  # conf.d. A full stow here would skip every ##exe.X config (their apps
+  # aren't installed yet); the full stow happens after mise, once they exist.
+  # Package `mise` is stripped by stow, so target is $XDG_CONFIG_HOME/mise →
+  # links land at ~/.config/mise/conf.d/*.toml.
+  stow.sh --dotfiles -f -d dot-config -t "$XDG_CONFIG_HOME/mise" mise
 )
 
-[[ -f "${HOME}/.zshenv" ]] && . "${HOME}/.zshenv" || true
+# dot-zshenv is sourced straight from the repo (not the stowed copy), so it
+# doesn't need to be stowed in the first pass.
+. ./dot-zshenv##shell.zsh
 
 # ----- mise: dotfiles (incl. mise conf.d) are stowed now -----
 if ! type mise &>/dev/null; then
@@ -60,6 +67,15 @@ mise plugin install neovim -q &> /dev/null
 
 mise install --yes
 mise upgrade --bump --quiet --yes --exclude uv
+
+# ----- Full stow now that mise tools exist -----
+# The first pass stowed only the mise config. This is the real stow of
+# everything else; ##exe.X configs whose binaries mise just installed (on the
+# shims dir already on PATH) now resolve and get linked. Idempotent.
+(
+  cd "${SCRIPT_DIR}"
+  stow.sh --dotfiles -f
+)
 
 # vim: set ft=sh ts=2 sw=2:
 
