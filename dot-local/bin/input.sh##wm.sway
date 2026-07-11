@@ -1,0 +1,68 @@
+#!/usr/bin/env sh
+# input.sh — unified input state for waybar + sway (xkb layout + fcitx5/Mozc).
+#   input.sh          emit waybar JSON for the custom/input module
+#   input.sh cycle    advance the input state: en → no → ja → en
+#   input.sh ja       toggle Japanese directly (fcitx5-remote -t)
+#   input.sh en       force the default state (en, Mozc off) — run at startup
+#                     via fcitx.service ExecStartPost
+#
+# Stateless: the current state is always derived live from sway + fcitx5, so
+# waybar clicks, sway keybindings, and fcitx's own toggles can never drift out
+# of sync. Layout indices follow the sway input config (`xkb_layout us,no`):
+# 0 = English (intl), 1 = Norwegian. Mozc composes atop the English layout.
+#
+# State-changing commands end by signalling waybar (RTMIN+7) so the module
+# repaints instantly instead of waiting for the 1 s poll.
+
+signal_waybar() { pkill -RTMIN+7 waybar 2>/dev/null; }
+
+im=$(fcitx5-remote -n 2>/dev/null)
+
+# Active layout, read from a keyboard that actually has multiple layouts
+# configured (the Intel/power-button "keyboards" only carry the US default).
+layout=$(swaymsg -t get_inputs -r 2>/dev/null | jq -r \
+  'first(.[] | select(.type=="keyboard" and (.xkb_layout_names|length)>1)
+        | .xkb_active_layout_name) // empty')
+
+case "$layout" in
+  English*)   short="en" ;;
+  Norwegian*) short="no" ;;
+  "")         short="??"; layout="unknown" ;;
+  *)          short=$(printf '%s' "$layout" | cut -c1-2 | tr 'A-Z' 'a-z') ;;
+esac
+
+# Effective state: Japanese wins while Mozc is composing.
+if [ "$im" = "mozc" ]; then state="ja"; else state="$short"; fi
+
+case "$1" in
+  cycle)
+    # Every target sets BOTH dimensions (IM and layout): switching the xkb
+    # layout can bump fcitx5's own IM group and spuriously activate Mozc, so
+    # single-axis nudges drift — explicit idempotent targets don't.
+    case "$state" in
+      en) fcitx5-remote -c
+          swaymsg input type:keyboard xkb_switch_layout 1 >/dev/null ;;  # → no
+      no) fcitx5-remote -o
+          swaymsg input type:keyboard xkb_switch_layout 0 >/dev/null ;;  # → ja
+      *)  fcitx5-remote -c
+          swaymsg input type:keyboard xkb_switch_layout 0 >/dev/null ;;  # → en
+    esac
+    signal_waybar
+    ;;
+  ja)
+    fcitx5-remote -t
+    signal_waybar
+    ;;
+  en)
+    fcitx5-remote -c
+    swaymsg input type:keyboard xkb_switch_layout 0 >/dev/null
+    signal_waybar
+    ;;
+  *)
+    if [ "$state" = "ja" ]; then
+      printf '{"text":"  あ","class":"ja","tooltip":"Japanese (Mozc) — on\\nLayout underneath: %s\\nClick: cycle en → no → ja"}\n' "$layout"
+    else
+      printf '{"text":"  %s","class":"%s","tooltip":"Layout: %s\\nJapanese — off\\nClick: cycle en → no → ja"}\n' "$short" "$short" "$layout"
+    fi
+    ;;
+esac

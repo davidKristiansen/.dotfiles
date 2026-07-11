@@ -7,6 +7,9 @@ After=graphical-session.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/fcitx5 --replace
+# Default the unified input state to EN (Mozc off, layout 0) once fcitx5
+# answers — see input.sh; the loop waits out the daemon's startup.
+ExecStartPost=/bin/sh -c 'for i in $(seq 20); do fcitx5-remote >/dev/null 2>&1 && break; sleep 0.5; done; %h/.local/bin/input.sh en'
 Restart=on-failure
 
 [Install]

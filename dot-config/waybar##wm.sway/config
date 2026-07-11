@@ -21,8 +21,7 @@
     "clock"
   ],
   "modules-right": [
-    "group/right",
-    "tray"
+    "group/right"
   ],
 
   // ── Island groups ─────────────────────────────────────────────────────────
@@ -41,8 +40,7 @@
   "group/right": {
     "orientation": "horizontal",
     "modules": [
-      "sway/language",
-      "custom/fcitx",
+      "custom/input",
       "bluetooth",
       "network",
       "pulseaudio",
@@ -55,7 +53,9 @@
       "cpu",
       "memory",
       "battery",
-      "custom/mako"
+      "custom/mako",
+      "custom/teams",
+      "tray"
     ]
   },
 
@@ -140,20 +140,29 @@
     }
   },
 
-  // ── Keyboard layout ───────────────────────────────────────────────────────
-  "sway/language": {
-    "format": "  {short}",
-    "tooltip-format": "{long}",
-    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
-  },
-
-  // ── Input method (fcitx5 — Mozc/Japanese layered atop the xkb layout) ─────
-  "custom/fcitx": {
+  // ── Input (unified: xkb layout + fcitx5/Mozc — $XDG_BIN_HOME/input.sh) ────
+  //    Shows あ while Mozc is on, otherwise the xkb layout code (en/no).
+  //    Click cycles en → no → ja; sway's Ctrl+Space runs the same script,
+  //    which signals RTMIN+7 after every state change for an instant repaint.
+  "custom/input": {
     "format": "{}",
     "return-type": "json",
     "interval": 1,
-    "exec": "$HOME/.config/waybar/fcitx.sh",
-    "on-click": "fcitx5-remote -t"
+    "signal": 7,
+    "exec": "$XDG_BIN_HOME/input.sh",
+    "on-click": "$XDG_BIN_HOME/input.sh cycle"
+  },
+
+  // ── Teams (teams-for-linux presence via MQTT — replaces its tray icon) ────
+  //    Continuous module: teams.sh subscribes to the local mosquitto broker
+  //    (teams/#, the same feed used for Home Assistant) and streams presence +
+  //    call state. Click raises Teams; right-click toggles mute via teams/command.
+  "custom/teams": {
+    "format": "󰊻 {}",
+    "return-type": "json",
+    "exec": "$HOME/.config/waybar/teams.sh",
+    "on-click": "teams-for-linux",
+    "on-click-right": "mosquitto_pub -h localhost -t teams/command -m '{\"action\":\"toggle-mute\"}' -q 1"
   },
 
   // ── Bluetooth ─────────────────────────────────────────────────────────────

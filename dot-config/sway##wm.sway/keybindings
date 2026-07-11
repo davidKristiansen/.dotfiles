@@ -117,14 +117,15 @@ bindsym $mod+Control+n exec makoctl dismiss
 bindsym $mod+Control+Shift+n exec makoctl dismiss --all
 
 #
-# Input — sway owns both input toggles so they're deterministic:
-#   Ctrl+Space        cycle the xkb layout (us/no) on all keyboards
-#   Ctrl+Shift+Space  toggle fcitx (Japanese/Mozc) on/off via fcitx5-remote
+# Input — both bindings route through input.sh (shared with waybar's
+# custom/input module, which it signals for an instant repaint):
+#   Ctrl+Space        cycle the input state: en → no → ja → en
+#   Ctrl+Shift+Space  toggle fcitx (Japanese/Mozc) directly
 # fcitx's own default trigger (Ctrl+Space) is harmlessly shadowed — sway grabs
-# the key first — so latin typing and layouts stay entirely with sway.
+# the key first — so the cycle stays entirely with input.sh.
 #
-bindsym Control+space input type:keyboard xkb_switch_layout next
-bindsym Control+Shift+space exec fcitx5-remote -t
+bindsym Control+space exec $XDG_BIN_HOME/input.sh cycle
+bindsym Control+Shift+space exec $XDG_BIN_HOME/input.sh ja
 
 #
 # Modes (defined in functions)

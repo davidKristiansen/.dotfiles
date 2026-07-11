@@ -36,13 +36,12 @@ window#waybar {
 }
 
 /* ── The islands ─────────────────────────────────────────────────────────
- * #left / #right are the group modules; #clock and #tray ride solo. A faint
- * shadow lifts each island off the wallpaper. */
+ * #left / #right are the group modules (tray lives inside #right); #clock
+ * rides solo. A faint shadow lifts each island off the wallpaper. */
 #custom-power,
 #left,
 #right,
-#clock,
-#tray {
+#clock {
   background: @bg;
   border-radius: 9px;
   padding: 0 6px;
@@ -50,13 +49,14 @@ window#waybar {
 }
 
 /* Straight outer edges aligned to sway's 7px window gap: square the outward-
- * facing corners of the leftmost (power) and rightmost (tray) islands so the
- * bar presents a flat vertical edge at the same indent as the tiled windows. */
+ * facing corners of the leftmost (power) and rightmost (right group) islands
+ * so the bar presents a flat vertical edge at the same indent as the tiled
+ * windows. */
 #custom-power {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-#tray {
+#right {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -74,8 +74,8 @@ window#waybar {
 #custom-media-playpause,
 #custom-media-next,
 #custom-media,
-#language,
-#custom-fcitx,
+#custom-input,
+#custom-teams,
 #bluetooth,
 #network,
 #pulseaudio,
@@ -89,7 +89,7 @@ window#waybar {
 #cpu,
 #memory,
 #battery {
-  padding: 0 9px;
+  padding: 0 7px;
   margin: 4px 1px;
   background: transparent;
   border-radius: 8px;
@@ -99,8 +99,7 @@ window#waybar {
 /* Accent-fill affordance: on hover a module fills with its own accent color
  * and the glyph flips to @bg. Toggle modules also fill when active/on, so
  * their state reads at a glance. */
-#language:hover               { background: @purple; color: @bg; }
-#custom-fcitx:hover           { background: @orange; color: @bg; }
+#custom-input:hover           { background: @purple; color: @bg; }
 #bluetooth:hover,
 #bluetooth.connected:hover    { background: @blue;   color: @bg; }
 #network:hover                { background: @aqua;   color: @bg; }
@@ -187,10 +186,27 @@ window#waybar {
 }
 
 /* ── Right-side modules: accent glyphs ──────────────────────────────────── */
-#language        { color: @purple; }
-/* Input method: gray あ when off, warm accent while Japanese (Mozc) is on. */
-#custom-fcitx      { color: @gray; }
-#custom-fcitx.mozc { color: @orange; }
+/* Unified input: purple layout code normally, warm accent あ while Mozc is on. */
+#custom-input    { color: @purple; }
+#custom-input.ja { color: @orange; }
+/* Teams presence: teams.sh prints the status as plain text ("Busy", "In call",
+ * …) and each state gets a distinct gruvbox hue. Aqua while in a call,
+ * blinking red while ringing; dimmed when not running. */
+#custom-teams                { color: @fg_dim; }
+#custom-teams.available      { color: @green; }
+#custom-teams.busy           { color: @red; }
+#custom-teams.dnd            { color: @purple; }
+#custom-teams.away           { color: @yellow; }
+#custom-teams.brb            { color: @orange; }
+#custom-teams.unknown        { color: @gray; }
+#custom-teams.offline        { color: @gray; }
+#custom-teams.in-call        { color: @aqua; }
+#custom-teams.incoming-call  {
+  color: @red;
+  animation: blink 1s steps(1) infinite;
+}
+#custom-teams:hover          { background: @blue; color: @bg; }
+
 #bluetooth       { color: @blue; }
 #bluetooth.connected { color: @aqua; }
 #bluetooth.disabled,
@@ -244,9 +260,13 @@ window#waybar {
   }
 }
 
-/* ── Tray (its own small island) ────────────────────────────────────────── */
+/* ── Tray (last module inside the right island) ─────────────────────────
+ * Zero padding so an empty tray takes no width and the island keeps its
+ * sharp right edge; when icons appear, the module margin + group padding
+ * provide the breathing room. */
 #tray {
-  padding: 0 10px;
+  padding: 0;
+  margin: 4px 1px;
 }
 #tray > .passive { -gtk-icon-effect: dim; }
 #tray > .needs-attention { -gtk-icon-effect: highlight; }
