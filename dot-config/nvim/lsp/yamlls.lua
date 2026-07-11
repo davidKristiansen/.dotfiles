@@ -1,4 +1,4 @@
--- lua/lsp/servers/yamlls.lua
+-- lsp/yamlls.lua
 -- SPDX-License-Identifier: MIT
 return {
   settings = {

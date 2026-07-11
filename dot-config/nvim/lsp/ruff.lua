@@ -1,4 +1,4 @@
--- lua/lsp/servers/ruff.lua
+-- lsp/ruff.lua
 -- SPDX-License-Identifier: MIT
 
 return {

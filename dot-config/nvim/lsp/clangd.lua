@@ -1,4 +1,4 @@
--- lua/lsp/servers/clangd.lua
+-- lsp/clangd.lua
 -- SPDX-License-Identifier: MIT
 return {
   cmd = {

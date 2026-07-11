@@ -1,10 +1,6 @@
 -- lua/core/lsp/on_attach.lua
 -- SPDX-License-Identifier: MIT
-
-vim.g.format_on_save = false
-vim.g.inlay_hints_enabled = false
-vim.g.on_type_formatting_enabled = false
-vim.g.fix_all_on_save = false
+-- Per-buffer LspAttach handler; global toggle defaults live in core.lsp.init.
 
 local keymaps = require('core.lsp.keymaps')
 

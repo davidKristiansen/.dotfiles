@@ -1,4 +1,4 @@
--- lua/lsp/servers/cpilot.lua
+-- lsp/copilot.lua
 -- SPDX-License-Identifier: MIT
 return {
   init_options = {

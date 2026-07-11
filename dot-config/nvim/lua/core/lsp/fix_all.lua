@@ -1,10 +1,13 @@
+-- lua/core/lsp/fix_all.lua
 -- SPDX-License-Identifier: MIT
--- File: lua/core/lsp/fix_all.lua
--- Deterministic LSP FixAll + QuickFix-all (Ruff/ESLint/typos-lsp/etc.) + Format-on-save pipeline.
+-- Deterministic LSP FixAll + QuickFix-all (Ruff/ESLint/typos-lsp/etc.).
+-- Manual-only by design (<leader>cA / :LspFixAll): source-level fixes can be
+-- destructive (e.g. removing "unused" imports/vars) and must never run on save.
 
 local M = {}
 
--- ── prefs ──────────────────────────────────────────────────────────────────────
+local TIMEOUT_MS = 800
+
 local FIXALL_KINDS = {
   'source.fixAll.ruff',
   'source.fixAll',
@@ -13,20 +16,7 @@ local FIXALL_KINDS = {
   'quickfix',
 }
 
-local defaults = {
-  enable_on_save = false, -- buffer default; can toggle per buffer
-  save_timeout_ms = 800, -- sync wait per client (ms)
-  create_commands = true, -- :LspFixAll / :LspFixAllToggle
-  notify = true, -- vim.notify feedback
-}
-
 -- ── helpers ────────────────────────────────────────────────────────────────────
-local function notify(msg, level)
-  if defaults.notify then
-    vim.notify(msg, level or vim.log.levels.INFO)
-  end
-end
-
 local function pick_window_for_buf(bufnr)
   local win = vim.api.nvim_get_current_win()
   if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == bufnr then
@@ -98,7 +88,7 @@ end
 function M.run(bufnr, opts)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  local timeout = (opts and opts.timeout_ms) or defaults.save_timeout_ms
+  local timeout = (opts and opts.timeout_ms) or TIMEOUT_MS
   local any_applied = false
 
   local win = pick_window_for_buf(bufnr)
@@ -139,21 +129,26 @@ function M.run(bufnr, opts)
       end
 
       -- Apply best source action (e.g. Ruff fixAll)
+      local source_applied = false
       if best_source then
         best_source = resolve_action(bufnr, best_source, timeout)
-        if apply_action(bufnr, best_source, client) then
-          any_applied = true
-        end
+        source_applied = apply_action(bufnr, best_source, client)
+        any_applied = any_applied or source_applied
       end
 
-      -- Apply all quickfix actions that carry edits (e.g. typos-lsp corrections).
-      -- Skip command-only actions (e.g. "Ignore in project") to avoid
-      -- broadcasting unknown commands to unrelated LSP clients.
-      for _, qf in ipairs(quickfixes) do
-        if qf.edit or not qf.command then
-          qf = resolve_action(bufnr, qf, timeout)
-          if apply_action(bufnr, qf, client) then
-            any_applied = true
+      -- Apply all quickfix actions that carry edits (e.g. typos-lsp
+      -- corrections) — but only from clients whose source action didn't run:
+      -- a fixAll edit shifts the buffer, so this client's quickfix edits are
+      -- both stale and redundant with it. Skip command-only actions (e.g.
+      -- "Ignore in project") to avoid broadcasting unknown commands to
+      -- unrelated LSP clients.
+      if not source_applied then
+        for _, qf in ipairs(quickfixes) do
+          if qf.edit or not qf.command then
+            qf = resolve_action(bufnr, qf, timeout)
+            if apply_action(bufnr, qf, client) then
+              any_applied = true
+            end
           end
         end
       end
@@ -161,89 +156,6 @@ function M.run(bufnr, opts)
   end
 
   return any_applied
-end
-
--- toggle per buffer
-function M.toggle_on_save(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  vim.b[bufnr].fix_all_on_save = not vim.b[bufnr].fix_all_on_save
-  notify(('FixAll on save: %s'):format(vim.b[bufnr].fix_all_on_save and 'ON' or 'OFF'))
-end
-
--- does any attached client support format?
-local function supports_format(bufnr)
-  for _, c in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
-    if c.supports_method and c:supports_method('textDocument/formatting') then
-      return true
-    end
-  end
-  return false
-end
-
--- unified save pipeline: FixAll → Format
-function M.pipeline(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-
-  -- FixAll first (only if enabled)
-  if vim.b[bufnr].fix_all_on_save or vim.g.fix_all_on_save then
-    M.run(bufnr)
-  end
-
-  -- Then format (global toggle + client support + disable for C files)
-  local is_c_file = vim.bo[bufnr].filetype == 'c'
-  if not is_c_file and vim.g.format_on_save and supports_format(bufnr) then
-    vim.lsp.buf.format({ async = false, bufnr = bufnr })
-  end
-end
-
--- attach per buffer: commands and the single BufWritePre hook
-function M.attach(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-
-  if vim.b[bufnr].fix_all_on_save == nil then
-    -- Disable fix-all for C files by default
-    if vim.bo[bufnr].filetype == 'c' then
-      vim.b[bufnr].fix_all_on_save = false
-    else
-      vim.b[bufnr].fix_all_on_save = defaults.enable_on_save
-    end
-  end
-
-  if defaults.create_commands then
-    vim.api.nvim_buf_create_user_command(bufnr, 'LspFixAll', function()
-      local ok = M.run(bufnr)
-      if ok then
-        notify('FixAll applied')
-      else
-        notify('No FixAll actions', vim.log.levels.DEBUG)
-      end
-    end, { desc = 'LSP: Fix all (Ruff/ESLint/typos-lsp/etc.)' })
-
-    vim.api.nvim_buf_create_user_command(bufnr, 'LspFixAllToggle', function()
-      M.toggle_on_save(bufnr)
-    end, { desc = 'Toggle FixAll on save (buffer)' })
-  end
-
-  local grp = vim.api.nvim_create_augroup(('LspSavePipeline_%d'):format(bufnr), { clear = true })
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    group = grp,
-    buffer = bufnr,
-    callback = function()
-      M.pipeline(bufnr)
-    end,
-    desc = 'Save pipeline: FixAll → Format',
-  })
-end
-
--- public setup: installs attach on LspAttach
-function M.setup(opts)
-  defaults = vim.tbl_deep_extend('force', defaults, opts or {})
-  vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('FixAllAttach', { clear = true }),
-    callback = function(args)
-      M.attach(args.buf)
-    end,
-  })
 end
 
 return M

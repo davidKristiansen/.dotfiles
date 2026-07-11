@@ -2,6 +2,7 @@
 -- Single source of truth for all buffer-local LSP keymaps.
 
 local fixall = require('core.lsp.fix_all')
+local format = require('core.lsp.format')
 
 local M = {}
 
@@ -42,27 +43,73 @@ local function keymaps(bufnr)
       'n',
       '<leader>cA',
       function()
-        fixall.run(bufnr)
+        local applied = fixall.run(bufnr)
+        vim.notify(applied and 'FixAll applied' or 'No FixAll actions')
       end,
       'Fix All (source.fixAll)',
     },
 
-    -- Formatting / toggles
+    -- Formatting
     {
       'n',
       '<leader>cf',
       function()
-        vim.lsp.buf.format({ async = true })
+        format.changed(bufnr)
       end,
-      'Format Document',
+      'Format Changed Hunks',
+    },
+    { 'x', '<leader>cf', format.selection, 'Format Selection' },
+    {
+      'n',
+      '<leader>cF',
+      function()
+        format.buffer(bufnr)
+      end,
+      'Format Buffer',
+    },
+    { 'n', '<leader>cl', format.line, 'Format Line' },
+
+    -- Toggles
+    {
+      'n',
+      '<leader>Tf',
+      function()
+        format.toggle_on_save_buffer(bufnr)
+      end,
+      'Toggle: Format on save (buffer)',
+    },
+    { 'n', '<leader>TF', format.toggle_on_save_global, 'Toggle: Format on save (global)' },
+    {
+      'n',
+      '<leader>Th',
+      function()
+        local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+        vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+        vim.notify(('Inlay hints: %s'):format(enabled and 'OFF' or 'ON'))
+      end,
+      'Toggle: Inlay hints (buffer)',
     },
     {
       'n',
-      '<leader>Ta',
+      '<leader>Ti',
       function()
-        fixall.toggle_on_save(bufnr)
+        local enabled = not vim.lsp.inline_completion.is_enabled()
+        vim.lsp.inline_completion.enable(enabled)
+        vim.notify(('Inline completion: %s'):format(enabled and 'ON' or 'OFF'))
       end,
-      'Toggle: FixAll on save',
+      'Toggle: Inline completion (global)',
+    },
+    {
+      'n',
+      '<leader>To',
+      function()
+        -- No is_enabled() for on-type formatting; track state ourselves.
+        local new_state = not (vim.b[bufnr].on_type_formatting_enabled or false)
+        vim.b[bufnr].on_type_formatting_enabled = new_state
+        vim.lsp.on_type_formatting.enable(new_state, { bufnr = bufnr })
+        vim.notify(('On-type formatting: %s'):format(new_state and 'ON' or 'OFF'))
+      end,
+      'Toggle: On-type formatting (buffer)',
     },
 
     -- Documentation

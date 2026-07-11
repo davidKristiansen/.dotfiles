@@ -1,4 +1,4 @@
--- lua/lsp/servers/ty.lua
+-- lsp/ty.lua
 -- SPDX-License-Identifier: MIT
 return {
   -- root_markers = { 'ty.toml', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },

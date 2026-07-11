@@ -1,4 +1,4 @@
--- lua/lsp/servers/lua_ls.lua
+-- lsp/lua_ls.lua
 -- SPDX-License-Identifier: MIT
 return {
   settings = {

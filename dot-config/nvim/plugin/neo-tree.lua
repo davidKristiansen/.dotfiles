@@ -1,29 +1,11 @@
 -- SPDX-License-Identifier: MIT
 -- neo-tree.nvim: file explorer + lsp-file-operations.
 --
--- Split load:
---   * lsp-file-operations advertises file-op capabilities to all LSP servers,
---     which must happen before servers attach — kept on the early (next-tick)
---     tier exactly as before.
---   * the neo-tree UI (and the event-hooking half of lsp-file-operations) loads
---     on demand via <leader>e / <leader>E. File operations only originate from
---     the neo-tree UI, so hooking them at first open loses nothing.
-
--- Early: advertise lsp-file-operations capabilities to all servers.
-require('utils.lazy').add({
-  src = 'https://github.com/antosha417/nvim-lsp-file-operations',
-  deps = {
-    'https://github.com/nvim-lua/plenary.nvim',
-  },
-  config = function()
-    local ok, lsp_file_ops = pcall(require, 'lsp-file-operations')
-    if ok then
-      vim.lsp.config('*', {
-        capabilities = lsp_file_ops.default_capabilities(),
-      })
-    end
-  end,
-})
+-- The file-operation *capabilities* are advertised statically by core.lsp
+-- (no plugin needed at startup); only the event-hooking half of
+-- lsp-file-operations loads here, with the neo-tree UI, on <leader>e /
+-- <leader>E. File operations only originate from the neo-tree UI, so hooking
+-- them at first open loses nothing.
 
 -- Only reveal when the current buffer is a real file on disk; otherwise
 -- (starter, terminal, [No Name], help, quickfix, …) reveal has no valid target,

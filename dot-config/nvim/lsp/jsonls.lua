@@ -1,4 +1,4 @@
--- lua/lsp/servers/jsonls.lua
+-- lsp/jsonls.lua
 -- SPDX-License-Identifier: MIT
 return {
   settings = {

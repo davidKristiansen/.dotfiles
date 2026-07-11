@@ -83,23 +83,9 @@ map('n', '<leader>h', function()
 end, { desc = 'Open start screen' })
 
 -- ---------------------------------------------------------------------
--- Toggles (<leader>T)
+-- Toggles (<leader>T) — LSP toggles (hints/format/completion) live in
+-- core.lsp.keymaps; only editor-level toggles belong here.
 -- ---------------------------------------------------------------------
-map('n', '<leader>Th', function()
-  vim.g.inlay_hints_enabled = not (vim.g.inlay_hints_enabled == true)
-  vim.lsp.inlay_hint.enable(vim.g.inlay_hints_enabled)
-  vim.notify((vim.g.inlay_hints_enabled and 'Enabled' or 'Disabled') .. ' inlay hints')
-end, { desc = 'Toggle Inlay Hints' })
-
-map('n', '<leader>Ti', function()
-  vim.lsp.inline_completion.enable(not vim.lsp.inline_completion.is_enabled())
-end, { desc = 'Toggle Inline Completion' })
-
-map('n', '<leader>Tf', function()
-  vim.g.format_on_save = not vim.g.format_on_save
-  vim.notify((vim.g.format_on_save and 'Enabled' or 'Disabled') .. ' format on save')
-end, { desc = 'Toggle Format on Save' })
-
 map('n', '<leader>Tb', function()
   local ok, gitsigns = pcall(require, 'gitsigns')
   if ok then

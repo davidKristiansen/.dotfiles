@@ -1,5 +1,12 @@
+-- lsp/rust_analyzer.lua
+-- SPDX-License-Identifier: MIT
+-- Diagnostics disabled — external tooling owns them.
 return {
-  diagnostics = {
-    enable = false,
+  settings = {
+    ['rust-analyzer'] = {
+      diagnostics = {
+        enable = false,
+      },
+    },
   },
 }
