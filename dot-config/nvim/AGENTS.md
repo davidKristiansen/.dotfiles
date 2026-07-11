@@ -75,7 +75,7 @@ Top-level files:
 - .luarc.json — lua_ls workspace config.
 - .stylua.toml — Formatting standard (2-space indent, single quotes, 100 columns). Run `stylua .` after edits.
 
-### .opencode/ (OpenCode agent config)
+### .claude/ (Claude Code agent config)
 - skills/add-plugin/SKILL.md — Skill for installing a new plugin.
 - skills/remove-plugin/SKILL.md — Skill for removing a plugin.
 
@@ -190,8 +190,8 @@ When adding a plugin that introduces a new `<leader>` prefix, register the group
 
 1. Minimize scope; touch only what the request needs.
 2. Keep this file authoritative — rewrite outdated content instead of appending.
-3. **Add a plugin:** use the `add-plugin` skill (`.opencode/skills/add-plugin/SKILL.md`).
-4. **Remove a plugin:** use the `remove-plugin` skill (`.opencode/skills/remove-plugin/SKILL.md`).
+3. **Add a plugin:** use the `add-plugin` skill (`.claude/skills/add-plugin/SKILL.md`).
+4. **Remove a plugin:** use the `remove-plugin` skill (`.claude/skills/remove-plugin/SKILL.md`).
 5. Use `pcall(require, ...)` for new plugin setup to avoid bootstrap failures.
 6. Provide `desc` for ALL user-facing keymaps.
 7. **LSP changes:** create/modify `lsp/<server>.lua` at the config root (Neovim 0.11+ native path).
