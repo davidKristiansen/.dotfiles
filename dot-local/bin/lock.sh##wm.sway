@@ -369,18 +369,40 @@ lock_1password() {
   fi
 }
 
+# When grim can't capture (e.g. a before-sleep or post-DPMS-off lock, where the
+# outputs are already powered off), reuse the most recent corrupted image for
+# this output if one exists. This keeps the broken-monitor look instead of
+# dropping to a plain solid-color lock. Echoes the path and returns 0 on hit.
+reuse_last_good() {
+  local candidate="$1"
+  if [[ -s "$candidate" ]]; then
+    log "grim capture unavailable; reusing last-good image: $candidate"
+    echo "$candidate"
+    return 0
+  fi
+  return 1
+}
+
 generate_image_for_output() {
   local output="$1"
   local raw corrupted
   if [[ -z "$output" ]]; then
     raw="$DIR/screen.png"
     log "Capturing entire screen..."
-    grim "$raw" || { log "grim failed to capture full screen"; return 1; }
+    if ! grim "$raw"; then
+      log "grim failed to capture full screen"
+      reuse_last_good "${raw%.png}_corrupted.png" && return 0
+      return 1
+    fi
   else
     local safe_output=${output//[^A-Za-z0-9_.-]/_}
     raw="$DIR/${safe_output}.png"
     log "Capturing output: $output"
-    grim -o "$output" "$raw" || { log "grim failed for output $output"; return 1; }
+    if ! grim -o "$output" "$raw"; then
+      log "grim failed for output $output"
+      reuse_last_good "${raw%.png}_corrupted.png" && return 0
+      return 1
+    fi
   fi
 
   corrupted="${raw%.png}_corrupted.png"
@@ -400,6 +422,17 @@ generate_image_for_output() {
 }
 
 # --- Execution ---
+
+# Idempotency: if a lock is already up, do not screenshot or spawn a second
+# swaylock. A second instance can't acquire the ext-session-lock ("Failed to
+# lock session -- is another lockscreen running?"), so it would waste a full
+# grim+ImageMagick pass and leave the earlier lock visible. This is what let a
+# solid-color before-sleep lock persist while later image locks silently failed
+# to take over. Exit 0 quickly so swayidle's `-w` wait is unblocked.
+if pgrep -x swaylock >/dev/null 2>&1; then
+  log "swaylock already running; not starting another lock."
+  exit 0
+fi
 
 mapfile -t outputs < <(get_outputs || true)
 (( ${#outputs[@]} == 0 )) && log "No outputs detected; will capture entire screen."
