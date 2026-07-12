@@ -38,4 +38,5 @@ hunkdiff = "latest"  # interactive diff viewer / git pager (`hunk`) — aqua, pr
 
 # Runtime for the npm:* backends above — single source of truth for node
 node = "lts"
+"pipx:nvim-mcp" = "latest"
 
