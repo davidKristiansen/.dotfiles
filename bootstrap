@@ -73,5 +73,11 @@ mise upgrade --bump --quiet --yes --exclude uv
   stow.sh --dotfiles -f
 )
 
+# ----- Restore Yazi plugins declared in package.toml -----
+if command -v ya >/dev/null 2>&1 &&
+   [[ -f "$XDG_CONFIG_HOME/yazi/package.toml" ]]; then
+  mise exec -- ya pkg install
+fi
+
 # vim: set ft=sh ts=2 sw=2:
 

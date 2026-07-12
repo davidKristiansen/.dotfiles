@@ -126,14 +126,16 @@ function M.add(spec)
       })
     end
 
+    -- Drop command stubs BEFORE vim.pack.add: add() sources the plugin's
+    -- plugin/ files, which register the real commands — deleting afterwards
+    -- would delete those real commands, not the stubs.
+    for _, name in ipairs(cmd_names) do
+      pcall(vim.api.nvim_del_user_command, name)
+    end
+
     local pkgs = build_pack(spec)
     if #pkgs > 0 then
       vim.pack.add(pkgs, { confirm = false })
-    end
-
-    -- Drop command stubs so the plugin can register its real commands.
-    for _, name in ipairs(cmd_names) do
-      pcall(vim.api.nvim_del_user_command, name)
     end
 
     -- `opts` sugar: plain require(main).setup(opts).

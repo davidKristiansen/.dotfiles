@@ -202,3 +202,35 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- The previous DirChanged autocmd auto-ran `uv sync` on cd (unattended install)
 -- and prepended venv/bin to PATH on every DirChanged without dedup, stacking
 -- duplicate PATH entries for the whole nvim process. Removed intentionally.
+
+-- Hijack directory opening to show mini.starter and neo-tree instead of netrw
+vim.api.nvim_create_autocmd('VimEnter', {
+  group = vim.api.nvim_create_augroup('dir_hijack', { clear = true }),
+  callback = function()
+    local path = vim.fn.expand('%:p')
+    if path == '' then
+      return
+    end
+
+    local stat = vim.uv.fs_stat(path)
+    if stat and stat.type == 'directory' then
+      local buf = vim.api.nvim_get_current_buf()
+
+      -- Change Neovim's cwd to the directory being opened
+      vim.cmd('cd ' .. vim.fn.fnameescape(path))
+
+      -- Open mini.starter in a new buffer
+      require('mini.starter').open()
+
+      -- Wipe out the netrw/directory buffer
+      pcall(vim.api.nvim_buf_delete, buf, { force = true })
+
+      -- Open neo-tree (avoiding 'reveal' since we are in a starter buffer)
+      vim.cmd('Neotree show')
+      
+      -- Focus back to the main window (mini.starter) if Neotree stole focus
+      -- 'show' usually doesn't steal focus, but just in case:
+      vim.cmd('wincmd p')
+    end
+  end,
+})

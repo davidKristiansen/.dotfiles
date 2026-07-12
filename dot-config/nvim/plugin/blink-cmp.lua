@@ -8,10 +8,20 @@ require('utils.lazy').add({
     'https://github.com/saghen/blink.lib',
     'https://github.com/fang2hou/blink-copilot',
   },
+  -- Rebuild the native library when vim.pack installs/updates blink.cmp
+  -- (v2 no longer ships prebuilt binaries through the old download path).
+  on_pack_changed = function(ev)
+    if ev.data.spec.name == 'blink.cmp' and ev.data.kind ~= 'delete' then
+      pcall(function()
+        require('blink.cmp').build():pwait()
+      end)
+    end
+  end,
   config = function()
-    -- blink.cmp native library build (async, only runs if missing)
+    -- Native library build; no-op when current. :pwait() so setup() can't
+    -- race an in-flight build into the Lua fuzzy fallback.
     pcall(function()
-      require('blink.cmp').build()
+      require('blink.cmp').build():pwait()
     end)
 
     -- LuaSnip jsregexp build

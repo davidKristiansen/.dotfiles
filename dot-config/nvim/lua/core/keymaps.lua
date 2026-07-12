@@ -23,6 +23,18 @@ map('i', '<A-j>', '<Esc>:m .+1<CR>==gi', { desc = 'Move line down' })
 map('i', '<A-k>', '<Esc>:m .-2<CR>==gi', { desc = 'Move line up' })
 
 -- ---------------------------------------------------------------------
+-- Yazi quick-edit: when nvim is launched as yazi's opener (yazi exports
+-- YAZI_LEVEL/YAZI_ID into the child env), make `q` quit the window so the
+-- file-manager round-trip stays one keystroke. On the last window this
+-- exits nvim back to yazi; splits close one at a time. Trades away macro
+-- recording, which is a fair deal for a transient editor session.
+-- Buffer-local `q` maps (help, quickfix, neo-tree, …) still win.
+-- ---------------------------------------------------------------------
+if vim.env.YAZI_LEVEL then
+  map('n', 'q', '<cmd>q<CR>', { desc = 'Quit window (yazi session)' })
+end
+
+-- ---------------------------------------------------------------------
 -- Quickfix
 -- ---------------------------------------------------------------------
 local function toggle_qflist()

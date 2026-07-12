@@ -1,7 +1,8 @@
 -- SPDX-License-Identifier: MIT
 -- Git integration. Split load:
 --   * gitsigns + fugitive load early (vim.schedule) so signs appear on open.
---   * neogit / diffview / lazygit load on demand (<leader>g* keymaps).
+--   * diffview loads on demand (<leader>g* keymaps / :Diffview* commands).
+--   * neogit / lazygit load on demand (<leader>g* keymaps / :Neogit).
 
 -- ── Gitsigns + Fugitive (early) ─────────────────────────────────────────
 require('utils.lazy').add({
@@ -112,17 +113,6 @@ local function create_branch()
   end)
 end
 
-local function toggle_diffview()
-  local lib = require('diffview.lib')
-  local view = lib.get_current_view()
-
-  if view then
-    vim.cmd('DiffviewClose')
-  else
-    vim.cmd('DiffviewOpen')
-  end
-end
-
 local function open_pr_view()
   pick_ref({
     prompt = 'PR View (vs Base)> ',
@@ -188,32 +178,93 @@ local function push_upstream()
   end
 end
 
-require('utils.lazy').add({
-  src = 'https://github.com/NeogitOrg/neogit',
-  deps = {
-    'https://github.com/MunifTanjim/nui.nvim',
-    'https://github.com/kdheepak/lazygit.nvim',
-    'https://github.com/dlyongemallo/diffview.nvim',
+-- ── Diffview ────────────────────────────────────────────────────────────
+local diffview = require('utils.lazy').add({
+  src = 'https://github.com/dlyongemallo/diffview.nvim',
+  cmd = {
+    'DiffviewOpen',
+    'DiffviewToggle',
+    'DiffviewClose',
+    'DiffviewFileHistory',
+    'DiffviewFocusFiles',
+    'DiffviewToggleFiles',
+    'DiffviewRefresh',
+    'DiffviewLog',
   },
   config = function()
     local actions = require('diffview.actions')
 
     require('diffview').setup({
       enhanced_diff_hl = true,
+      view = {
+        default = { winbar_info = true },
+        file_history = { winbar_info = true },
+        -- ours | theirs on top, merged result below; resolve with the
+        -- default <leader>co/<leader>ct/<leader>cb/<leader>ca, dx; [x/]x jump
+        merge_tool = { layout = 'diff3_mixed', disable_diagnostics = true },
+      },
+      file_panel = {
+        listing_style = 'tree',
+        win_config = { position = 'left', width = 32 },
+      },
+      -- Defaults stay on (stage: -/S/U, panel focus/toggle: <leader>e/<leader>b,
+      -- cycle layout: g<C-x>, help: g?); entries below are additions.
       keymaps = {
         view = {
-          ['[f'] = actions.select_prev_entry,
-          [']f'] = actions.select_next_entry,
+          { 'n', 'q', '<cmd>DiffviewClose<CR>', { desc = 'Close Diffview' } },
+          { 'n', '[f', actions.select_prev_entry, { desc = 'Prev file' } },
+          { 'n', ']f', actions.select_next_entry, { desc = 'Next file' } },
         },
         file_panel = {
-          ['j'] = actions.next_entry,
-          ['k'] = actions.prev_entry,
-          ['<CR>'] = actions.select_entry,
-          ['[f'] = actions.select_prev_entry,
-          [']f'] = actions.select_next_entry,
+          { 'n', 'q', '<cmd>DiffviewClose<CR>', { desc = 'Close Diffview' } },
+          { 'n', '[f', actions.select_prev_entry, { desc = 'Prev file' } },
+          { 'n', ']f', actions.select_next_entry, { desc = 'Next file' } },
+          { 'n', 'cc', '<cmd>Neogit commit<CR>', { desc = 'Commit staged' } },
+        },
+        file_history_panel = {
+          { 'n', 'q', '<cmd>DiffviewClose<CR>', { desc = 'Close Diffview' } },
+          { 'n', '[f', actions.select_prev_entry, { desc = 'Prev file' } },
+          { 'n', ']f', actions.select_next_entry, { desc = 'Next file' } },
         },
       },
     })
+  end,
+  keys = {
+    { '<leader>gv', '<cmd>DiffviewToggle<CR>', desc = 'Toggle Diffview' },
+    { '<leader>gV', open_pr_view, desc = 'PR View (Cumulative)' },
+    { '<leader>gl', open_pr_history, desc = 'PR History (Commit-by-Commit)' },
+    {
+      '<leader>gf',
+      '<cmd>DiffviewFileHistory %<CR>',
+      desc = 'File History (Buffer)',
+    },
+    {
+      '<leader>gf',
+      ':DiffviewFileHistory<CR>',
+      mode = 'v',
+      desc = 'File History (Selection)',
+    },
+    {
+      '<leader>gH',
+      '<cmd>DiffviewFileHistory<CR>',
+      desc = 'File History (Project)',
+    },
+    { '<leader>gD', open_diff_vs_ref, desc = 'Diff vs Ref (Merge-Base)' },
+  },
+})
+
+-- ── Neogit + LazyGit ────────────────────────────────────────────────────
+require('utils.lazy').add({
+  src = 'https://github.com/NeogitOrg/neogit',
+  deps = {
+    'https://github.com/MunifTanjim/nui.nvim',
+    'https://github.com/kdheepak/lazygit.nvim',
+  },
+  cmd = 'Neogit',
+  config = function()
+    -- Load diffview through its own spec so our setup() above is applied
+    -- before neogit's diffview integration first uses it.
+    diffview.load()
 
     require('neogit').setup({
       kind = 'tab',
@@ -221,21 +272,6 @@ require('utils.lazy').add({
     })
   end,
   keys = {
-    -- Diffview
-    { '<leader>gv', toggle_diffview, desc = 'Toggle Diffview' },
-    { '<leader>gV', open_pr_view, desc = 'PR View (Cumulative)' },
-    { '<leader>gl', open_pr_history, desc = 'PR History (Commit-by-Commit)' },
-    {
-      '<leader>gf',
-      '<cmd>DiffviewFileHistory %<CR>',
-      desc = 'Diffview File History (Buffer)',
-    },
-    {
-      '<leader>gH',
-      '<cmd>DiffviewFileHistory<CR>',
-      desc = 'Diffview File History (Project)',
-    },
-    { '<leader>gD', open_diff_vs_ref, desc = 'Diff vs Ref (Merge-Base)' },
     -- Branches
     { '<leader>gB', create_branch, desc = 'Create new branch' },
     -- Neogit

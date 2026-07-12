@@ -23,13 +23,16 @@ require('utils.lazy').add({
     'https://github.com/nvim-lua/plenary.nvim',
     'https://github.com/MunifTanjim/nui.nvim',
     'https://github.com/antosha417/nvim-lsp-file-operations',
+    'https://github.com/s1n7ax/nvim-window-picker',
   },
+  cmd = 'Neotree',
   config = function()
     require('neo-tree').setup({
       use_popups_for_input = false,
       enable_git_status = true,
       window = { mappings = { ['<C-v>'] = 'open_vsplit' } },
       filesystem = {
+        hijack_netrw_behavior = 'disabled',
         use_libuv_file_watcher = true,
         follow_current_file = {
           enabled = false,

@@ -71,7 +71,9 @@ local function has_git_baseline(bufnr)
   if name == '' or not vim.fs.root(name, '.git') then
     return false
   end
-  local out = vim.system({ 'git', '-C', vim.fs.dirname(name), 'ls-files', '--error-unmatch', '--', name }):wait()
+  local out = vim
+    .system({ 'git', '-C', vim.fs.dirname(name), 'ls-files', '--error-unmatch', '--', name })
+    :wait()
   return out.code == 0
 end
 

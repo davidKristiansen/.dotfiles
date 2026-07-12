@@ -95,6 +95,7 @@ Then alphabetically:
 - dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
 - dial.lua — Increment/decrement augends & keymaps (vim.schedule).
 - git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
+- guess-indent.lua — Auto-detect file indentation, sets buffer-local shiftwidth/expandtab (event: `BufReadPre`/`BufNewFile`).
 - hex.lua — Hex editing via xxd (keymap: `<leader>Tx`).
 - mason.lua — Mason tool installer (event: first `BufReadPre`/`FileType`).
 - neo-tree.lua — File explorer (keymap: `<leader>e`/`<leader>E`) + lsp-file-operations capabilities (later tier; split-loaded, see Lazy Loading Strategy).
