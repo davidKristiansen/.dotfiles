@@ -1,0 +1,49 @@
+{
+  "skill_name": "bugfix",
+  "evals": [
+    {
+      "id": 0,
+      "name": "eval-0-exact-fit-truncation",
+      "prompt": "There's a bug in textkit: truncate_words cuts the text even when it fits exactly. truncate_words('one two three', 3) returns 'one two three…' but it should return the text unchanged — it's exactly 3 words, nothing to truncate. Can you fix this?",
+      "expected_output": "A regression test asserting the exact-fit case is added and shown failing (red) before the one-character fix in textkit/truncate.py (>= to >), then the full unittest suite passes. No unrelated changes.",
+      "files": ["fixtures/wordwrap"],
+      "assertions": [
+        "Bug is fixed: truncate_words('one two three', 3) returns the text unchanged after the change",
+        "A regression test for the exact-fit case exists in the test suite",
+        "The new regression test fails when run against the pre-fix code (verified by checking out the original textkit/truncate.py)",
+        "The full test suite passes after the fix",
+        "Minimal footprint: source changes touch only textkit/truncate.py; other non-test files are unmodified",
+        "SUMMARY.md shows evidence of a red run (failing test output) before the fix was applied"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "eval-1-nan-report-root-cause",
+      "prompt": "our stock report is broken. `node bin/report.js data/stock.csv` prints NaN for every line and the total is NaN too. the csv looks fine to me. can you fix it?",
+      "expected_output": "Root cause identified in lib/parse.js (header cells not trimmed), a regression test with whitespace-padded headers added and shown failing first, then the parser fixed. Not a null-guard workaround in lib/report.js.",
+      "files": ["fixtures/inventory"],
+      "assertions": [
+        "Bug is fixed: `node bin/report.js data/stock.csv` prints numeric values (no NaN/undefined) with correct total 91.30",
+        "Root cause fixed in the parser: lib/parse.js trims header cells; the fix is not a workaround in lib/report.js (report.js may be untouched or only trivially touched)",
+        "A regression test exists covering CSV headers with surrounding whitespace",
+        "The new regression test fails when run against the pre-fix lib/parse.js",
+        "The full test suite (npm test) passes after the fix",
+        "SUMMARY.md shows evidence of a red run (failing test output) before the fix was applied"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "eval-2-no-test-suite-median",
+      "prompt": "found a bug in stats.py — median([1, 2, 3, 4]) returns 3 but the median of that list should be 2.5. please fix",
+      "expected_output": "Project has no test suite: bug reproduced via a minimal standalone repro (red), median fixed to average the two middle values for even-length input (green), no test framework bootstrapped, mean/value_range untouched.",
+      "files": ["fixtures/statlib"],
+      "assertions": [
+        "Bug is fixed: median([1, 2, 3, 4]) returns 2.5 after the change",
+        "Odd-length behavior preserved: median([1, 2, 3]) still returns 2",
+        "The bug was reproduced before fixing: a standalone repro/verification script exists in the project or SUMMARY.md shows red-before/green-after output",
+        "No test framework was bootstrapped as a side effect (no new pytest/tox/framework config files or dependency manifests)",
+        "Minimal footprint: source changes touch only the median function in stats.py; mean and value_range are unmodified"
+      ]
+    }
+  ]
+}
