@@ -1,0 +1,66 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
+[[mgr.prepend_keymap]]
+on   = "l"
+run  = "plugin smart-enter"
+desc = "Enter directory or open file"
+
+[[mgr.prepend_keymap]]
+on   = "<Right>"
+run  = "plugin smart-enter"
+desc = "Enter directory or open file"
+
+# [[mgr.prepend_keymap]]
+# on   = "<Enter>"
+# run  = "plugin smart-enter"
+# desc = "Enter directory or open file"
+
+[[mgr.prepend_keymap]]
+on   = "e"
+run  = "shell --block -- \"$EDITOR\" %h"
+desc = "Edit hovered path"
+
+[[mgr.prepend_keymap]]
+on   = "E"
+run  = 'shell --block -- "$EDITOR" .'
+desc = "Edit current directory"
+
+[[mgr.prepend_keymap]]
+on   = "'"
+run  = "plugin bookmarks jump"
+desc = "Jump to a bookmark"
+
+# --- Selection: <Space> keeps its default toggle+down; add the missing upward twin ---
+
+[[mgr.prepend_keymap]]
+on   = "<BackTab>"
+run  = [ "toggle", "arrow -1" ]
+desc = "Toggle selection and move up"
+
+# --- \ leader (vim's default leader; unbound in yazi) ---
+
+[[mgr.prepend_keymap]]
+on   = [ "\\", "m" ]
+run  = "plugin bookmarks save"
+desc = "Mark: save bookmark here"
+
+[[mgr.prepend_keymap]]
+on   = [ "\\", "M" ]
+run  = "plugin mount"
+desc = "Mount manager"
+
+[[mgr.prepend_keymap]]
+on   = [ "\\", "c" ]
+run  = "plugin chmod"
+desc = "Chmod on selected files"
+
+[[mgr.prepend_keymap]]
+on   = [ "\\", "b", "d" ]
+run  = "plugin bookmarks delete"
+desc = "Delete a bookmark"
+
+[[mgr.prepend_keymap]]
+on   = [ "\\", "b", "D" ]
+run  = "plugin bookmarks delete_all"
+desc = "Delete all bookmarks"

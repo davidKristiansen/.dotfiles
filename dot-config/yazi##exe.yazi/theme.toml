@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
+[flavor]
+dark = "gruvbox-dark"
+
+[status]
+separator_open  = ""
+separator_close = ""

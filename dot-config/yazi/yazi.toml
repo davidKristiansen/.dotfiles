@@ -1,6 +1,0 @@
-# SPDX-License-Identifier: MIT
-# Copyright David Kristiansen
-
-[mgr]
-sort_by = "natural"
-sort_dir_first = true

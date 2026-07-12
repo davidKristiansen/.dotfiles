@@ -1,8 +1,0 @@
-# SPDX-License-Identifier: MIT
-# Copyright David Kristiansen
-
-[plugin]
-deps = []
-
-[flavor]
-deps = [{ use = "bennyyip/gruvbox-dark", rev = "b4cc9f2" }]

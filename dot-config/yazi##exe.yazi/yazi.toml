@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
+[mgr]
+sort_by = "natural"
+sort_dir_first = true
+
+[which]
+sort_by = "key"
+
+
+[[plugin.prepend_fetchers]]
+url   = "*"
+run   = "git"
+group = "git"
+
+[[plugin.prepend_fetchers]]
+url   = "*/"
+run   = "git"
+group = "git"
