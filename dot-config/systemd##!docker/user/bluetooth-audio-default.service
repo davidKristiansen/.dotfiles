@@ -1,0 +1,13 @@
+[Unit]
+Description=Make connected Bluetooth audio devices the default sink
+After=pipewire.service pipewire-pulse.service wireplumber.service
+Requires=pipewire-pulse.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/audio-control.sh watch-bluetooth
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target
