@@ -200,9 +200,13 @@ window#waybar {
 #custom-teams.brb            { color: @orange; }
 #custom-teams.unknown        { color: @gray; }
 #custom-teams.offline        { color: @gray; }
-#custom-teams.in-call        { color: @aqua; }
+#custom-teams.in-call        {
+  color: @bg;
+  background: @aqua;
+}
 #custom-teams.incoming-call  {
-  color: @red;
+  color: @bg;
+  background: @red;
   animation: blink 1s steps(1) infinite;
 }
 #custom-teams:hover          { background: @blue; color: @bg; }

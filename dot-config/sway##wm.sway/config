@@ -9,7 +9,7 @@ set $term ghostty
 set $default_gaps_inner 7
 set $default_gaps_outer 0
 
-set $menu $term --class="term.launcher" -e $HOME/.local/bin/fzf-launcher
+set $menu $HOME/.local/bin/launcher.sh
 # set $menu vicinae toggle
 set $menu_fallback 'bemenu-run \
   --ignorecase   \

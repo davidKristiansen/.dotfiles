@@ -40,6 +40,7 @@
   "group/right": {
     "orientation": "horizontal",
     "modules": [
+      "custom/teams",
       "custom/input",
       "bluetooth",
       "network",
@@ -54,7 +55,6 @@
       "memory",
       "battery",
       "custom/mako",
-      "custom/teams",
       "tray"
     ]
   },
@@ -156,13 +156,14 @@
   // ── Teams (teams-for-linux presence via MQTT — replaces its tray icon) ────
   //    Continuous module: teams.sh subscribes to the local mosquitto broker
   //    (teams/#, the same feed used for Home Assistant) and streams presence +
-  //    call state. Click raises Teams; right-click toggles mute via teams/command.
+  //    call state. Click (or $mod+t) toggles Teams to/from the current
+  //    workspace; right-click opens teams-menu.sh (mute / hide / restart / quit).
   "custom/teams": {
     "format": "󰊻 {}",
     "return-type": "json",
     "exec": "$HOME/.config/waybar/teams.sh",
-    "on-click": "teams-for-linux",
-    "on-click-right": "mosquitto_pub -h localhost -t teams/command -m '{\"action\":\"toggle-mute\"}' -q 1"
+    "on-click": "$HOME/.config/waybar/teams-menu.sh toggle",
+    "on-click-right": "$HOME/.config/waybar/teams-menu.sh"
   },
 
   // ── Bluetooth ─────────────────────────────────────────────────────────────
@@ -284,7 +285,7 @@
     "format": "  {percentage_used}%",
     "states": { "warning": 80, "critical": 95 },
     "tooltip-format": "{used} used of {total} on {path}  ({free} free)",
-    "on-click": "nautilus"
+    "on-click": "swaymsg exec '$term --class=__yazi -e yazi'"
   },
 
   // ── CPU ───────────────────────────────────────────────────────────────────

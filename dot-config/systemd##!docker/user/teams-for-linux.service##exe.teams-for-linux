@@ -4,7 +4,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/teams-for-linux --minimized
+ExecStart=/usr/bin/teams-for-linux
 
 [Install]
 WantedBy=sway-session.target

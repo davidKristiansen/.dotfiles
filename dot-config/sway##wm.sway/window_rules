@@ -7,6 +7,8 @@ for_window {
     [app_id="term.launcher"] floating enable, sticky enable, resize set 1200 800, opacity 0.9
     [app_id="term.screenshare"] floating enable, sticky enable, resize set 60 ppt 65 ppt, move position center, border pixel 10, opacity 0.95
     [app_id="termfloat"] floating enable, sticky enable, resize set 58 ppt 46 ppt, opacity 0.9
+    [app_id="term.teams-menu"] floating enable, sticky enable, resize set 320 px 190 px, move position center, border pixel 6, opacity 0.95
+    [app_id="term.quickcmd"] floating enable, sticky enable, resize set 620 px 42 px, move position center, border pixel 4, opacity 0.95
     [app_id="__btop"] floating enable, sticky enable, resize set 650 400, opacity 0.9
     [app_id="com.mitchellh.ghostty.nvim"] floating enable, resize set height 80 ppt, move position center
     [app_id="^scratchpad$"] move scratchpad

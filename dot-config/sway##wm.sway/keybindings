@@ -18,6 +18,11 @@ bindsym --whole-window $mod+button2 kill
 bindsym $mod+Shift+s mode $mode_screenshot
 bindsym $mod+Delete exec $lock
 bindsym $mod+z exec systemctl suspend
+bindsym $mod+t exec $HOME/.config/waybar/teams-menu.sh toggle
+# Quick command runner — a one-line "Run" box (systemctl, etc.); type a
+# command, Enter runs it and the box closes. Like Windows' Run dialog.
+# Re-pressing $mod+r replaces any open box. Keeps your zsh completions.
+bindsym $mod+r exec $XDG_BIN_HOME/quickcmd.sh
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning \
     -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' \
@@ -130,7 +135,7 @@ bindsym Control+Shift+space exec $XDG_BIN_HOME/input.sh ja
 #
 # Modes (defined in functions)
 #
-bindsym $mod+r mode "resize"
+bindsym $mod+Shift+r mode "resize"
 bindsym $mod+g mode "gaps"
 
 #
