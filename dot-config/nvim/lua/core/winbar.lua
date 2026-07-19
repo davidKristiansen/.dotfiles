@@ -79,8 +79,11 @@ local function set_winbar()
   local buftype = vim.bo[buf].buftype
   local filetype = vim.bo[buf].filetype
 
-  -- Only show winbar for normal files
-  if buftype == '' then
+  -- Only show winbar for normal files; leave neo-tree alone (it manages its
+  -- own winbar via source_selector).
+  if filetype == 'neo-tree' then
+    return
+  elseif buftype == '' then
     vim.wo.winbar = '%!v:lua.get_winbar_str(' .. vim.api.nvim_get_current_win() .. ')'
   else
     vim.wo.winbar = nil

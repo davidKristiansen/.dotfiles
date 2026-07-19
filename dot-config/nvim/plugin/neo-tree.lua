@@ -88,13 +88,20 @@ require('utils.lazy').add({
       },
     })
 
-    -- Transparent winbar background for source selector tabs.
+    -- Make source selector tabs blend with the neo-tree sidebar background.
     local function set_winbar_hl()
       local hl = vim.api.nvim_set_hl
-      hl(0, 'NeoTreeTabActive', { bg = 'NONE', bold = true })
-      hl(0, 'NeoTreeTabInactive', { bg = 'NONE' })
-      hl(0, 'NeoTreeTabSeparatorActive', { bg = 'NONE', fg = 'NONE' })
-      hl(0, 'NeoTreeTabSeparatorInactive', { bg = 'NONE', fg = 'NONE' })
+      -- Grab the sidebar bg so tabs match (falls back to Normal if unset).
+      local nt = vim.api.nvim_get_hl(0, { name = 'NeoTreeNormal', link = false })
+      local bg = nt.bg
+      if not bg then
+        local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
+        bg = normal.bg
+      end
+      hl(0, 'NeoTreeTabActive', { bg = bg, bold = true })
+      hl(0, 'NeoTreeTabInactive', { bg = bg })
+      hl(0, 'NeoTreeTabSeparatorActive', { bg = bg, fg = bg })
+      hl(0, 'NeoTreeTabSeparatorInactive', { bg = bg, fg = bg })
     end
     set_winbar_hl()
     -- Re-apply after colorscheme changes.
