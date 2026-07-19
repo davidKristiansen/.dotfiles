@@ -74,7 +74,31 @@ require('utils.lazy').add({
           leave_dirs_open = false,
         },
       },
+
+      -- Git actions inside the git_status source (mnemonics match <leader>g*).
+      git_status = {
+        window = {
+          mappings = {
+            ['gs'] = 'git_add_file', -- stage   (matches <leader>gs)
+            ['gu'] = 'git_unstage_file', -- unstage (matches <leader>gu)
+            ['gr'] = 'git_revert_file', -- revert  (matches <leader>gr)
+            ['gA'] = 'git_add_all', -- stage all
+          },
+        },
+      },
     })
+
+    -- Transparent winbar background for source selector tabs.
+    local function set_winbar_hl()
+      local hl = vim.api.nvim_set_hl
+      hl(0, 'NeoTreeTabActive', { bg = 'NONE', bold = true })
+      hl(0, 'NeoTreeTabInactive', { bg = 'NONE' })
+      hl(0, 'NeoTreeTabSeparatorActive', { bg = 'NONE', fg = 'NONE' })
+      hl(0, 'NeoTreeTabSeparatorInactive', { bg = 'NONE', fg = 'NONE' })
+    end
+    set_winbar_hl()
+    -- Re-apply after colorscheme changes.
+    vim.api.nvim_create_autocmd('ColorScheme', { callback = set_winbar_hl })
 
     -- Hook file operations now that neo-tree is loaded.
     pcall(function()
