@@ -61,8 +61,6 @@ require('utils.lazy').add({
     { '<leader>eb', '<cmd>Neotree toggle buffers<cr>', desc = 'Explorer: buffers' },
     -- Open git status source in explorer.
     { '<leader>eg', '<cmd>Neotree toggle git_status<cr>', desc = 'Explorer: git status' },
-    -- Open document symbols source in explorer.
-    { '<leader>es', '<cmd>Neotree toggle document_symbols<cr>', desc = 'Explorer: symbols' },
     -- Set the cwd to the directory of the current file.
     {
       '<leader>ew',
