@@ -28,6 +28,7 @@ require('utils.lazy').add({
   cmd = 'Neotree',
   config = function()
     require('neo-tree').setup({
+      sources = { 'filesystem', 'buffers', 'git_status', 'document_symbols' },
       use_popups_for_input = false,
       enable_git_status = true,
       window = { mappings = { ['<C-v>'] = 'open_vsplit' } },
@@ -61,6 +62,8 @@ require('utils.lazy').add({
     { '<leader>eb', '<cmd>Neotree toggle buffers<cr>', desc = 'Explorer: buffers' },
     -- Open git status source in explorer.
     { '<leader>eg', '<cmd>Neotree toggle git_status<cr>', desc = 'Explorer: git status' },
+    -- Open document symbols source in explorer (built-in, experimental).
+    { '<leader>es', '<cmd>Neotree toggle document_symbols<cr>', desc = 'Explorer: symbols' },
     -- Set the cwd to the directory of the current file.
     {
       '<leader>ew',
