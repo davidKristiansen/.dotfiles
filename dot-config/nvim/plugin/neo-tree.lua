@@ -3,8 +3,8 @@
 --
 -- The file-operation *capabilities* are advertised statically by core.lsp
 -- (no plugin needed at startup); only the event-hooking half of
--- lsp-file-operations loads here, with the neo-tree UI, on <leader>e /
--- <leader>E. File operations only originate from the neo-tree UI, so hooking
+-- lsp-file-operations loads here, with the neo-tree UI, on <leader>e* keys.
+-- File operations only originate from the neo-tree UI, so hooking
 -- them at first open loses nothing.
 
 -- Only reveal when the current buffer is a real file on disk; otherwise
@@ -47,21 +47,27 @@ require('utils.lazy').add({
     end)
   end,
   keys = {
-    -- Toggle the explorer; on open, reveal (jump to) the current file.
+    -- Toggle the explorer sidebar.
+    { '<leader>ee', '<cmd>Neotree toggle<cr>', desc = 'Explorer: toggle' },
+    -- Reveal the current file in the tree (focus tree if already open).
     {
-      '<leader>e',
-      function()
-        vim.cmd(on_real_file() and 'Neotree toggle reveal' or 'Neotree toggle')
-      end,
-      desc = 'Explorer (reveal current file)',
-    },
-    -- Reveal current file without toggling closed (focus tree if already open).
-    {
-      '<leader>E',
+      '<leader>ef',
       function()
         vim.cmd(on_real_file() and 'Neotree reveal' or 'Neotree focus')
       end,
-      desc = 'Explorer: reveal current file',
+      desc = 'Explorer: reveal file',
+    },
+    -- Open buffers source in explorer.
+    { '<leader>eb', '<cmd>Neotree toggle buffers<cr>', desc = 'Explorer: buffers' },
+    -- Open git status source in explorer.
+    { '<leader>eg', '<cmd>Neotree toggle git_status<cr>', desc = 'Explorer: git status' },
+    -- Open document symbols source in explorer.
+    { '<leader>es', '<cmd>Neotree toggle document_symbols<cr>', desc = 'Explorer: symbols' },
+    -- Set the cwd to the directory of the current file.
+    {
+      '<leader>ew',
+      '<cmd>Neotree dir=%:p:h<cr>',
+      desc = 'Explorer: set cwd to file dir',
     },
   },
 })

@@ -54,12 +54,12 @@ Combine triggers in one spec to share a single load guard (e.g. obsidian loads o
 | **event** | autocmd | blink-pairs (`InsertEnter`), mason (`BufReadPre`/`FileType`) |
 | **ft** | FileType | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` in vault) |
 | **cmd** | user command | sshfs (`:SSHConnect`/`:SSHConfig`) |
-| **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>o*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e`/`<leader>E`), obsidian (`<leader>n*`), git heavy (`<leader>g*`) |
+| **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>r*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e*`), obsidian (`<leader>n*`), git heavy (`<leader>g*`) |
 | **cond** | env gate | tmux (`$TMUX`) |
 
 **Split-loaded plugins:**
 - `git.lua` — gitsigns + fugitive on the *later* tier; neogit/diffview/lazygit on `<leader>g*` keys (two `add()` calls).
-- `neo-tree.lua` — lsp-file-operations capability advertisement on the *later* tier (must precede LSP attach); the neo-tree UI on `<leader>e`/`<leader>E` keys.
+- `neo-tree.lua` — lsp-file-operations capability advertisement on the *later* tier (must precede LSP attach); the neo-tree UI on `<leader>e*` keys.
 - `obsidian.lua` — one spec, dual trigger: `ft` markdown-in-vault **or** `<leader>n*` keys.
 
 **Exceptions (not routed through the helper):**
@@ -98,12 +98,12 @@ Then alphabetically:
 - guess-indent.lua — Auto-detect file indentation, sets buffer-local shiftwidth/expandtab (event: `BufReadPre`/`BufNewFile`).
 - hex.lua — Hex editing via xxd (keymap: `<leader>Tx`).
 - mason.lua — Mason tool installer (event: first `BufReadPre`/`FileType`).
-- neo-tree.lua — File explorer (keymap: `<leader>e`/`<leader>E`) + lsp-file-operations capabilities (later tier; split-loaded, see Lazy Loading Strategy).
+- neo-tree.lua — File explorer (keymap: `<leader>e*`) + lsp-file-operations capabilities (later tier; split-loaded, see Lazy Loading Strategy).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
 - nvim-mcp.lua — MCP server for AI assistant integration with Neovim (vim.schedule).
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
-- overseer.lua — Task runner and job management (keymap: `<leader>o*`).
+- overseer.lua — Task runner and job management (keymap: `<leader>r*`).
 - codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
 - opencode-nickjvandyke.lua_ — opencode.nvim nickjvandyke fork (disabled).
 - pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (keymap: `<leader>p*`).
@@ -174,9 +174,10 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>f` | find     |
 | `<leader>g` | git      |
 | `<leader>n` | notes    |
-| `<leader>o` | overseer |
+| `<leader>o` | org      |
 | `<leader>a` | ai       |
 | `<leader>p` | pi       |
+| `<leader>r` | run      |
 | `<leader>t` | tests    |
 | `<leader>T` | toggles  |
 | `<leader>w` | worktree |
