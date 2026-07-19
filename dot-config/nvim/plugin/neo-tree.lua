@@ -28,10 +28,44 @@ require('utils.lazy').add({
   cmd = 'Neotree',
   config = function()
     require('neo-tree').setup({
-      sources = { 'filesystem', 'buffers', 'git_status', 'document_symbols' },
+      sources = { 'filesystem', 'buffers', 'git_status', 'document_symbols', 'diagnostics' },
       use_popups_for_input = false,
       enable_git_status = true,
-      window = { mappings = { ['<C-v>'] = 'open_vsplit' } },
+
+      -- Tabbed source selector at the top of the neo-tree panel.
+      source_selector = {
+        winbar = true,
+        content_layout = 'center',
+        sources = {
+          { source = 'filesystem', display_name = '󰉓 Files' },
+          { source = 'buffers', display_name = '󰈙 Bufs' },
+          { source = 'git_status', display_name = '󰊢 Git' },
+          { source = 'document_symbols', display_name = '󰅩 Symbols' },
+          { source = 'diagnostics', display_name = '󰒡 Diag' },
+        },
+      },
+
+      -- Shared window mappings (apply to all sources).
+      window = {
+        mappings = {
+          ['<C-v>'] = 'open_vsplit',
+          ['gd'] = 'diffview_file',
+        },
+      },
+
+      -- Custom commands available in all sources.
+      commands = {
+        diffview_file = function(state)
+          local node = state.tree:get_node()
+          local path = node:get_id()
+          if path and vim.fn.filereadable(path) == 1 then
+            vim.cmd('DiffviewFileHistory ' .. vim.fn.fnameescape(path))
+          else
+            vim.notify('No file under cursor', vim.log.levels.WARN)
+          end
+        end,
+      },
+
       filesystem = {
         hijack_netrw_behavior = 'disabled',
         use_libuv_file_watcher = true,
@@ -64,6 +98,8 @@ require('utils.lazy').add({
     { '<leader>eg', '<cmd>Neotree toggle git_status<cr>', desc = 'Explorer: git status' },
     -- Open document symbols source in explorer (built-in, experimental).
     { '<leader>es', '<cmd>Neotree toggle document_symbols<cr>', desc = 'Explorer: symbols' },
+    -- Open diagnostics source in explorer.
+    { '<leader>ed', '<cmd>Neotree toggle diagnostics<cr>', desc = 'Explorer: diagnostics' },
     -- Set the cwd to the directory of the current file.
     {
       '<leader>ew',
