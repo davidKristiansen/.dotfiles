@@ -24,6 +24,7 @@ require('utils.lazy').add({
     'https://github.com/MunifTanjim/nui.nvim',
     'https://github.com/antosha417/nvim-lsp-file-operations',
     'https://github.com/s1n7ax/nvim-window-picker',
+    'https://github.com/mrbjarksen/neo-tree-diagnostics.nvim',
   },
   cmd = 'Neotree',
   config = function()
