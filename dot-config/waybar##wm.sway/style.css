@@ -1,8 +1,9 @@
 /*
- * Waybar — gruvbox dark hard · "islands"
+ * Waybar — gruvbox dark hard · "islands" · monochrome
  * Transparent bar; each cluster (left group, centered clock, right group, tray)
- * floats as its own rounded island. Accent-colored glyphs, soft hover fills,
- * and warning/critical states that still mean something.
+ * floats as its own rounded island. Grayscale glyphs and soft gray hover fills;
+ * color is reserved for state that means something — warning (yellow) and
+ * critical (red). The full gruvbox palette below is kept for reference.
  */
 
 /* ── gruvbox dark hard palette ──────────────────────────────────────────── */
@@ -96,31 +97,30 @@ window#waybar {
   transition: background 150ms ease, color 150ms ease;
 }
 
-/* Accent-fill affordance: on hover a module fills with its own accent color
- * and the glyph flips to @bg. Toggle modules also fill when active/on, so
- * their state reads at a glance. */
-#custom-input:hover           { background: @purple; color: @bg; }
+/* Hover affordance: a soft gray fill with bright text — monochrome, so hover
+ * reads as "interactive" without introducing hue. Toggle modules brighten
+ * their glyph (fg_dim → fg) when active instead of filling with color. */
+#custom-input:hover,
 #bluetooth:hover,
-#bluetooth.connected:hover    { background: @blue;   color: @bg; }
-#network:hover                { background: @aqua;   color: @bg; }
-#pulseaudio:hover             { background: @yellow; color: @bg; }
-#custom-backlight:hover        { background: @yellow; color: @bg; }
-#temperature:hover            { background: @orange; color: @bg; }
-#disk:hover                   { background: @blue;   color: @bg; }
-#cpu:hover                    { background: @aqua;   color: @bg; }
-#memory:hover                 { background: @purple; color: @bg; }
-#battery:hover                { background: @green;  color: @bg; }
-#mode:hover                   { background: @orange; color: @bg; }
-#custom-media:hover           { background: @green;  color: @bg; }
-
-#idle_inhibitor:hover         { background: @yellow; color: @bg; }
-#custom-gammastep:hover        { background: @orange; color: @bg; }
-#custom-mako:hover             { background: @purple; color: @bg; }
-#custom-backlight-mode:hover   { background: @aqua;   color: @bg; }
+#bluetooth.connected:hover,
+#network:hover,
+#pulseaudio:hover,
+#custom-backlight:hover,
+#temperature:hover,
+#disk:hover,
+#cpu:hover,
+#memory:hover,
+#battery:hover,
+#mode:hover,
+#custom-media:hover,
+#idle_inhibitor:hover,
+#custom-gammastep:hover,
+#custom-mako:hover,
+#custom-backlight-mode:hover  { background: @bg_hl; color: @fg; }
 
 /* ── Power button (its own island, like the tray) ───────────────────────── */
 #custom-power {
-  color: @red;
+  color: @fg_dim;
   font-size: 15px;
   padding: 0 13px;
   transition: background 150ms ease, color 150ms ease;
@@ -144,7 +144,7 @@ window#waybar {
 }
 #workspaces button.focused {
   color: @bg;
-  background: @orange;
+  background: @fg;
 }
 #workspaces button.urgent {
   color: @bg;
@@ -152,7 +152,7 @@ window#waybar {
 }
 
 #mode {
-  color: @orange;
+  color: @fg;
   font-weight: bold;
 }
 
@@ -173,11 +173,11 @@ window#waybar {
 #custom-media-prev:hover,
 #custom-media-playpause:hover,
 #custom-media-next:hover {
-  color: @green;
+  color: @fg;
   background: transparent;
 }
 #custom-media {
-  color: @green;
+  color: @fg;
   padding-left: 4px;
   padding-right: 10px;
 }
@@ -185,15 +185,17 @@ window#waybar {
   color: @fg_dim;
 }
 
-/* ── Right-side modules: accent glyphs ──────────────────────────────────── */
-/* Unified input: purple layout code normally, warm accent あ while Mozc is on. */
-#custom-input    { color: @purple; }
-#custom-input.ja { color: @orange; }
+/* ── Right-side modules: monochrome glyphs ──────────────────────────────── */
+/* Idle glyphs rest at fg; toggle modules sit at fg_dim and brighten to fg
+ * when active, so their on/off state reads by brightness rather than hue. */
+#custom-input    { color: @fg; }
+#custom-input.ja { color: @fg; font-weight: bold; }
 /* Teams presence: teams.sh prints the status as plain text ("Busy", "In call",
- * …) and each state gets a distinct gruvbox hue. Aqua while in a call,
+ * …). This module keeps its gruvbox hues — presence/meeting state is worth
+ * seeing in color against the otherwise monochrome bar. Aqua while in a call,
  * blinking red while ringing; dimmed when not running. */
-#custom-teams                { color: @fg_dim; }
-#custom-teams.available      { color: @green; }
+#custom-teams                { color: @gray; }
+#custom-teams.available      { color: @fg; }
 #custom-teams.busy           { color: @red; }
 #custom-teams.dnd            { color: @purple; }
 #custom-teams.away           { color: @yellow; }
@@ -211,28 +213,28 @@ window#waybar {
 }
 #custom-teams:hover          { background: @blue; color: @bg; }
 
-#bluetooth       { color: @blue; }
-#bluetooth.connected { color: @aqua; }
+#bluetooth       { color: @fg; }
+#bluetooth.connected { color: @fg; }
 #bluetooth.disabled,
 #bluetooth.off   { color: @gray; }
-#network         { color: @aqua; }
+#network         { color: @fg; }
 #network.disconnected { color: @gray; }
-#pulseaudio      { color: @yellow; }
+#pulseaudio      { color: @fg; }
 #pulseaudio.muted { color: @gray; }
-#custom-backlight { color: @yellow; }
+#custom-backlight { color: @fg; }
 #custom-backlight-mode       { color: @fg_dim; padding: 0 5px; }
-#custom-backlight-mode.auto  { color: @aqua; }
+#custom-backlight-mode.auto  { color: @fg; }
 #custom-gammastep            { color: @fg_dim; padding: 0 5px; }
-#custom-gammastep.on         { color: @orange; }
+#custom-gammastep.on         { color: @fg; }
 #idle_inhibitor  { color: @fg_dim; padding: 0 5px; }
-#idle_inhibitor.activated { color: @yellow; }
+#idle_inhibitor.activated { color: @fg; }
 #custom-mako     { color: @fg_dim; padding: 0 5px; }
-#custom-mako.on  { color: @purple; }
-#temperature     { color: @orange; }
-#disk            { color: @blue; }
-#cpu             { color: @aqua; }
-#memory          { color: @purple; }
-#battery         { color: @green; }
+#custom-mako.on  { color: @fg; }
+#temperature     { color: @fg; }
+#disk            { color: @fg; }
+#cpu             { color: @fg; }
+#memory          { color: @fg; }
+#battery         { color: @fg; }
 
 /* ── State colors (the "functional" part) ───────────────────────────────── */
 #temperature.critical,
@@ -249,8 +251,8 @@ window#waybar {
 }
 
 #battery.warning   { color: @yellow; }
-#battery.charging  { color: @green; }
-#battery.full      { color: @aqua; }
+#battery.charging  { color: @fg; }
+#battery.full      { color: @fg_dim; }
 #battery.critical:not(.charging) {
   color: @bg;
   background: @red;
