@@ -567,19 +567,26 @@ log "Invoking swaylock with args: ${swaylock_args[*]} $*"
 
 lock_1password
 
-# Run everything in a detached subshell so lock.sh exits immediately.
-# This unblocks swayidle's 'wait: true' behavior so monitors can turn off.
-(
-  # Redirect output so swayidle doesn't wait for EOF on stdout/stderr
-  exec </dev/null >"$DIR/lock-daemon.log" 2>&1
+# Lock SYNCHRONOUSLY. `swaylock -f` daemonizes only AFTER it has acquired the
+# ext-session-lock and presented the first frame, so when this returns the
+# screen is genuinely locked. Only then does lock.sh exit and release swayidle's
+# `-w` wait (and thus the sleep inhibitor) — guaranteeing the lock is up before
+# suspend. This closes the race where the desktop was briefly visible on resume.
+# swaylock's own output goes to the log file, never the pipe swayidle reads, so
+# swayidle's wait still completes cleanly when we exit.
+swaylock -f "${swaylock_args[@]}" "$@" >"$DIR/lock-daemon.log" 2>&1
+SWAYLOCK_PID=$(pgrep -x swaylock | tail -n1)
+log "swaylock locked (PID=$SWAYLOCK_PID)"
 
-  swaylock "${swaylock_args[@]}" "$@" &
-  SWAYLOCK_PID=$!
-  log "swaylock started (PID=$SWAYLOCK_PID)"
+# The fingerprint listener and unlock cleanup watch the now-daemonized swaylock
+# across suspend/resume. They run detached so lock.sh can return immediately —
+# the screen is already locked, so there is no race left to lose.
+(
+  exec </dev/null >>"$DIR/lock-daemon.log" 2>&1
 
   start_fingerprint_listener "$SWAYLOCK_PID"
 
-  wait "$SWAYLOCK_PID" 2>/dev/null
+  while kill -0 "$SWAYLOCK_PID" 2>/dev/null; do sleep 0.5; done
 
   if [[ -n "$FINGERPRINT_PID" ]]; then
     kill "$FINGERPRINT_PID" 2>/dev/null || true
