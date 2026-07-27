@@ -89,9 +89,9 @@ keybind = ctrl+o=unbind
 keybind = shift+enter=text:\x1b[13;2u
 
 
-custom-shader = shaders/cursor_groovy.glsl
+#custom-shader = shaders/cursor_groovy.glsl
 # custom-shader = shaders/cursor_blaze.glsl
-custom-shader-animation  = true
+#custom-shader-animation  = true
 
 
 
