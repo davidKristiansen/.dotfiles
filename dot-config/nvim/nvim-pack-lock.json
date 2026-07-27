@@ -153,6 +153,10 @@
       "rev": "4171fba613b64ade9a28e198bd5b4fea5ba45e22",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
+    "neo-tree-diagnostics.nvim": {
+      "rev": "e00434c3cf8637bcaf70f65c2b9d82b0cc9bd7dc",
+      "src": "https://github.com/mrbjarksen/neo-tree-diagnostics.nvim"
+    },
     "neo-tree.nvim": {
       "rev": "b01ee1769144c4491ea44bc329cb84040e9793be",
       "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
