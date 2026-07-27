@@ -1,0 +1,11 @@
+#!/bin/sh
+# Print the focused sway window's geometry as "x,y WxH" (grim -g format).
+#
+# This lives in a script rather than inline in the sway config on purpose:
+# sway's command parser matches quotes naively, so a jq format string like
+# "\(.x),\(.y) ..." embedded in an `exec` prematurely closes sway's own quote
+# and then splits the command on the comma ("Unknown/invalid command '\(.y)'").
+# Keeping the quotes/commas in here means the config only ever sees
+# `grim -g "$(focusrect.sh)"`, which sway parses cleanly.
+swaymsg -t get_tree \
+    | jq -r 'first(.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)")'

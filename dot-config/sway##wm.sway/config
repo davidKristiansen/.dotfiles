@@ -42,9 +42,10 @@ set $screenannotate slurp \
           --output-filename ~/Pictures/Screenshots/satty-%Y%m%d-%H%M%S.png
 
 # Geometry ("x,y WxH") of the focused window — a drop-in replacement for slurp
-# that skips the region-select prompt and captures the current window.
-set $focusrect swaymsg -t get_tree \
-        | jq -r 'first(.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)")'
+# that skips the region-select prompt and captures the current window. Kept in a
+# script because sway's parser mis-handles the jq format string's quotes/commas
+# when embedded inline (it splits the exec on the comma in "\(.x),\(.y)").
+set $focusrect ~/.local/bin/focusrect.sh
 
 set $windowgrab grim -g "$($focusrect)" - \
         | wl-copy
