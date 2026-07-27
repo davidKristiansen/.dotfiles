@@ -8,7 +8,7 @@
     "closeAppOnCross": false,
     "trayIconEnabled": false,
     "watchConfigFile": true,
-    "defaultURLHandler": "xdg-open",
+    "defaultURLHandler": "teams-url-dispatch",
     "disableGpu": true,
     "screenSharingEnabled": true,
     "pipewireEnabled": true,
