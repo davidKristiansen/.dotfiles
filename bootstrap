@@ -76,7 +76,9 @@ mise upgrade --bump --quiet --yes --exclude uv
 # ----- Restore Yazi plugins declared in package.toml -----
 if command -v ya >/dev/null 2>&1 &&
    [[ -f "$XDG_CONFIG_HOME/yazi/package.toml" ]]; then
-  mise exec -- ya pkg install
+  # Plugins/flavors are ya-managed and gitignored (not vendored), so any local
+  # drift is disposable — --discard keeps this idempotent instead of aborting.
+  mise exec -- ya pkg install --discard >/dev/null
 fi
 
 # vim: set ft=sh ts=2 sw=2:

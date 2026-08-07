@@ -43,3 +43,8 @@ dot-claude/settings.local.json
 dot-config/git/priv.conf
 dot-config/git/work.conf
 dot-config/git/allowed_signers
+
+# Yazi plugins/flavors are managed by `ya pkg` from package.toml (pinned
+# rev+hash), not vendored. Only package.toml is tracked; contents regenerate.
+dot-config/yazi##exe.yazi/plugins/
+dot-config/yazi##exe.yazi/flavors/
