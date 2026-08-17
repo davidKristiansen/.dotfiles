@@ -24,6 +24,14 @@ to log it in `~/src/10.priv/mcpipe/mcpipe-feedback.md`. Do not silently ignore i
 - **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
 When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
 
+## When to reach for graphify (do this automatically)
+Detection: a graph exists for the current project iff `graphify-out/graph.json` is present in the repo root.
+
+- **If a graph exists → use it first for codebase-understanding work.** Architecture questions, "how does X work", file/symbol relationships, "where is this used", impact / blast-radius analysis — query the graph *before* falling back to grep/read fan-out. Prefer the `graphify` MCP tools when connected (`query_graph`, `get_neighbors`, `god_nodes`, `shortest_path`, `get_pr_impact`, …); if the MCP server didn't connect this session (see the first-build gotcha below), use the `/graphify` skill via the CLI.
+  - This does **not** apply to trivial, well-scoped edits (a known one-liner, a rename in a file you already have open) — don't spin up graph queries as busywork.
+  - Graphs can go stale. If the code has clearly moved on from the graph, say so and offer to refresh with `graphify update . --force` (then re-export to the vault per the sync rules below).
+- **If no graph exists → suggest creating one when the task would benefit** (any substantial exploration, onboarding to an unfamiliar area, multi-file refactor planning). Offer, don't auto-build — semantic extraction is slow, so let the user opt in before running `/graphify`.
+
 ## graphify → Obsidian vault sync (do this automatically)
 I keep one unified Obsidian vault at `~/.local/share/vault` (Johnny Decimal). graphify graphs are integrated into it under a quarantined, machine-owned subfolder per project: `~/.local/share/vault/graphify/<project>/` (where `<project>` is the repo dir's basename).
 
@@ -123,3 +131,24 @@ call, every item. Example: `text=["※ swap if reversed"]`.**
 
 Multiple Neovim instances: `connect` lists them. Ask the user which
 one — don't guess
+
+# adoc-index (personal)
+
+adoc-index is my personal, local MCP for semantic search over an AsciiDoc specification set. It is
+a personal tool, not a team install, so it lives in my personal config. It is work in progress and
+I may swap it for another local indexer later.
+
+When adoc-index is connected and the repo has an AsciiDoc spec tree, send natural-language spec
+questions to it before you read the raw `.adoc` files. The index renders the `include::` shells and
+ranks with a hybrid embedding plus FTS5 keyword search. It runs fully local.
+
+- **`gather_context(question, k_docs=4, char_budget=24000)`** — start here. It returns the most
+  relevant spec sections as rendered text in one budget-capped bundle. It lists anything that did
+  not fit under `omitted` with the exact follow-up call.
+- **`get_doc(doc_path, heading="", max_chars=12000)`** — one document's rendered text. Pass
+  `heading` (a case-insensitive substring) to fetch one section.
+- **`search(query, k_docs=6)`** — ranked pointers, no bodies. Use it to survey or to widen.
+- **`index_stats()`** — document and chunk counts, vector dim, and model.
+- Cite each result's `source_ref` / `doc_path` and heading path.
+
+Refresh after spec edits with `adoc-index index-docs`. It is incremental. `--rebuild` re-renders all.
