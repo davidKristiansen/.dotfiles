@@ -1,0 +1,245 @@
+onboarding = false
+# herdr configuration
+# Ported from ~/.config/tmux/* on 2026-08-17.
+# Only non-default values are set; everything else inherits herdr's defaults.
+# Reload after editing:  herdr server reload-config   (or prefix+r, rebound below)
+
+# --- Theme -------------------------------------------------------------------
+# tmux colors.conf is Gruvbox Dark Hard (terminal bg #1d2021) and uses
+# `status-style bg=default` to inherit the terminal background. panel_bg="reset"
+# is the herdr equivalent of that bg=default inheritance.
+[theme]
+name = "gruvbox"
+
+[theme.custom]
+panel_bg = "reset"
+
+# --- Terminal / new panes ----------------------------------------------------
+# tmux keys.conf splits all pass -c "#{pane_current_path}", i.e. new panes
+# inherit the source pane's cwd. "follow" is the same policy.
+[terminal]
+new_cwd = "follow"
+
+# --- Keys --------------------------------------------------------------------
+# Prefix stays ctrl+b to match tmux muscle memory. Note: herdr and tmux both
+# claim ctrl+b, but experimental.allow_nested is false so they never nest.
+[keys]
+prefix = "ctrl+b"
+
+# tmux binds `prefix + r` to reload-config and has no resize mode; herdr ships
+# the opposite (prefix+r = resize, prefix+shift+r = reload). Swapped to match.
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+
+# tmux's default `prefix + ,` renames the current window. A herdr tab is the
+# closest analogue to a tmux window.
+rename_tab = "prefix+comma"
+
+# Splits, matching tmux keys.conf:
+#   `prefix + -` opens below   -> herdr calls a horizontal divider "horizontal"
+#   `prefix + v` opens right   -> herdr calls a vertical divider "vertical"
+# tmux's stock `%` (opens right) and `"` (opens below) are now bound alongside
+# them. A binding accepts an array, so the tmux keys and the originals coexist.
+# Naming, verified with `herdr config check`:
+#   - "percent" is accepted and normalises to `%`.
+#   - "quote" is the *single* quote — it collides with a literal `'`, not `"`.
+#     "dquote", "doublequote" and "apostrophe" are all rejected, so the double
+#     quote has to be the literal `"` inside a TOML single-quoted string.
+# Note the tmux/herdr axis names are opposite: tmux `"` is a -v split, herdr
+# calls that same below-opening divider "horizontal".
+split_horizontal = ["prefix+minus", 'prefix+"']
+split_vertical = ["prefix+v", "prefix+percent"]
+
+# Pane focus. Alt+hjkl used to be bound here (tilish parity) purely because
+# herdr had no vim-tmux-navigator equivalent. herdr-splits.nvim *is* that
+# equivalent, so ctrl+hjkl is now seamless nvim-split/herdr-pane navigation and
+# alt+hjkl is seamless resize -- both via the plugin_action binds below. That
+# restores the tmux keys.conf muscle memory exactly.
+#
+# focus_pane_* is therefore left at herdr's own prefix+hjkl defaults. It stays
+# useful as an explicit, non-forwarding fallback for plain shell panes.
+
+# tilish uses Alt+1..9 to jump workspaces; herdr tabs are the closest analogue.
+switch_tab = "alt+1..9"
+
+# Agent-panel navigation. Unset in herdr's defaults, which leaves the sidebar
+# unreachable from the keyboard — and the agent state machine is the reason this
+# config exists. alt+1..9 is already switch_tab above, so agent focus takes
+# prefix+alt+1..9. NOTE: focusing an agent marks its tab *seen*, which clears a
+# `done` state (done = idle after unseen work). These keys consume that signal.
+focus_agent = "prefix+alt+1..9"
+previous_agent = "prefix+alt+k"
+next_agent = "prefix+alt+j"
+
+# --- Seamless nvim <-> herdr navigation (herdr-splits) -----------------------
+# The herdr half of herdr-splits.nvim; the Neovim half is
+# ~/.config/nvim/plugin/herdr-splits.lua. These actions forward the chord into
+# the pane when it is running Neovim, and move/resize the herdr pane otherwise,
+# so one set of keys works in both. This is the herdr equivalent of what
+# vim-tmux-navigator does for tmux, which is why ctrl+hjkl is back to being the
+# navigation key here.
+#
+# Requires the herdr-side plugin, which provides the nav-*/resize-* actions:
+#   herdr plugin install lmilojevicc/herdr-splits.nvim
+# `plugin_action` commands are "<plugin-id>.<action-id>"; verify the ids with
+# `herdr plugin action list`. Wrap behaviour and the matching Neovim mappings are
+# configured once, from setup() in the Neovim half.
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "herdr-splits.nav-left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "herdr-splits.nav-down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "herdr-splits.nav-up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "herdr-splits.nav-right"
+
+[[keys.command]]
+key = "alt+h"
+type = "plugin_action"
+command = "herdr-splits.resize-left"
+
+[[keys.command]]
+key = "alt+j"
+type = "plugin_action"
+command = "herdr-splits.resize-down"
+
+[[keys.command]]
+key = "alt+k"
+type = "plugin_action"
+command = "herdr-splits.resize-up"
+
+[[keys.command]]
+key = "alt+l"
+type = "plugin_action"
+command = "herdr-splits.resize-right"
+
+# --- Moving panes ------------------------------------------------------------
+# herdr 0.8.0 has no built-in *action* for swapping/moving a pane (there is no
+# swap_pane_* or move_pane_* binding), but the socket API does: `pane swap`.
+# These shell out to it. `--current` resolves the focused pane server-side and
+# `--direction` swaps it with its neighbour, which is tmux's `swap-pane` and
+# i3's move rolled into one. Verified against the live server: it returns
+# changed=true when a neighbour exists and changed=false reason=no_neighbor
+# otherwise, so an edge press is a harmless no-op.
+#
+# alt+shift+hjkl sits one modifier away from the alt+hjkl resize keys above and
+# follows the tilish/i3 convention, where mod+shift+hjkl moves a window. Unlike
+# those keys this is herdr-only: it swaps whole panes and never forwards to nvim.
+# `herdr` resolves through the mise shims dir, which bootstrap puts on PATH.
+[[keys.command]]
+key = "alt+shift+h"
+description = "Move pane left"
+type = "shell"
+command = "herdr pane swap --current --direction left"
+
+[[keys.command]]
+key = "alt+shift+j"
+description = "Move pane down"
+type = "shell"
+command = "herdr pane swap --current --direction down"
+
+[[keys.command]]
+key = "alt+shift+k"
+description = "Move pane up"
+type = "shell"
+command = "herdr pane swap --current --direction up"
+
+[[keys.command]]
+key = "alt+shift+l"
+description = "Move pane right"
+type = "shell"
+command = "herdr pane swap --current --direction right"
+
+# --- Popups (ported from tmux keys.conf) -------------------------------------
+# tmux-todo and tmux-todo-add contain no tmux API calls (only a stale comment),
+# so they run unchanged in a herdr popup.
+
+# prefix + t : compact quick-glance todo
+[[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = "$HOME/.local/bin/tmux-todo"
+width = "40%"
+height = "50%"
+
+# prefix + T : full todo editor
+[[keys.command]]
+key = "prefix+shift+t"
+type = "popup"
+command = "$HOME/.local/bin/tmux-todo"
+width = "80%"
+height = "80%"
+
+# prefix + a : quick-add a task to the vault inbox
+[[keys.command]]
+key = "prefix+a"
+type = "popup"
+command = "$HOME/.local/bin/tmux-todo-add"
+width = "50%"
+height = 3  # bare number = terminal cells; strings must be percentages
+
+# prefix + alt + g : lazygit (not in tmux.conf; lazygit is installed via mise)
+[[keys.command]]
+key = "prefix+alt+g"
+type = "popup"
+command = "lazygit"
+width = "80%"
+height = "80%"
+
+# NOT PORTED: tmux's `prefix + S` / `prefix + s` window save/restore and the
+# after-* autosave hooks. tmux-save-window, tmux-restore-window, and
+# tmux-autosave-window all drive the tmux API directly. herdr's persistent
+# server plus `herdr session` largely removes the need for them.
+
+# --- UI ----------------------------------------------------------------------
+[ui]
+# tmux general.conf: `set -g mouse on`
+mouse_capture = true
+
+# tmux keys.conf creates windows immediately (no name prompt).
+prompt_new_tab_name = false
+
+# tmux colors.conf highlights with colour142 (gruvbox bright green #b8bb26)
+# for the copy-mode selection and popup borders.
+accent = "#b8bb26"
+
+agent_panel_sort = "spaces"
+show_agent_labels_on_pane_borders = true
+
+# Distinguish parallel Claude sessions in the sidebar by their terminal title
+# rather than by pane ID alone. This is herdr's own documented example row set.
+[ui.sidebar.agents.rows_by_agent]
+claude = [["state_icon", "workspace", "tab"], ["terminal_title_stripped"], ["agent"]]
+
+[ui.toast]
+# Claude Code already has agentPushNotifEnabled / inputNeededNotifEnabled in
+# ~/.claude/settings.json; route herdr's background agent notifications to the
+# desktop too. Switch to "terminal" if the OS notification path stays silent.
+delivery = "system"
+
+[ui.sound]
+# tmux general.conf sets `visual-activity off` — the same no-noise preference.
+enabled = false
+
+# --- Experimental ------------------------------------------------------------
+[experimental]
+# tmux general.conf sets `allow-passthrough on` for image.nvim. herdr's
+# equivalent is its Kitty graphics path; Ghostty is Kitty-graphics capable.
+kitty_graphics = true
+
+# Preserve pane scrollback across full server restarts. The tmux setup invested
+# in window save/restore scripts, so persistence is clearly wanted here.
+pane_history = true
+
+# vim: set ft=toml ts=2 sw=2:

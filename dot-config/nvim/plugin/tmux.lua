@@ -2,6 +2,14 @@
 -- tmux integration: nvim-tmux-navigation + vim-tpipeline (only inside tmux).
 -- Owns the <C-h/j/k/l> pane-navigation maps; outside tmux they fall back to
 -- plain window navigation so the keys behave the same everywhere.
+--
+-- Inside herdr, plugin/herdr-splits.lua owns those same chords, so bail out
+-- before binding anything -- including the fallback, which would otherwise
+-- shadow it. The two multiplexers are mutually exclusive (herdr is not run
+-- nested inside tmux), so each provides seamless navigation on its own.
+if vim.env.HERDR_ENV == '1' then
+  return
+end
 
 if vim.env.TMUX == nil then
   local map = vim.keymap.set

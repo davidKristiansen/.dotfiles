@@ -48,3 +48,11 @@ dot-config/git/allowed_signers
 # rev+hash), not vendored. Only package.toml is tracked; contents regenerate.
 dot-config/yazi##exe.yazi/plugins/
 dot-config/yazi##exe.yazi/flavors/
+
+# herdr — allowlist: config.toml is the only durable config. herdr 0.8.0 pins
+# its runtime files to the config dir with no separate state-dir setting, so
+# logs (herdr-{server,client}.log), sockets (*.sock), restore state
+# (session.json, session-history.json) and .plugins.lock can all appear here.
+# They are machine-local and can contain pane scrollback — never commit them.
+dot-config/herdr/*
+!dot-config/herdr/config.toml

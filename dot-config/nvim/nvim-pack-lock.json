@@ -117,6 +117,10 @@
       "rev": "84a4987ff36798c2fc1169cbaff67960aed9776f",
       "src": "https://github.com/NMAC427/guess-indent.nvim"
     },
+    "herdr-splits.nvim": {
+      "rev": "94f30cf4e9ac76ddf185a3acd0977be728fa4106",
+      "src": "https://github.com/lmilojevicc/herdr-splits.nvim"
+    },
     "hex.nvim": {
       "rev": "b46e63356a69e8d6f046c38a9708d55d17f15038",
       "src": "https://github.com/RaafatTurki/hex.nvim"

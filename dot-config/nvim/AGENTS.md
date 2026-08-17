@@ -50,12 +50,12 @@ Combine triggers in one spec to share a single load guard (e.g. obsidian loads o
 | Tier | Trigger | Plugins |
 |------|---------|---------|
 | **Eager** (`lazy=false`) | during sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
-| **Later** (`vim.schedule`) | next tick | 03-fzf-lua, blink-cmp, dial, gitsigns (git.lua), nvim-mcp, neo-tree lsp-file-operations capabilities |
+| **Later** (`vim.schedule`) | next tick | 03-fzf-lua, blink-cmp, dial, gitsigns (git.lua), nvim-mcp, neo-tree lsp-file-operations capabilities, herdr-splits |
 | **event** | autocmd | blink-pairs (`InsertEnter`), mason (`BufReadPre`/`FileType`) |
 | **ft** | FileType | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` in vault) |
 | **cmd** | user command | sshfs (`:SSHConnect`/`:SSHConfig`) |
 | **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>r*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e*`), obsidian (`<leader>n*`), git heavy (`<leader>g*`) |
-| **cond** | env gate | tmux (`$TMUX`) |
+| **cond** | env gate | tmux (`$TMUX`), herdr-splits (`$HERDR_ENV`) |
 
 **Split-loaded plugins:**
 - `git.lua` — gitsigns + fugitive on the *later* tier; neogit/diffview/lazygit on `<leader>g*` keys (two `add()` calls).
@@ -96,6 +96,7 @@ Then alphabetically:
 - dial.lua — Increment/decrement augends & keymaps (vim.schedule).
 - git.lua — Git integration (split: gitsigns+fugitive vim.schedule, neogit/diffview/lazygit keymap `<leader>g*`).
 - guess-indent.lua — Auto-detect file indentation, sets buffer-local shiftwidth/expandtab (event: `BufReadPre`/`BufNewFile`).
+- herdr-splits.lua — herdr-splits.nvim seamless split/pane navigation and resizing (vim.schedule, guarded by `$HERDR_ENV`). Owns `<C-h/j/k/l>` and `<M-h/j/k/l>` inside herdr; the herdr half is installed separately (`herdr plugin install lmilojevicc/herdr-splits.nvim`) and bound in `~/.config/herdr/config.toml`.
 - hex.lua — Hex editing via xxd (keymap: `<leader>Tx`).
 - mason.lua — Mason tool installer (event: first `BufReadPre`/`FileType`).
 - neo-tree.lua — File explorer (keymap: `<leader>e*`) + lsp-file-operations capabilities (later tier; split-loaded, see Lazy Loading Strategy).
@@ -109,7 +110,7 @@ Then alphabetically:
 - pi.lua — pi-nvim bridge to pi coding agent, sends context to running pi session (keymap: `<leader>p*`).
 - render-markdown.lua — Markdown rendering (FileType: markdown).
 - sshfs.lua — Remote file editing (cmd: `:SSHConnect`/`:SSHConfig`; loads the full `SSH*` command set on first use).
-- tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`). Owns the `<C-h/j/k/l>` pane-navigation maps; outside tmux it maps them to plain `<C-w>` window navigation instead.
+- tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`). Owns the `<C-h/j/k/l>` pane-navigation maps; outside tmux it maps them to plain `<C-w>` window navigation instead. Bails out entirely under `$HERDR_ENV`, where herdr-splits.lua owns those chords (the two multiplexers are mutually exclusive, never nested).
 - typst.lua — Typst language support (FileType: typst).
 - undotree.lua — Visual undo history, built-in Neovim 0.12+ (keymap: `<leader>u`).
 - vimtex.lua — LaTeX support (FileType: tex).
@@ -160,7 +161,7 @@ Only config-returning modules remain (loaded by plugin/ files):
 
 - Global mappings: `lua/core/keymaps.lua` (loaded after plugins via `after/plugin/keymaps.lua`)
 - LSP buffer-local: `lua/core/lsp/keymaps.lua` invoked from on_attach
-- Plugin-specific: defined inline in each `plugin/*.lua` file (e.g. `<C-h/j/k/l>` pane navigation lives in `plugin/tmux.lua`, with a `<C-w>`-fallback outside tmux)
+- Plugin-specific: defined inline in each `plugin/*.lua` file (e.g. `<C-h/j/k/l>` pane navigation lives in `plugin/tmux.lua` under `$TMUX` and `plugin/herdr-splits.lua` under `$HERDR_ENV`, with a `<C-w>`-fallback when in neither)
 - Keymap-triggered plugins: stub keymaps defined eagerly, real keymaps set on load
 - All keymaps MUST include `desc` for discoverability (which-key).
 

@@ -11,7 +11,11 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 : "${XDG_BIN_HOME:=$HOME/.local/bin}"
 : "${GNUPGHOME:=$HOME/.gnupg}"
 
-# Ensure XDG dirs exist
+# Ensure XDG dirs exist.
+# herdr is load-bearing here, not just tidiness: it writes its logs, sockets and
+# session state next to config.toml with no way to redirect them. The dir must
+# already exist so stow links config.toml into it instead of folding the whole
+# directory into one symlink — which would point herdr's writes at this repo.
 mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_DATA_HOME" \
          "$XDG_STATE_HOME/zsh" \
@@ -20,6 +24,7 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$GNUPGHOME" \
          "$XDG_CONFIG_HOME/systemd/user" \
          "$XDG_CONFIG_HOME/teams-for-linux" \
+         "$XDG_CONFIG_HOME/herdr" \
          "$HOME/.pi/agent/sessions" \
          "$HOME/.pi/context-mode/sessions"
 chmod 700 "$GNUPGHOME"
