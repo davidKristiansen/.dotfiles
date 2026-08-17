@@ -8,8 +8,8 @@
     "closeAppOnCross": false,
     "trayIconEnabled": false,
     "watchConfigFile": true,
-    "defaultURLHandler": "teams-url-dispatch",
-    "disableGpu": true,
+    "defaultURLHandler": "$HOME/.config/teams-for-linux/teams-url-dispatch",
+    "disableGpu": false,
     "screenSharingEnabled": true,
     "pipewireEnabled": true,
     "screenSharing": {
@@ -17,7 +17,7 @@
             "enabled": false
         }
     },
-    "customCSSLocation": "/home/SONY/s7000026748/.config/teams-for-linux/gruvbox-dark-hard.css",
+    "customCSSLocation": "~/.config/teams-for-linux/gruvbox-dark-hard.css",
     "notificationMethod": "electron",
     "mqtt": {
         "enabled": true,
@@ -26,7 +26,7 @@
         "topicPrefix": "teams",
         "statusTopic": "status",
         "commandTopic": "command",
-        "statusCheckInterval": 10000,
+        "statusCheckInterval": 30000,
         "homeAssistant": {
             "enabled": true,
             "discoveryPrefix": "homeassistant",
