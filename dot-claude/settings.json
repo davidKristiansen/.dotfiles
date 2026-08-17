@@ -7,11 +7,14 @@
       "Bash(mise *)"
     ]
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true
   },
   "effortLevel": "high",
-  "theme": "auto"
+  "theme": "auto",
+  "agentPushNotifEnabled": true,
+  "inputNeededNotifEnabled": true,
+  "hooks": {"SessionStart":[{"matcher":"*","hooks":[{"type":"command","command":"bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session","timeout":10}]}]}
 }
