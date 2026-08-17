@@ -60,9 +60,9 @@ case "$1" in
     ;;
   *)
     if [ "$state" = "ja" ]; then
-      printf '{"text":"  あ","class":"ja","tooltip":"Japanese (Mozc) — on\\nLayout underneath: %s\\nClick: cycle en → no → ja"}\n' "$layout"
+      printf '{"text":" あ","class":"ja","tooltip":"Japanese (Mozc) — on\\nLayout underneath: %s\\nClick: cycle en → no → ja"}\n' "$layout"
     else
-      printf '{"text":"  %s","class":"%s","tooltip":"Layout: %s\\nJapanese — off\\nClick: cycle en → no → ja"}\n' "$short" "$short" "$layout"
+      printf '{"text":" %s","class":"%s","tooltip":"Layout: %s\\nJapanese — off\\nClick: cycle en → no → ja"}\n' "$short" "$short" "$layout"
     fi
     ;;
 esac

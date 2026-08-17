@@ -47,7 +47,7 @@ dock() {
     swaymsg "[app_id=\"$APP_ID\"] move left" >/dev/null 2>&1
     guard=$((guard + 1))
   done
-  swaymsg "[app_id=\"$APP_ID\"] resize set width 50 ppt" 2>/dev/null
+  swaymsg "[app_id=\"$APP_ID\"] resize set width 66 ppt" 2>/dev/null
 }
 # floaty: pull Teams onto the current workspace as a centered floating window.
 floaty()  { swaymsg "[app_id=\"$APP_ID\"] move container to workspace current, \

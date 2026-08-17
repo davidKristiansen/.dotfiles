@@ -74,7 +74,7 @@
     }
   },
   "sway/mode": {
-    "format": "  {}",
+    "format": " {}",
     "max-length": 50
   },
   "sway/window": {
@@ -106,7 +106,7 @@
     "tooltip": false
   },
   "custom/media": {
-    "format": "  {}",
+    "format": " {}",
     "return-type": "json",
     "max-length": 45,
     "escape": true,
@@ -119,8 +119,8 @@
   // ── Clock (with calendar tooltip) ─────────────────────────────────────────
   "clock": {
     "interval": 30,
-    "format": "  {:%H:%M}",
-    "format-alt": "  {:%a %d %b %Y}",
+    "format": " {:%H:%M}",
+    "format-alt": " {:%a %d %b %Y}",
     "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
     "calendar": {
       "mode": "month",
@@ -171,7 +171,7 @@
     "format": "󰂯",
     "format-disabled": "󰂲",
     "format-off": "󰂲",
-    "format-connected": "󰂱  {num_connections}",
+    "format-connected": "󰂱 {num_connections}",
     "tooltip-format": "{controller_alias}\n{status}",
     "tooltip-format-connected": "{controller_alias}\n{status}\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias} · {device_address}",
@@ -181,9 +181,9 @@
   // ── Network ───────────────────────────────────────────────────────────────
   "network": {
     "interface": "wlp0s20f3",
-    "format-wifi": "󰖩  {signalStrength}%",
-    "format-ethernet": "󰈀  {ifname}",
-    "format-disconnected": "󰖪  off",
+    "format-wifi": "󰖩 {signalStrength}%",
+    "format-ethernet": "󰈀 {ifname}",
+    "format-disconnected": "󰖪 off",
     "tooltip-format": "{ifname} · {ipaddr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname} · {ipaddr}\n {bandwidthDownBits}    {bandwidthUpBits}",
     "tooltip-format-ethernet": "{ifname} · {ipaddr}\n {bandwidthDownBits}    {bandwidthUpBits}",
@@ -194,9 +194,9 @@
 
   // ── Audio ─────────────────────────────────────────────────────────────────
   "pulseaudio": {
-    "format": "{icon}  {volume}%",
-    "format-bluetooth": "{icon}  {volume}%",
-    "format-muted": "  muted",
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": " muted",
     "format-icons": {
       "headphone": "",
       "hands-free": "",
@@ -271,8 +271,8 @@
     "input-filename": "temp1_input",
     "critical-threshold": 95,
     "interval": 5,
-    "format": "{icon}  {temperatureC}°",
-    "format-critical": "{icon}  {temperatureC}°",
+    "format": "{icon} {temperatureC}°",
+    "format-critical": "{icon} {temperatureC}°",
     "format-icons": ["", "", "", "", ""],
     "tooltip-format": "CPU package: {temperatureC}°C",
     "on-click": "swaymsg exec '$term --class=__btop -e btop'"
@@ -282,7 +282,7 @@
   "disk": {
     "interval": 60,
     "path": "/",
-    "format": "  {percentage_used}%",
+    "format": " {percentage_used}%",
     "states": { "warning": 80, "critical": 95 },
     "tooltip-format": "{used} used of {total} on {path}  ({free} free)",
     "on-click": "swaymsg exec '$term --class=__yazi -e yazi'"
@@ -291,7 +291,7 @@
   // ── CPU ───────────────────────────────────────────────────────────────────
   "cpu": {
     "interval": 5,
-    "format": "  {usage}%",
+    "format": " {usage}%",
     "states": { "warning": 70, "critical": 90 },
     "tooltip": true,
     "on-click": "swaymsg exec '$term --class=__btop -e btop'"
@@ -300,7 +300,7 @@
   // ── Memory ────────────────────────────────────────────────────────────────
   "memory": {
     "interval": 5,
-    "format": "󰍛  {percentage}%",
+    "format": "󰍛 {percentage}%",
     "states": { "warning": 75, "critical": 90 },
     "tooltip-format": "{used:0.1f} GiB / {total:0.1f} GiB  ({percentage}%)\nswap: {swapUsed:0.1f} / {swapTotal:0.1f} GiB",
     "on-click": "swaymsg exec '$term --class=__btop -e btop'"
@@ -309,11 +309,11 @@
   // ── Battery ───────────────────────────────────────────────────────────────
   "battery": {
     "states": { "good": 80, "warning": 30, "critical": 15 },
-    "format": "{icon}  {capacity}%",
-    "format-charging": "󰂄  {capacity}%",
-    "format-plugged": "  {capacity}%",
-    "format-full": "  {capacity}%",
-    "format-alt": "{icon}  {time}",
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-full": " {capacity}%",
+    "format-alt": "{icon} {time}",
     "format-icons": ["", "", "", "", ""],
     "tooltip-format": "{capacity}%  ·  {timeTo}\n{power:0.1f} W",
     "on-click": "swaymsg exec '$term --class=termfloat -e sudo powertop'"
