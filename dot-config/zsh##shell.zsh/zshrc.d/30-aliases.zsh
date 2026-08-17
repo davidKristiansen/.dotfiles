@@ -77,7 +77,12 @@ alias dotfiles='/usr/bin/git -C "$DOT_DIR"'
 # dce [workspace-folder] [session-name] [-- custom command...]
 #   workspace-folder : path to project (default: $PWD)
 #   session-name     : tmux session name (default: basename of workspace-folder)
-#   -- command...    : override the default tmux attach-or-new behaviour
+#   -- command...    : run this instead of the default tmux attach-or-new,
+#                      e.g. `dce -- zsh`, `dce -- herdr`, `dce -- nvim .`
+#
+# With a TTY the command runs through docker exec -it, so it gets the same
+# terminal treatment as the tmux default (terminfo seeding, TERM, COLORTERM).
+# Without a TTY (pipes, scripts) it falls back to devcontainer exec.
 #
 # Ensures the container is running (devcontainer up) before exec-ing into it.
 dce() {
@@ -135,37 +140,54 @@ dce() {
   fi
 
   # ── exec into container ──────────────────────────────────────────────
-  if (( ${#cmd} )); then
-    # Non-interactive: use devcontainer exec (handles env probing, etc.)
-    devcontainer exec --remote-env TERM="$TERM" --workspace-folder="$ws_folder" "${cmd[@]}"
-  else
-    # Interactive tmux: use docker exec -it for proper TTY allocation
-    #
-    # Seed the host TERM's terminfo into the container when it's missing.
-    # Terminals like ghostty (TERM=xterm-ghostty) ship an entry the
-    # container's ncurses db usually lacks, which makes tmux abort with
-    # "missing or unsuitable terminal". Fall back to xterm-256color if we
-    # can't install it (e.g. no tic/infocmp in a minimal image).
-    local term="$TERM"
-    if ! command docker exec "$container_id" infocmp "$term" >/dev/null 2>&1; then
-      if ! infocmp -x "$term" 2>/dev/null \
-           | command docker exec -i "$container_id" tic -x - >/dev/null 2>&1; then
-        term="xterm-256color"
-      fi
-    fi
-
-    local -a docker_exec=(
-      docker exec -it
-      -e TERM="$term"
-      -e LANG="${LANG}"
-      -e LC_ALL="${LC_ALL}"
-    )
-    [[ -n "$remote_user" ]] && docker_exec+=(-u "$remote_user")
-    "${docker_exec[@]}" "$container_id" \
-      tmux attach-session -t "$session" 2>/dev/null \
-      || "${docker_exec[@]}" "$container_id" \
-        tmux new-session -s "$session"
+  # No TTY (piped/scripted): use devcontainer exec, which handles env
+  # probing. Still forward the colour environment so tools that colourise
+  # their piped output on request behave the same as interactively.
+  if [[ ! -t 0 || ! -t 1 ]]; then
+    local -a remote_env=(--remote-env TERM="$TERM")
+    [[ -n "$COLORTERM" ]] && remote_env+=(--remote-env COLORTERM="$COLORTERM")
+    devcontainer exec "${remote_env[@]}" --workspace-folder="$ws_folder" \
+      "${cmd[@]:-zsh}"
+    return $?
   fi
+
+  # Interactive: use docker exec -it for proper TTY allocation.
+  #
+  # Seed the host TERM's terminfo into the container when it's missing.
+  # Terminals like ghostty (TERM=xterm-ghostty) ship an entry the
+  # container's ncurses db usually lacks, which makes tmux abort with
+  # "missing or unsuitable terminal". Fall back to xterm-256color if we
+  # can't install it (e.g. no tic/infocmp in a minimal image).
+  local term="$TERM"
+  if ! command docker exec "$container_id" infocmp "$term" >/dev/null 2>&1; then
+    if ! infocmp -x "$term" 2>/dev/null \
+         | command docker exec -i "$container_id" tic -x - >/dev/null 2>&1; then
+      term="xterm-256color"
+    fi
+  fi
+
+  local -a docker_exec=(
+    docker exec -it
+    -e TERM="$term"
+    -e LANG="${LANG}"
+    -e LC_ALL="${LC_ALL}"
+  )
+  # 24-bit colour is advertised via COLORTERM, not TERM — without it nvim,
+  # tmux, delta, bat & co. fall back to a 256-colour palette. This matters
+  # most when the terminfo seeding above downgraded $term.
+  [[ -n "$COLORTERM" ]] && docker_exec+=(-e COLORTERM="$COLORTERM")
+  [[ -n "$remote_user" ]] && docker_exec+=(-u "$remote_user")
+
+  # A custom command replaces the tmux default entirely.
+  if (( ${#cmd} )); then
+    "${docker_exec[@]}" "$container_id" "${cmd[@]}"
+    return $?
+  fi
+
+  "${docker_exec[@]}" "$container_id" \
+    tmux attach-session -t "$session" 2>/dev/null \
+    || "${docker_exec[@]}" "$container_id" \
+      tmux new-session -s "$session"
 }
 
 # --- lazy helpers for git/docker --------------------------------------------
