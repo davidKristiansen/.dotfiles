@@ -17,7 +17,7 @@
             "enabled": false
         }
     },
-    "customCSSLocation": "~/.config/teams-for-linux/gruvbox-dark-hard.css",
+    "customCSSLocation": "$HOME/.config/teams-for-linux/gruvbox-dark-hard.css",
     "notificationMethod": "electron",
     "mqtt": {
         "enabled": true,
