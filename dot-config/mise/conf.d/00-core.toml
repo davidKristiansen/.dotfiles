@@ -33,8 +33,8 @@ tree-sitter = "latest"
 claude = "latest"
 herdr = "latest"  # terminal multiplexer for coding agents
 "npm:context-mode" = "latest"
-"pipx:graphifyy" = { version = "latest", extras = "pdf,office,mcp,svg" }
-ollama = "latest"  # local model runtime
+"pipx:graphifyy" = { version = "latest", extras = "pdf,office,mcp,svg,ollama" }
+ollama = "latest"  # local model runtime — graphifyy's ollama extra talks to it
 
 hunkdiff = "latest"  # interactive diff viewer / git pager (`hunk`) — aqua, prebuilt
 

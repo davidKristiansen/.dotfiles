@@ -24,6 +24,3 @@ allure = "latest"
 "npm:@devcontainers/cli" = "latest"
 lazydocker = "latest"  # aqua, prebuilt
 "go:github.com/maaslalani/sheets" = "latest"
-
-# Override: add the ollama extra where an ollama server can actually run
-"pipx:graphifyy" = { version = "latest", extras = "pdf,office,mcp,svg,ollama" }
