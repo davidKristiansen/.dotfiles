@@ -1,0 +1,6 @@
+[package]
+name = "invitation"
+version = "0.1.0"
+entrypoint = "invitation.typ"
+authors = ["David Kristiansen"]
+description = "Reusable kids' party invitation template (balloons, confetti, generic detail list, A5 or 2-up A4)"

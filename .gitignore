@@ -56,3 +56,6 @@ dot-config/yazi##exe.yazi/flavors/
 # They are machine-local and can contain pane scrollback — never commit them.
 dot-config/herdr/*
 !dot-config/herdr/config.toml
+
+# Typst local packages — sources are tracked, compiled proofs are not.
+dot-local/share/typst/packages/**/*.pdf
