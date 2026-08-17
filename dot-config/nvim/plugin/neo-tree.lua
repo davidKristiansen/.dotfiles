@@ -65,6 +65,23 @@ require('utils.lazy').add({
             vim.notify('No file under cursor', vim.log.levels.WARN)
           end
         end,
+
+        -- git_status: open the working-tree diff (vs HEAD) for the file under
+        -- the cursor in Diffview, scoped to just that file. Directory nodes
+        -- keep their normal expand/collapse behaviour.
+        diffview_open = function(state)
+          local node = state.tree:get_node()
+          if node.type == 'directory' then
+            require('neo-tree.sources.common.commands').toggle_node(state)
+            return
+          end
+          local path = node:get_id()
+          if path and path ~= '' then
+            vim.cmd('DiffviewOpen -- ' .. vim.fn.fnameescape(path))
+          else
+            vim.notify('No file under cursor', vim.log.levels.WARN)
+          end
+        end,
       },
 
       filesystem = {
@@ -80,6 +97,8 @@ require('utils.lazy').add({
       git_status = {
         window = {
           mappings = {
+            ['<cr>'] = 'diffview_open', -- open the file's diff instead of the buffer
+            ['o'] = 'open', -- keep a way to open the plain buffer
             ['gs'] = 'git_add_file', -- stage   (matches <leader>gs)
             ['gu'] = 'git_unstage_file', -- unstage (matches <leader>gu)
             ['gr'] = 'git_revert_file', -- revert  (matches <leader>gr)
