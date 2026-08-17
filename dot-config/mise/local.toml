@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# The target of MISE_GLOBAL_CONFIG_FILE (set in environment.d/30-mise.conf).
+# `mise use -g` writes here, which keeps a stray pin inside the repo instead of
+# creating an untracked ~/.config/mise/config.toml next to the conf.d symlinks.
+#
+# This file is machine-agnostic scratch space, not a curated list. mise rewrites
+# it, so the comments above may not survive a write -- do not put anything here
+# worth keeping. Move a pin that should be permanent into the right conf.d file
+# (00-core everywhere, 10-dev, 20-host real hosts, 30-gui laptop) and delete it
+# from here. mise warns when a conf.d pin shadows one in this file.
+
+[tools]
