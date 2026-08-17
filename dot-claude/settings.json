@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "mcp__mcpipe__*",
+      "mcp__graphify__*",
       "Bash(mcpipe *)",
+      "Bash(graphify *)",
       "Bash(pipx *)",
       "Bash(mise *)"
     ]
@@ -16,5 +18,18 @@
   "theme": "auto",
   "agentPushNotifEnabled": true,
   "inputNeededNotifEnabled": true,
-  "hooks": {"SessionStart":[{"matcher":"*","hooks":[{"type":"command","command":"bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session","timeout":10}]}]}
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
 }
