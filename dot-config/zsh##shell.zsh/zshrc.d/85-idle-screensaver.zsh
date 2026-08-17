@@ -6,8 +6,10 @@
 
 command -v neo >/dev/null || return 0
 
+# Multiplexer panes opt out: the rain repaints the whole pane and fights the
+# multiplexer's own redraws (and, under herdr, its agent-state tracking).
 # if [[ -n "$TMUX" && "$(tmux display-message -p '#S' 2>/dev/null)" == scratch ]]; then
-if [[ -n "$TMUX" ]]; then
+if [[ -n "${TMUX:-}" || -n "${HERDR_PANE_ID:-}" || "${HERDR_ENV:-}" == 1 ]]; then
   return 0
 fi
 
