@@ -31,8 +31,10 @@ tree-sitter = "latest"
 
 # Agents & agent tooling
 claude = "latest"
+herdr = "latest"  # terminal multiplexer for coding agents
 "npm:context-mode" = "latest"
 "pipx:graphifyy" = { version = "latest", extras = "pdf,office,mcp,svg" }
+ollama = "latest"  # local model runtime
 
 hunkdiff = "latest"  # interactive diff viewer / git pager (`hunk`) — aqua, prebuilt
 
