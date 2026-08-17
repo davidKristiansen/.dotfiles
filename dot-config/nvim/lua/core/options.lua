@@ -63,6 +63,7 @@ opt.sidescroll = 1
 opt.wrap = false
 opt.splitright = true
 opt.splitbelow = true
+opt.equalalways = false
 opt.splitkeep = 'screen'
 opt.conceallevel = 2
 
