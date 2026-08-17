@@ -33,7 +33,9 @@ require('utils.lazy').add({
     })
 
     require('mason-lspconfig').setup({
-      ensure_installed = require('core.lsp').servers(),
+      -- mason_servers() excludes servers provided outside mason (e.g. macpyver
+      -- from the project venv); those are still enabled by core.lsp.
+      ensure_installed = require('core.lsp').mason_servers(),
       automatic_enable = false, -- core.lsp owns vim.lsp.enable()
     })
   end,

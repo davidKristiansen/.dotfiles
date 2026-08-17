@@ -17,6 +17,12 @@ vim.g.format_on_save = true -- hunk-scoped, so safe for third-party code
 vim.g.inlay_hints_enabled = false
 vim.g.on_type_formatting_enabled = false
 
+-- Servers provided outside mason (project virtualenvs, system installs).
+-- They are still enabled from lsp/<name>.lua, but mason has no package for
+-- them, so they must be excluded from ensure_installed. macpyver-lsp ships in
+-- the MacPyver project venv.
+M.non_mason = { macpyver = true }
+
 --- Server names derived from lsp/*.lua.
 ---@return string[]
 function M.servers()
@@ -27,6 +33,18 @@ function M.servers()
     end
   end
   table.sort(names)
+  return names
+end
+
+--- mason-installable subset of servers() (excludes M.non_mason).
+---@return string[]
+function M.mason_servers()
+  local names = {}
+  for _, name in ipairs(M.servers()) do
+    if not M.non_mason[name] then
+      names[#names + 1] = name
+    end
+  end
   return names
 end
 
