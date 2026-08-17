@@ -118,7 +118,10 @@
 
 [credential "https://github.com"]
 	helper = 
-	helper = !/home/SONY/s7000026748/.local/share/mise/installs/github-cli/2.96.0/gh_2.96.0_linux_amd64/bin/gh auth git-credential
+	helper = !$HOME/.local/share/mise/shims/gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/home/SONY/s7000026748/.local/share/mise/installs/github-cli/2.96.0/gh_2.96.0_linux_amd64/bin/gh auth git-credential
+	helper = !$HOME/.local/share/mise/shims/gh auth git-credential
+[http]
+	version = HTTP/1.1
+	postBuffer = 1048576000
