@@ -81,6 +81,13 @@ map('n', '<leader>fj', pick('jumplist'), { desc = 'Jumplist' })
 map('n', '<leader>fd', pick('diagnostics'), { desc = 'Diagnostics (buffer)' })
 map('n', '<leader>fD', pick('diagnostics', { bufnr = nil }), { desc = 'Diagnostics (workspace)' })
 map('n', '<leader>fz', pick('zoxide'), { desc = 'Zoxide' })
+map('n', '<leader>fr', pick('lsp_references'), { desc = 'References (LSP)' })
+map('n', '<leader>fs', pick('lsp_document_symbols'), { desc = 'Symbols (document)' })
+map('n', '<leader>fS', pick('lsp_workspace_symbols'), { desc = 'Symbols (workspace)' })
+map('n', '<leader>fl', pick('current_buffer_lines'), { desc = 'Buffer lines' })
+map('n', '<leader>fk', pick('keymaps'), { desc = 'Keymaps' })
+map('n', '<leader>fc', pick('commands'), { desc = 'Commands' })
+map('n', '<leader>fm', pick('marks'), { desc = 'Marks' })
 map('n', '<leader><leader>', pick('resume'), { desc = 'Resume last picker' })
 
 -- ---------------------------------------------------------------------

@@ -41,6 +41,14 @@ function M.lsp_type_definitions(opts)
   require('fzf-lua').lsp_type_definitions(opts)
 end
 
+function M.lsp_document_symbols(opts)
+  require('fzf-lua').lsp_document_symbols(opts)
+end
+
+function M.lsp_workspace_symbols(opts)
+  require('fzf-lua').lsp_workspace_symbols(opts)
+end
+
 function M.diagnostics(opts)
   require('fzf-lua').diagnostics_document(opts)
 end
@@ -60,6 +68,18 @@ end
 
 function M.help_tags(opts)
   require('fzf-lua').help_tags(opts)
+end
+
+function M.keymaps(opts)
+  require('fzf-lua').keymaps(opts)
+end
+
+function M.commands(opts)
+  require('fzf-lua').commands(opts)
+end
+
+function M.marks(opts)
+  require('fzf-lua').marks(opts)
 end
 
 function M.grep(opts)
