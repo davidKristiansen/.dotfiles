@@ -73,3 +73,4 @@ image/x-targa=swayimg.desktop
 image/x-tga=swayimg.desktop
 video/webm=mpv.desktop
 x-scheme-handler/mailto=microsoft-edge.desktop
+x-scheme-handler/bitwarden=bitwarden.desktop
