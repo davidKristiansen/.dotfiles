@@ -16,17 +16,39 @@ require('utils.lazy').add({
     vim.g.gruvbox_material_float_style = 'blend'
   end,
   config = function()
+    local function overrides()
+      local Pmenu = vim.api.nvim_get_hl(0, { name = 'Pmenu' })
+      local PmenuSel = vim.api.nvim_get_hl(0, { name = 'PmenuSel' })
+
+      vim.api.nvim_set_hl(0, 'BlinkCmpMenu', { bg = 'NONE', fg = Pmenu.fg })
+      vim.api.nvim_set_hl(
+        0,
+        'BlinkCmpMenuSelection',
+        { bg = PmenuSel.bg, fg = PmenuSel.fg, bold = true }
+      )
+      vim.api.nvim_set_hl(0, 'BlinkCmpMenuBorder', { bg = 'NONE', fg = Pmenu.fg })
+
+      -- Gitsigns links its word-level *Inline groups to TermCursor, which here
+      -- is bg=<fg color> with no fg -> beige-on-beige, unreadable in the
+      -- preview_hunk float (<leader>gh). Redefine as a bright diff-color bg
+      -- with a dark fg, matching how gruvbox keeps DiffText legible. Defined
+      -- before gitsigns' scheduled setup(), so gitsigns leaves them alone.
+      local function fg(group)
+        return vim.api.nvim_get_hl(0, { name = group }).fg
+      end
+      local dark = '#1d2021'
+      vim.api.nvim_set_hl(0, 'GitSignsAddInline', { bg = fg('Green'), fg = dark })
+      vim.api.nvim_set_hl(0, 'GitSignsChangeInline', { bg = fg('Blue'), fg = dark })
+      vim.api.nvim_set_hl(0, 'GitSignsDeleteInline', { bg = fg('Red'), fg = dark })
+    end
+
     vim.cmd.colorscheme('gruvbox-material')
-
-    local Pmenu = vim.api.nvim_get_hl(0, { name = 'Pmenu' })
-    local PmenuSel = vim.api.nvim_get_hl(0, { name = 'PmenuSel' })
-
-    vim.api.nvim_set_hl(0, 'BlinkCmpMenu', { bg = 'NONE', fg = Pmenu.fg })
-    vim.api.nvim_set_hl(
-      0,
-      'BlinkCmpMenuSelection',
-      { bg = PmenuSel.bg, fg = PmenuSel.fg, bold = true }
-    )
-    vim.api.nvim_set_hl(0, 'BlinkCmpMenuBorder', { bg = 'NONE', fg = Pmenu.fg })
+    overrides()
+    -- Reapply on any colorscheme reload; registered here (eager) before
+    -- gitsigns' own ColorScheme handler, so ours sets the groups first.
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      group = vim.api.nvim_create_augroup('GruvboxOverrides', { clear = true }),
+      callback = overrides,
+    })
   end,
 })
