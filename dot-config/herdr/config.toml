@@ -18,6 +18,12 @@ panel_bg = "reset"
 # tmux keys.conf splits all pass -c "#{pane_current_path}", i.e. new panes
 # inherit the source pane's cwd. "follow" is the same policy.
 [terminal]
+# This devcontainer's terminals inherit no SHELL: VS Code's code-server runs with
+# --force-disable-user-env, and zsh does not export SHELL for itself. herdr's
+# default_shell fallback chain is $SHELL -> /bin/sh, so every pane came up as
+# dash. Name zsh explicitly instead of relying on the environment.
+default_shell = "/bin/zsh"
+
 new_cwd = "follow"
 
 # --- Keys --------------------------------------------------------------------
