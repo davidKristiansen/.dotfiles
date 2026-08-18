@@ -1,6 +1,35 @@
 # SPDX-License-Identifier: MIT
 
 : "${XDG_CONFIG_HOME:=$HOME/.config}"
+
+# ----- Runtime dir -----
+# XDG_RUNTIME_DIR comes from the login session (pam_systemd), never from this
+# repo -- but a devcontainer inherits the *host* value (/run/user/$UID) while
+# /run/user inside the container stays root-owned and empty. The path is both
+# unwritable and unfixable: no process running as us can create it. Anything
+# that opens a socket there fails, and Neovim is the loud one -- serverstart()
+# refuses with "Please make sure 'XDG_RUNTIME_DIR' is writeable", which takes
+# fzf-lua's whole setup down with it. `su`/`ssh` sessions with no seat land in
+# the same hole, so this is not gated on /.dockerenv.
+# $UID is a zsh *and* bash builtin (no fork), and the -w test short-circuits the
+# mkdir on every shell after the first, so the common path stays fork-free.
+_zshenv_uid="${UID:-$(id -u)}"
+: "${XDG_RUNTIME_DIR:=/run/user/$_zshenv_uid}"
+if [ ! -w "$XDG_RUNTIME_DIR" ]; then
+  XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/xdg-runtime-$_zshenv_uid"
+  # 0700 is required by the XDG spec: the runtime dir must not be group- or
+  # world-accessible, since it holds sockets and other live session state.
+  [ -d "$XDG_RUNTIME_DIR" ] || mkdir -p -m 700 -- "$XDG_RUNTIME_DIR" 2>/dev/null
+fi
+if [ -w "$XDG_RUNTIME_DIR" ]; then
+  export XDG_RUNTIME_DIR
+else
+  # Unset beats pointing at a broken path: most tools then pick their own
+  # TMPDIR fallback (Neovim uses /tmp/nvim.$USER) instead of hard-failing.
+  unset XDG_RUNTIME_DIR
+fi
+unset _zshenv_uid
+
 # Source environment variables from environment.d (if any)
 if [ -d "$XDG_CONFIG_HOME/environment.d" ]; then
   for env_file in "$XDG_CONFIG_HOME"/environment.d/*.conf; do
