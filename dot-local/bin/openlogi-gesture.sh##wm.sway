@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+
+# openlogi-gesture.sh — route MX Master gesture-button swipes to sway.
+#
+# OpenLogi runs each binding as /bin/sh -c "<command>" from the long-lived
+# openlogi-agent process, which captures its environment once at startup. Two
+# inherited values cannot be trusted:
+#
+#   SWAYSOCK  sway puts its pid in the socket name, so the value stops
+#             resolving after a sway restart. swaymsg carries no fallback of
+#             its own. Probe the live sockets on every call instead.
+#   PATH      sway exports PATH into the systemd user environment, which is
+#             the only reason /opt/sway/bin is reachable here. Locate the
+#             swaymsg binary directly so a bare PATH still works.
+
+set -euo pipefail
+
+usage() {
+    cat <<'USAGE'
+Usage: openlogi-gesture.sh <action>
+
+Actions:
+  workspace-prev  previous workspace on the focused output
+  workspace-next  next workspace on the focused output
+  fullscreen      toggle fullscreen on the focused window
+  floating        toggle floating on the focused window
+USAGE
+}
+
+# Print the path to swaymsg. This sway is installed under /opt, so PATH alone
+# is not enough when the agent starts before sway exports its environment.
+swaymsg_bin() {
+    local candidate
+    if candidate="$(command -v swaymsg 2> /dev/null)"; then
+        printf '%s\n' "$candidate"
+        return 0
+    fi
+    for candidate in /opt/sway/bin/swaymsg /usr/local/bin/swaymsg /usr/bin/swaymsg; do
+        if [[ -x $candidate ]]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Print the first sway IPC socket that answers, newest first. A sway restart
+# leaves the previous socket in place, so matching the name is not enough.
+sway_socket() {
+    local swaymsg="$1" runtime_dir sock
+    runtime_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+    while IFS= read -r sock; do
+        [[ -S $sock ]] || continue
+        if "$swaymsg" -s "$sock" -t get_version > /dev/null 2>&1; then
+            printf '%s\n' "$sock"
+            return 0
+        fi
+    done < <(ls -t "$runtime_dir"/sway-ipc.*.sock 2> /dev/null)
+    return 1
+}
+
+main() {
+    local action="${1:-}" sock swaymsg
+    local -a msg
+
+    case "$action" in
+        workspace-prev) msg=(workspace prev_on_output) ;;
+        workspace-next) msg=(workspace next_on_output) ;;
+        fullscreen) msg=(fullscreen toggle) ;;
+        floating) msg=(floating toggle) ;;
+        -h | --help)
+            usage
+            return 0
+            ;;
+        *)
+            printf 'openlogi-gesture.sh: unknown action: %s\n' "${action:-<none>}" >&2
+            usage >&2
+            return 2
+            ;;
+    esac
+
+    if ! swaymsg="$(swaymsg_bin)"; then
+        printf 'openlogi-gesture.sh: swaymsg not found\n' >&2
+        return 1
+    fi
+
+    if ! sock="$(sway_socket "$swaymsg")"; then
+        printf 'openlogi-gesture.sh: no sway IPC socket answered\n' >&2
+        return 1
+    fi
+
+    exec "$swaymsg" -s "$sock" "${msg[@]}"
+}
+
+main "$@"

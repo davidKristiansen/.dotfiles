@@ -1,0 +1,105 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# OpenLogi — Logitech HID++ device control (MX Master 3 over Bluetooth).
+#
+# OpenLogi owns this file: the agent and GUI rewrite it to persist device
+# state, and its atomic writer replaces a symlink instead of following one.
+# A stow link here is therefore detached the next time a setting changes.
+# Re-attach and pull those changes back into the repo with:
+#   stow.sh --dotfiles --adopt
+#
+# Gesture-button swipes are dispatched by openlogi-gesture.sh; edit that
+# script to change what a direction does, not this file.
+schema_version = 4
+selected_device = "direct:046d:b023:unit:d7b3d507"
+
+[devices."direct:046d:b023:unit:d7b3d507"]
+scroll_resolution = "high"
+
+[devices."direct:046d:b023:unit:d7b3d507".identity]
+display_name = "MX Master 3"
+codename = "Wireless Mouse MX Master 3"
+kind = "mouse"
+
+[devices."camera:046d:0826:serial:32698680".camera_controls]
+zoom = 1
+focus_auto = 1
+focus = 60
+exposure_auto = 1
+white_balance_auto = 1
+exposure = 166
+brightness = 128
+contrast = 32
+saturation = 32
+sharpness = 22
+white_balance = 5500
+
+[app_settings]
+launch_at_login = true
+check_for_updates = true
+auto_install_updates = true
+update_prompt_seen = true
+show_in_menu_bar = true
+capture_mouse_events = true
+auto_download_assets = true
+asset_source = "automatic"
+thumbwheel_sensitivity = 14
+appearance = "system"
+theme_dark = "Gruvbox Dark"
+
+[devices."direct:046d:b023:unit:d7b3d507".identity.model_info]
+entity_count = 3
+unit_id = [
+    0,
+    0,
+    0,
+    0,
+]
+model_ids = [
+    45091,
+    16514,
+    0,
+]
+extended_model_id = 1
+
+[devices."direct:046d:b023:unit:d7b3d507".identity.model_info.transports]
+usb = false
+equad = true
+btle = true
+bluetooth = false
+
+[devices."direct:046d:b023:unit:d7b3d507".identity.capabilities]
+buttons = true
+pointer = true
+lighting = false
+scroll_inversion = true
+hires_wheel = true
+thumbwheel = true
+haptic_feedback = false
+haptic_panel = false
+
+[devices."direct:046d:b023:unit:d7b3d507".smartshift]
+mode = "ratchet"
+auto_disengage = 22
+tunable_torque = 0
+
+[devices."direct:046d:b023:unit:d7b3d507".bindings]
+DpiToggle = "CycleDpiPresets"
+
+[devices."camera:046d:0826:serial:32698680"]
+camera_profile = "default"
+
+[keyboard]
+
+# Gesture button (the thumb button) — hold and swipe, routed to sway through
+# openlogi-gesture.sh. OpenLogi's stock defaults for these slots are macOS
+# actions (MissionControl, ShowDesktop, AppExpose) that the Linux injector
+# skips, so every direction is set explicitly. The commands run under
+# /bin/sh -c, which expands $HOME, and the agent's PATH excludes ~/.local/bin.
+[devices."direct:046d:b023:unit:d7b3d507".bindings.GestureButton]
+Up = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh fullscreen" }
+Down = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh floating" }
+Left = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh workspace-prev" }
+Right = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh workspace-next" }
+Click = "MiddleClick"
