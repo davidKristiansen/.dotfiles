@@ -10,14 +10,6 @@
     ]
   },
   "model": "opus",
-  "enabledPlugins": {
-    "lua-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
-  },
-  "effortLevel": "high",
-  "theme": "auto",
-  "agentPushNotifEnabled": true,
-  "inputNeededNotifEnabled": true,
   "hooks": {
     "SessionStart": [
       {
@@ -31,5 +23,17 @@
         ]
       }
     ]
-  }
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"$HOME/.claude/statusline-command.sh\""
+  },
+  "effortLevel": "high",
+  "theme": "auto",
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
 }
