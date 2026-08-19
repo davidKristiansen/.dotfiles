@@ -1,12 +1,20 @@
 {
   "permissions": {
+    "additionalDirectories": [
+      "~/.dotfiles",
+      "~/.local/bin"
+    ],
     "allow": [
       "mcp__mcpipe__*",
       "mcp__graphify__*",
       "Bash(mcpipe *)",
       "Bash(graphify *)",
       "Bash(pipx *)",
-      "Bash(mise *)"
+      "Bash(mise *)",
+      "Read(~/.dotfiles/**)",
+      "Read(~/.local/bin/**)",
+      "Edit(~/.dotfiles/**)",
+      "Write(~/.dotfiles/**)"
     ]
   },
   "model": "opus",
