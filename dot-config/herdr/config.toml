@@ -77,6 +77,16 @@ focus_agent = "prefix+alt+1..9"
 previous_agent = "prefix+alt+k"
 next_agent = "prefix+alt+j"
 
+# Worktree workspaces. new_worktree stays on its prefix+shift+g default. herdr
+# has no default keys for open and remove, so both are bound here.
+# open_worktree opens an existing checkout as a workspace. herdr enumerates the
+# repo's git worktrees, so checkouts from other tools appear too — Claude Code
+# puts its own under .claude/worktrees/. remove_worktree extends the close
+# ladder (x = pane, shift+x = tab) and asks for confirmation before it deletes
+# the checkout.
+open_worktree = "prefix+shift+o"
+remove_worktree = "prefix+alt+x"
+
 # --- Seamless nvim <-> herdr navigation (herdr-splits) -----------------------
 # The herdr half of herdr-splits.nvim; the Neovim half is
 # ~/.config/nvim/plugin/herdr-splits.lua. These actions forward the chord into
@@ -227,6 +237,12 @@ show_agent_labels_on_pane_borders = true
 # rather than by pane ID alone. This is herdr's own documented example row set.
 [ui.sidebar.agents.rows_by_agent]
 claude = [["state_icon", "workspace", "tab"], ["terminal_title_stripped"], ["agent"]]
+
+# Space rows: show each workspace's branch and git status. Together with
+# agent_panel_sort = "spaces" above, the sidebar groups agents by workspace and
+# works as a worktree navigator.
+[ui.sidebar.spaces]
+rows = [["state_icon", "workspace"], ["branch", "git_status"]]
 
 [ui.toast]
 # Claude Code already has agentPushNotifEnabled / inputNeededNotifEnabled in
