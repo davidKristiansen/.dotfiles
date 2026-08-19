@@ -152,3 +152,14 @@ ranks with a hybrid embedding plus FTS5 keyword search. It runs fully local.
 - Cite each result's `source_ref` / `doc_path` and heading path.
 
 Refresh after spec edits with `adoc-index index-docs`. It is incremental. `--rebuild` re-renders all.
+
+# Writing rules
+
+Apply these to every project. Do not wait for a request.
+
+- Use the `ste-writing` skill for all prose you write: documentation, READMEs, commit
+  bodies, pull-request text, code comments, and error and log strings.
+- A comment states the present behavior. Never write change history in a comment. Do
+  not name the earlier value, the earlier name, or the reason for the edit.
+- Write a commit subject in the imperative mood. Write "add the socket forward", not
+  "added" or "adds".
