@@ -105,7 +105,6 @@ Then alphabetically:
 - noice.lua_ — noice.nvim UI replacement (disabled, replaced by built-in ui2 in init.lua).
 - obsidian.lua — Obsidian note-taking (keymap: `<leader>n*` + FileType markdown in vault).
 - overseer.lua — Task runner and job management (keymap: `<leader>r*`).
-- codecompanion.lua_ — codecompanion.nvim AI chat (disabled).
 - render-markdown.lua — Markdown rendering (FileType: markdown).
 - sshfs.lua — Remote file editing (cmd: `:SSHConnect`/`:SSHConfig`; loads the full `SSH*` command set on first use).
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`). Owns the `<C-h/j/k/l>` pane-navigation maps; outside tmux it maps them to plain `<C-w>` window navigation instead. Bails out entirely under `$HERDR_ENV`, where herdr-splits.lua owns those chords (the two multiplexers are mutually exclusive, never nested).

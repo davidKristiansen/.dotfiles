@@ -53,10 +53,6 @@
       "rev": "2390c6e45c4789072c293ac69de051d169668b29",
       "src": "https://github.com/coder/claudecode.nvim"
     },
-    "codecompanion.nvim": {
-      "rev": "a4ea94df34ad32df7914cf960e0faec038fc5535",
-      "src": "https://github.com/olimorris/codecompanion.nvim"
-    },
     "codediff.nvim": {
       "rev": "1739102d1cc7153ea9f8f7df7d6a6134ebc46111",
       "src": "https://github.com/esmuellert/codediff.nvim"
