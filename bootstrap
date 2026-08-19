@@ -47,9 +47,7 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 
   # Install stow.sh as a single self-contained file from the latest release.
   # Deliberately unpinned: this repo is the dogfood path for stow.sh, so a
-  # regression should surface here first. The cost is that a feature release
-  # can change behaviour mid-bootstrap — 0.19.0 added fold-point eviction,
-  # which aborted this repo's run outright (see --no-evict below).
+  # regression should surface here first.
   rm -f "$XDG_BIN_HOME/stow.sh"
   stow_tmp=$(mktemp)
   curl -fsSL "https://github.com/davetothek/stow.sh/releases/latest/download/stow.sh" -o "$stow_tmp"
@@ -61,7 +59,7 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   # aren't installed yet); the full stow happens after mise, once they exist.
   # Package `mise` is stripped by stow, so target is $XDG_CONFIG_HOME/mise →
   # links land at ~/.config/mise/conf.d/*.toml.
-  stow.sh --dotfiles --no-evict -f -d dot-config -t "$XDG_CONFIG_HOME/mise" mise
+  stow.sh --dotfiles -f -d dot-config -t "$XDG_CONFIG_HOME/mise" mise
 )
 
 # ----- mise: dotfiles (incl. mise conf.d) are stowed now -----
@@ -85,20 +83,13 @@ mise upgrade --bump --quiet --yes --exclude uv
 # shims dir already on PATH) now resolve and get linked. Idempotent.
 (
   cd "${SCRIPT_DIR}"
-  # --no-evict: stow.sh 0.19.0 unfolds a "stale" fold point and moves the
-  # filtered files out to the target. It refuses when git tracks one of them,
-  # and the pre-flight turns that into an atomic abort of the whole run. Two
-  # upstream bugs trip it here:
-  #   * ~/.pi/agent/{extensions,skills,themes} — the plan holds only ~/.pi, so
-  #     the stale-fold sweep calls the deeper folds unplanned, while the link
-  #     loop in the same run reports them already stowed.  (stow.sh#10)
-  #   * ~/.config/zsh/.zshenv — an in-package relative symlink, never a
-  #     planned target, so it reads as unplanned repository content.
-  #     (stow.sh#11)
-  # --no-evict downgrades both to warnings. Machine-local state still lives
-  # inside the fold points (~/.claude, ~/.config/git, ~/.config/zsh); drop
-  # this flag once upstream fixes the sweep, and let it clean them up.
-  stow.sh --dotfiles --no-evict -f
+  # Eviction (stow.sh >= 0.19.0, default on) unfolds a stale fold point and
+  # moves the machine-local files it was serving out of the package and into
+  # the target. That is what keeps app state written through a fold point —
+  # ~/.claude, ~/.config/git, ~/.config/zsh — from living in this repo where
+  # `git clean -xdf` would delete it. It refuses to move anything git tracks,
+  # so it cannot rewrite repository content.
+  stow.sh --dotfiles -f
 )
 
 # ----- Restore Yazi plugins declared in package.toml -----
