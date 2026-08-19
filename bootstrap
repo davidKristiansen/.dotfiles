@@ -30,9 +30,7 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_CONFIG_HOME/systemd/user" \
          "$XDG_CONFIG_HOME/teams-for-linux" \
          "$XDG_CONFIG_HOME/herdr" \
-         "$XDG_CONFIG_HOME/git" \
-         "$HOME/.pi/agent/sessions" \
-         "$HOME/.pi/context-mode/sessions"
+         "$XDG_CONFIG_HOME/git"
 chmod 700 "$GNUPGHOME"
 
 echo Hold on to your bootstraps !

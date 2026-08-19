@@ -11,11 +11,6 @@ zsh_plugins.zsh
 # Machine-local secrets (never commit)
 .secrets/
 
-# Pi — secrets & ephemeral
-dot-pi/agent/auth.json
-dot-pi/agent/mcp-cache.json
-dot-pi/agent/sessions/
-dot-pi/context-mode/
 # CocoIndex Code (ccc)
 /.cocoindex_code/*
 !/.cocoindex_code/global_settings.yml

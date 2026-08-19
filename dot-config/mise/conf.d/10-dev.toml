@@ -9,7 +9,6 @@
 # Node (runtime is declared once in 00-core.toml)
 npm = "latest"
 "npm:prettier" = "latest"
-"npm:@earendil-works/pi-coding-agent" = "latest"
 
 # Python
 python = "3.14"

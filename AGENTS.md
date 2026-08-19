@@ -17,8 +17,8 @@ dot-zshenv##shell.zsh       →   ~/.zshenv   (## suffix stripped, see below)
 ```
 
 Top-level packages: `dot-config/`, `dot-claude/`, `dot-local/`, `dot-gnupg/`,
-`dot-pi/`, plus a few root files. Running `stow.sh --dotfiles` from the repo root
-stows them all into `~`.
+plus a few root files. Running `stow.sh --dotfiles` from the repo root stows
+them all into `~`.
 
 - `.stowignore` — glob patterns for files that live here but must **not** be
   symlinked (project scaffolding: `bootstrap`, `AGENTS.md`, `.github/`, `.gitignore`,
