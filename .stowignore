@@ -9,5 +9,7 @@ bootstrap
 .gitignore
 .gitmodules
 
-# Claude Code project-local state for this repo (not the dot-claude package)
-.claude
+# Claude Code project-local state for this repo (not the dot-claude package).
+# Anchored: an unanchored '.claude' also matches dot-config/nvim/.claude, which
+# is tracked content, and stow.sh refuses to evict tracked files.
+/.claude
