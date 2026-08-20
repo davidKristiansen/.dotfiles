@@ -13,8 +13,7 @@
       "Bash(mise *)",
       "Read(~/.dotfiles/**)",
       "Read(~/.local/bin/**)",
-      "Edit(~/.dotfiles/**)",
-      "Write(~/.dotfiles/**)"
+      "Edit(~/.dotfiles/**)"
     ]
   },
   "model": "opus",
