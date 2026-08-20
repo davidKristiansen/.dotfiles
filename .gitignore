@@ -55,3 +55,7 @@ dot-config/herdr/*
 
 # Typst local packages — sources are tracked, compiled proofs are not.
 dot-local/share/typst/packages/**/*.pdf
+
+# spec-interview artifacts — working documents for one task, not durable config.
+spec.md
+tasks.md
