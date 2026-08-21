@@ -125,6 +125,13 @@
   # reads the marks, so it keeps the full prompt.
   if [[ -n ${HERDR_PANE_ID:-} || ${HERDR_ENV:-} == 1 ]]; then
     typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+    # Keep the duration of the last command. It goes at the end of line 1, in
+    # front of the newline segment.
+    local -i nl=${POWERLEVEL9K_LEFT_PROMPT_ELEMENTS[(i)newline]}
+    if (( nl <= $#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS )); then
+      POWERLEVEL9K_LEFT_PROMPT_ELEMENTS[nl,nl]=(command_execution_time newline)
+    fi
+    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_PREFIX='took '
   fi
 
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
