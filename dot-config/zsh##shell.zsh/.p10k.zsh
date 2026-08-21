@@ -119,6 +119,14 @@
     # example               # example user-defined segment (see prompt_example function below)
   )
 
+  # herdr reflows pane text on resize and ignores the OSC 133 prompt marks, so
+  # zle redraws the prompt at the wrong row and stacks prompt fragments. A right
+  # prompt is the trigger; with an empty one the redraw stays correct. Ghostty
+  # reads the marks, so it keeps the full prompt.
+  if [[ -n ${HERDR_PANE_ID:-} || ${HERDR_ENV:-} == 1 ]]; then
+    typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+  fi
+
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
   typeset -g POWERLEVEL9K_MODE=nerdfont-v3
   # When set to `moderate`, some icons will have an extra space after them. This is meant to avoid
