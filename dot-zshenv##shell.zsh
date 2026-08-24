@@ -47,6 +47,11 @@ if [ -d "$XDG_CONFIG_HOME/environment.d" ]; then
   done
 fi
 
+# MISE_GLOBAL_CONFIG_FILE replaces the whole mise global config set, conf.d
+# included, so every conf.d tool disappears outside $HOME. Nothing in this
+# setup may set it; drop a value inherited from a long-lived parent.
+unset MISE_GLOBAL_CONFIG_FILE
+
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 # Completion dump belongs in the cache dir. Defined here (not only in the

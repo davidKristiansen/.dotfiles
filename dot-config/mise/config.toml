@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+# Copyright David Kristiansen
+#
+# The default global config, stowed as a symlink so that `mise use -g`
+# writes into the repo instead of into an untracked real file.
+#
+# Do not point MISE_GLOBAL_CONFIG_FILE at this file to relocate it: that
+# variable replaces the whole global config set, conf.d included, so every
+# conf.d tool disappears when the working directory is outside $HOME.
+#
+# This file is machine-agnostic scratch space, not a curated list. mise
+# rewrites it, so these comments may not survive a write -- do not put
+# anything here worth keeping. Move a pin that should be permanent into the
+# right conf.d file (00-core everywhere, 10-dev, 20-host real hosts, 30-gui
+# laptop) and delete it from here. mise warns when a conf.d pin shadows one
+# in this file.
