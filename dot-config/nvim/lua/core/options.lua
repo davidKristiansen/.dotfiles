@@ -34,6 +34,25 @@ opt.swapfile = false
 opt.undofile = true -- persistent undo
 opt.undolevels = 10000
 opt.clipboard = 'unnamedplus'
+
+-- xclip needs an X server it can reach. A devcontainer inherits DISPLAY from
+-- the SSH forward, but nothing answers behind it, so every yank reports
+-- "Can't open display". OSC 52 sends the copy through the terminal instead.
+-- Paste reads the unnamed register, because a terminal that does not answer an
+-- OSC 52 read makes Neovim wait for the timeout on each paste. Use the paste
+-- key of the terminal for text from outside Neovim.
+if vim.uv.fs_stat('/.dockerenv') or vim.env.SSH_TTY then
+  local osc52 = require('vim.ui.clipboard.osc52')
+  local function from_unnamed()
+    return vim.split(vim.fn.getreg('"') or '', '\n')
+  end
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = { ['+'] = osc52.copy('+'), ['*'] = osc52.copy('*') },
+    paste = { ['+'] = from_unnamed, ['*'] = from_unnamed },
+  }
+end
+
 opt.updatetime = 200 -- CursorHold delay
 opt.inccommand = 'nosplit' -- live :substitute preview
 opt.timeoutlen = 300
