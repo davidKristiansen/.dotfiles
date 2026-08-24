@@ -15,9 +15,6 @@ cmake = "latest"
 "ubi:iffse/pay-respects" = "latest"
 "ubi:orhun/binsider" = "latest"
 
-# Cargo-built (no release binaries — requires the rust toolchain above)
-"cargo:nvim-mcp" = "latest"
-
 # Host-side utilities
 mutagen = "latest"  # laptop↔server sync — runs on hosts, not in containers
 allure = "latest"

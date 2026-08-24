@@ -53,84 +53,104 @@ The user-scoped `graphify-mcp` server auto-detects `./graphify-out/graph.json` f
 So the FIRST time we build a graph in a new repo: **let `/graphify` fully finish (wait for `graph.json` to be written — the slow step is semantic extraction) before reloading**, then tell the user to reload so the MCP server picks it up. Don't reload mid-build. If a build was interrupted and left no `graph.json`, `graphify update . --force` writes a fast code-only graph to unblock the server.
 # Neovim via nvim-mcp
 
-The user edits code in Neovim. You control it through nvim-mcp tools.
-You already know Vim — use that knowledge.
+The user edits code in Neovim. You control it through the tools of the
+`nvim` MCP server. You already know Vim — use that knowledge.
+
+The server runs with `--connect auto`, so it finds and connects to the
+Neovim instances of the current project by itself.
 
 ## Rules
 
-**⚠ CRITICAL: Call `get_state_brief` at the START of every turn — before
-any nvim-mcp call, file read, or disk edit that touches a Neovim buffer.
-Never carry over cursor position or file identity from a previous turn.
-Use the full `get_state` only when you need deep context (folds, marks,
-diagnostics, highlights, virtual text, all windows).**
+**⚠ CRITICAL: read the editor state at the START of every turn — call
+`list_buffers` and `cursor_position` before any edit or any tool call that
+depends on what the user has open. Never carry a buffer ID, a cursor
+position, or a file identity over from a previous turn.**
 
-1. **If a file is in `buffers`, always use buffer tools — not disk.**
-   Read with `read_full_buf` (or `read_buf_range` for a slice).
-   Edit with `find_and_replace_buf` (or `write_full_buf` for full content).
-   This ensures the user sees changes immediately and gets undo.
-   Fall back to disk only if the file isn't in `buffers`.
-2. **The user's context is the active window.** If the active window
-   is a terminal, the user's file context is the alternate window.
-   When opening files in that case, use
-   `send_command(["wincmd p", "e <file>", "wincmd p"])`.
-   If the terminal is the only window, use
-   `send_command("vsplit <file>")` to avoid replacing it.
-3. **Keep the terminal window in place when splitting.** If a terminal
-   window exists, open new splits from a non-terminal window so the
-   terminal stays where it is. Switch to a file window first
-   (`wincmd p` or target it directly), run the split there, then
-   switch back if needed.
+Every tool except `get_targets`, `connect`, and `connect_tcp` needs a
+`connection_id`:
 
-## Colors
+1. Read the `nvim-connections://` resource for the active connections.
+2. If it is empty, call `get_targets`, then `connect` with one of the
+   socket paths. `connect_tcp` takes a TCP address instead.
+3. If more than one instance is connected, ask the user which one to use.
+   Do not guess.
 
-Both `highlight_range` and `add_virtual_text` accept the same two
-color formats:
+A connection ID is a BLAKE3 hash of the target, so it stays the same
+across sessions.
 
-- Hex code (e.g. `#3b4048`) — used as-is.
-- Highlight group name (e.g. `Comment`, `DiagnosticError`) — adapts
-  to the user's colorscheme. For `highlight_range`, the group's
-  foreground color is used as the line background. For
-  `add_virtual_text`, the group is used directly.
+## Reading
 
-Unknown names (including bare color literals like `Red` or
-`darkgreen`) return an error. Use either a hex code or a valid
-highlight group.
+`read` takes a `document` and an optional 0-based line range (`start`, and
+`end` exclusive, where `-1` is the last line). A `document` is one of:
 
-### Recommended highlight groups
+- `{"buffer_id": 12}` — a buffer that is open
+- `{"project_relative_path": "src/main.rs"}`
+- `{"absolute_path": "/home/fw/src/main.rs"}`
 
-When using `highlight_range` or `add_virtual_text`, prefer these
-groups so the visual semantics stay consistent and adapt to the
-colorscheme:
+`read` also reaches a file that no buffer holds, so prefer it over a disk
+read for any file in the project. `list_buffers` shows the open buffers and
+their line counts. `cursor_position` gives the buffer name and the 0-based
+row and column.
 
-- Notes / context (default for both tools): `Comment`
-- Errors / problems: `DiagnosticError`
-- Warnings / caution: `DiagnosticWarn`
-- Info / context: `DiagnosticInfo`
-- Hints / suggestions: `DiagnosticHint`
-- Good / success: `DiagnosticOk`
+## Writing
 
-Pass the group name as the `color` argument
-(e.g. `color="DiagnosticError"`). Both tools default to `Comment`
-when no color is provided.
+This server has no buffer-write tool. To change a file:
 
-## Virtual text
+1. Prefer `lsp_apply_edit` for a rename, a code action, or a format result.
+   The change goes through Neovim, so the user sees it and keeps undo.
+2. If no LSP operation fits, edit the file on disk, then reload the buffer
+   with `exec_lua` and `vim.cmd('checktime')`. This prevents a
+   "file changed on disk" prompt for the user.
 
-**⚠ MANDATORY: every `add_virtual_text` / `add_virtual_texts` text item
-MUST start with `※ ` (U+203B, "Reference Mark"). No exceptions, every
-call, every item. Example: `text=["※ swap if reversed"]`.**
+Call `list_buffers` before a disk edit. A modified buffer holds content
+that the disk does not, and a disk write discards it.
 
-- Keep each annotation **single-line and short**. No `\n`. One item per
-  `text` list. If you need more, place several short annotations on
-  adjacent lines instead.
-- `color`: default `Comment`. Use a `Diagnostic*` group only when
-  semantics demand it.
-- `position`: default `"eol"`. Use `"above"` / `"below"` only when the
-  annotated line is already long.
+## LSP
 
-## Multi-instance
+Each `lsp_*` tool needs an `lsp_client_name`. Call `lsp_clients` for the
+names. Call `wait_for_lsp_ready` after you open a file, because the client
+attaches after the buffer loads.
 
-Multiple Neovim instances: `connect` lists them. Ask the user which
-one — don't guess
+Use LSP for a question about a symbol. It is more accurate than grep:
+
+- `lsp_definition`, `lsp_declaration`, `lsp_type_definition`,
+  `lsp_implementations`, `lsp_references`
+- `lsp_document_symbols`, `lsp_workspace_symbols`, `lsp_hover`
+- `lsp_call_hierarchy_prepare`, then `lsp_call_hierarchy_incoming_calls` or
+  `lsp_call_hierarchy_outgoing_calls`
+- `lsp_type_hierarchy_prepare`, then `lsp_type_hierarchy_supertypes` or
+  `lsp_type_hierarchy_subtypes`
+- `lsp_rename`, `lsp_code_actions`, `lsp_resolve_code_action`
+- `lsp_formatting`, `lsp_range_formatting`, `lsp_organize_imports`
+
+All positions are 0-based. The formatting and import tools apply their
+edits by default. Pass `apply_edits: false` to get the TextEdit list back
+instead.
+
+## Diagnostics
+
+`buffer_diagnostics` takes a buffer ID. These resources give more:
+
+- `nvim-diagnostics://{connection_id}/workspace`
+- `nvim-diagnostics://{connection_id}/buffer/{buffer_id}`
+
+## Windows and navigation
+
+`navigate` opens a document at a 0-based line and character.
+
+Run window commands through `exec_lua`. Keep the terminal window in place:
+
+- If the active window is a terminal, the file context of the user is the
+  alternate window. Open a file there with
+  `vim.cmd('wincmd p | edit <file> | wincmd p')`.
+- If the terminal is the only window, use `vim.cmd('vsplit <file>')` so the
+  terminal stays.
+
+## exec_lua
+
+`exec_lua` runs any Lua in the editor of the user. Use it for the window
+layout, for `checktime`, and for options. Do not use it to rewrite buffer
+text when `lsp_apply_edit`, or a disk edit with `checktime`, does the job.
 
 # adoc-index (personal)
 
