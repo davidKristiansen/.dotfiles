@@ -2,8 +2,8 @@
 # Copyright David Kristiansen
 #
 # Lightweight dev tools — installed everywhere, including devcontainers.
-# Heavy toolchains (rust, zig, …) live in 20-host.toml##!docker;
-# devcontainers get those from their image or a project-local mise.toml.
+# Toolchains (rust, cmake, …) live in 00-core.toml; host-only utilities
+# live in 20-host.toml##!container.
 
 [tools]
 # Node (runtime is declared once in 00-core.toml)

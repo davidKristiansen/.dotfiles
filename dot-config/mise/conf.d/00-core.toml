@@ -10,6 +10,11 @@ jobs = 32
 idiomatic_version_file_enable_tools = ["python"]
 
 [tools]
+# Toolchains — devcontainers need these too
+rust = "latest"
+cargo-binstall = "latest"
+cmake = "latest"
+
 # Shell & CLI essentials
 bat = "latest"
 bat-extras = "latest"
