@@ -2,7 +2,7 @@
 # Copyright David Kristiansen
 #
 # Lightweight dev tools — installed everywhere, including devcontainers.
-# Heavy toolchains (rust, java, zig, …) live in 20-host.toml##!docker;
+# Heavy toolchains (rust, zig, …) live in 20-host.toml##!docker;
 # devcontainers get those from their image or a project-local mise.toml.
 
 [tools]
@@ -20,6 +20,10 @@ ruff = "latest"
 
 # Go
 go = "latest"
+
+# Java — mason builds groovy-language-server with gradle, which needs a JDK.
+# Ubuntu ships only a JRE, so this must be everywhere nvim runs.
+java = "temurin-21"
 
 # Lua
 stylua = "latest"
