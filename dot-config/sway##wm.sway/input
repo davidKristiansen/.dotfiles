@@ -21,3 +21,6 @@ input type:touchpad {
     natural_scroll disabled
 }
 
+input 1133:45091:Logitech_Wireless_Mouse_MX_Master_3 {
+    scroll_factor 0.3
+}
