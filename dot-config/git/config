@@ -125,3 +125,5 @@
 [http]
 	version = HTTP/1.1
 	postBuffer = 1048576000
+[user]
+	email = david@kristiansen.tech
