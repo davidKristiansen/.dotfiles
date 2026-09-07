@@ -81,7 +81,7 @@ haptic_panel = false
 
 [devices."direct:046d:b023:unit:d7b3d507".smartshift]
 mode = "ratchet"
-auto_disengage = 22
+auto_disengage = 34
 tunable_torque = 0
 
 [devices."direct:046d:b023:unit:d7b3d507".bindings]
@@ -89,6 +89,9 @@ DpiToggle = "CycleDpiPresets"
 
 [devices."camera:046d:0826:serial:32698680"]
 camera_profile = "default"
+
+[devices."direct:046d:b023:unit:d7b3d507".bindings.GestureButton.Up ]
+RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh fullscreen"
 
 [keyboard]
 
@@ -98,8 +101,13 @@ camera_profile = "default"
 # skips, so every direction is set explicitly. The commands run under
 # /bin/sh -c, which expands $HOME, and the agent's PATH excludes ~/.local/bin.
 [devices."direct:046d:b023:unit:d7b3d507".bindings.GestureButton]
-Up = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh fullscreen" }
-Down = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh floating" }
-Left = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh workspace-prev" }
-Right = { RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh workspace-next" }
 Click = "MiddleClick"
+
+[devices."direct:046d:b023:unit:d7b3d507".bindings.GestureButton.Down ]
+RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh floating"
+
+[devices."direct:046d:b023:unit:d7b3d507".bindings.GestureButton.Left ]
+RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh workspace-prev"
+
+[devices."direct:046d:b023:unit:d7b3d507".bindings.GestureButton.Right ]
+RunShellCommand = "$HOME/.local/bin/openlogi-gesture.sh workspace-next"
