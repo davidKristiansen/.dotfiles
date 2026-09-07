@@ -1,9 +1,5 @@
 {
   "permissions": {
-    "additionalDirectories": [
-      "~/.dotfiles",
-      "~/.local/bin"
-    ],
     "allow": [
       "mcp__mcpipe__*",
       "mcp__graphify__*",
@@ -14,9 +10,13 @@
       "Read(~/.dotfiles/**)",
       "Read(~/.local/bin/**)",
       "Edit(~/.dotfiles/**)"
+    ],
+    "additionalDirectories": [
+      "~/.dotfiles",
+      "~/.local/bin"
     ]
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -31,13 +31,13 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "lua-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
-  },
   "statusLine": {
     "type": "command",
     "command": "bash \"$HOME/.claude/statusline-command.sh\""
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "effortLevel": "high",
   "theme": "auto",
