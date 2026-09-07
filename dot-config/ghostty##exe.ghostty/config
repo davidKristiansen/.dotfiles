@@ -31,9 +31,9 @@ resize-overlay          = never
 # alpha-blending          = "srgb"
 
 working-directory = home
-mouse-scroll-multiplier = 1
 mouse-reporting = true
-mouse-scroll-multiplier = precision:1,discrete:3
+# Wheel speed is set system-wide by sway's scroll_factor (see sway/input).
+mouse-scroll-multiplier = 1
 
 ##############################
 # Shell Integration
