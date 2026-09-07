@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+# Park the presenting workspace on the meeting room screen. kanshi matches the
+# screen with a glob, so the connector name is only known at run time.
+
+tv=$(swaymsg -t get_outputs -r \
+  | jq -r '[.[] | select(.make == "Sony" and .active)][0].name // empty')
+
+[ -n "$tv" ] || exit 0
+
+swaymsg "workspace 1, move workspace to output $tv" >/dev/null
