@@ -56,6 +56,10 @@ opt.signcolumn = 'yes'
 opt.pumblend = 10
 opt.pumheight = 10
 opt.cmdheight = 0
+-- One statusline for the whole window layout; the per-window winbar names each
+-- split. Inside tmux, plugin/tmux.lua sets laststatus=0 and tpipeline pipes the
+-- statusline into the tmux status bar instead.
+opt.laststatus = 3
 opt.winminwidth = 5
 opt.scrolloff = 4
 opt.sidescrolloff = 8

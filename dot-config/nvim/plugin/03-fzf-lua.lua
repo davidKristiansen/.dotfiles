@@ -22,12 +22,19 @@ require('utils.lazy').add({
 
     require('fzf-lua').setup({
       fzf_opts = { ['--layout'] = 'default' },
-      winopts = {
-        height = 0.40,
-        width = 1.00,
-        row = 1.00,
-        col = 0.50,
-      },
+      -- Computed each time it opens, because it depends on the size of
+      -- the window. Stop one line short of the bottom so the statusline
+      -- stays visible: at row 1.00 the picker sits flush against the
+      -- bottom and covers it.
+      winopts = function()
+        local height = math.floor(vim.o.lines * 0.40)
+        return {
+          height = height,
+          width = 1.00,
+          row = vim.o.lines - vim.o.cmdheight - height - 1,
+          col = 0.50,
+        }
+      end,
       keymap = { fzf = { ['ctrl-c'] = 'abort' } },
       actions = {
         files = {
