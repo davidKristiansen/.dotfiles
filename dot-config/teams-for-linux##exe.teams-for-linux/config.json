@@ -8,7 +8,7 @@
     "closeAppOnCross": false,
     "trayIconEnabled": false,
     "watchConfigFile": true,
-    "defaultURLHandler": "$HOME/.config/teams-for-linux/teams-url-dispatch",
+    "defaultURLHandler": ".local/bin/teams-url-dispatch",
     "disableGpu": false,
     "screenSharingEnabled": true,
     "pipewireEnabled": true,
@@ -17,7 +17,7 @@
             "enabled": false
         }
     },
-    "customCSSLocation": "$HOME/.config/teams-for-linux/gruvbox-dark-hard.css",
+    "customCSSLocation": ".config/teams-for-linux/gruvbox-dark-hard.css",
     "notificationMethod": "electron",
     "mqtt": {
         "enabled": true,
@@ -32,5 +32,14 @@
             "discoveryPrefix": "homeassistant",
             "deviceName": "Teams (mylaptop)"
         }
-    }
+    },
+    "electronCLIFlags": [
+        [
+            "enable-features",
+            "VaapiVideoEncoder,VaapiVideoDecodeLinuxGL,WebRTCPipeWireCapturer"
+        ],
+        "ignore-gpu-blocklist",
+        "enable-webrtc-hw-encoding",
+        "enable-webrtc-hw-decoding"
+    ]
 }
