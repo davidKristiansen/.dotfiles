@@ -308,6 +308,8 @@
 
   // ── Battery ───────────────────────────────────────────────────────────────
   "battery": {
+    "bat": "BAT0",
+    "adapter": "AC",
     "states": { "good": 80, "warning": 30, "critical": 15 },
     "format": "{icon} {capacity}%",
     "format-charging": "󰂄 {capacity}%",
