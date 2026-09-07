@@ -6,7 +6,11 @@
 # PATH must be exported too: sway runs from /opt/sway/bin, and units like
 # swayidle call swaymsg — without the session PATH the user manager's default
 # PATH can't find it (lock.sh output detection and DPMS silently fail).
-exec_always dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK PATH XDG_CURRENT_DESKTOP=sway
+# The value is explicit, not a bare PATH copy: sway starts without the zsh
+# profile, and systemd discards PATH lines in environment.d(5), so this line
+# is the one place that puts $XDG_BIN_HOME and the mise shims into the
+# session. Sway runs exec through sh -c, so $HOME and $PATH expand here.
+exec_always dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway PATH=$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH
 exec_always systemctl --user start sway-session.target
 
 # Desktop preferences (idempotent one-shots).
