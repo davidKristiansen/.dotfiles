@@ -53,6 +53,20 @@ function M.diagnostics(opts)
   require('fzf-lua').diagnostics_document(opts)
 end
 
+-- Semantic search, backed by the ish index rather than by the files.
+function M.ish(opts)
+  require('utils.ish').search(opts)
+end
+
+function M.ish_lang(languages, opts)
+  require('utils.ish').search_lang(languages, opts)
+end
+
+-- Semantic search over one kind: code, doc, test, or config.
+function M.ish_type(types, opts)
+  require('utils.ish').search_type(types, opts)
+end
+
 -- General search functions
 function M.files(opts)
   require('fzf-lua-enchanted-files').files(opts)

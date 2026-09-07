@@ -72,6 +72,7 @@ end
 
 map('n', '<leader>ff', pick('files'), { desc = 'Files' })
 map('n', '<leader>fg', pick('live_grep'), { desc = 'Live Grep' })
+map('n', '<leader>fi', pick('ish'), { desc = 'Semantic search (ish)' })
 map('n', '<leader>fb', pick('buffers'), { desc = 'Buffers' })
 map('n', '<leader>fh', pick('help_tags'), { desc = 'Help Tags' })
 map('n', '<leader>fo', pick('oldfiles'), { desc = 'Old Files' })

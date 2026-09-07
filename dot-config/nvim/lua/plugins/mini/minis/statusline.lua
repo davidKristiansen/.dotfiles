@@ -21,6 +21,8 @@ return {
       local filename = vim.fn.expand('%:t')
       local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
       local location = MiniStatusline.section_location({ trunc_width = 75 })
+      -- What the ish index is doing, empty unless it is doing something.
+      local ish = require('utils.ish').statusline()
       -- local fmt_mode      = fmt.status_icon()
 
       -- Macro indicator (shows when recording a macro)
@@ -36,7 +38,7 @@ return {
         '%<',
         { hl = 'MiniStatuslineFilename', strings = {} },
         '%=',
-        { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+        { hl = 'MiniStatuslineFileinfo', strings = { ish, fileinfo } },
         { hl = mode_hl, strings = { location } },
       })
     end,
