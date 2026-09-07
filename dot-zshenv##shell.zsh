@@ -34,6 +34,13 @@ unset _zshenv_uid
 if [ -d "$XDG_CONFIG_HOME/environment.d" ]; then
   for env_file in "$XDG_CONFIG_HOME"/environment.d/*.conf; do
     [ -r "$env_file" ] || continue
+    # The wayland conf steers the GUI toolkits to a compositor. A session
+    # without one — an SSH login or a container — has no WAYLAND_DISPLAY,
+    # and the values then make every Qt program abort at start. Load the
+    # conf only when a compositor is present.
+    case "$env_file" in
+      *-wayland.conf) [ -n "${WAYLAND_DISPLAY-}" ] || continue ;;
+    esac
     set -o allexport
     . "$env_file"
     set +o allexport
