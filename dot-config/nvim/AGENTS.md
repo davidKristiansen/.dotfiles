@@ -51,16 +51,17 @@ Combine triggers in one spec to share a single load guard (e.g. obsidian loads o
 |------|---------|---------|
 | **Eager** (`lazy=false`) | during sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
 | **Later** (`vim.schedule`) | next tick | 03-fzf-lua, blink-cmp, dial, gitsigns (git.lua), nvim-mcp, neo-tree lsp-file-operations capabilities, herdr-splits |
-| **event** | autocmd | blink-pairs (`InsertEnter`), tabout (`InsertEnter`), mason (`BufReadPre`/`FileType`) |
+| **event** | autocmd | blink-pairs (`InsertEnter`), tabout (`InsertEnter`), mason (`BufReadPre`/`FileType`), hlslens (`CmdlineEnter`) |
 | **ft** | FileType | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` in vault) |
 | **cmd** | user command | sshfs (`:SSHConnect`/`:SSHConfig`) |
-| **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>r*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e*`), obsidian (`<leader>n*`), git heavy (`<leader>g*`) |
+| **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>r*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e*`), obsidian (`<leader>n*`), git heavy (`<leader>g*`), hlslens (`n`/`N`/`*`/`#`/`g*`/`g#`, `<leader>l`) |
 | **cond** | env gate | tmux (`$TMUX`), herdr-splits (`$HERDR_ENV`) |
 
 **Split-loaded plugins:**
 - `git.lua` — gitsigns + fugitive on the *later* tier; neogit/diffview/lazygit on `<leader>g*` keys (two `add()` calls).
 - `neo-tree.lua` — lsp-file-operations capability advertisement on the *later* tier (must precede LSP attach); the neo-tree UI on `<leader>e*` keys.
 - `obsidian.lua` — one spec, dual trigger: `ft` markdown-in-vault **or** `<leader>n*` keys.
+- `hlslens.lua` — one spec, dual trigger: `event` first `CmdlineEnter` **or** the search-motion keys.
 
 **Exceptions (not routed through the helper):**
 - `undotree.lua` — a bundled plugin loaded via `packadd` on `<leader>u` (no `vim.pack` source).
@@ -98,6 +99,7 @@ Then alphabetically:
 - guess-indent.lua — Auto-detect file indentation, sets buffer-local shiftwidth/expandtab (event: `BufReadPre`/`BufNewFile`).
 - herdr-splits.lua — herdr-splits.nvim seamless split/pane navigation and resizing (vim.schedule, guarded by `$HERDR_ENV`). Owns `<C-h/j/k/l>` and `<M-h/j/k/l>` inside herdr; the herdr half is installed separately (`herdr plugin install lmilojevicc/herdr-splits.nvim`) and bound in `~/.config/herdr/config.toml`.
 - hex.lua — Hex editing via xxd (keymap: `<leader>Tx`).
+- hlslens.lua — nvim-hlslens search-match lens; dual trigger (event: first `CmdlineEnter`, so `/` incsearch is covered, **or** the `n`/`N`/`*`/`#`/`g*`/`g#` keys). Owns those motions (a Lua wrapper that keeps `v:count1`, then `hlslens.start()`) and `<leader>l` for `:nohlsearch`.
 - mason.lua — Mason tool installer (event: first `BufReadPre`/`FileType`).
 - neo-tree.lua — File explorer (keymap: `<leader>e*`) + lsp-file-operations capabilities (later tier; split-loaded, see Lazy Loading Strategy).
 - neotest.lua — Test runner: Python, GTest (keymap: `<leader>t*`).
