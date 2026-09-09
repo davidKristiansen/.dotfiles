@@ -213,6 +213,10 @@
       "rev": "b8c8aa91f42055d7f69012587cde4f1d99f2a701",
       "src": "https://github.com/igorlfs/nvim-dap-view"
     },
+    "nvim-hlslens": {
+      "rev": "be2d7b2be01860b5445a007ff2bc72b29896db6b",
+      "src": "https://github.com/kevinhwang91/nvim-hlslens"
+    },
     "nvim-lsp-file-operations": {
       "rev": "b9c795d3973e8eec22706af14959bc60c579e771",
       "src": "https://github.com/antosha417/nvim-lsp-file-operations"
@@ -308,6 +312,10 @@
     "sshfs.nvim": {
       "rev": "57f586251d788dae38fd12998b9a208f7d54c1ef",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
+    },
+    "tabout.nvim": {
+      "rev": "9a3499480a8e53dcaa665e2836f287e3b7764009",
+      "src": "https://github.com/abecodes/tabout.nvim"
     },
     "telescope-frecency.nvim": {
       "rev": "5479d8a269e30479280c59e44f805396127653e6",
