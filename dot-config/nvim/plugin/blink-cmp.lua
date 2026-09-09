@@ -37,6 +37,20 @@ require('utils.lazy').add({
       vim.schedule(build_jsregexp)
     end
 
+    -- Last step of the <Tab> chain: jump out of a treesitter pair, or let
+    -- tabout insert a plain <Tab>. It declines while it is not yet loaded, so
+    -- the chain falls through to `fallback`.
+    local function tabout(fn)
+      return function()
+        local ok, mod = pcall(require, 'tabout')
+        if not ok then
+          return false
+        end
+        mod[fn]()
+        return true
+      end
+    end
+
     require('blink.cmp').setup({
       snippets = { preset = 'luasnip' },
 
@@ -96,8 +110,8 @@ require('utils.lazy').add({
         ['<CR>'] = { 'accept', 'fallback' },
         ['<C-e>'] = { 'hide' },
         ['<C-Space>'] = { 'show' },
-        ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
-        ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'snippet_forward', tabout('tabout'), 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'snippet_backward', tabout('taboutBack'), 'fallback' },
         ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
         ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
       },

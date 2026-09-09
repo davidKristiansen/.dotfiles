@@ -51,7 +51,7 @@ Combine triggers in one spec to share a single load guard (e.g. obsidian loads o
 |------|---------|---------|
 | **Eager** (`lazy=false`) | during sourcing | 00-gruvbox, 01-mini, 02-treesitter, which-key |
 | **Later** (`vim.schedule`) | next tick | 03-fzf-lua, blink-cmp, dial, gitsigns (git.lua), nvim-mcp, neo-tree lsp-file-operations capabilities, herdr-splits |
-| **event** | autocmd | blink-pairs (`InsertEnter`), mason (`BufReadPre`/`FileType`) |
+| **event** | autocmd | blink-pairs (`InsertEnter`), tabout (`InsertEnter`), mason (`BufReadPre`/`FileType`) |
 | **ft** | FileType | typst (`typst`), vimtex (`tex`), render-markdown (`markdown`), obsidian (`markdown` in vault) |
 | **cmd** | user command | sshfs (`:SSHConnect`/`:SSHConfig`) |
 | **keys** | first keypress | dap (`<F5>`/`<leader>d*`), neotest (`<leader>t*`), overseer (`<leader>r*`), claudecode (`<leader>a*`), pi (`<leader>p*`), hex (`<leader>Tx`), neo-tree UI (`<leader>e*`), obsidian (`<leader>n*`), git heavy (`<leader>g*`) |
@@ -90,7 +90,7 @@ Files with numeric prefixes load first:
 Then alphabetically:
 - bigfile.lua — Large file handling (custom BufReadPre autocmd, no plugin).
 - claudecode.lua — claudecode.nvim Claude Code IDE integration via WebSocket MCP protocol, keymaps use `<leader>a*` prefix (keymap-triggered: `<leader>ac`/`<leader>af` etc.; neo-tree add via `<leader>as`).
-- blink-cmp.lua — Completion engine + LuaSnip + Copilot source (vim.schedule).
+- blink-cmp.lua — Completion engine + LuaSnip + Copilot source (vim.schedule). The `<Tab>`/`<S-Tab>` chain ends in tabout (see tabout.lua).
 - blink-pairs.lua — Auto pairs (InsertEnter).
 - dap.lua — Debug adapter protocol (keymap: `<F5>`, `<leader>d*`).
 - dial.lua — Increment/decrement augends & keymaps (vim.schedule).
@@ -107,6 +107,7 @@ Then alphabetically:
 - overseer.lua — Task runner and job management (keymap: `<leader>r*`).
 - render-markdown.lua — Markdown rendering (FileType: markdown).
 - sshfs.lua — Remote file editing (cmd: `:SSHConnect`/`:SSHConfig`; loads the full `SSH*` command set on first use).
+- tabout.lua — tabout.nvim; jump out of a treesitter pair (event: `InsertEnter`). It sets an empty `tabkey`/`backwards_tabkey`: blink.cmp owns insert-mode `<Tab>`/`<S-Tab>`, and the last step of that chain in `plugin/blink-cmp.lua` calls `tabout()`/`taboutBack()`. `act_as_tab`/`act_as_shift_tab` insert a `<Tab>` or dedent when there is no pair to jump over.
 - tmux.lua — Tmux navigation integration (vim.schedule, guarded by `$TMUX`). Owns the `<C-h/j/k/l>` pane-navigation maps; outside tmux it maps them to plain `<C-w>` window navigation instead. Bails out entirely under `$HERDR_ENV`, where herdr-splits.lua owns those chords (the two multiplexers are mutually exclusive, never nested).
 - typst.lua — Typst language support (FileType: typst).
 - undotree.lua — Visual undo history, built-in Neovim 0.12+ (keymap: `<leader>u`).
