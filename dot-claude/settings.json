@@ -8,11 +8,14 @@
       "Bash(pipx *)",
       "Bash(mise *)",
       "Read(~/.dotfiles/**)",
+      "Read(~/dotfiles/**)",
       "Read(~/.local/bin/**)",
-      "Edit(~/.dotfiles/**)"
+      "Edit(~/.dotfiles/**)",
+      "Edit(~/dotfiles/**)"
     ],
     "additionalDirectories": [
       "~/.dotfiles",
+      "~/dotfiles",
       "~/.local/bin"
     ]
   },
@@ -49,10 +52,42 @@
   },
   "enabledPlugins": {
     "lua-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true,
+    "bitbucket@eudc": true,
+    "writing@eudc": true,
+    "git@eudc": true,
+    "spec@eudc": true,
+    "code@eudc": true
   },
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
   "theme": "auto",
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "allow": [
+      "$defaults"
+    ],
+    "soft_deny": [
+      "$defaults"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Repository visibility**: assume private unless told otherwise",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste and gist services as outside the trust boundary",
+      "**Secrets management**: op (1Password CLI)",
+      "**Cloud provider(s)**: None configured",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment"
+    ]
+  }
 }
