@@ -21,6 +21,7 @@ zsh_plugins.zsh
 dot-claude/*
 !dot-claude/settings.json
 !dot-claude/skills/
+dot-claude/skills/synced/
 !dot-claude/agents/
 !dot-claude/commands/
 !dot-claude/hooks/
