@@ -177,9 +177,5 @@ Refresh after spec edits with `adoc-index index-docs`. It is incremental. `--reb
 
 Apply these to every project. Do not wait for a request.
 
-- Use the `ste-writing` skill for all prose you write: documentation, READMEs, commit
+- Use the `writing:ste` skill for all prose you write: documentation, READMEs, commit
   bodies, pull-request text, code comments, and error and log strings.
-- A comment states the present behavior. Never write change history in a comment. Do
-  not name the earlier value, the earlier name, or the reason for the edit.
-- Write a commit subject in the imperative mood. Write "add the socket forward", not
-  "added" or "adds".
