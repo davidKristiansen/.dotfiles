@@ -70,6 +70,9 @@ alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tmux='tmux -u -f "$XDG_CONFIG_HOME/tmux/tmux.conf"'
 alias svn='svn --config-dir "$XDG_CONFIG_HOME/subversion"'
 
+# --- workmux ----------------------------------------------------------------
+(( $+commands[workmux] )) && alias wm='workmux'
+
 # --- dotfiles helper ---------------------------------------------------------
 alias dotfiles='/usr/bin/git -C "$DOT_DIR"'
 

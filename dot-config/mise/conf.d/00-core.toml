@@ -37,6 +37,7 @@ tree-sitter = "latest"
 # Agents & agent tooling
 claude = "latest"
 herdr = "latest"  # terminal multiplexer for coding agents
+workmux = "latest"  # git worktree + tmux window per agent task
 "npm:context-mode" = "latest"
 "pipx:graphifyy" = { version = "latest", extras = "pdf,office,mcp,svg,ollama" }
 ollama = "latest"  # local model runtime — graphifyy's ollama extra talks to it

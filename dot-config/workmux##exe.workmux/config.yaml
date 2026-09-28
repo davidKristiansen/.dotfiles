@@ -1,0 +1,5 @@
+# workmux global configuration (https://github.com/raine/workmux)
+# Personal defaults for all projects. A project's .workmux.yaml overrides them.
+# Only non-default values go here. Print every option with its default:
+#   workmux config reference
+# Write a project override template with `workmux init` in the project root.
