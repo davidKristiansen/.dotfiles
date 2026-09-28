@@ -3,3 +3,24 @@
 # Only non-default values go here. Print every option with its default:
 #   workmux config reference
 # Write a project override template with `workmux init` in the project root.
+nerdfont: true
+merge_strategy: rebase # Make workmux merge do rebase by default
+merge_keep: false # Keep worktree, window, and branch after merge by default
+agent: claude
+
+# The first pane is the default shell on the left. The agent pane splits off to
+# the right of it and takes the focus.
+panes:
+  - name: shell
+  - command: <agent> # Start the configured agent (e.g., claude)
+    split: horizontal
+    focus: true
+
+# Claude Code creates its worktrees in <repo>/.claude/worktrees, and no setting
+# moves them. workmux uses the same directory, so each repo has one worktree
+# location for both tools.
+worktree_dir: .claude/worktrees
+# Name the directory and the tmux window after the part of the branch name that
+# follows the last '/'. workmux converts that part to a lowercase slug, so branch
+# feature/ABC-1_do_x gives abc-1-do-x.
+worktree_naming: basename
