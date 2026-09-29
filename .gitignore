@@ -22,6 +22,7 @@ dot-claude/*
 !dot-claude/settings.json
 !dot-claude/skills/
 dot-claude/skills/synced/
+dot-claude/skills/.trash/
 !dot-claude/agents/
 !dot-claude/commands/
 !dot-claude/hooks/
