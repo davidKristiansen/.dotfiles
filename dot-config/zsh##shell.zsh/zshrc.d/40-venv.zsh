@@ -81,6 +81,19 @@ __venv_switch_to() {
   fi
 }
 
+# Drop a venv whose interpreter has gone. A deleted or moved checkout
+# leaves $VIRTUAL_ENV naming nothing. Every tool that reads it then warns
+# or picks the wrong interpreter. Return 0 only when something changed.
+__venv_drop_if_gone() {
+  [[ -n "$VIRTUAL_ENV" && ! -x "$VIRTUAL_ENV/bin/python" ]] || return 1
+  path=(${^path:#$VIRTUAL_ENV/bin})
+  export PATH="${(j.:.)path}"
+  unset VIRTUAL_ENV
+  (( $+functions[deactivate] )) && unset -f deactivate
+  _SMART_VENV_ROOT=""
+  return 0
+}
+
 # ----------------------------- main hook ------------------------------------
 
 _python_venv_smart() {
@@ -89,6 +102,8 @@ _python_venv_smart() {
   if [[ -n "$DIRENV_DIR" ]] && typeset -f _direnv_hook >/dev/null 2>&1; then
     return 0
   fi
+
+  __venv_drop_if_gone
 
   local target
   if _in_container; then
@@ -104,8 +119,15 @@ _python_venv_smart() {
 
 # --------------------------- autoload hooks ---------------------------------
 
+# Watch for a venv that goes away under a shell that does not move. The
+# test is one file check, so it is cheap enough for every prompt.
+_python_venv_guard() {
+  __venv_drop_if_gone && _python_venv_smart
+}
+
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd _python_venv_smart
+add-zsh-hook precmd _python_venv_guard
 _python_venv_smart  # run once now
 
 # vim: set ft=zsh ts=2 sw=2:
