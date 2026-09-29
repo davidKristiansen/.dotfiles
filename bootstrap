@@ -33,7 +33,24 @@ mkdir -p "$XDG_CONFIG_HOME" \
          "$XDG_CONFIG_HOME/git"
 chmod 700 "$GNUPGHOME"
 
-echo Hold on to your bootstraps !
+# Colour only on a terminal, and never when NO_COLOR is set (no-color.org).
+# stdout and stderr are checked apart, so a redirected stream stays plain.
+c_banner='' c_step='' c_ok='' c_out_off=''
+c_warn='' c_err='' c_err_off=''
+if [[ -z "${NO_COLOR:-}" ]]; then
+  if [[ -t 1 ]]; then
+    c_banner=$'\e[1;35m' c_step=$'\e[1;36m' c_ok=$'\e[1;32m' c_out_off=$'\e[0m'
+  fi
+  if [[ -t 2 ]]; then
+    c_warn=$'\e[1;33m' c_err=$'\e[1;31m' c_err_off=$'\e[0m'
+  fi
+fi
+step() { printf '\n%s==> %s%s\n' "$c_step" "$*" "$c_out_off"; }
+ok()   { printf '%s  ✔ %s%s\n' "$c_ok" "$*" "$c_out_off"; }
+warn() { printf '%s  ! %s%s\n' "$c_warn" "$*" "$c_err_off" >&2; }
+err()  { printf '%s  ✘ %s%s\n' "$c_err" "$*" "$c_err_off" >&2; }
+
+printf '%sHold on to your bootstraps !%s\n' "$c_banner" "$c_out_off"
 
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 
@@ -41,11 +58,13 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   cd "${SCRIPT_DIR}"
 
   # Pull latest dotfiles before stowing
-  git pull --rebase --quiet || true
+  step 'Pull the dotfiles'
+  git pull --rebase --quiet || warn 'git pull failed, so the local checkout stays as it is'
 
   # Install stow.sh as a single self-contained file from the latest release.
   # Deliberately unpinned: this repo is the dogfood path for stow.sh, so a
   # regression should surface here first.
+  step 'Install stow.sh'
   rm -f "$XDG_BIN_HOME/stow.sh"
   stow_tmp=$(mktemp)
   curl -fsSL "https://github.com/davetothek/stow.sh/releases/latest/download/stow.sh" -o "$stow_tmp"
@@ -57,10 +76,12 @@ export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
   # aren't installed yet); the full stow happens after mise, once they exist.
   # Package `mise` is stripped by stow, so target is $XDG_CONFIG_HOME/mise →
   # links land at ~/.config/mise/conf.d/*.toml.
+  step 'Stow the mise config'
   stow.sh --dotfiles -f -d dot-config -t "$XDG_CONFIG_HOME/mise" mise
 )
 
 # ----- mise: dotfiles (incl. mise conf.d) are stowed now -----
+step 'Install mise and its tools'
 if ! type mise &>/dev/null; then
   \curl https://mise.run | sh
 else
@@ -87,16 +108,29 @@ mise upgrade --bump --quiet --yes --exclude uv
   # ~/.claude, ~/.config/git, ~/.config/zsh — from living in this repo where
   # `git clean -xdf` would delete it. It refuses to move anything git tracks,
   # so it cannot rewrite repository content.
+  step 'Stow the dotfiles'
   stow.sh --dotfiles -f
 )
 
 # ----- Restore Yazi plugins declared in package.toml -----
 if command -v ya >/dev/null 2>&1 &&
    [[ -f "$XDG_CONFIG_HOME/yazi/package.toml" ]]; then
+  step 'Restore the Yazi plugins'
   # Plugins/flavors are ya-managed and gitignored (not vendored), so any local
   # drift is disposable — --discard keeps this idempotent instead of aborting.
-  mise exec -- ya pkg install --discard >/dev/null
+  # ya runs git once for each package, and git writes a "HEAD is now at" line
+  # to stderr each time. Keep all of the output, and show it only on failure.
+  ya_rc=0
+  ya_log=$(mise exec -- ya pkg install --discard 2>&1) || ya_rc=$?
+  if (( ya_rc != 0 )); then
+    printf '%s\n' "$ya_log" >&2
+    err "ya pkg install failed (exit $ya_rc)"
+    exit "$ya_rc"
+  fi
+  ok 'Yazi plugins are up to date'
 fi
+
+printf '\n%sDone.%s\n' "$c_ok" "$c_out_off"
 
 # vim: set ft=sh ts=2 sw=2:
 
