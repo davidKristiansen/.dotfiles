@@ -73,6 +73,53 @@ alias svn='svn --config-dir "$XDG_CONFIG_HOME/subversion"'
 # --- workmux ----------------------------------------------------------------
 (( $+commands[workmux] )) && alias wm='workmux'
 
+# `workmux add <branch>` looks only at local branches. When only origin has the
+# branch, workmux creates a new empty branch from the base and ignores the
+# remote one. This wrapper asks origin first. When origin has the branch and
+# the local repo does not, it fetches the branch and passes origin/<branch>.
+# The worktree then starts at the remote commit and tracks it.
+# The wrapper does not change --pr, --count, and --foreach runs, where the
+# positional argument is not a plain branch name.
+if (( $+commands[workmux] )); then
+  workmux() {
+    if [[ $1 != add ]]; then
+      command workmux "$@"
+      return
+    fi
+    local -a args=("${@:2}")
+    # Options of `workmux add` that take a separate value.
+    local -a valued=(--pr --forge --base --name --target-name --parent-session
+      -p --prompt -P --prompt-file -a --agent -n --count --foreach
+      --branch-template --max-concurrent -l --layout --mode)
+    local -i i=1 pos=0 skip=0
+    local arg
+    for arg in "${args[@]}"; do
+      case $arg in
+        --pr|--pr=*|-n|--count|--count=*|--foreach|--foreach=*) skip=1 ;;
+      esac
+    done
+    while (( i <= $#args )); do
+      case ${args[i]} in
+        --) (( i < $#args )) && pos=$(( i + 1 )); break ;;
+        -*) (( ${valued[(Ie)${args[i]}]} )) && (( i++ )) ;;
+        *) pos=$i; break ;;
+      esac
+      (( i++ ))
+    done
+    if (( pos && ! skip )); then
+      local branch=${args[pos]}
+      if [[ $branch != origin/* ]] \
+        && ! git show-ref --verify --quiet "refs/heads/$branch" \
+        && git ls-remote --exit-code origin "refs/heads/$branch" >/dev/null 2>&1; then
+        print -u2 "workmux: origin has $branch, so the worktree tracks origin/$branch"
+        git fetch --quiet origin "refs/heads/${branch}:refs/remotes/origin/${branch}" || return
+        args[pos]=origin/$branch
+      fi
+    fi
+    command workmux add "${args[@]}"
+  }
+fi
+
 # --- dotfiles helper ---------------------------------------------------------
 alias dotfiles='/usr/bin/git -C "$DOT_DIR"'
 
