@@ -27,3 +27,9 @@ graphify-out
 
 /spec*.md
 /plan*.md
+
+# workmux
+.workmux.yaml
+
+# Claude Code and workmux worktrees
+.claude/worktrees/
