@@ -66,6 +66,7 @@ Combine triggers in one spec to share a single load guard (e.g. obsidian loads o
 **Exceptions (not routed through the helper):**
 - `undotree.lua` — a bundled plugin loaded via `packadd` on `<leader>u` (no `vim.pack` source).
 - `worktree.lua` — a self-contained module (no external plugin); `require('utils.worktree').setup()` runs eagerly (cheap: registers `:Worktree` + `<leader>w*`).
+- `bitbucket.lua` — a self-contained module (no external plugin); `require('utils.bitbucket').setup()` runs eagerly (cheap: one cached `git config` read per checkout). It installs `:Bitbucket`, `<leader>gc*` and `]r`/`[r` **only inside a Bitbucket checkout**, and removes them again on `DirChanged` to another host.
 
 ## Directory Layout
 
@@ -90,6 +91,7 @@ Files with numeric prefixes load first:
 
 Then alphabetically:
 - bigfile.lua — Large file handling (custom BufReadPre autocmd, no plugin).
+- bitbucket.lua — Bitbucket Data Center pull request review over REST API 1.0; self-contained module, `setup()` runs eagerly (keymaps: `<leader>gc*`, `]r`/`[r`; command: `:Bitbucket`). Command and keymaps exist only while the cwd is a Bitbucket checkout (`DirChanged`-driven). Comment threads mark themselves in the sign column and as virtual lines when a file of the pull request opens (`BufWinEnter`, one request per pull request; `auto_threads = false` turns it off). The endpoint is derived from git — an http remote's `/scm/` path, `git config bitbucket.url`, or an `insteadOf` rewrite — never hard-coded; credentials come from `$BITBUCKET_TOKEN`, `token_file`, `git credential fill` (every configured credential helper, sent as basic auth like git itself), or a prompt.
 - claudecode.lua — claudecode.nvim Claude Code IDE integration via WebSocket MCP protocol, keymaps use `<leader>a*` prefix (keymap-triggered: `<leader>ac`/`<leader>af` etc.; neo-tree add via `<leader>as`).
 - blink-cmp.lua — Completion engine + LuaSnip + Copilot source (vim.schedule). The `<Tab>`/`<S-Tab>` chain ends in tabout (see tabout.lua).
 - blink-pairs.lua — Auto pairs (InsertEnter).
@@ -139,6 +141,7 @@ Server-specific overrides (one file per server):
 - lazy.lua — Declarative lazy-loading helper over `vim.pack`. Single entry point `require('utils.lazy').add(spec)`; see Lazy Loading Strategy. Every `plugin/*.lua` routes through it (except the `undotree`/`worktree` exceptions noted there).
 - picker.lua — Library of fzf-lua picker functions (files, grep, LSP, zoxide, sessions). Session pickers show `display_name  /decoded/path` format. Pure module, no setup side-effects.
 - worktree.lua — Git worktree utilities (setup called from `plugin/worktree.lua`).
+- bitbucket/ — Bitbucket Data Center review client (setup called from `plugin/bitbucket.lua`): `config.lua` (endpoint, project, repo and token resolution out of `git config`, plus `is_bitbucket()` detection), `api.lua` (async curl over REST API 1.0, paging, error text), `pr.lua` (pull request resolution, diff line classification, comment transport), `anchor.lua` (buffer position to comment anchor; diffview windows are exact, plain buffers are refused on drift unless forced), `ui.lua` (composer and thread reader in a float, split or vsplit — both markdown buffers, so render-markdown attaches; inline threads as extmarks), `init.lua` (commands and keymaps).
 
 ### lua/plugins/ (legacy, mostly removed)
 Only config-returning modules remain (loaded by plugin/ files):
@@ -174,6 +177,7 @@ Only config-returning modules remain (loaded by plugin/ files):
 | `<leader>e` | explorer |
 | `<leader>f` | find     |
 | `<leader>g` | git      |
+| `<leader>gc` | review (bitbucket) — registered by `utils.bitbucket` on activation, not here, so it stays hidden outside a Bitbucket checkout |
 | `<leader>n` | notes    |
 | `<leader>o` | org      |
 | `<leader>a` | ai       |
