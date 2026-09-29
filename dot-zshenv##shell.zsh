@@ -89,4 +89,17 @@ fi
 # Rustup/cargo environment (guarded: not every box has a rust toolchain)
 [ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+# ----- Local secrets -----
+# Personal API tokens (Jira and similar) live outside this file so that the
+# shell configuration stays shareable. `set -a` exports every assignment, so
+# the file holds plain NAME=value lines and needs no `export` keyword.
+if [ -d "$HOME/.secrets" ]; then
+  set -a
+  for _zshenv_secret in "$HOME"/.secrets/*.env; do
+    [ -r "$_zshenv_secret" ] && . "$_zshenv_secret"
+  done
+  set +a
+  unset _zshenv_secret
+fi
+
 # vim: set ft=sh ts=2 sw=2:
