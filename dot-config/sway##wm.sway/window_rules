@@ -46,6 +46,8 @@ for_window {
     [title="sun-awt-X11-XWindowPeer"] floating enable, resize set 200px 400px
     [class="^Monitor$" instance="^Monitor$" title="^Monitor$"] floating enable
     [title="QtPreview"] floating enable
+    # CCSIM viewer (Tk, XWayland: no app_id)
+    [class="^Tk$" title="(?i)ccsim"] floating enable
     [title="^CUSe"] floating enable
     [title="Page Unresponsive"] floating enable
 
